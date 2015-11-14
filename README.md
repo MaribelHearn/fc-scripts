@@ -1,5 +1,5 @@
 # fc-scripts
-The Fun Community Pokémon Online server scripts. Not intended for server use outside of Fun Community itself yet (there is still a lot of mess to be fixed); please wait patiently for a thread to appear on the Pokémon Online forums.
+The Fun Community Pokémon Online server scripts. Not intended for server use outside of Fun Community itself yet (there is still a lot of mess to be fixed); please wait patiently for a thread to appear on the Pokémon Online forums. The scripts were never intended to be released to the public, and as a result, many things have not yet been adapted to that; that is being worked on at the moment.
 
 (Files are currently being added.)
 
