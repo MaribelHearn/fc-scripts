@@ -181,7 +181,7 @@ helpers = {
             } else if (message.indexOf("Error 400, ") != -1) {
                 sys.sendHtmlAuth(this.bot(bots.spy) + "[<a href=\"po:join/" + channelname + "\">#" + channelname +
                 "</a>] <b style='color:" + this.color(src) + "'>" + this.escapehtml(name) + "</b> got Star Fox'd because of trying to run /" + this.escapehtml(cmd) + " (Error 400 Bad Request).");
-            } else if (message.indexOf("I KILL YOOOOUUUU!!!") != -1) {
+            } else if (message.indexOf("I KILL YOOOOUUUU!!!") != -1 || message.indexOf("Sorry, this channel is currently silenced.") != -1) {
                 sys.sendHtmlAuth(this.bot(bots.spy) + "[<a href=\"po:join/" + channelname + "\">#" + channelname +
                 "</a>] <b style='color:" + this.color(src) + "'>" + this.escapehtml(name) + "</b> got Star Fox'd because of trying to post during silence.");
             } else if (message == "You tried.") {
@@ -195,7 +195,7 @@ helpers = {
                 "</a>] <b style='color:" + this.color(src) + "'>" + this.escapehtml(name) + "</b> got Star Fox'd because of trying to run /" + this.escapehtml(cmd) + ".");
             }
         } else {
-            if (message.indexOf("I KILL YOOOOUUUU!!!") != -1) {
+            if (message.indexOf("I KILL YOOOOUUUU!!!") != -1 || message.indexOf("Sorry, this channel is currently silenced.") != -1) {
                 sys.sendHtmlAuth(this.bot(bots.spy) + "[<a href=\"po:join/" + channelname + "\">#" + channelname +
                 "</a>] <b style='color:" + this.color(src) + "'>" + this.escapehtml(name) + "</b> got Star Fox'd because of trying to talk during silence.");
             } else {
@@ -211,6 +211,13 @@ helpers = {
         var lower = players[src].name.toLowerCase();
         sys.sendHtmlMessage(src, this.bot(bots.mute) + "Sorry, you are muted on the server. [Time until expiration: " + this.formatMuteTime(mutelist[lower].time) +
         "] [Reason: " + mutelist[lower].reason + "]", channel);
+    }
+    
+    ,
+    
+    silenceMessage: function (src, channel) {
+        var lower = players[src].name.toLowerCase();
+        sys.sendHtmlMessage(src, this.bot(bots.silence) + (bots.silence == "Achmed the Dead Terrorist" ? "I KILL YOOOOUUUU!!!" : "Sorry, this channel is currently silenced."), channel);
     }
     
     ,
@@ -1621,7 +1628,7 @@ helpers = {
             }
             return 0;
         } else {
-            return sys.dbAuth(name);
+            return (sys.dbAuth(name) >= 4 ? 3 : sys.dbAuth(name));
         }
     }
     

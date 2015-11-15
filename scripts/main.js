@@ -1324,7 +1324,7 @@
         if (regchannels[sys.channel(channel).toLowerCase()]) {
             if (regchannels[sys.channel(channel).toLowerCase()].silence > auth) {
                 sys.stopEvent();
-                helpers.starfox(src, channel, [], bots.silence, "I KILL YOOOOUUUU!!!");
+                helpers.silenceMessage(src, channel);
                 return;
             }
         }
