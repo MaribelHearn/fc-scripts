@@ -13,6 +13,6 @@ Click 'Download ZIP' to download this repository, then extract the ZIP into your
 
 You will also need to put the `bansites.txt` and `proxy_list.txt` files from the [po-server-goodies](https://github.com/po-devs/po-server-goodies) repository in your server folder. The scripts will read these and use them when they initialise.
 
-By default, channels are not registered, so you will have to register the permanent channels yourself, including the main channel. For this reason you should, if your server is new, decide your main channel name before registering it; if you want to change your main channel name, you will have to register it again.
+By default, channels are not registered, so you will have to register the permanent channels yourself, including the main channel. It will be implemented in the future. For this reason you should, if your server is new, decide your main channel name before registering it; if you want to change your main channel name, you will have to register it again.
 
 The scripts offer country and time zone retrieval functionality, for which it uses the [IPinfoDB](http://ipinfodb.com/) API service. If you want this functionality, you will need to register at IPinfoDB and get a free API key. Add it with the `/setapi <API key>` command, assuming `<API key>` is a valid API key. If you want to remove the functionality again, use the `/removeapi` command. This will also erase all country and time zone data.
