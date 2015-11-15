@@ -1261,6 +1261,64 @@ ownercommands = {
     
     ,
     
+    trust: function (src, channel, command) {
+        var trustedIps = sys.trustedIps(), ip;
+        if (!command[1]) {
+            helpers.starfox(src, channel, command, bots.priv, "Error 404, IP not found.");
+            return;
+        }
+        ip = command[1];
+        if (!helpers.isIp(ip)) {
+            helpers.starfox(src, channel, command, bots.ban, "Error 400, invalid IP.");
+            return;
+        }
+        if (helpers.isInArray(ip, trustedIps)) {
+            helpers.starfox(src, channel, command, bots.priv, "Error 400, that IP is already trusted!");
+            return;
+        }
+        sys.addTrustedIp(ip);
+        sys.sendHtmlMessage(src, helpers.bot(bots.priv) + "You added the IP " + ip + " to the list of trusted IPs.", channel);
+    }
+    
+    ,
+    
+    distrust: function (src, channel, command) {
+        var trustedIps = sys.trustedIps(), ip;
+        if (!command[1]) {
+            helpers.starfox(src, channel, command, bots.priv, "Error 404, IP not found.");
+            return;
+        }
+        ip = command[1];
+        if (!helpers.isIp(ip)) {
+            helpers.starfox(src, channel, command, bots.ban, "Error 400, invalid IP.");
+            return;
+        }
+        if (!helpers.isInArray(ip, trustedIps)) {
+            helpers.starfox(src, channel, command, bots.priv, "Error 400, that IP isn't trusted!");
+            return;
+        }
+        sys.removeTrustedIp(ip);
+        sys.sendHtmlMessage(src, helpers.bot(bots.priv) + "You removed the IP " + ip + " from the list of trusted IPs.", channel);
+    }
+    
+    ,
+    
+    doschannel: function (src, channel, command) {
+        var dosChannel = command[1];
+        if (!dosChannel) {
+            helpers.starfox(src, channel, command, bots.priv, "Error 404, channel not found.");
+            return;
+        }
+        if (sys.dosChannel() == dosChannel) {
+            helpers.starfox(src, channel, command, bots.priv, "Error 400, that channel is already the anti DoS message channel!");
+            return;
+        }
+        sys.changeDosChannel(dosChannel);
+        sys.sendHtmlMessage(src, helpers.bot(bots.priv) + "You made " + dosChannel + " the anti DoS message channel.", channel);
+    }
+    
+    ,
+    
     /**
         --------------
         Flood Settings
