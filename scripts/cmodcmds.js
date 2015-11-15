@@ -10,7 +10,7 @@
 */
     cmodcommands = {
         cmodcommands: function (src, channel, command) {
-            var commandsmessage = BORDER
+            var commandsmessage = border
             + "<h2>Channel Moderator Commands</h2>"
             + "<br>"
             + "<b>" + helpers.user("/topic ") + helpers.arg("text") + "</b>: changes the entire channel topic to <b>text</b>. Only allowed if you are allowed to remove all of its parts. "
@@ -31,7 +31,7 @@
             + "<b>" + helpers.user("/caps") + "</b>: allows or disallows excessive usage of caps on the current channel.<br>"
             + "<b>" + helpers.user("/flood") + "</b>: allows or disallows flooding on the current channel.<br>"
             + "<br><timestamp/><br>"
-            + BORDER2;
+            + border2;
             sys.sendHtmlMessage(src, commandsmessage, channel);
         }
         
@@ -252,7 +252,7 @@
         ,
         
         cmutelist: function (src, channel, command) {
-            var onlinemessage = BORDER + "<style type='text/css'>table {border-width:1px; border-style:solid; border-color:#000;}" +
+            var onlinemessage = border + "<style type='text/css'>table {border-width:1px; border-style:solid; border-color:#000;}" +
             "thead {font-weight:bold;}</style><h2>Channel Mute List</h2><br><table cellpadding=2 cellspacing=0><thead><tr style='background-color:#b0b0b0;'>" +
             "<td>Name</td><td>IP</td><td>Muter</td><td>Reason</td><td>Date</td></tr></thead>", id, lower = sys.channel(channel).toLowerCase();
             if (!regchannels[lower]) {
@@ -265,14 +265,14 @@
                 onlinemessage += "<tr><td>" + index + "</td><td>" + id.ip + "</td><td>" + id.mutedby + "</td><td>" + id.reason + "</td><td>" + id.date + "</td></tr>";
             }
             var playernum = Object.keys(cmutelist).length;
-            onlinemessage += "</table><br><br><b>Total Muted Players:</b> " + playernum + "<br><br><timestamp/><br>" + BORDER2;
+            onlinemessage += "</table><br><br><b>Total Muted Players:</b> " + playernum + "<br><br><timestamp/><br>" + border2;
             sys.sendHtmlMessage(src, onlinemessage, channel);
         }
         
         ,
         
         cbanlist: function (src, channel, command) {
-            var onlinemessage = BORDER + "<style type='text/css'>table {border-width:1px; border-style:solid; border-color:#000;}" +
+            var onlinemessage = border + "<style type='text/css'>table {border-width:1px; border-style:solid; border-color:#000;}" +
             "thead {font-weight:bold;}</style><h2>Channel Ban List</h2><br><table cellpadding=2 cellspacing=0><thead><tr style='background-color:#b0b0b0;'>" +
             "<td>Name</td><td>IP</td><td>Banner</td><td>Reason</td><td>Date</td></tr></thead>", id, lower = sys.channel(channel).toLowerCase();
             if (!regchannels[lower]) {
@@ -285,14 +285,14 @@
                 onlinemessage += "<tr><td>" + index + "</td><td>" + id.ip + "</td><td>" + id.banner + "</td><td>" + id.reason + "</td><td>" + id.date + "</td></tr>";
             }
             var playernum = Object.keys(cbanlist).length;
-            onlinemessage += "</table><br><br><b>Total Banned Players:</b> " + playernum + "<br><br><timestamp/><br>" + BORDER2;
+            onlinemessage += "</table><br><br><b>Total Banned Players:</b> " + playernum + "<br><br><timestamp/><br>" + border2;
             sys.sendHtmlMessage(src, onlinemessage, channel);
         }
         
         ,
         
         crangebanlist: function (src, channel, command) {
-            var onlinemessage = BORDER + "<style type='text/css'>table {border-width:1px; border-style:solid; border-color:#000;}" +
+            var onlinemessage = border + "<style type='text/css'>table {border-width:1px; border-style:solid; border-color:#000;}" +
             "thead {font-weight:bold;}</style><h2>Channel Range Ban List</h2><br><table cellpadding=2 cellspacing=0><thead><tr style='background-color:#b0b0b0;'>" +
             "<td>Name</td><td>Range</td><td>Banner</td><td>Reason</td><td>Date</td></tr></thead>", id, lower = sys.channel(channel).toLowerCase();
             if (!regchannels[lower]) {
@@ -305,7 +305,7 @@
                 onlinemessage += "<tr><td>" + index + "</td><td>" + id.range + "</td><td>" + id.banner + "</td><td>" + id.reason + "</td><td>" + id.date + "</td></tr>";
             }
             var playernum = Object.keys(crangebanlist).length;
-            onlinemessage += "</table><br><br><b>Total Range Banned Players:</b> " + playernum + "<br><br><timestamp/><br>" + BORDER2;
+            onlinemessage += "</table><br><br><b>Total Range Banned Players:</b> " + playernum + "<br><br><timestamp/><br>" + border2;
             sys.sendHtmlMessage(src, onlinemessage, channel);
         }
         
@@ -376,9 +376,9 @@
                 }
                 regchannels[sys.channel(channel).toLowerCase()].silence = strength;
                 var color = global["auth" + strength + "color"];
-                var silencemessage = BORDER + "<br>"
+                var silencemessage = border + "<br>"
                 + helpers.bot(bots.silence) + "<b><font color='" + color + "'>SILENCE! I KILL YOU!</font> <small>-" + name + ".</small></b><br>"
-                + BORDER2;
+                + border2;
                 sys.write("data/regchannels.txt", JSON.stringify(regchannels));
                 sys.sendHtmlAll(silencemessage, channel);
             } else {
@@ -403,9 +403,9 @@
                 if (regchannels[lower].silence <= auth) {
                     var color = global["auth" + regchannels[lower].silence + "color"];
                     regchannels[lower].silence = 0;
-                    var unsilencemessage = BORDER + "<br>"
+                    var unsilencemessage = border + "<br>"
                     + helpers.bot(bots.silence) + "<b><font color='" + color + "'>UNSILENCE! I WON'T KILL YOU!</font> <small>-" + sys.name(src)
-                    + ".</small></b><br>" + BORDER2;
+                    + ".</small></b><br>" + border2;
                     sys.write("data/regchannels.txt", JSON.stringify(regchannels));
                     sys.sendHtmlAll(unsilencemessage, channel);
                 }

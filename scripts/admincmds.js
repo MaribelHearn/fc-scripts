@@ -10,7 +10,7 @@
 */
     admincommands = {
         admincommands: function (src, channel, command) {
-            var commandsmessage = BORDER
+            var commandsmessage = border
             + "<h2>Administrator Commands</h2>"
             + "<br>"
             + "<b>" + helpers.userl("/adminjusticeoptions") + "</b>: displays admin justice options.<br>"
@@ -18,7 +18,7 @@
             + "<b>" + helpers.userl("/dboptions") + "</b>: displays database options.<br>"
             + "<b>" + helpers.userl("/botsettings") + "</b>: displays bot settings.<br>"
             + "<br><timestamp/><br>"
-            + BORDER2;
+            + border2;
             sys.sendHtmlMessage(src, commandsmessage, channel);
         }
         
@@ -30,7 +30,7 @@
             ---------------------
         **/
         adminjusticeoptions: function (src, channel, command) {
-            var commandsmessage = BORDER
+            var commandsmessage = border
             + "<h2>Administrator Commands ~ Admin Justice Options</h2>"
             + "<br>"
             + "<b>" + helpers.user("/ban ") + helpers.arg("player") + helpers.arg2("*reason") + helpers.arg3("*time") + "</b>: bans <b>player</b> from the server for <b>time</b> for <b>reason</b>. Also /b.<br>"
@@ -40,7 +40,7 @@
             + "<b>" + helpers.user("/banreason ") + helpers.arg("player") + helpers.arg2("*reason") + "</b>: changes the ban reason for <b>player</b> to <b>reason</b>.<br>"
             + "<b>" + helpers.user("/clearbanlist") + "</b>: clears the server's ban list.<br>"
             + "<br><timestamp/><br>"
-            + BORDER2;
+            + border2;
             sys.sendHtmlMessage(src, commandsmessage, channel);
         }
         
@@ -380,14 +380,14 @@
             ------------
         **/
         admintouroptions: function (src, channel, command) {
-            var commandsmessage = BORDER
+            var commandsmessage = border
             + "<h2>Administrator Commands ~ Tour Options</h2>"
             + "<br>"
             + "<b>" + helpers.user("/tour ") + helpers.arg("tier") + helpers.arg2("*number") + "</b>: starts a <b>tier</b> tournament with <b>number</b> participators.<br>"
             + "<b>" + helpers.user("/toursize ") + helpers.arg("number") + "</b>: changed the number of participators to <b>number</b>.<br>"
             + "<b>" + helpers.user("/endtour") + "</b>: ends the current tournament.<br>"
             + "<br><timestamp/><br>"
-            + BORDER2;
+            + border2;
             sys.sendHtmlMessage(src, commandsmessage, channel);
         }
         
@@ -438,7 +438,7 @@
                 return;
             }
             tour[0].tournumber = command[1];
-            sys.sendHtmlMain(BORDER + "<br>" + helpers.bot(bots.tour) + sys.name(src) + " has changed the number of tournament players to " + command[1] + "!<br>" + BORDER2);
+            sys.sendHtmlMain(border + "<br>" + helpers.bot(bots.tour) + sys.name(src) + " has changed the number of tournament players to " + command[1] + "!<br>" + border2);
         }
         
         ,
@@ -449,7 +449,7 @@
                 return;
             }
             tour[0].tourmode = 0;                        
-            sys.sendHtmlMain(BORDER + "<br>" + helpers.bot(bots.tour) + "The " + tour[0].tourtier + " tournament has been cancelled by " + sys.name(src) + ".<br>" + BORDER2);
+            sys.sendHtmlMain(border + "<br>" + helpers.bot(bots.tour) + "The " + tour[0].tourtier + " tournament has been cancelled by " + sys.name(src) + ".<br>" + border2);
         }
         
         ,
@@ -460,7 +460,7 @@
             ------------
         **/
         botsettings: function (src, channel, command) {
-            var commandsmessage = BORDER
+            var commandsmessage = border
             + "<h2>Administrator Commands ~ Bot Settings</h2>"
             + "<br>"
             + "Current bots and their names:<br>"
@@ -474,7 +474,7 @@
             + "Use <b>" + helpers.user("/symbol ") + helpers.arg("character") + "</b> to change the bot symbol to <b>character</b>.<br>"
             + "Use <b>" + helpers.user("/symbolcolor ") + helpers.arg("color") + "</b> to change the bot symbol color to <b>color</b>. Also /symbolcolour.<br>"
             + "<br><timestamp/><br>"
-            + BORDER2;
+            + border2;
             sys.sendHtmlMessage(src, commandsmessage, channel);
         }
         
@@ -565,21 +565,21 @@
             ----------------
         **/
         dboptions: function (src, channel, command) {
-            var commandsmessage = BORDER
+            var commandsmessage = border
             + "<h2>Administrator Commands ~ Database Options</h2>"
             + "<br>"
             + "<b>" + helpers.user("/dbinfo") + "</b>: displays information about the database. May cause lag.<br>"
             + "<b>" + helpers.user("/dbsearch ") + helpers.arg("text") + "</b>: displays all players in the database that match <b>text</b>. Also /search.<br>"
             + "<b>" + helpers.user("/dbdelete ") + helpers.arg("player") + "</b>: removes <b>player</b> from the database.<br>"
             + "<br><timestamp/><br>"
-            + BORDER2;
+            + border2;
             sys.sendHtmlMessage(src, commandsmessage, channel);
         }
         
         ,
         
         dbinfo: function (src, channel, command) {
-            var db = sys.dbAll(), infomessage = BORDER + "<h2>Database Info</h2><br>", ipArray = [], rangeArray = [], registeredUsers = 0, users, ip, range, registered;
+            var db = sys.dbAll(), infomessage = border + "<h2>Database Info</h2><br>", ipArray = [], rangeArray = [], registeredUsers = 0, users, ip, range, registered;
             users = db.length;
             for (var i in db) {
                 ip = sys.dbIp(db[i]);
@@ -596,14 +596,14 @@
             + "<b>Registered users</b>: " + registeredUsers + "<br>"
             + "<b>IPs</b>: " + ipArray.length + "<br>"
             + "<b>Ranges</b>: " + rangeArray.length + "<br>"
-            + "<br><timestamp/><br>" + BORDER2;
+            + "<br><timestamp/><br>" + border2;
             sys.sendHtmlMessage(src, infomessage, channel);
         }
         
         ,
         
         dbsearch: function (src, channel, command) {
-            var list = "", term = command[1], resultsmessage = BORDER + "<h2>Database Search</h2><br>Your database search request '" + term + "' returned the following results:<br><br>", total = 0, db;
+            var list = "", term = command[1], resultsmessage = border + "<h2>Database Search</h2><br>Your database search request '" + term + "' returned the following results:<br><br>", total = 0, db;
             if (!term) {
                 helpers.starfox(src, channel, command, bots.command, "Error 404, text not found.", channel);
                 return;
@@ -619,7 +619,7 @@
                     total++;
                 }
             }
-            resultsmessage += "<br><b>Total Results:</b> " + total + "<br><br><timestamp/><br>" + BORDER2;
+            resultsmessage += "<br><b>Total Results:</b> " + total + "<br><br><timestamp/><br>" + border2;
             sys.sendHtmlMessage(src, resultsmessage, channel);
         }
         

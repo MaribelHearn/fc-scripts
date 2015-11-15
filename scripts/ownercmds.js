@@ -10,7 +10,7 @@
 */
 ownercommands = {
     ownercommands: function (src, channel, command) {
-        var commandsmessage = BORDER
+        var commandsmessage = border
         + "<h2>Owner Commands</h2>"
         + "<br>"
         + "<b>" + helpers.userl("/ownerjusticeoptions") + "</b>: displays owner justice options.<br>"
@@ -25,7 +25,7 @@ ownercommands = {
         + "<b>" + helpers.userl("/filtersettings") + "</b>: displays name filtering settings.<br>"
         + "<b>" + helpers.userl("/miscellaneous") + "</b>: displays other commands.<br>"
         + "<br><timestamp/><br>"
-        + BORDER2;
+        + border2;
         sys.sendHtmlMessage(src, commandsmessage, channel);
     }
     
@@ -37,7 +37,7 @@ ownercommands = {
         ---------------------
     */
     ownerjusticeoptions: function (src, channel, command) {
-        var commandsmessage = BORDER
+        var commandsmessage = border
         + "<h2>Owner Commands ~ Owner Justice Options</h2>"
         + "<br>"
         + "<b>" + helpers.user("/silentkick ") + helpers.arg("player") + "</b>: silent kicks <b>player</b> from the server. Also /skick or /sk.<br>"
@@ -56,7 +56,7 @@ ownercommands = {
         + "<b>" + helpers.user("/gigabanreason ") + helpers.arg("player") + helpers.arg2("*reason") + "</b>: changes the giga ban reason for <b>player</b> to <b>reason</b>.<br>"
         + "<b>" + helpers.user("/cleargigabanlist") + "</b>: clears the server's giga ban list.<br>"
         + "<br><timestamp/><br>"
-        + BORDER2;
+        + border2;
         sys.sendHtmlMessage(src, commandsmessage, channel);
     }
     
@@ -521,7 +521,7 @@ ownercommands = {
         --------------
     **/
     scriptoptions: function (src, channel, command) {
-        var commandsmessage = BORDER
+        var commandsmessage = border
         + "<h2>Owner Commands ~ Script Options</h2>"
         + "<br>"
         + "<b>" + helpers.user("/update ") + helpers.arg("module") + "</b>: updates the <b>module</b> module. Updates the main script file by default.<br>"
@@ -533,7 +533,7 @@ ownercommands = {
         + "<b>" + helpers.user("/silenteval ") + helpers.arg("code") + "</b>: executes <b>code</b> silently. Also /seval.<br>"
         + "<b>" + helpers.user("/secretsilenteval ") + helpers.arg("code") + "</b>: executes <b>code</b> silently without posting it to even yourself. Also /sseval.<br>"
         + "<br><timestamp/><br>"
-        + BORDER2;
+        + border2;
         sys.sendHtmlMessage(src, commandsmessage, channel);
     }
     
@@ -770,8 +770,8 @@ ownercommands = {
         var name = sys.name(src), starttime, runtime;
         command.splice(0, 1);
         command = command.join(DELIMITER);
-        sys.sendHtmlAll(BORDER + "<br><timestamp/> <b>" + helpers.user(name) + " executed the following code:</b><br><b style='font-family: courier new;'>"
-        + helpers.escapehtml(command) + "</b><br>" + BORDER2, channel);
+        sys.sendHtmlAll(border + "<br><timestamp/> <b>" + helpers.user(name) + " executed the following code:</b><br><b style='font-family: courier new;'>"
+        + helpers.escapehtml(command) + "</b><br>" + border2, channel);
         starttime = new Date();
         try {
             eval(command);
@@ -790,8 +790,8 @@ ownercommands = {
         var name = sys.name(src), starttime, runtime;
         command.splice(0, 1);
         command = command.join(DELIMITER);
-        sys.sendHtmlMessage(src, BORDER + "<br><timestamp/> <b>You executed the following code silently:</b><br><b style='font-family:courier new;'>"
-        + helpers.escapehtml(command) + "</b><br>" + BORDER2, channel);
+        sys.sendHtmlMessage(src, border + "<br><timestamp/> <b>You executed the following code silently:</b><br><b style='font-family:courier new;'>"
+        + helpers.escapehtml(command) + "</b><br>" + border2, channel);
         starttime = new Date();
         try {
             eval(command);
@@ -839,7 +839,7 @@ ownercommands = {
         ------------------------------
     **/
     banneroptions: function (src, channel, command) {
-        var commandsmessage = BORDER
+        var commandsmessage = border
         + "<h2>Owner Commands ~ Banner and Description Options</h2>"
         + "<br>"
         + "<b>" + helpers.user("/banner ") + helpers.arg("html") + "</b>: changes the banner to <b>html</b>.<br>"
@@ -847,7 +847,7 @@ ownercommands = {
         + "<b>" + helpers.user("/testbanner ") + helpers.arg("html") + "</b>: changes the banner to <b>html</b>, but only for yourself. If <b>html</b> is not specified, resets the banner.<br>"
         + "<b>" + helpers.user("/testdescription ") + helpers.arg("html") + "</b>: posts <b>html</b> to yourself, to test a server description with.<br>"
         + "<br><timestamp/><br>"
-        + BORDER2;
+        + border2;
         sys.sendHtmlMessage(src, commandsmessage, channel);
     }
     
@@ -905,7 +905,7 @@ ownercommands = {
         -------------
     **/
     authsettings: function (src, channel, command) {
-        var commandsmessage = BORDER
+        var commandsmessage = border
         + "<h2>Owner Commands ~ Auth Settings</h2>"
         + "<br>"
         + "The following players have auth:<br>"
@@ -919,7 +919,7 @@ ownercommands = {
         + "Use <b>" + helpers.user("/invisibleowner ") + helpers.arg("player") + helpers.arg2("*placement") + "</b>: to change <b>player</b>'s auth level to owner (invisible), "
         + "placed together with auth level <b>placement</b> on the player list. Also /invisible or /invis.<br>"
         + "<br><timestamp/><br>"
-        + BORDER2;
+        + border2;
         sys.sendHtmlMessage(src, commandsmessage, channel);
     }
     
@@ -1104,7 +1104,7 @@ ownercommands = {
         ------------------
     **/
     whitelistsettings: function (src, channel, command) {
-        var commandsmessage = BORDER
+        var commandsmessage = border
         + "<h2>Owner Commands ~ Whitelist Settings</h2>"
         + "<br>"
         + "The server is currently <b>" + (open === true ? "open" : "closed") + "</b>.<br>"
@@ -1117,7 +1117,7 @@ ownercommands = {
         + "Use <b>" + helpers.user("/allowrange ") + helpers.arg("range") + "</b> to allow <b>range</b> through server closure.<br>"
         + "Use <b>" + helpers.user("/disallowrange ") + helpers.arg("range") + "</b> to disallow <b>range</b> through server closure.<br>"
         + "<br><timestamp/><br>"
-        + BORDER2;
+        + border2;
         sys.sendHtmlMessage(src, commandsmessage, channel);
     }
     
@@ -1243,7 +1243,7 @@ ownercommands = {
         ----------------
     **/
     antidossettings: function (src, channel, command) {
-        var trustedIps = sys.trustedIps(), dosChannel = sys.dosChannel() === "" ? "none" : sys.dosChannel(), commandsmessage = BORDER
+        var trustedIps = sys.trustedIps(), dosChannel = sys.dosChannel() === "" ? "none" : sys.dosChannel(), commandsmessage = border
         + "<h2>Owner Commands ~ Anti DoS Settings</h2>"
         + "<br>"
         + "The current anti DoS message channel is " + (dosChannel == "none" ? "none" : "<a href='po:join/" + dosChannel + "'>#" + dosChannel + "</a>") + ".<br>"
@@ -1255,7 +1255,7 @@ ownercommands = {
         + "Use <b>" + helpers.user("/distrust ") + helpers.arg("IP") + "</b> to remove <b>IP</b> from the trusted IPs.<br>"
         + "Use <b>" + helpers.user("/doschannel ") + helpers.arg("channel") + "</b> to change the anti DoS message channel to <b>channel</b>.<br>"
         + "<br><timestamp/><br>"
-        + BORDER2;
+        + border2;
         sys.sendHtmlMessage(src, commandsmessage, channel);
     }
     
@@ -1325,7 +1325,7 @@ ownercommands = {
         --------------
     **/
     floodsettings: function (src, channel, command) {
-        var commandsmessage = BORDER
+        var commandsmessage = border
         + "<h2>Owner Commands ~ Flood Settings</h2>"
         + "<br>"
         + "<b>Flood Level:</b> " + floodlevel + "<br>"
@@ -1342,7 +1342,7 @@ ownercommands = {
         + "Use <b>" + helpers.user("/floodtime ") + helpers.arg("number") + "</b> to change the flood time into <b>number</b> seconds.<br>"
         + "Use <b>" + helpers.user("/allowance ") + helpers.arg("number") + "</b> to change the message allowance into <b>number</b> messages.<br>"
         + "<br><timestamp/><br>"
-        + BORDER2;
+        + border2;
         sys.sendHtmlMessage(src, commandsmessage, channel);
     }
     
@@ -1406,7 +1406,7 @@ ownercommands = {
         ---------------
     **/
     serversettings: function (src, channel, command) {
-        var commandsmessage = BORDER, serverprivate = sys.isServerPrivate(), serveropen = open;
+        var commandsmessage = border, serverprivate = sys.isServerPrivate(), serveropen = open;
         var ports = sys.serverPorts().length, proxies = sys.proxyServers().length, serverport;
         var uptime = sys.profileDump().split('\n')[0].split(',')[0].split(':')[1].slice(1, -2);
         var DAYS = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
@@ -1442,7 +1442,7 @@ ownercommands = {
         + "Use <b>" + helpers.user("/shutdown") + "</b> to shut down the server.<br>"
         + "Use <b>" + helpers.user("/restart") + "</b> to restart the server.<br>"
         + "<br><timestamp/><br>"
-        + BORDER2;
+        + border2;
         sys.sendHtmlMessage(src, commandsmessage, channel);
     }
     
@@ -1487,7 +1487,7 @@ ownercommands = {
         ---------------
     **/
     silentsettings: function (src, channel, command) {
-        var commandsmessage = BORDER
+        var commandsmessage = border
         + "<h2>Owner Commands ~ Silent Settings</h2>"
         + "<br>"
         + "The following commands will currently bypass logging in <a href='po:join/" + permchannels[0] + "'>#" + permchannels[0] + "</a>:<br>"
@@ -1497,7 +1497,7 @@ ownercommands = {
         + "Use <b>" + helpers.user("/addsilentcommand ") + helpers.arg("command") + "</b> to make <b>command</b> a silent command. Also /addsc.<br>"
         + "Use <b>" + helpers.user("/removesilentcommand ") + helpers.arg("command") + "</b> to make <b>command</b> from the list of silent commands. Also /removesc.<br>"
         + "<br><timestamp/><br>"
-        + BORDER2;
+        + border2;
         sys.sendHtmlMessage(src, commandsmessage, channel);
     }
     
@@ -1551,7 +1551,7 @@ ownercommands = {
         ---------------
     **/
     filtersettings: function (src, channel, command) {
-        var commandsmessage = BORDER
+        var commandsmessage = border
         + "<h2>Owner Commands ~ Filter Settings</h2>"
         + "<br>"
         + "The following words are currently not allowed to be in a username:<br>"
@@ -1567,7 +1567,7 @@ ownercommands = {
         + "Use <b>" + helpers.user("/addexception ") + helpers.arg("name") + "</b> to allow <b>name</b> to bypass filtering. Also /exception.<br>"
         + "Use <b>" + helpers.user("/removeexception ") + helpers.arg("name") + "</b> to disallow <b>name</b> to bypass filtering.<br>"
         + "<br><timestamp/><br>"
-        + BORDER2;
+        + border2;
         sys.sendHtmlMessage(src, commandsmessage, channel);
     }
     
@@ -1645,7 +1645,7 @@ ownercommands = {
         -------------
     **/
     miscellaneous: function (src, channel, command) {
-        var commandsmessage = BORDER
+        var commandsmessage = border
         + "<h2>Owner Commands ~ Miscellaneous</h2>"
         + "<br>";
         if (API === "") {
@@ -1655,6 +1655,7 @@ ownercommands = {
             commandsmessage += "<b>" + helpers.user("/removeapi") + "</b>: removes your IPinfoDB API key. This will disable country and time zone retrieval and reset all corresponding data.<br>";
         }
         commandsmessage += "<b>" + helpers.user("/layout") + "</b>: changes the layout of certain messages to the old one or the new one.<br>"
+        + "<b>" + helpers.user("/bordercolor ") + helpers.arg("color") + "</b>: changes the border color to <b>color</b>.<br>"
         + "<b>" + helpers.user("/commandcolor ") + helpers.arg("number") + helpers.arg2("*color") + "</b>: changes command color <b>number</b> to <b>color</b>. 0 is the user, 1 is the first argument, and so on.<br>"
         + "<b>" + helpers.user("/clearpass ") + helpers.arg("player") + "</b>: clears <b>player</b>'s password.<br>"
         + "<b>" + helpers.user("/servertopic ") + helpers.arg("text") + "</b>: changes the server topic to <b>text</b>.<br>"
@@ -1665,7 +1666,7 @@ ownercommands = {
         + "<b>" + helpers.user("/updatetiers") + "</b>: updates the server tier list to the most recent version of the main server tier list.<br>"
         + "<b>" + helpers.user("/exportmembers") + "</b>: exports the member database.<br>"
         + "<br><timestamp/><br>"
-        + BORDER2;
+        + border2;
         sys.sendHtmlMessage(src, commandsmessage, channel);
     }
     
@@ -1734,6 +1735,26 @@ ownercommands = {
     
     ,
     
+    bordercolor: function (src, channel, command) {
+        var color = command[1];
+        if (!color) {
+            helpers.starfox(src, channel, command, bots.command, "Error 404, number not found.");
+            return;
+        }
+        if (!sys.validColor(color)) {
+            helpers.starfox(src, channel, command, bots.command, "Error 403, invalid color.");
+            return;
+        }
+        bordercolor = color;
+        sys.write("data/bordercolor.txt", bordercolor);
+        border = "<font color='" + color + "'><b>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>></b></font>";
+        border2 = "<font color='" + color + "'><b>&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;" +
+        "&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;</b></font>";
+        sys.sendHtmlMessage(src, helpers.bot(bots.main) + "The border color has been changed to " + color + ".", channel);
+    }
+    
+    ,
+    
     commandcolor: function (src, channel, command) {
         if (!command[1]) {
             helpers.starfox(src, channel, command, bots.command, "Error 404, number not found.");
@@ -1747,9 +1768,13 @@ ownercommands = {
             helpers.starfox(src, channel, command, bots.command, "Error 404, color not found.");
             return;
         }
+        if (!sys.validColor(command[2])) {
+            helpers.starfox(src, channel, command, bots.command, "Error 403, invalid color.");
+            return;
+        }
         cmdcolors[command[1]] = command[2];
         sys.write("data/cmdcolors.txt", JSON.stringify(cmdcolors));
-        sys.sendHtmlMessage(src, helpers.bot(bots.command) + "Command color " + command[1] + " has been changed to " + command[2] + ".", channel);
+        sys.sendHtmlMessage(src, helpers.bot(bots.main) + "Command color " + command[1] + " has been changed to " + command[2] + ".", channel);
     }
     
     ,
@@ -1794,7 +1819,7 @@ ownercommands = {
     ,
     
     regchannelinfo: function (src, channel, command) {
-        var message = BORDER + "<style type='text/css'>table {border-width:1px; border-style:solid; border-color:#000;}" 
+        var message = border + "<style type='text/css'>table {border-width:1px; border-style:solid; border-color:#000;}" 
         + "thead {font-weight:bold;}</style><h2>Registered Channels</h2><br>"
         + "<table cellpadding=2 cellspacing=0><thead><tr style='background-color:#b0b0b0;'>"
         + "<td>Channel</td><td>Permanent</td><td>Private</td><td>Closure Level</td><td>Owners</td></tr></thead><tbody>";
@@ -1807,14 +1832,14 @@ ownercommands = {
             message += "<td>" + regchannels[i].close + "</td><td>" + regchannels[i].owners.join(", ") + "</td></tr>";
             
         }
-        message += "</tbody></table><br><br><timestamp/><br>" + BORDER2;
+        message += "</tbody></table><br><br><timestamp/><br>" + border2;
         sys.sendHtmlMessage(src, message, channel);
     }
     
     ,
     
     commandlist: function (src, channel, command) {
-        var scriptmessage = BORDER + "<h2>List of Commands</h2><br>", length, totallength;
+        var scriptmessage = border + "<h2>List of Commands</h2><br>", length, totallength;
         length = Object.keys(usercommands1).length;
         length = eval(length) + Object.keys(usercommands2).length * 1;
         scriptmessage += "<b>User Commands:</b> " + Object.keys(usercommands1).sort().join(", ") + ", " + Object.keys(usercommands2).join(", ") + "<br>" +
@@ -1837,7 +1862,7 @@ ownercommands = {
         "<b>Total Channel Owner Commands:</b> " + Object.keys(cownercommands).length + "<br>" +
         "<b>Total Helpers:</b> " + Object.keys(helpers).length + "<br>" +
         "<b><u>Total Commands:</u></b> " + allcommands.length + "<br>";
-        scriptmessage += "<br><timestamp/><br>" + BORDER2;
+        scriptmessage += "<br><timestamp/><br>" + border2;
         sys.sendHtmlMessage(src, scriptmessage, channel);
     }
     
