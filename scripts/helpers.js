@@ -123,7 +123,17 @@ helpers = {
     
     floodCheck: function (src, channelname) {
         if (regchannels[channelname]) {
-            return regchannels[channelname].flood;
+            if (regchannels[channelname].flood) {
+                return false;
+            }
+            if (players[src].floodcount > allowance) {
+                floodplayers.splice(floodplayers.indexOf(src), 1);
+                if (players[src].floodcount != Infinity && sys.auth(src) < floodlevel) {
+                    return true;
+                }
+                players[src].floodcount = Infinity;
+            }
+            return false;
         }
         if (players[src].floodcount > allowance) {
             floodplayers.splice(floodplayers.indexOf(src), 1);
