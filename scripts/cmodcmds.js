@@ -362,15 +362,15 @@
                     helpers.muteMessage(src, channel);
                     return;
                 }
-                if (strength > cauth) {
-                    helpers.starfox(src, channel, command, bots.silence, "Error 403, you may not silence with a silence level higher than your auth level.");
-                    return;
-                }
                 if (!strength) {
                     strength = cauth;
                 }
                 if (isNaN(strength) || strength < 1 || strength > 3) {
                     helpers.starfox(src, channel, command, bots.silence, "Error 403, invalid silence level.");
+                    return;
+                }
+                if (strength > cauth) {
+                    helpers.starfox(src, channel, command, bots.silence, "Error 403, you may not silence with a silence level higher than your auth level.");
                     return;
                 }
                 if (regchannels[sys.channel(channel).toLowerCase()].silence > cauth) {
