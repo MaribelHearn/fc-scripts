@@ -48,9 +48,9 @@ helpers = {
         sys.write("data/nameblocklist.txt", '["fuck","bitch","gay","fag","sex","condom",' +
         '"vagina","dildo","vibrator","orgasm","cunt","cock","dick","asshole","blow","slut","pussy","rape","penis",' +
         '"horny","intercourse","nigger","nigga","shit","cum","bastard","anus","porn","fap","hitler",":","masturbat","rapist"]');
-        sys.write("data/proxylist.txt", sys.read("proxylist.txt"));
+        sys.write("data/proxylist.txt", sys.read("proxy_list.txt"));
         sys.write("data/bansites.txt", sys.read("bansites.txt"));
-        sys.rm("proxylist.txt");
+        sys.rm("proxy_list.txt");
         sys.rm("bansites.txt");
         
         // Objects
