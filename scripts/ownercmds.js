@@ -1658,6 +1658,20 @@ ownercommands = {
         }
         API = api;
         sys.write("data/API_KEY.txt", api);
+        sys.webCall(IP_RETRIEVAL_URL, function (resp) {
+            if (resp === "") {
+                print("An error occurred while loading the host IP address.");
+                return;
+            }
+            hostIp = resp;
+            sys.webCall(helpers.countryRetrievalUrl(hostIp), function (resp) {
+                resp = JSON.parse(resp);
+                hostTimeZone = helpers.timezonedata(resp.countryName, resp.timeZone);
+                hostCountry = helpers.countrydata(resp.countryName);
+                hostCity = helpers.citydata(resp.cityName);
+                print("Host location data has been loaded.");
+            });
+        });
         sys.sendHtmlMessage(src, helpers.bot(bots.main) + "Your API key has been set.", channel);
     }
     
