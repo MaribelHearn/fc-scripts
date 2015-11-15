@@ -11,7 +11,7 @@
 
 cusercommands = {
     cusercommands: function (src, channel, command) {
-        var commandsmessage = BORDER
+        var commandsmessage = border
         + "<h2>Channel User Commands</h2>"
         + "<br>"
         + "<b>" + helpers.user("/registerthis") + "</b>: registers the current channel. Also /register.<br>"
@@ -24,7 +24,7 @@ cusercommands = {
         + "<b>" + helpers.user("/channelleave ") + helpers.arg("channel") + "</b>: makes you leave <b>channel</b>. If <b>channel</b> is not specified, makes you leave the current channel. Also /cleave.<br>"
         + "<b>" + helpers.user("/leaveall") + "</b>: makes you leave every channel you are on, except the current channel.<br>"
         + "<br><timestamp/><br>"
-        + BORDER2;
+        + border2;
         sys.sendHtmlMessage(src, commandsmessage, channel);
     }
     
@@ -108,7 +108,7 @@ cusercommands = {
         extending2 ? extending2 = "<b style='color:green'>Yes</b>" : extending2 = "<b style='color:red'>No</b>";
         backward2 ? backward2 = "<b style='color:green'>Yes</b>" : backward2 = "<b style='color:red'>No</b>";
         topic ? topic = topic : topic = ["Welcome to " + channelname + "!"];
-        channelmessage = BORDER + "<h2>Channel Info" + (command[1] ? " ~ " + channelname : "") + "</h2><br>" +
+        channelmessage = border + "<h2>Channel Info" + (command[1] ? " ~ " + channelname : "") + "</h2><br>" +
         "<br><b>Name:</b> " + channelname +
         "<br><b>Registered:</b> " + reg +
         "<br><b>Permanent:</b> " + stay +
@@ -122,7 +122,7 @@ cusercommands = {
         "<br><b>Extending Characters Allowed:</b> " + extending2 +
         "<br><b>Backward Pushing Characters Allowed:</b> " + backward2 +
         "<br><b>Topic:</b> " + topic.join(TOPIC_DELIMITER) +
-        "<br><br><timestamp/><br>" + BORDER2;
+        "<br><br><timestamp/><br>" + border2;
         sys.sendHtmlMessage(src, channelmessage, channel);
     }
     
@@ -135,7 +135,7 @@ cusercommands = {
     ,
     
     channelonline: function (src, channel, command) {
-        var onlinemessage = BORDER + "<style type='text/css'>table {border-width:1px; border-style:solid; border-color:#000;}" 
+        var onlinemessage = border + "<style type='text/css'>table {border-width:1px; border-style:solid; border-color:#000;}" 
         + "thead {font-weight:bold;}</style><h2>Players Online on " + sys.channel(channel) + "</h2><br>"
         + "<table cellpadding=2 cellspacing=0><thead><tr style='background-color:#b0b0b0;'>"
         + "<td>Icon</td><td>Auth</td><td>Name</td><td>ID</td>", date = new Date(), cplayers = sys.playersOfChannel(channel), unit, country;
@@ -207,7 +207,7 @@ cusercommands = {
             }
             onlinemessage += "</tr>";
         }
-        onlinemessage += "</tbody></table><br><br><b>Total Players Online:</b> " + cplayers.length + "<br><br><timestamp/><br>" + BORDER2;
+        onlinemessage += "</tbody></table><br><br><b>Total Players Online:</b> " + cplayers.length + "<br><br><timestamp/><br>" + border2;
         sys.sendHtmlMessage(src, onlinemessage, channel);
     }
     
@@ -227,7 +227,7 @@ cusercommands = {
         }
         var mods = regchannels[lower].mods, admins = regchannels[lower].admins, owners = regchannels[lower].owners;
         var index, i_auth, i_authname, i_name, i_lastlogin, i_status, total = 0;
-        var message = BORDER + "<h2>Channel Auth of " + sys.channel(channel) + "</h2><br><style type='text/css'>table {border-width:1px; border-style:solid; border-color:#000;}"
+        var message = border + "<h2>Channel Auth of " + sys.channel(channel) + "</h2><br><style type='text/css'>table {border-width:1px; border-style:solid; border-color:#000;}"
         + "thead {font-weight:bold;}</style>"
         + "<table cellpadding=2 cellspacing=0><thead><tr style='background-color:#b0b0b0;'>"
         + "<td>Icon</td><td>Auth</td><td>Name</td><td>Last Online</td><td>Status</td></tr></thead>";
@@ -297,7 +297,7 @@ cusercommands = {
             message += "<tr><td>" + helpers.authimage(i_auth) + "</td><td>" + i_authname + "</td><td>" + i_name + "</td><td>" + i_lastlogin + "</td><td>" + i_status + "</td></tr>";
             total++;
         }
-        message += "</table><br><br><b>Total Channel Auth Members:</b> " + total + "<br><br><timestamp/><br>" + BORDER2;
+        message += "</table><br><br><b>Total Channel Auth Members:</b> " + total + "<br><br><timestamp/><br>" + border2;
         sys.sendHtmlMessage(src, message, channel);
     }
     
@@ -322,7 +322,7 @@ cusercommands = {
     ,
     
     channelrules: function (src, channel, command) {
-        var rulesmessage = BORDER + "<h2>" + sys.channel(channel) + "'s Rules</h2><br>", lower = sys.channel(channel).toLowerCase();
+        var rulesmessage = border + "<h2>" + sys.channel(channel) + "'s Rules</h2><br>", lower = sys.channel(channel).toLowerCase();
         if (channel === 0) {
             helpers.starfox(src, channel, command, bots.channel, "Error 400, the main channel cannot have channel rules.");
             return;
@@ -337,7 +337,7 @@ cusercommands = {
                     rulesmessage += helpers.bot("• ±Rule " + i + ": " + regchannels[lower].rules[i] + "<br>");
                 }
             }
-            rulesmessage += "<br><timestamp/><br>" + BORDER2;
+            rulesmessage += "<br><timestamp/><br>" + border2;
             sys.sendHtmlMessage(src, rulesmessage, channel);
         } else {
             helpers.starfox(src, channel, command, bots.channel, "Error 400, this channel isn't registered!");

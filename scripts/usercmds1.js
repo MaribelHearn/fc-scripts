@@ -19,7 +19,7 @@ usercommands1 = {
         -------------
     **/
     commands: function (src, channel, command) {
-        var lower = sys.name(src).toLowerCase(), auth = sys.auth(src), commandsmessage = BORDER + "<h2>Commands</h2><br>" +
+        var lower = sys.name(src).toLowerCase(), auth = sys.auth(src), commandsmessage = border + "<h2>Commands</h2><br>" +
         "<b>" + helpers.userl("/usercommands") + "</b>: displays user commands.<br>";
         commandsmessage += (auth >= 1 ? "<b>" + helpers.userl("/modcommands") + "</b>: displays moderator commands.<br>" : "");
         commandsmessage += (auth >= 2 ? "<b>" + helpers.userl("/admincommands") + "</b>: displays administrator commands.<br>" : "");
@@ -31,14 +31,14 @@ usercommands1 = {
         commandsmessage += "<br><b>" + helpers.userl("/partycommands") + "</b>: displays Party commands. Only for the <a href='po:join/" + permchannels[3] + "'>#" + permchannels[3] + "</a> channel.<br>";
         commandsmessage += "<b>" + helpers.userl("/roulettecommands") + "</b>: displays Roulette commands. Only for the <a href='po:join/" + permchannels[5] + "'>#" + permchannels[5] + "</a> channel.<br>";
         commandsmessage += "<b>" + helpers.userl("/rrcommands") + "</b>: displays Russian Roulette options. Only for the <a href='po:join/" + permchannels[4] + "'>#" + permchannels[4] + "</a> channel.<br>";
-        commandsmessage += "<br><timestamp/><br>" + BORDER2;
+        commandsmessage += "<br><timestamp/><br>" + border2;
         sys.sendHtmlMessage(src, commandsmessage, channel);
     }
     
     ,
     
     usercommands: function (src, channel, command) {
-        var commandsmessage = BORDER
+        var commandsmessage = border
         + "<h2>User Commands</h2>"
         + "<br>"
         + "<b>" + helpers.userl("/funcommands") + "</b>: displays fun commands.<br>"
@@ -47,14 +47,14 @@ usercommands1 = {
         + "<b>" + helpers.userl("/messageoptions") + "</b>: displays message options.<br>"
         + "<b>" + helpers.userl("/touroptions") + "</b>: displays tour options.<br>"
         + "<br><timestamp/><br>"
-        + BORDER2;
+        + border2;
         sys.sendHtmlMessage(src, commandsmessage, channel);
     }
     
     ,
     
     funcommands: function (src, channel, command) {
-        var commandsmessage = BORDER
+        var commandsmessage = border
         + "<h2>Fun Commands</h2>"
         + "<br>"
         + "<b>" + helpers.user("/armyof ") + helpers.arg("Pokémon") + "</b>: posts six of the same <b>Pokémon</b>.<br>"
@@ -90,14 +90,14 @@ usercommands1 = {
         + "<b>" + helpers.user("/sleep ") + helpers.arg("player") + "</b>: puts <b>player</b> to sleep. This command no longer adds 'asleep' to the player's name.<br>"
         + "<b>" + helpers.user("/wtfboom") + "</b>: an extreme reaction for an astonishing surprise, like a sudden explosion.<br>"
         + "<br><timestamp/><br>"
-        + BORDER2;
+        + border2;
         sys.sendHtmlMessage(src, commandsmessage, channel);
     }
     
     ,
     
     infooptions: function (src, channel, command) {
-        var commandsmessage = BORDER
+        var commandsmessage = border
         + "<h2>User Commands ~ Info Options</h2>"
         + "<br>"
         + "<b>" + helpers.user("/rules") + "</b>: displays the server's rules.<br>"
@@ -121,14 +121,14 @@ usercommands1 = {
         + "<b>" + helpers.user("/movepool ") + helpers.arg("Pokémon") + helpers.arg2("*move") + "</b>: displays if <b>move</b> is in <b>Pokémon</b>'s movepool. If <b>move</b> is not specified, displays <b>Pokémon</b>'s movepool. Also /canlearn.<br>"
         + "<b>" + helpers.user("/gradient ") + helpers.arg("gradient") + "</b>: tests <b>gradient</b>. Useful for trainer info.<br>"
         + "<br><timestamp/><br>"
-        + BORDER2;
+        + border2;
         sys.sendHtmlMessage(src, commandsmessage, channel);
     }
     
     ,
     
     interactoptions: function (src, channel, command) {
-        var commandsmessage = BORDER
+        var commandsmessage = border
         + "<h2>User Commands ~ Interact Options</h2>"
         + "<br>"
         + "<b>" + helpers.user("/color ") + helpers.arg("color") + "</b>: changes your color to <b>color</b>. <b>color</b> must be valid. Also /colour.<br>"
@@ -148,14 +148,14 @@ usercommands1 = {
         + "<b>" + helpers.user("/flyaway") + "</b>: you fly away from the server, disconnecting you in the process.<br>"
         + "<b>" + helpers.user("/see ") + helpers.arg("text") + "</b>: you are so afraid of <b>text</b>, you run away from the server in fear. If <b>text</b> is unspecified, you will see Dennis.<br>"
         + "<br><timestamp/><br>"
-        + BORDER2;
+        + border2;
         sys.sendHtmlMessage(src, commandsmessage, channel);
     }
     
     ,
     
     messageoptions: function (src, channel, command) {
-        var commandsmessage = BORDER
+        var commandsmessage = border
         + "<h2>User Commands ~ Message Options</h2>"
         + "<br>"
         + "<b>" + helpers.user("/me ") + helpers.arg("message") + "</b>: posts <b>message</b> between asterisks, in bold and your name color.<br>"
@@ -170,14 +170,14 @@ usercommands1 = {
         + "<b>" + helpers.user("/random") + "</b>: generates a random post that doesn't make any sense.<br>"
         + "<b>" + helpers.user("/randomsupport") + "</b>: posts a message that you support a randomly generated couple.<br>"
         + "<br><timestamp/><br>"
-        + BORDER2;
+        + border2;
         sys.sendHtmlMessage(src, commandsmessage, channel);
     }
     
     ,
     
     touroptions: function (src, channel, command) {
-        var commandsmessage = BORDER
+        var commandsmessage = border
         + "<h2>User Commands ~ Tour Options</h2>"
         + "<br>"
         + "<b>" + helpers.user("/join") + "</b>: join the current tour.<br>"
@@ -185,14 +185,14 @@ usercommands1 = {
         + "<b>" + helpers.user("/viewtour") + "</b>: display the current tour.<br>"
         + "<b>" + helpers.user("/viewround") + "</b>: view the current round.<br>"
         + "<br><timestamp/><br>"
-        + BORDER2;
+        + border2;
         sys.sendHtmlMessage(src, commandsmessage, channel);
     }
     
     ,
     
     help: function (src, channel, command) {
-        var helpmessage = BORDER, topic = command[1];
+        var helpmessage = border, topic = command[1];
         if (!topic) {
             helpers.starfox(src, channel, command, bots.command, "Error 404, topic not found.");
             return;
@@ -257,7 +257,7 @@ usercommands1 = {
             helpers.starfox(src, channel, command, bots.command, "Error 403, invalid topic.");
             return;
         }
-        helpmessage += "<br><timestamp/><br>" + BORDER2;
+        helpmessage += "<br><timestamp/><br>" + border2;
         sys.sendHtmlMessage(src, helpmessage, channel);
     }
     
@@ -269,7 +269,7 @@ usercommands1 = {
         ------------
     **/
     rules: function (src, channel, command) {
-        var rulesmessage = BORDER
+        var rulesmessage = border
         + "<h2>Rules</h2>"
         + "<br>"
         + helpers.bot("• " + botsymbol + RULE1) + EXPL1
@@ -278,14 +278,14 @@ usercommands1 = {
         + helpers.bot("• " + botsymbol + RULE4) + EXPL4
         + helpers.bot("• " + botsymbol + RULE5) + EXPL5
         + "<br><timestamp/><br>"
-        + BORDER2;
+        + border2;
         sys.sendHtmlMessage(src, rulesmessage, channel);
     }
     
     ,
     
     online: function (src, channel, command) {
-        var onlinemessage = BORDER + "<style type='text/css'>table {border-width:1px; border-style:solid; border-color:#000;}" 
+        var onlinemessage = border + "<style type='text/css'>table {border-width:1px; border-style:solid; border-color:#000;}" 
         + "thead {font-weight:bold;}</style><h2>Players Online</h2><br>"
         + "<table cellpadding=2 cellspacing=0><thead><tr style='background-color:#b0b0b0;'>"
         + "<td>Icon</td><td>Auth</td><td>Name</td><td>ID</td>", srcauth = sys.auth(src), date = new Date(), unit;
@@ -362,14 +362,14 @@ usercommands1 = {
             onlinemessage += "</tr>";
         }
         var playernum = sys.numPlayers();
-        onlinemessage += "</tbody></table><br><br><b>Total Players Online:</b> " + playernum + "<br><br><timestamp/><br>" + BORDER2;
+        onlinemessage += "</tbody></table><br><br><b>Total Players Online:</b> " + playernum + "<br><br><timestamp/><br>" + border2;
         sys.sendHtmlMessage(src, onlinemessage, channel);
     }
     
     ,
     
     channels: function (src, channel, command) {
-        var channelmessage = BORDER + "<style type='text/css'>table {border-width:1px; border-style:solid; border-color:#000;}" 
+        var channelmessage = border + "<style type='text/css'>table {border-width:1px; border-style:solid; border-color:#000;}" 
         + "thead {font-weight:bold;}</style><h2>Channels Online</h2><br>"
         + "<table cellpadding=2 cellspacing=0><thead><tr style='background-color:#b0b0b0;'>"
         + "<td>ID</td><td>Name</td><td>Description</td>";
@@ -396,14 +396,14 @@ usercommands1 = {
             }
             channelmessage += "<tr><td>" + id + "</td><td><a href='po:join/" + name + "'>#" + name + "</a></td><td>" + descr + "</td></tr>";
         }
-        channelmessage += "</table><br><br><b>Total Channels Online:</b> " + total + "<br><br><timestamp/><br>" + BORDER2;
+        channelmessage += "</table><br><br><b>Total Channels Online:</b> " + total + "<br><br><timestamp/><br>" + border2;
         sys.sendHtmlMessage(src, channelmessage, channel);
     }
     
     ,
     
     battles: function (src, channel, command) {
-        var battlemessage = BORDER + "<style type='text/css'>table {border-width:1px; border-style:solid; border-color:#000;}" 
+        var battlemessage = border + "<style type='text/css'>table {border-width:1px; border-style:solid; border-color:#000;}" 
         + "thead {font-weight:bold;}</style><h2>Battles Online</h2><br>"
         + "<table cellpadding=2 cellspacing=0><thead><tr style='background-color:#b0b0b0;'>"
         + "<td>ID</td><td>Player 1</td><td>Player 2</td><td>Tier</td><td>Clauses</td><td>Start Time</td><td>Link</td>";
@@ -417,7 +417,7 @@ usercommands1 = {
             battlemessage += "<tr><td>" + index + "</td><td>" + p1 + "</td><td>" + p2 + "</td><td>" + tier + "</td><td>" + clauses + "</td><td>" + start + "</td><td>" + link + "</td></tr>";
         }
         var total = Object.keys(battles).length;
-        battlemessage += "</table><br><br><b>Total Battles Online:</b> " + total + "<br><br><timestamp/><br>" + BORDER2;
+        battlemessage += "</table><br><br><b>Total Battles Online:</b> " + total + "<br><br><timestamp/><br>" + border2;
         sys.sendHtmlMessage(src, battlemessage, channel);
     }
     
@@ -431,7 +431,7 @@ usercommands1 = {
     ,
     
     registry: function (src, channel, command) {
-        var auth = sys.auth(src), registrymessage = BORDER + "<style type='text/css'>table {border-width: 1px; border-style: solid; border-color: black;}</style><h2>Pokémon Online Registry</h2><br>" +
+        var auth = sys.auth(src), registrymessage = border + "<style type='text/css'>table {border-width: 1px; border-style: solid; border-color: black;}</style><h2>Pokémon Online Registry</h2><br>" +
         "<table cellpadding=2 cellspacing=0><thead><tr style='background-color: #b0b0b0;'><th>Server</th><th>Players Online</th><th>Advanced Connection</th>";
         if (auth >= 1) {
             registrymessage += "<th>Host Country</th>";
@@ -476,7 +476,7 @@ usercommands1 = {
             "<br><b>Total Servers:</b> " + servers.length +
             "<br><b>Total Players:</b> " + total +
             "<br><b>Percentage on " + servername + ":</b> " + (sys.numPlayers() / total * 100).toPrecision(2) + "%" +
-            "<br>Players that are logged onto multiple servers are counted multiple times.<br><br><timestamp/><br>" + BORDER2;
+            "<br>Players that are logged onto multiple servers are counted multiple times.<br><br><timestamp/><br>" + border2;
             sys.sendHtmlMessage(src, registrymessage, channel);
         });
     }
@@ -484,7 +484,7 @@ usercommands1 = {
     ,
     
     serverinfo: function (src, channel, command) {
-        var servermessage = BORDER + "<h2>Server Info</h2><br>", ports = sys.serverPorts().length,
+        var servermessage = border + "<h2>Server Info</h2><br>", ports = sys.serverPorts().length,
         DAYS = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
         MONTHS = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
         uptime = sys.profileDump().split('\n')[0].split(',')[0].split(':')[1].slice(1, -2),
@@ -500,14 +500,14 @@ usercommands1 = {
         "<br><b>IP:</b> " + hostIp +
         "<br><b>" + (ports == 1 ? "Port" : "Ports") + ":</b> " + sys.serverPorts().join(", ") +
         "<br><b>Public:</b> " + serverprivate + "<br><b>Open:</b> " + serveropen + "<br><br>" + "<b>Local Date:</b> " + date +
-        "<br><b>Local Time:</b> " + time + "<br><b>Server Uptime:</b> " + helpers.formatUptime(uptime) + "<br><br><timestamp/><br>" + BORDER2;
+        "<br><b>Local Time:</b> " + time + "<br><b>Server Uptime:</b> " + helpers.formatUptime(uptime) + "<br><br><timestamp/><br>" + border2;
         sys.sendHtmlMessage(src, servermessage, channel);
     }
     
     ,
     
     scriptinfo: function (src, channel, command) {
-        var scriptmessage = BORDER + "<h2>Script Info</h2>", scriptcontent = [], length;
+        var scriptmessage = border + "<h2>Script Info</h2>", scriptcontent = [], length;
         scriptcontent.push(sys.read("scripts.js"));
         scriptcontent.push(sys.read("scripts/main.js"));
         scriptcontent.push(sys.read("scripts/base64.js"));
@@ -530,14 +530,14 @@ usercommands1 = {
         "<b>Lines:</b> " + scriptcontent.split(/\u000A/g).length + "<br>" +
         "<h3>Contribution</h3><br>" +
         "Contributed to by: General Thor<br>";
-        scriptmessage += "<br><timestamp/><br>" + BORDER2;
+        scriptmessage += "<br><timestamp/><br>" + border2;
         sys.sendHtmlMessage(src, scriptmessage, channel);
     }
     
     ,
     
     playerinfo: function (src, channel, command) {
-        var infomessage = BORDER + "<h2>Player Info</h2><br>", player = command[1], trgt, auth, imageindex, status, lastlogin;
+        var infomessage = border + "<h2>Player Info</h2><br>", player = command[1], trgt, auth, imageindex, status, lastlogin;
         if (!player) {
             player = sys.name(src);
         }
@@ -571,7 +571,7 @@ usercommands1 = {
             "<br><b>Auth:</b> " + helpers.authname(sys.dbAuth(player), true, true);
         }
         infomessage += "<br><b>Last Online:</b> " + lastlogin +
-        "<br><br><timestamp/><br>" + BORDER2;
+        "<br><br><timestamp/><br>" + border2;
         sys.sendHtmlMessage(src, infomessage, channel);
     }
     
@@ -580,7 +580,7 @@ usercommands1 = {
     auth: function (src, channel, command) {
         var srcauth = sys.auth(src), index, auth, authname, name, ip, lastlogin, status, total, country, timezone2;
         var authlist = helpers.authSort(), length = 0;
-        var message = BORDER + "<h2>Server Authority</h2>"
+        var message = border + "<h2>Server Authority</h2>"
         + "<br><style type='text/css'>table {border-width:1px; border-style:solid; border-color:#000;}thead {font-weight:bold;}</style>"
         + "<table cellpadding=2 cellspacing=0><thead><tr style='background-color:#b0b0b0;'>"
         + "<td>Icon</td><td>Auth</td><td>Title</td><td>Name</td>";
@@ -615,7 +615,7 @@ usercommands1 = {
             message += "<td>" + lastlogin + "</td><td>" + status + "</td></tr>";
             length++;
         }
-        message += "</table><br><br><b>Total Auth Members:</b> " + length + "<br><br><timestamp/><br>" + BORDER2;
+        message += "</table><br><br><b>Total Auth Members:</b> " + length + "<br><br><timestamp/><br>" + border2;
         sys.sendHtmlMessage(src, message, channel);
     }
     
@@ -641,7 +641,7 @@ usercommands1 = {
     ,
 
     myalts: function (src, channel, command) {
-        var altsmessage = BORDER + "<h2>My Alts</h2><br><style type='text/css'>table {border-width:1px; border-style:solid; border-color:#000;}"
+        var altsmessage = border + "<h2>My Alts</h2><br><style type='text/css'>table {border-width:1px; border-style:solid; border-color:#000;}"
         + "thead {font-weight:bold;}</style>"
         + "<table cellpadding=2 cellspacing=0><thead><tr style='background-color:#b0b0b0;'>"
         + "<td>Icon</td><td>Auth</td><td>Title</td><td>Name</td><td>Registered</td><td>Last Online</td></tr></thead><tbody>", total = 0, alts = sys.aliases(sys.ip(src)), title = "", name, auth, registered, lastlogin;
@@ -658,14 +658,14 @@ usercommands1 = {
             "</td><td>" + name + "</td><td>" + registered + "</td><td>" + lastlogin + "</td></tr>";
             total++;
         }
-        altsmessage += "</tbody></table><br><br><b>Total Alts:</b> " + total + "<br><br><timestamp/><br>" + BORDER2;
+        altsmessage += "</tbody></table><br><br><b>Total Alts:</b> " + total + "<br><br><timestamp/><br>" + border2;
         sys.sendHtmlMessage(src, altsmessage, channel);
     }
     
     ,
     
     pokedex: function (src, channel, command) {
-        var dexmessage = BORDER, index = 27, form = 0, pokenum, pokenumdisplay, pokemon, stats, feet, lbs;
+        var dexmessage = border, index = 27, form = 0, pokenum, pokenumdisplay, pokemon, stats, feet, lbs;
         if (!command[1]) {
             helpers.starfox(src, channel, command, bots.command, "Error 404, Pokémon not found.");
             return;
@@ -785,7 +785,7 @@ usercommands1 = {
                 + "</tr>";
             }
         }
-        dexmessage += "</tbody></table><br><br><timestamp/><br>" + BORDER2;
+        dexmessage += "</tbody></table><br><br><timestamp/><br>" + border2;
         sys.sendHtmlMessage(src, dexmessage, channel);
     }
     
@@ -816,7 +816,7 @@ usercommands1 = {
             }
         }
         var type = "<img src='Themes/Classic/types/type" + sys.moveType(id) + ".png'>", name = sys.move(id);
-        var movedexmessage = BORDER + "<br><h2>Movedex</h2><br>"
+        var movedexmessage = border + "<br><h2>Movedex</h2><br>"
         + "<style type='text/css'>table {border-width:1px; border-style:solid; border-color:#000;}thead {font-weight:bold;}tfoot {font-style:italic;}</style>"
         + "<table cellpadding=2 cellspacing=0><thead><tr style='background-color:#b0b0b0;'><td>Number</td><td>Name</td><td>Type</td><td>Category</td><td>Base Power</td>"
         + "<td>PP</td><td>Accuracy</td><td>Priority</td><td>Range</td></tr></thead><tbody><tr><td>" + id + "</td><td>" + name + "</td><td>" + type + "</td>";
@@ -856,7 +856,7 @@ usercommands1 = {
         if (range == 12)range = "Team";if (cat == 1)cat = "Physical";else if (cat == 2)cat = "Special";else if (cat === 0)cat = "Other";
         if (acc > 100)acc = "-";if (cat == 1)cat = "Physical";else if (cat == 2)cat = "Special";else if (cat === 0)cat = "Other";else if (cat === undefined)cat = "-";
         movedexmessage += "<td>" + cat + "</td><td>" + power + "</td><td>" + pp + "</td><td>" + acc + "</td><td>" + prio + "</td><td>" + range + "</td></tbody>"
-        + "<tfoot><tr><td colspan=9>" + descr.slice(id.toString().length + 1) + "</td></tr></tfoot></table><br><br><timestamp/><br>" + BORDER2;
+        + "<tfoot><tr><td colspan=9>" + descr.slice(id.toString().length + 1) + "</td></tr></tfoot></table><br><br><timestamp/><br>" + border2;
         sys.sendHtmlMessage(src, movedexmessage, channel);
     }
     
@@ -869,7 +869,7 @@ usercommands1 = {
     ,
     
     movepool: function (src, channel, command) {
-        var learnmessage = BORDER, index = 27, form = 0, pokenum, pokenumdisplay, pokemon, move, id, movelist;
+        var learnmessage = border, index = 27, form = 0, pokenum, pokenumdisplay, pokemon, move, id, movelist;
         if (!command[1]) {
             helpers.starfox(src, channel, command, bots.command, "Error 404, Pokémon not found.");
             return;
@@ -938,7 +938,7 @@ usercommands1 = {
                 for (var index2 in movelist) {
                     movelist[index2] = sys.move(movelist[index2]);
                 }
-                learnmessage += movelist.sort().join(", ") + ".<br><br><b>Total Moves:</b> " + movelist.length + "<br><br><timestamp/><br>" + BORDER2;
+                learnmessage += movelist.sort().join(", ") + ".<br><br><b>Total Moves:</b> " + movelist.length + "<br><br><timestamp/><br>" + border2;
                 if (command[2]) {
                     for (var index2 in movelist) {
                         if (movelist[index2] == move) {
@@ -980,7 +980,7 @@ usercommands1 = {
                 return;
             }
         }
-        var name = sys.ability(id), descrs = sys.read("db/abilities/ability_battledesc.txt"), abdexmessage = BORDER + "<br><h2>#" + id + " " + name + "</h2><br><b>Description:</b> ";
+        var name = sys.ability(id), descrs = sys.read("db/abilities/ability_battledesc.txt"), abdexmessage = border + "<br><h2>#" + id + " " + name + "</h2><br><b>Description:</b> ";
         descrs = descrs.split("\n");
         var descrarray = [], derp, herp;
         for (var index in descrs) {
@@ -1011,7 +1011,7 @@ usercommands1 = {
             ablist[index4] = derp[0];
             ablist[index4] = sys.pokemon(ablist[index4]);
         }
-        abdexmessage += ablist.join(", ") + ".<br><br><timestamp/><br>" + BORDER2;
+        abdexmessage += ablist.join(", ") + ".<br><br><timestamp/><br>" + border2;
         sys.sendHtmlMessage(src, abdexmessage, channel);
     }
     
@@ -1029,7 +1029,7 @@ usercommands1 = {
             helpers.starfox(src, channel, command, bots.command, "Error 403, invalid team number.");
             return;
         }
-        var slot, name = sys.name(src), gen = sys.gen(src, team), viewteammessage = BORDER + "<h2>" + name + "'s Gen " + gen + " Team</h2><br><table>", index = 1, iddisplay;
+        var slot, name = sys.name(src), gen = sys.gen(src, team), viewteammessage = border + "<h2>" + name + "'s Gen " + gen + " Team</h2><br><table>", index = 1, iddisplay;
         for (slot = 0; slot < 6; slot++) {
             var id = sys.teamPoke(src, team, slot);
             if (id === 0) {
@@ -1103,7 +1103,7 @@ usercommands1 = {
             }
         }
         viewteammessage += "</table><b>" + helpers.user("/team") + "</b> without an argument displays your first team. To see your other teams, use <b>" + helpers.user("/team") + " " + helpers.arg("1/2/3/4/5") + "</b>." +
-        "<br><br><timestamp/><br>" + BORDER2;
+        "<br><br><timestamp/><br>" + border2;
         sys.sendHtmlMessage(src, viewteammessage, channel);
     }
     
@@ -1277,12 +1277,12 @@ usercommands1 = {
             for (tourmembersindex = 0; tourmembersindex < tour[channel].tourmembers.length; tourmembersindex++) {
                 tourplayerlist += "<b>" + (tourmembersindex+1) + ". " + members[tour[channel].tourmembers[tourmembersindex]] + "</b><br>";
             }
-            var viewroundmessage = BORDER
+            var viewroundmessage = border
             + "<h3> Players in the " + tour[channel].tourtier + " Tournament: </h3>"
             + tourplayerlist
             + "<br>"
             + "<timestamp/><br>"
-            + BORDER2;
+            + border2;
             sys.sendHtmlMessage(src, viewroundmessage, channel);
             return;
         }

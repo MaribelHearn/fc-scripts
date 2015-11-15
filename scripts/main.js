@@ -32,9 +32,6 @@
     "Manaphy", "Shaymin", "Arceus", "Victini", "Cobalion", "Terrakion", "Virizion", "Tornadus", "Thundurus", "Landorus", "Reshiram", "Zekrom", "Kyurem", "Meloetta", "Genesect",
     "Xerneas", "Yveltal", "Zygarde"];
     ROULETTE_EVENTS = ["frenzy", "chainfest", "type", "legendary"];
-    BORDER = "<font color='darkblue'><b>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>></b></font>";
-    BORDER2 = "<font color='darkblue'><b>&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;" +
-    "&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;</b></font>";
     NUMBER_OF_POKEMON = 721;
     REACTIVATE_REGISTER_BUTTON = 14;
     ROULETTE_WAIT_MIN = 90;
@@ -244,51 +241,22 @@
         Global Variables
         ----------------
     **/
-    // Boolean
-    helpers.setvariable("tor", false);
-    helpers.setvariable("stopbattles", false);
-    helpers.setvariable("megabancheck", false);
-    helpers.setvariable("gigabancheck", false);
-    helpers.setvariable("serverStarting", false);
-    
-    // Number
-    timer = 0;
-    partynyan = 0;
-    rouletteStep = 0;
-    rouletteTime = sys.rand(ROULETTE_WAIT_MIN, ROULETTE_WAIT_MAX);
-    
-    // String
-    rouletteEvent = "";
-    helpers.setvariable("layout", "new");
-    helpers.setvariable("hostIp", "");
-    helpers.setvariable("hostCountry", "");
-    helpers.setvariable("hostCity", "");
-    helpers.setvariable("hostTimeZone", "");
-    
-    // Array
-    helpers.setvariable("players", []);
-    helpers.setvariable("floodplayers", []);
-    
-    // Object
-    helpers.setvariable("tour", {});
-    helpers.setvariable("battles", {});
-    helpers.setvariable("battlesf", {});
-    
     // Boolean from data file
     helpers.setvariable("open", sys.read("data/open.txt") == "true" ? true : false);
     
     // Number from data file
-    helpers.setvariable("allowance", parseInt(sys.read("data/allowance.txt")));
-    helpers.setvariable("floodtime", parseInt(sys.read("data/floodtime.txt")));
-    helpers.setvariable("floodlevel", parseInt(sys.read("data/floodlevel.txt")));
-    helpers.setvariable("maxplayers", parseInt(sys.read("data/maxplayers.txt")));
+    allowance = parseInt(sys.read("data/allowance.txt"));
+    floodtime = parseInt(sys.read("data/floodtime.txt"));
+    floodlevel = parseInt(sys.read("data/floodlevel.txt"));
+    maxplayers = parseInt(sys.read("data/maxplayers.txt"));
     
     // String from data file
-    helpers.setvariable("botcolor", sys.read("data/botcolor.txt"));
-    helpers.setvariable("partymode", sys.read("data/partymode.txt"));
-    helpers.setvariable("botsymbol", sys.read("data/botsymbol.txt"));
-    helpers.setvariable("servertopic", sys.read("data/servertopic.txt"));
-    helpers.setvariable("botsymbolcolor", sys.read("data/botsymbolcolor.txt"));
+    botcolor = sys.read("data/botcolor.txt");
+    partymode = sys.read("data/partymode.txt");
+    botsymbol = sys.read("data/botsymbol.txt");
+    servertopic = sys.read("data/servertopic.txt");
+    botsymbolcolor = sys.read("data/botsymbolcolor.txt");
+    bordercolor = sys.read("data/bordercolor.txt");
     
     // Array from data file
     allowed = JSON.parse(sys.read("data/allowed.txt"));
@@ -326,6 +294,39 @@
     rangebanlist = JSON.parse(sys.read("data/rangebanlist.txt"));
     selfkickmessages = JSON.parse(sys.read("data/selfkickmsg.txt"));
     rangebanmessages = JSON.parse(sys.read("data/rangebanmsg.txt"));
+    
+    // Boolean
+    helpers.setvariable("tor", false);
+    helpers.setvariable("stopbattles", false);
+    helpers.setvariable("megabancheck", false);
+    helpers.setvariable("gigabancheck", false);
+    helpers.setvariable("serverStarting", false);
+    
+    // Number
+    timer = 0;
+    partynyan = 0;
+    rouletteStep = 0;
+    rouletteTime = sys.rand(ROULETTE_WAIT_MIN, ROULETTE_WAIT_MAX);
+    
+    // String
+    helpers.setvariable("rouletteEvent", "");
+    helpers.setvariable("layout", "new");
+    helpers.setvariable("hostIp", "");
+    helpers.setvariable("hostCountry", "");
+    helpers.setvariable("hostCity", "");
+    helpers.setvariable("hostTimeZone", "");
+    helpers.setvariable("border", "<font color='" + bordercolor + "'><b>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>></b></font>");
+    helpers.setvariable("border2", "<font color='" + bordercolor + "'><b>&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;" +
+    "&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;</b></font>");
+    
+    // Array
+    helpers.setvariable("players", []);
+    helpers.setvariable("floodplayers", []);
+    
+    // Object
+    helpers.setvariable("tour", {});
+    helpers.setvariable("battles", {});
+    helpers.setvariable("battlesf", {});
     
     // Special
     tour[0] = {};

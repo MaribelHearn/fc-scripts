@@ -10,7 +10,7 @@
 */
     modcommands = {
         modcommands: function (src, channel, command) {
-            var commandsmessage = BORDER
+            var commandsmessage = border
             + "<h2>Moderator Commands</h2>"
             + "<br>"
             + "<b>" + helpers.userl("/justiceoptions") + "</b>: displays justice options.<br>"
@@ -21,7 +21,7 @@
             + "<b>" + helpers.userl("/bigtextsettings") + "</b>: displays custom bigtext settings.<br>"
             + "<b>" + helpers.userl("/customsettings") + "</b>: displays justice message customisation settings.<br>"
             + "<br><timestamp/><br>"
-            + BORDER2;
+            + border2;
             sys.sendHtmlMessage(src, commandsmessage, channel);
         }
         
@@ -33,7 +33,7 @@
             ---------------
         **/
         justiceoptions: function (src, channel, command) {
-            var commandsmessage = BORDER
+            var commandsmessage = border
             + "<h2>Moderator Commands ~ Justice Options</h2>"
             + "<br>"
             + "<b>" + helpers.user("/forcerules ") + helpers.arg("player") + "</b>: shows <b>player</b> the server rules. Also /frules.<br>"
@@ -51,7 +51,7 @@
             + "<b>" + helpers.user("/megabanlist") + "</b>: view the server's mega ban list in a neat table with reason and date of ban.<br>"
             + "<b>" + helpers.user("/gigabanlist") + "</b>: view the server's giga ban list in a neat table with reason and date of ban.<br>"
             + "<br><timestamp/><br>"
-            + BORDER2;
+            + border2;
             sys.sendHtmlMessage(src, commandsmessage, channel);
         }
         
@@ -73,7 +73,7 @@
                 helpers.starfox(src, channel, command, bots.command, "Error 403, you can't force rules on " + command[1] + " because their auth level is higher or equal to yours.");
                 return;
             }
-            var rulesmessage = BORDER
+            var rulesmessage = border
             + "<h2>Rules</h2>"
             + "<br>"
             + helpers.bot("• " + botsymbol + RULE1) + EXPL1
@@ -82,7 +82,7 @@
             + helpers.bot("• " + botsymbol + RULE4) + EXPL4
             + helpers.bot("• " + botsymbol + RULE5) + EXPL5
             + "<br><timestamp/><br>"
-            + BORDER2;
+            + border2;
             sys.sendHtmlMessage(trgt, rulesmessage, channel);
             sys.sendHtmlMessage(trgt, helpers.bot(bots.command) + "The server rules were forced on you by " + name + "!", channel);
             sys.sendHtmlMessage(src, helpers.bot(bots.command) + "You forced the Server Rules on " + command[1] + "!", channel);
@@ -124,7 +124,7 @@
             rules.push(helpers.bot("• " + botsymbol + RULE3) + EXPL3);
             rules.push(helpers.bot("• " + botsymbol + RULE4) + EXPL4);
             rules.push(helpers.bot("• " + botsymbol + RULE5) + EXPL5);
-            sys.sendHtmlMessage(trgt, BORDER + "<h2>Rules ~ Rule " + (eval(command[2]) + 1 * 1) + "</h2><br>" + rules[command[2]] + "<br><timestamp/><br>" + BORDER2, channel);
+            sys.sendHtmlMessage(trgt, border + "<h2>Rules ~ Rule " + (eval(command[2]) + 1 * 1) + "</h2><br>" + rules[command[2]] + "<br><timestamp/><br>" + border2, channel);
             command[2]++;
             sys.sendHtmlMessage(trgt, helpers.bot(bots.command) + "Rule " + command[2] + " was forced on you by " + name + "!", channel);
             sys.sendHtmlMessage(src, helpers.bot(bots.command) + "You forced Rule " + command[2] + " on " + command[1] + "!", channel);
@@ -334,7 +334,7 @@
         ,
         
         mutelist: function (src, channel, command) {
-            var onlinemessage = BORDER + "<style type='text/css'>table {border-width:1px; border-style:solid; border-color:#000;}" +
+            var onlinemessage = border + "<style type='text/css'>table {border-width:1px; border-style:solid; border-color:#000;}" +
             "thead {font-weight:bold;}</style><h2>Mute List</h2><br><table cellpadding=2 cellspacing=0><thead><tr style='background-color:dodgerblue'>" +
             "<td>Name</td><td>IP</td><td>Muter</td><td>Reason</td><td>Muted for</td><td>Time left</td><td>Date of muting</td></tr></thead>", id;
             for (var index in mutelist) {
@@ -377,7 +377,7 @@
                 "</td><td>" + id.reason + "</td><td>" + time + "</td><td>" + left + unit + "</td><td>" + id.date + "</td></tr>";
             }
             var playernum = Object.keys(mutelist).length;
-            onlinemessage += "</table><br><br><b>Total Muted Players:</b> " + playernum + "<br><br><timestamp/><br>" + BORDER2;
+            onlinemessage += "</table><br><br><b>Total Muted Players:</b> " + playernum + "<br><br><timestamp/><br>" + border2;
             sys.sendHtmlMessage(src, onlinemessage, channel);
         }
         
@@ -394,7 +394,7 @@
         
         banlist: function (src, channel, command) {
             var player, time, left, ip;
-            var onlinemessage = BORDER + "<style type='text/css'>table {border-width:1px; border-style:solid; border-color:#000;}" +
+            var onlinemessage = border + "<style type='text/css'>table {border-width:1px; border-style:solid; border-color:#000;}" +
             "thead {font-weight:bold;}</style><h2>Ban List</h2><br><table cellpadding=2 cellspacing=0><thead><tr style='background-color:#ff6900'>" +
             "<td>Name</td><td>IP</td><td>Banner</td><td>Reason</td><td>Banned for</td><td>Time left</td><td>Date of banning</td></tr></thead>";
             for (var index in banlist) {
@@ -444,7 +444,7 @@
                 "</td><td>" + id.reason + "</td><td>" + time + "</td><td>" + left + unit + "</td><td>" + id.date + "</td></tr>";
             }
             var playernum = Object.keys(banlist).length;
-            onlinemessage += "</table><br><br><b>Total Banned Players:</b> " + playernum + "<br><br><timestamp/><br>" + BORDER2;
+            onlinemessage += "</table><br><br><b>Total Banned Players:</b> " + playernum + "<br><br><timestamp/><br>" + border2;
             sys.sendHtmlMessage(src, onlinemessage, channel);
         }
         
@@ -461,7 +461,7 @@
         ,
         
         rangebanlist: function (src, channel, command) {
-            var onlinemessage = BORDER + "<style type='text/css'>table {border-width:1px; border-style:solid; border-color:#000;}" +
+            var onlinemessage = border + "<style type='text/css'>table {border-width:1px; border-style:solid; border-color:#000;}" +
             "thead {font-weight:bold;}</style><h2>Range Ban List</h2><br><table cellpadding=2 cellspacing=0><thead><tr style='background-color:green'>" +
             "<td>Name</td><td>Range</td><td>Banner</td><td>Reason</td><td>Date</td></tr></thead>", player, range;
             for (var index in rangebanlist) {
@@ -481,14 +481,14 @@
                 onlinemessage += "<tr style='background-color:#7fff00'><td>" + player + "</td><td>" + id.range + "</td><td>" + id.banner + "</td><td>" + id.reason + "</td><td>" + id.date + "</td></tr>";
             }
             var playernum = Object.keys(rangebanlist).length;
-            onlinemessage += "</table><br><br><b>Total Range Banned Players:</b> " + playernum + "<br><br><timestamp/><br>" + BORDER2;
+            onlinemessage += "</table><br><br><b>Total Range Banned Players:</b> " + playernum + "<br><br><timestamp/><br>" + border2;
             sys.sendHtmlMessage(src, onlinemessage, channel);
         }
         
         ,
         
         megabanlist: function (src, channel, command) {
-            var onlinemessage = BORDER + "<style type='text/css'>table {border-width:1px; border-style:solid; border-color:#000;}" +
+            var onlinemessage = border + "<style type='text/css'>table {border-width:1px; border-style:solid; border-color:#000;}" +
             "thead {font-weight:bold;}</style><h2>Mega Ban List</h2><br><table cellpadding=2 cellspacing=0><thead><tr style='background-color:purple'>" +
             "<td>Name</td><td>Banner</td><td>Reason</td><td>Date</td></tr></thead>", player;
             for (var index in megabanlist) {
@@ -500,14 +500,14 @@
                 onlinemessage += "<tr style='background-color:fuchsia'><td>" + player + "</td><td>" + id.banner + "</td><td>" + id.reason + "</td><td>" + id.date + "</td></tr>";
             }
             var playernum = Object.keys(megabanlist).length;
-            onlinemessage += "</table><br><br><b>Total Mega Banned Players:</b> " + playernum + "<br><br><timestamp/><br>" + BORDER2;
+            onlinemessage += "</table><br><br><b>Total Mega Banned Players:</b> " + playernum + "<br><br><timestamp/><br>" + border2;
             sys.sendHtmlMessage(src, onlinemessage, channel);
         }
         
         ,
         
         gigabanlist: function (src, channel, command) {
-            var onlinemessage = BORDER + "<style type='text/css'>table {border-width:1px; border-style:solid; border-color:#000;}" +
+            var onlinemessage = border + "<style type='text/css'>table {border-width:1px; border-style:solid; border-color:#000;}" +
             "thead {font-weight:bold;}</style><h2>Giga Ban List</h2><br><table cellpadding=2 cellspacing=0><thead><tr style='background-color:darkred'>" +
             "<td>Name</td><td>Banner</td><td>Reason</td><td>Pseudo</td><td>Date</td></tr></thead>", player;
             for (var index in gigabanlist) {
@@ -519,7 +519,7 @@
                 onlinemessage += "<tr style='background-color:red'><td>" + player + "</td><td>" + id.banner + "</td><td>" + id.reason + "</td><td>" + id.pseudo + "</td><td>" + id.date + "</td></tr>";
             }
             var playernum = Object.keys(gigabanlist).length;
-            onlinemessage += "</table><br><br><b>Total Giga Banned Players:</b> " + playernum + "<br><br><timestamp/><br>" + BORDER2;
+            onlinemessage += "</table><br><br><b>Total Giga Banned Players:</b> " + playernum + "<br><br><timestamp/><br>" + border2;
             sys.sendHtmlMessage(src, onlinemessage, channel);
         }
         
@@ -531,7 +531,7 @@
             ----------------
         **/
         modinfooptions: function (src, channel, command) {
-            var commandsmessage = BORDER
+            var commandsmessage = border
             + "<h2>Moderator Commands ~ Info Options</h2>"
             + "<br>"
             + "<b>" + helpers.user("/cp ") + helpers.arg("player") + "</b>: displays Control Panel and location data for <b>player</b>. Also /whois.<br>"
@@ -540,14 +540,14 @@
             + "<b>" + helpers.user("/rangealts ") + helpers.arg("range") + "</b>: displays alts for <b>range</b>.<br>"
             + "<b>" + helpers.user("/lastmessages") + "</b>: Shows everyone's last 10 messages in a neat table. Also /lastmsgs or /lastposts.<br>"
             + "<br><timestamp/><br>"
-            + BORDER2;
+            + border2;
             sys.sendHtmlMessage(src, commandsmessage, channel);
         }
         
         ,
         
         cp: function (src, channel, command) {
-            var cpmessage = BORDER + "<h2>Control Panel</h2><br>", gigabanned = false, megabanned = false, rangebanned = false, banned = false, muted = false;
+            var cpmessage = border + "<h2>Control Panel</h2><br>", gigabanned = false, megabanned = false, rangebanned = false, banned = false, muted = false;
             var name, player, auth, imageindex, status, registered, location, country, os, derp, usedips, playerchannels, lastlogin, timezone2, flag, version;
             if (!command[1]) {
                 helpers.starfox(src, channel, command, bots.command, "Error 404, player not found.", channel);
@@ -666,7 +666,7 @@
             "<br><b>Number of Alts:</b> " + altsnum +
             "<br><b>Used IPs:</b> " + usedips +
             "<br><b>Channels:</b> " + playerchannels +
-            "<br><br><timestamp/><br>" + BORDER2;
+            "<br><br><timestamp/><br>" + border2;
             sys.sendHtmlMessage(src, cpmessage, channel);
         }
         
@@ -745,7 +745,7 @@
         ,
         
         rangealts: function (src, channel, command) {
-            var altsmessage = BORDER + "<h2>Alts for range " + command[1] + "</h2><br><table>", range = command[1], aliases = [], db;
+            var altsmessage = border + "<h2>Alts for range " + command[1] + "</h2><br><table>", range = command[1], aliases = [], db;
             if (!range) {
                 helpers.starfox(src, channel, command, bots.command, "Error 404, range not found.");
                 return;
@@ -765,14 +765,14 @@
                 return;
             }
             altsmessage += "<tr><td>" + aliases.join(", ") + "</td></tr>";
-            altsmessage += "</table><br><br><b>Total Alts:</b> " + aliases.length + "<br><br><timestamp/><br>" + BORDER2;
+            altsmessage += "</table><br><br><b>Total Alts:</b> " + aliases.length + "<br><br><timestamp/><br>" + border2;
             sys.sendHtmlMessage(src, altsmessage, channel);
         }
         
         ,
         
         lastmessages: function (src, channel, command) {
-            var message = BORDER + "<style type='text/css'>table {border-width:1px; border-style:solid; border-color:#000;}" 
+            var message = border + "<style type='text/css'>table {border-width:1px; border-style:solid; border-color:#000;}" 
             + "thead {font-weight:bold;}</style>"
             + "<h2>Last Messages</h2><br />"
             + "<table cellpadding=2 cellspacing=0><thead><tr style='background-color:#b0b0b0;'><td>Player Name</td><td>Messages</td></tr></thead>";
@@ -793,7 +793,7 @@
                 }
                 message += "</td></tr>";
             }
-            message += "</table><br><br><timestamp/><br>" + BORDER2;
+            message += "</table><br><br><timestamp/><br>" + border2;
             sys.sendHtmlMessage(src, message, channel);
         }
         
@@ -817,7 +817,7 @@
             ------------
         **/
         nameoptions: function (src, channel, command) {
-            var commandsmessage = BORDER
+            var commandsmessage = border
             + "<h2>Moderator Commands ~ Name Options</h2>"
             + "<br>"
             + "<b>" + helpers.user("/changename ") + helpers.arg("player") + helpers.arg2("*name") + "</b>: changes <b>player</b>'s name to <b>name</b>.<br>"
@@ -825,7 +825,7 @@
             + " or replaces the names by <b>text</b> with a number. If <b>self</b> is specified, the command affects yourself as well.<br>"
             + "<b>" + helpers.user("/resetall") + "</b>: sets all players' usernames back to their original states.<br>"
             + "<br><timestamp/><br>"
-            + BORDER2;
+            + border2;
             sys.sendHtmlMessage(src, commandsmessage, channel);
         }
         
@@ -924,7 +924,7 @@
             -------------
         **/
         otheroptions: function (src, channel, command) {
-            var commandsmessage = BORDER
+            var commandsmessage = border
             + "<h2>Moderator Commands ~ Other Options</h2>"
             + "<br>"
             + "<b>" + helpers.user("/clear") + "</b>: clears the chat. Also /chatclear and /clearchat.<br>"
@@ -932,7 +932,7 @@
             + "<b>" + helpers.user("/flash ") + helpers.arg("player") + "</b>: flashes <b>player</b>.<br>"
             + "<b>" + helpers.user("/html ") + helpers.arg("message") + "</b>: send the HTML-message <b>message</b>.<br>"
             + "<br><timestamp/><br>"
-            + BORDER2;
+            + border2;
             sys.sendHtmlMessage(src, commandsmessage, channel);
         }
         
@@ -1050,7 +1050,7 @@
             ------------
         **/
         altsettings: function (src, channel, command) {
-            var commandsmessage = BORDER + "<h2>Moderator Commands ~ Alt Settings</h2><br><style type='text/css'>table {border-width:1px; border-style:solid; border-color:#000;}"
+            var commandsmessage = border + "<h2>Moderator Commands ~ Alt Settings</h2><br><style type='text/css'>table {border-width:1px; border-style:solid; border-color:#000;}"
             + "thead {font-weight:bold;}</style>"
             + "<table cellpadding=2 cellspacing=0><thead><tr style='background-color:#b0b0b0;'>"
             + "<td>Icon</td><td>Auth</td><td>Title</td><td>Name</td><td>Registered</td><td>Last Online</td></tr></thead><tbody>", total = 0, alts = sys.aliases(sys.ip(src)), title = "", name, auth, registered, lastlogin;
@@ -1073,7 +1073,7 @@
             + "Use <b>" + helpers.user("/delete ") + helpers.arg("alt") + "</b> to remove <b>alt</b> from the database. <b>alt</b> must have the same IP.<br>"
             + "Use <b>" + helpers.user("/title ") + helpers.arg("alt") + helpers.arg2("*text") + "</b>: to change <b>alt</b>'s auth title to <b>text</b>. If <b>alt</b> is not specified, changes your current alt's title. <b>alt</b> must have the same IP.<br>"
             + "<br><timestamp/><br>"
-            + BORDER2;
+            + border2;
             sys.sendHtmlMessage(src, commandsmessage, channel);
         }
         
@@ -1100,7 +1100,7 @@
             if (!isIp && members[player]) {
                 player = members[player];
             }
-            var altsmessage = BORDER + "<h2>" + (isIp ? "Alts for IP " + ip : player + "'s alts") + "</h2><br><style type='text/css'>table {border-width:1px; border-style:solid; border-color:#000;}"
+            var altsmessage = border + "<h2>" + (isIp ? "Alts for IP " + ip : player + "'s alts") + "</h2><br><style type='text/css'>table {border-width:1px; border-style:solid; border-color:#000;}"
             + "thead {font-weight:bold;}</style>"
             + "<table cellpadding=2 cellspacing=0><thead><tr style='background-color:#b0b0b0;'>"
             + "<td>Icon</td><td>Auth</td><td>Title</td><td>Name</td><td>Registered</td><td>Last Online</td></tr></thead><tbody>";
@@ -1116,7 +1116,7 @@
                 altsmessage += "<tr><td>" + helpers.authimage(src, auth > 3 ? 0 : auth) + "</td><td>" + helpers.authname(auth, true) + "</td><td>" + title +
                 "</td><td>" + name + "</td><td>" + registered + "</td><td>" + lastlogin + "</td></tr>";
             }
-            altsmessage += "</tbody></table><br><br><b>Total Alts:</b> " + alts.length + "<br><br><timestamp/><br>" + BORDER2;
+            altsmessage += "</tbody></table><br><br><b>Total Alts:</b> " + alts.length + "<br><br><timestamp/><br>" + border2;
             sys.sendHtmlMessage(src, altsmessage, channel);
         }
         
@@ -1237,7 +1237,7 @@
                 bigtextstemp["/" + i] = bigtextstemp[i];
                 delete bigtextstemp[i];
             }
-            commandsmessage = BORDER + "<h2>Moderator Commands ~ Bigtext Settings</h2><br>"
+            commandsmessage = border + "<h2>Moderator Commands ~ Bigtext Settings</h2><br>"
             + "Current custom bigtexts:<br>"
             + "<br>"
             + Object.keys(bigtextstemp).join(", ") + "<br>"
@@ -1245,7 +1245,7 @@
             + "Use <b>" + helpers.user("/addcommand ") + helpers.arg("name") + helpers.arg2("*text") + helpers.arg3("*bot") + helpers.arg4("*color") + helpers.arg5("*size") +
             "</b>: to add a custom bigtext. If <b>bot</b> is 'default', it will become the default fun command bot.<br>"
             + "Use <b>" + helpers.user("/removecommand ") + helpers.arg("name") + "</b>: to remove a custom bigtext.<br>"
-            + "<br><timestamp/><br>" + BORDER2;
+            + "<br><timestamp/><br>" + border2;
             sys.sendHtmlMessage(src, commandsmessage, channel);
         }
         
@@ -1323,7 +1323,7 @@
             ---------------
         **/
         customsettings: function (src, channel, command) {
-            var lower = sys.name(src).toLowerCase(), auth = sys.auth(src), commandsmessage = BORDER + "<h2>Moderator Commands ~ Custom Settings</h2><br>"
+            var lower = sys.name(src).toLowerCase(), auth = sys.auth(src), commandsmessage = border + "<h2>Moderator Commands ~ Custom Settings</h2><br>"
             + "Your current custom messages:<br>"
             + "<br>"
             + "<b>Self Kick message:</b> " + (!selfkickmessages[lower] ? "none" : selfkickmessages[lower]) + "<br>"
@@ -1360,7 +1360,7 @@
             }
             commandsmessage += "Use <b>" + helpers.user("/resetmsg ") + helpers.arg("message") + "</b> to reset <b>message</b> to its default.<br>";
             commandsmessage += "Use <b>" + helpers.user("/resetmsgs") + "</b> to reset your messages to their defaults.<br>"
-            + "<br><timestamp/><br>" + BORDER2;
+            + "<br><timestamp/><br>" + border2;
             sys.sendHtmlMessage(src, commandsmessage, channel);
         }
         

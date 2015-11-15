@@ -10,7 +10,7 @@
 */
     cownercommands = {
         cownercommands: function (src, channel, command) {
-            var commandsmessage = BORDER
+            var commandsmessage = border
             + "<h2>Channel Owner Commands</h2>"
             + "<br>"
             + "<b>" + helpers.user("/unregisterthis") + "</b>: unregisters the current channel.<br>"
@@ -31,7 +31,7 @@
             + "<b>" + helpers.user("/removecrule ") + helpers.arg("number") + "</b>: removes channel rule <b>number</b>.<br>"
             + "<b>" + helpers.user("/clearcrules") + "</b>: clears the channel rules.<br>"
             + "<br><timestamp/><br>"
-            + BORDER2;
+            + border2;
             sys.sendHtmlMessage(src, commandsmessage, channel);
         }
         

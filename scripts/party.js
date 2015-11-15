@@ -13,12 +13,12 @@
 */
 partycommands = {
     partycommands: function (src, channel, command) {
-        var commandsmessage = BORDER
+        var commandsmessage = border
         + "<h2>Party Commands</h2>"
         + "<br>"
         + "<b>" + helpers.user("/mode ") + helpers.arg("mode") + "</b>: changes the current party mode to <b>mode</b>. If <b>mode</b> is 'off', ends the current party mode. Only for channel auth.<br>"
         + "<br><timestamp/><br>"
-        + BORDER2;
+        + border2;
         sys.sendHtmlMessage(src, commandsmessage, channel);
     }
     
@@ -43,7 +43,7 @@ partycommands = {
             if (partymode == "nightclub") {
                 sys.sendHtmlAll(":<div>", channel);
             }
-            sys.sendHtmlAll(BORDER + "<br>" + helpers.bot(bots.party) + "<b>" + helpers.user(name) + " has turned " + helpers.arg(mode) + " off.</b><br>" + BORDER2, channel);
+            sys.sendHtmlAll(border + "<br>" + helpers.bot(bots.party) + "<b>" + helpers.user(name) + " has turned " + helpers.arg(mode) + " off.</b><br>" + border2, channel);
             partymode = "none";
             sys.write("data/partymode.txt", "none");
             regchannels[permchannels[3].toLowerCase()].topic = ["Welcome to " + permchannels[3] + "!"];
@@ -58,7 +58,7 @@ partycommands = {
                 if (oldmode == "nightclub") {
                     sys.sendHtmlAll(":<div>", channel);
                 }
-                sys.sendHtmlAll(BORDER + "<br>" + helpers.bot(bots.party) + "<b>" + helpers.user(name) + " has turned " + helpers.arg(mode) + " on!</b><br>" + BORDER2, channel);
+                sys.sendHtmlAll(border + "<br>" + helpers.bot(bots.party) + "<b>" + helpers.user(name) + " has turned " + helpers.arg(mode) + " on!</b><br>" + border2, channel);
                 if (partymode == "nightclub") {
                     sys.sendHtmlAll("<font color='white'>:</font><div style='background:black'>", channel);
                     regchannels[permchannels[3].toLowerCase()].topic = ["This channel is currently in " + mode + ".<font color='white'>:</font><div style='background:black'>"];
