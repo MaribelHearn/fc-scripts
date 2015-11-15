@@ -10,13 +10,13 @@
 */
 cadmincommands = {    
     cadmincommands: function (src, channel, command) {
-        var commandsmessage = BORDER
+        var commandsmessage = border
         + "<h2>Channel Administrator Commands</h2>"
         + "<br>"
         + "<b>" + helpers.user("/cban ") + helpers.arg("player") + helpers.arg2("*reason") + "</b>: bans <b>player</b> from the current channel for <b>reason</b>.<br>"
         + "<b>" + helpers.user("/cunban ") + helpers.arg("player") + "</b>: unbans <b>player</b> from the current channel.<br>"
         + "<br><timestamp/><br>"
-        + BORDER2;
+        + border2;
         sys.sendHtmlMessage(src, commandsmessage, channel);
     }
     

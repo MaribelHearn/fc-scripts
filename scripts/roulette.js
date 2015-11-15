@@ -12,7 +12,7 @@
 */
 roulettecommands = {
     roulettecommands: function (src, channel, command) {
-        var commandsmessage = BORDER;
+        var commandsmessage = border;
         commandsmessage += "<h2>Roulette Commands</h2>"
         + "<br>"
         + "<b>" + helpers.user("/roulette") + "</b>: generates a pseudorandom Pokémon with a random nature and a random held item.<br>"
@@ -20,7 +20,7 @@ roulettecommands = {
         + "<b>" + helpers.user("/longestchain") + "</b>: shows how long your longest chain of Pokémon was, and which Pokémon was chained.<br>"
         + "<b>" + helpers.user("/eventflash") + "</b>: toggles whether a random event will flash you or not (see /help for events). Flashing is turned off by default.<br>"
         + "<br><timestamp/><br>"
-        + BORDER2;
+        + border2;
         sys.sendHtmlMessage(src, commandsmessage, channel);
     }
     
