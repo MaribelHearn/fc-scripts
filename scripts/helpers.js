@@ -1605,17 +1605,17 @@ helpers = {
         var lower = sys.channel(channel).toLowerCase();
         if (regchannels[lower]) {
             for (var ownerindex in regchannels[lower].owners) {
-                if (regchannels[lower].owners[ownerindex] == name || sys.dbAuth(name) == 3) {
+                if (regchannels[lower].owners[ownerindex] == name || sys.dbAuth(name) >= 3) {
                     return 3;
                 }
             }
             for (var adminindex in regchannels[lower].admins) {
-                if (regchannels[lower].admins[adminindex] == name || sys.dbAuth(name) == 2) {
+                if (regchannels[lower].admins[adminindex] == name || sys.dbAuth(name) >= 2) {
                     return 2;
                 }
             }
             for (var modindex in regchannels[lower].mods) {
-                if (regchannels[lower].mods[modindex] == name || sys.dbAuth(name) == 1) {
+                if (regchannels[lower].mods[modindex] == name || sys.dbAuth(name) >= 1) {
                     return 1;
                 }
             }
