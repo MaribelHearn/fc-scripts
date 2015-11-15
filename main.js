@@ -79,8 +79,9 @@
 		moduleLoaded = {};
 	}
 	for (var i in SCRIPT_MODULES) {
-		fileName = SCRIPT_MODULES[i].split('.')[0];
-		if (fileName != "main") {
+        fileName = SCRIPT_MODULES[i].split('.')[0];
+        fileExtension = SCRIPT_MODULES[i].split('.')[1];
+		if (fileName != "main" && fileExtension == "js") {
 			if (!moduleLoaded[fileName]) {
 				print("Loaded module " + SCRIPT_MODULES[i]);
 				sys.exec("scripts/" + SCRIPT_MODULES[i]);
