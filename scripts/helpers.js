@@ -1400,20 +1400,43 @@ helpers = {
     ,
     
     morse: function (text) {
-        text = text.toLowerCase();
-        commandz=text.replace(/a/g,".- ");commandz=commandz.replace(/b/g,"-... ");commandz=commandz.replace(/c/g,"-.-. ");
-        commandz=commandz.replace(/d/g,"-.. ");commandz=commandz.replace(/e/g,". ");commandz=commandz.replace(/f/g,"..-. ");
-        commandz=commandz.replace(/g/g,"--. ");commandz=commandz.replace(/h/g,".... ");commandz=commandz.replace(/i/g,".. ");
-        commandz=commandz.replace(/j/g,".--- ");commandz=commandz.replace(/k/g,"-.- ");commandz=commandz.replace(/l/g,".-.. ");
-        commandz=commandz.replace(/m/g,"-- ");commandz=commandz.replace(/n/g,"-. ");commandz=commandz.replace(/o/g,"--- ");
-        commandz=commandz.replace(/p/g,".--. ");commandz=commandz.replace(/q/g,"--.- ");commandz=commandz.replace(/r/g,".-. ");
-        commandz=commandz.replace(/s/g,"... ");commandz=commandz.replace(/t/g,"- ");commandz=commandz.replace(/u/g,"..- ");
-        commandz=commandz.replace(/v/g,"...- ");commandz=commandz.replace(/w/g,".-- ");commandz=commandz.replace(/x/g,"-..- ");
-        commandz=commandz.replace(/y/g,"-.-- ");commandz=commandz.replace(/z/g,"--.. ");commandz=commandz.replace(/0/g,"----- ");
-        commandz=commandz.replace(/1/g,".---- ");commandz=commandz.replace(/2/g,"..--- ");commandz=commandz.replace(/3/g,"...-- ");
-        commandz=commandz.replace(/4/g,"....- ");commandz=commandz.replace(/5/g,"..... ");commandz=commandz.replace(/6/g,"-.... ");
-        commandz=commandz.replace(/7/g,"--... ");commandz=commandz.replace(/8/g,"---.. ");commandz=commandz.replace(/9/g,"----. ");
-        return commandz;
+        text = text.replace(/a/gi, ".- ");
+        text = text.replace(/b/gi, "-... ");
+        text = text.replace(/c/gi, "-.-. ");
+        text = text.replace(/d/gi, "-.. ");
+        text = text.replace(/e/gi, ". ");
+        text = text.replace(/f/gi, "..-. ");
+        text = text.replace(/g/gi, "--. ");
+        text = text.replace(/h/gi, ".... ");
+        text = text.replace(/i/gi, ".. ");
+        text = text.replace(/j/gi, ".--- ");
+        text = text.replace(/k/gi, "-.- ");
+        text = text.replace(/l/gi, ".-.. ");
+        text = text.replace(/m/gi, "-- ");
+        text = text.replace(/n/gi, "-. ");
+        text = text.replace(/o/gi, "--- ");
+        text = text.replace(/p/gi, ".--. ");
+        text = text.replace(/q/gi, "--.- ");
+        text = text.replace(/r/gi, ".-. ");
+        text = text.replace(/s/gi, "... ");
+        text = text.replace(/t/gi, "- ");
+        text = text.replace(/u/gi, "..- ");
+        text = text.replace(/v/gi, "...- ");
+        text = text.replace(/w/gi, ".-- ");
+        text = text.replace(/x/gi, "-..- ");
+        text = text.replace(/y/gi, "-.-- ");
+        text = text.replace(/z/gi, "--.. ");
+        text = text.replace(/0/g, "----- ");
+        text = text.replace(/1/g, ".---- ");
+        text = text.replace(/2/g, "..--- ");
+        text = text.replace(/3/g, "...-- ");
+        text = text.replace(/4/g, "....- ");
+        text = text.replace(/5/g, "..... ");
+        text = text.replace(/6/g, "-.... ");
+        text = text.replace(/7/g, "--... ");
+        text = text.replace(/8/g, "---.. ");
+        text = text.replace(/9/g, "----. ");
+        return text;
     }
     
     ,
