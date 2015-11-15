@@ -320,6 +320,18 @@ helpers = {
     
     ,
     
+    mapsUrl: function (city, country) {
+        return "https://www.google.com/maps?q=" + city + ", " + country;
+    }
+    
+    ,
+    
+    youtubeDataUrl: function (video) {
+        return "http://crystal.moe/youtube?id=" + video;
+    }
+    
+    ,
+    
     countrydata: function (country) {
         if (country == '-' || country === "") {
             return hostCountry;
@@ -1174,7 +1186,7 @@ helpers = {
                     var name = link.match(regex)[link.match(regex).length - 1];
                     var resp;
                     try {
-                        resp = JSON.parse(sys.synchronousWebCall('http://crystal.moe/youtube?id=' + name));
+                        resp = JSON.parse(sys.synchronousWebCall(helpers.youtubeDataUrl(name)));
                         link = '<a href="' + this.escapehtml(link) + '">' + resp.items[0].snippet.title + '</a>';
                     }
                     catch (e) {
@@ -1194,49 +1206,21 @@ helpers = {
     
     ,
     
-    oldhtmllinks: function (text) {
-        var exp = /([a-zA-Z]+:\/\/|www\.)[^\s']+/ig;
-        var found = text.match(exp);
-        var newtext;
-        var newfound;
-        for (var x in found) {
-            if (found.hasOwnProperty(x)) {
-                var link = found[x];
-                newfound = found[x].replace(/\//g, sys.md5('/')).replace(/_/g, sys.md5('_'));
-                var regex  = /.*(?:youtu.be\/|youtube.*v=|youtube.*\/embed\/|youtube.*\/v\/|youtube.*videos\/)([^#\&\?]*).*/;
-                if (link.match(regex)) {
-                    var name = link.match(regex)[link.match(regex).length - 1],
-                        resp;
-                    try {
-                        resp = JSON.parse(sys.synchronousWebCall('https://gdata.youtube.com/feeds/api/videos/' + name + '?alt=json'));
-                        link = '<span title="Youtube">' + YOUTUBE_BASE64 + '</span>' + ' ' + '<span title = "'+ this.escapehtml(link) + '">' + resp.entry.title.$t + '</span>';
-                    } catch (e) {
-                    }
-                }
-                newtext = ("<a href ='" + link + "'>" + link + "</a>").replace(/&amp;/gi, "&");
-                text = text.replace(found[x], newtext);
-            }
-        }
-        return text;
-    }
-    
-    ,
-    
-    idsort: function (arraya) {
-        // array consists of multiple numbers. Using arraya.sort() would put 1000 in front of 995, for example
+    idsort: function (array) {
+        // array consists of multiple numbers. Using array.sort() would put 1000 in front of 995, for example
         // this sorting function puts 1000 after 995
-        var x, y, z, sorted = [], maxlength = 1;    
-        arraya = arraya.sort();
-        for (x in arraya) {
-            arraya[x] = JSON.stringify(arraya[x]);
-            if (arraya[x].length > maxlength) {
-                maxlength = arraya[x].length;
+        var x, y, z, sorted = [], maxlength = 1;
+        array = array.sort();
+        for (x in array) {
+            array[x] = JSON.stringify(array[x]);
+            if (array[x].length > maxlength) {
+                maxlength = array[x].length;
             }
         }
         for (y = 1; y <= maxlength; y++) {
-            for (z in arraya) {
-                if (arraya[z].length == y) {
-                    sorted.push(arraya[z]);
+            for (z in array) {
+                if (array[z].length == y) {
+                    sorted.push(array[z]);
                 }
             }
         }

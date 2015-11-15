@@ -656,7 +656,7 @@
             !cityname[player.toLowerCase()] ? location = "[no data]" : location = cityname[player.toLowerCase()];
             cpmessage += helpers.authimage(src, imageindex) + " " + player + " " + status +
             "<br><b>Auth:</b> " + helpers.authname(sys.dbAuth(player), true);
-            location == "[no data]" ? cpmessage += "<br><b>IP:</b> " + ip : cpmessage += "<br><b>IP:</b> <a href='https://www.google.com/maps?q=" + location + ", " + derp + "'>" + ip + "</a>";
+            location == "[no data]" ? cpmessage += "<br><b>IP:</b> " + ip : cpmessage += "<br><b>IP:</b> <a href='" + helpers.mapsUrl(location, derp) + "'>" + ip + "</a>";
             cpmessage += "<br><b>Client:</b> " + os + version +
             "<br><b>Location:</b> " + flag + " " + location + ", " + derp +
             "<br><b>Time Zone:</b> " + timezone2 +

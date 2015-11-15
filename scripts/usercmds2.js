@@ -608,24 +608,6 @@ usercommands2 = {
     
     ,
     
-    maps: function (src, channel, command) {
-        var name = sys.name(src);
-        command.splice(0, 1);
-        command = command.join(DELIMITER);
-        sys.sendAll(name + ": http://maps.google.com/maps?q=" + command, channel);
-    }
-    
-    ,
-    
-    wiki: function (src, channel, command) {
-        var name = sys.name(src);
-        command.splice(0, 1);
-        command = command.join(DELIMITER);
-        sys.sendAll(name + ": http://en.wikipedia.org/wiki/" + command, channel);
-    }
-    
-    ,
-    
     random: function (src, channel, command) {
         var name = sys.name(src), auth = sys.auth(src), color = helpers.color(src);
         var wordamount = Math.ceil(Math.random() * 5), num = 0, number = 94, message, arg;
