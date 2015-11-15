@@ -26,7 +26,8 @@
             + "<b>" + helpers.user("/crangebanlist") + "</b>: displays the current channel's range ban list in a neat table.<br>"
             + "<b>" + helpers.user("/cclose ") + helpers.arg("auth") + "</b>: closes the current channel for any player below level <b>auth</b>.<br>"
             + "<b>" + helpers.user("/copen") + "</b>: opens the current channel.<br>"
-            + "<b>" + helpers.user("/silence ") + helpers.arg("level") + "</b>: sets the silence level of the current channel to <b>level</b>. The level cannot be higher than your auth's.<br>"
+            + "<b>" + helpers.user("/silence ") + helpers.arg("level") + "</b>: sets the silence level of the current channel to <b>level</b>.<br>"
+            + "<b>level</b> is 1, 2 or 3 and cannot exceed your channel auth level. If <b>level</b> is not specified, uses your channel auth level.<br>"
             + "<b>" + helpers.user("/unsilence") + "</b>: removes the silence level of the current channel.<br>"
             + "<b>" + helpers.user("/caps") + "</b>: allows or disallows excessive usage of caps on the current channel.<br>"
             + "<b>" + helpers.user("/flood") + "</b>: allows or disallows flooding on the current channel.<br>"
@@ -365,8 +366,12 @@
                     helpers.starfox(src, channel, command, bots.silence, "Error 403, you may not silence with a silence level higher than your auth level.");
                     return;
                 }
-                if (!strength || isNaN(strength) || strength < 1) {
+                if (!strength) {
                     strength = cauth;
+                }
+                if (isNaN(strength) || strength < 1 || strength > 3) {
+                    helpers.starfox(src, channel, command, bots.silence, "Error 403, invalid silence level.");
+                    return;
                 }
                 if (regchannels[sys.channel(channel).toLowerCase()].silence > cauth) {
                     helpers.starfox(src, channel, command, bots.silence, "Error 403, you can't lower the silence when the silence level is higher than your auth level!");
