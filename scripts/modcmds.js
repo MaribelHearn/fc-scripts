@@ -838,7 +838,7 @@
                 return;
             }
             if (regchannels[sys.channel(channel).toLowerCase()].silence > auth) {
-                helpers.starfox(src, channel, command, bots.silence, "I KILL YOOOOUUUU!!!");
+                helpers.silenceMessage(src, channel);
                 return;
             }
             if (!command[1]) {
@@ -907,7 +907,7 @@
                 return;
             }
             if (regchannels[sys.channel(channel).toLowerCase()].silence > auth) {
-                helpers.starfox(src, channel, command, bots.silence, "I KILL YOOOOUUUU!!!");
+                helpers.silenceMessage(src, channel);
                 return;
             }
             for (var index in players) {
@@ -1022,7 +1022,7 @@
             }
             if (regchannels[sys.channel(channel).toLowerCase()]) {
                 if (regchannels[sys.channel(channel).toLowerCase()].silence > auth) {
-                    helpers.starfox(src, channel, command, bots.silence, "I KILL YOOOOUUUU!!!");
+                    helpers.silenceMessage(src, channel);
                     return;
                 }
             }

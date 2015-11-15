@@ -355,30 +355,35 @@
         ,
         
         silence: function (src, channel, command) {
-            var name = sys.name(src), lower = sys.channel(channel).toLowerCase();
+            var name = sys.name(src), cauth = helpers.cauth(name.toLowerCase(), channel), lower = sys.channel(channel).toLowerCase(), strength = command[1];
             if (regchannels[lower]) {
                 if (helpers.muteCheck(name)) {
                     helpers.muteMessage(src, channel);
                     return;
                 }
-                var strength = command[1], auth = sys.auth(src);
-                if (isNaN(strength))strength = 1;
-                if (strength > auth)strength = auth;
-                if (strength < 1)stength = 1;
-                if (!command[1])strength = 1;
-                if (regchannels[sys.channel(channel).toLowerCase()].silence > auth) {
-                    helpers.starfox(src, channel, command, bots.silence, "Error 403, you can't lower the silence when the silence is above your auth!");
+                if (!strength || isNaN(strength) || strength < 1) {
+                    strength = 1;
+                }
+                if (strength > cauth) {
+                    strength = cauth;
+                }
+                if (regchannels[sys.channel(channel).toLowerCase()].silence > cauth) {
+                    helpers.starfox(src, channel, command, bots.silence, "Error 403, you can't lower the silence when the silence level is higher than your auth level!");
                     return;
                 }
                 if (strength == regchannels[sys.channel(channel).toLowerCase()].silence) {
-                    helpers.starfox(src, channel, command, bots.silence, "Error 400, you can't silence the chat on the same level!");
+                    helpers.starfox(src, channel, command, bots.silence, "Error 400, this channel already has silence level " + strength + "!");
                     return;
                 }
                 regchannels[sys.channel(channel).toLowerCase()].silence = strength;
                 var color = global["auth" + strength + "color"];
-                var silencemessage = border + "<br>"
-                + helpers.bot(bots.silence) + "<b><font color='" + color + "'>SILENCE! I KILL YOU!</font> <small>-" + name + ".</small></b><br>"
-                + border2;
+                var silencemessage = border + "<br>";
+                if (bots.silence == "Achmed the Dead Terrorist") {
+                    silencemessage += helpers.bot(bots.silence) + "<b><font color='" + color + "'>SILENCE! I KILL YOU!</font> <small>-" + name + ".</small></b><br>";
+                } else {
+                    silencemessage += helpers.bot(bots.silence) + "<b><font color='" + color + "'>This channel has been silenced by " + name + ". [Silence Level: " + strnegth + "]</font></b><br>";
+                }
+                silencemessage += border2;
                 sys.write("data/regchannels.txt", JSON.stringify(regchannels));
                 sys.sendHtmlAll(silencemessage, channel);
             } else {
@@ -390,22 +395,26 @@
         ,
 
         unsilence: function (src, channel, command) {
-            var auth = sys.auth(src), lower = sys.channel(channel).toLowerCase();
+            var name = sys.name(src), cauth = helpers.cauth(name.toLowerCase(), channel), lower = sys.channel(channel).toLowerCase();
             if (regchannels[lower]) {
-                if (regchannels[lower].silence > auth) {
-                    helpers.starfox(src, channel, command, bots.silence, "Error 403, you can't unsilence this channel because the silence is too strong!");
+                if (regchannels[lower].silence > cauth) {
+                    helpers.starfox(src, channel, command, bots.silence, "Error 403, you can't unsilence this channel because the silence level is higher than your auth level!");
                     return;
                 }
                 if (regchannels[lower].silence === 0) {
                     helpers.starfox(src, channel, command, bots.silence, "Error 400, you can't unsilence when there is no silence in this channel!");
                     return;
                 }
-                if (regchannels[lower].silence <= auth) {
+                if (regchannels[lower].silence <= cauth) {
                     var color = global["auth" + regchannels[lower].silence + "color"];
                     regchannels[lower].silence = 0;
-                    var unsilencemessage = border + "<br>"
-                    + helpers.bot(bots.silence) + "<b><font color='" + color + "'>UNSILENCE! I WON'T KILL YOU!</font> <small>-" + sys.name(src)
-                    + ".</small></b><br>" + border2;
+                    var unsilencemessage = border + "<br>";
+                    if (bots.silence == "Achmed the Dead Terrorist") {
+                        silencemessage += helpers.bot(bots.silence) + "<b><font color='" + color + "'>UNSILENCE! I WON'T KILL YOU!</font> <small>-" + name + ".</small></b><br>";
+                    } else {
+                        silencemessage += helpers.bot(bots.silence) + "<b><font color='" + color + "'>This channel has been unsilenced by " + name + "</font></b><br>";
+                    }
+                    silencemessage += border2;
                     sys.write("data/regchannels.txt", JSON.stringify(regchannels));
                     sys.sendHtmlAll(unsilencemessage, channel);
                 }

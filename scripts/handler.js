@@ -30,7 +30,7 @@ mutedOrSilenced = function (src, channel, command, name, auth) {
     }
     if (regchannels[sys.channel(channel).toLowerCase()]) {
         if (regchannels[sys.channel(channel).toLowerCase()].silence > auth) {
-            helpers.starfox(src, channel, command, bots.silence, "I KILL YOOOOUUUU!!!");
+            helpers.silenceMessage(src, channel);
             return true;
         }
     }
