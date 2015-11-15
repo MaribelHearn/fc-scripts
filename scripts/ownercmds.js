@@ -1440,7 +1440,7 @@ ownercommands = {
         + "Use <b>" + helpers.user("/public") + "</b> to make the server public.<br>"
         + "Use <b>" + helpers.user("/private") + "</b> to make the server private.<br>"
         + "Use <b>" + helpers.user("/shutdown") + "</b> to shut down the server.<br>"
-        + "Use <b>" + helpers.user("/restart") + "</b> to restart the server.<br>"
+        + "Use <b>" + helpers.user("/restart") + "</b> to restart the server. Windows only.<br>"
         + "<br><timestamp/><br>"
         + border2;
         sys.sendHtmlMessage(src, commandsmessage, channel);
@@ -1467,15 +1467,23 @@ ownercommands = {
     shutdown: function (src, channel, command) {
         var name = sys.name(src);
         sys.sendHtmlMain(helpers.bot(bots.priv) + "<b>" + helpers.user(name) + " has shut down the server!</b>");
-        sys.setTimer(function () {sys.shutDown();}, 1000, 0);
+        sys.setTimer(function () {
+            sys.shutDown();
+        }, 1000, 0);
     }
     
     ,
     
     restart: function (src, channel, command) {
-        var name = sys.name(src);
-        sys.setTimer(function () {sys.shutDown();}, 1000, 0);
-        sys.system("wait.bat 1 && start Server.exe");
+        var name = sys.name(src), os = sys.os();
+        if (os != "windows") {
+            helpers.starfox(src, channel, command, bots.priv, "Error 400, this command only works on Windows!");
+            return;
+        }
+        sys.setTimer(function () {
+            sys.shutDown();
+        }, 1000, 0);
+        sys.system("wait 1 && start Server.exe");
         sys.sendHtmlMain(helpers.bot(bots.priv) + "<b>" + helpers.user(name) + " has restarted the server!</b>");
     }
     
