@@ -1251,9 +1251,9 @@ ownercommands = {
         + "<br>"
         + trustedIps.join(", ") + "<br>"
         + "<br>"
-        + "Use <b>" + helpers.userg("/trust ") + helpers.arg("IP") + "</b> to add <b>IP</b> to the trusted IPs.<br>"
-        + "Use <b>" + helpers.userg("/distrust ") + helpers.arg("IP") + "</b> to remove <b>IP</b> from the trusted IPs.<br>"
-        + "Use <b>" + helpers.userg("/doschannel ") + helpers.arg("channel") + "</b> to change the anti DoS message channel to <b>channel</b>.<br>"
+        + "Use <b>" + helpers.user("/trust ") + helpers.arg("IP") + "</b> to add <b>IP</b> to the trusted IPs.<br>"
+        + "Use <b>" + helpers.user("/distrust ") + helpers.arg("IP") + "</b> to remove <b>IP</b> from the trusted IPs.<br>"
+        + "Use <b>" + helpers.user("/doschannel ") + helpers.arg("channel") + "</b> to change the anti DoS message channel to <b>channel</b>.<br>"
         + "<br><timestamp/><br>"
         + BORDER2;
         sys.sendHtmlMessage(src, commandsmessage, channel);
