@@ -355,16 +355,17 @@
         ,
         
         silence: function (src, channel, command) {
-            var name = sys.name(src), cauth = helpers.cauth(name.toLowerCase(), channel), lower = sys.channel(channel).toLowerCase(), strength = command[1];
+            var name = sys.name(src), cauth = helpers.cauth(name.toLowerCase(), channel), lower = sys.channel(channel).toLowerCase(), strength = command[1], silencemessage = helpers.bot(bots.silence);
             if (regchannels[lower]) {
                 if (helpers.muteCheck(name)) {
                     helpers.muteMessage(src, channel);
                     return;
                 }
-                if (!strength || isNaN(strength) || strength < 1) {
-                    strength = 1;
-                }
                 if (strength > cauth) {
+                    helpers.starfox(src, channel, command, bots.silence, "Error 403, you may not silence with a silence level higher than your auth level.");
+                    return;
+                }
+                if (!strength || isNaN(strength) || strength < 1) {
                     strength = cauth;
                 }
                 if (regchannels[sys.channel(channel).toLowerCase()].silence > cauth) {
@@ -376,14 +377,10 @@
                     return;
                 }
                 regchannels[sys.channel(channel).toLowerCase()].silence = strength;
-                var color = global["auth" + strength + "color"];
-                var silencemessage = border + "<br>";
                 if (bots.silence == "Achmed the Dead Terrorist") {
-                    silencemessage += helpers.bot(bots.silence) + "<b><font color='" + color + "'>SILENCE! I KILL YOU!</font> <small>-" + name + ".</small></b><br>";
-                } else {
-                    silencemessage += helpers.bot(bots.silence) + "<b><font color='" + color + "'>This channel has been silenced by " + name + ". [Silence Level: " + strnegth + "]</font></b><br>";
+                    silencemessage += "SILENCE! I KILL YOU! ";
                 }
-                silencemessage += border2;
+                silencemessage += "This channel has been silenced by " + name + ". [Silence Level: " + strength + "]";
                 sys.write("data/regchannels.txt", JSON.stringify(regchannels));
                 sys.sendHtmlAll(silencemessage, channel);
             } else {
@@ -395,7 +392,7 @@
         ,
 
         unsilence: function (src, channel, command) {
-            var name = sys.name(src), cauth = helpers.cauth(name.toLowerCase(), channel), lower = sys.channel(channel).toLowerCase();
+            var name = sys.name(src), cauth = helpers.cauth(name.toLowerCase(), channel), lower = sys.channel(channel).toLowerCase(), unsilencemessage = helpers.bot(bots.silence);
             if (regchannels[lower]) {
                 if (regchannels[lower].silence > cauth) {
                     helpers.starfox(src, channel, command, bots.silence, "Error 403, you can't unsilence this channel because the silence level is higher than your auth level!");
@@ -406,15 +403,11 @@
                     return;
                 }
                 if (regchannels[lower].silence <= cauth) {
-                    var color = global["auth" + regchannels[lower].silence + "color"];
                     regchannels[lower].silence = 0;
-                    var unsilencemessage = border + "<br>";
                     if (bots.silence == "Achmed the Dead Terrorist") {
-                        silencemessage += helpers.bot(bots.silence) + "<b><font color='" + color + "'>UNSILENCE! I WON'T KILL YOU!</font> <small>-" + name + ".</small></b><br>";
-                    } else {
-                        silencemessage += helpers.bot(bots.silence) + "<b><font color='" + color + "'>This channel has been unsilenced by " + name + "</font></b><br>";
+                        unsilencemessage += "UNSILENCE! I WON'T KILL YOU! ";
                     }
-                    silencemessage += border2;
+                    unsilencemessage += "This channel has been unsilenced by " + name + ".";
                     sys.write("data/regchannels.txt", JSON.stringify(regchannels));
                     sys.sendHtmlAll(unsilencemessage, channel);
                 }
