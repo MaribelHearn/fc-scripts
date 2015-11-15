@@ -1,0 +1,1 @@
+(sys.exec && sys.exec("scripts/main.js")) || eval(sys.getFileContent("scripts/main.js"));
