@@ -35,6 +35,7 @@ helpers = {
         sys.write("data/botsymbol.txt", "±");
         sys.write("data/servertopic.txt", "Welcome to " + sys.getServerName() + "!");
         sys.write("data/botsymbolcolor.txt", "#318739");
+        sys.write("data/bordercolor.txt", "darkblue");
         
         // Arrays
         sys.write("data/allowed.txt", '["127.0.0.1"]');
@@ -1748,7 +1749,7 @@ helpers = {
     ,
 
     tourdisplay: function (tourdisplayversion, channel) {
-        var correctborder = BORDER;
+        var correctborder = border;
         var minutesago = Math.floor((new Date() - tour[channel].tourstarttime) / 60000);
         var minutesstring = minutesago == 1 ? "minute" : "minutes";
         var minutesagostring = minutesago === 0 ? "" : " (started " + String(minutesago) + " " + minutesstring + " ago)";
@@ -1756,14 +1757,14 @@ helpers = {
         var joinmodestring = tourdisplayversion === 0 || tourdisplayversion == 1 ? this.bot(bots.tour) +
         "Type /join to enter the tournament! " + spotsleftstring : "<timestamp/>Currently in Round " + tour[channel].roundnumber +
         ". Number of players left is " + (tour[channel].tourcurrentnumber - tour[channel].tourlosers.length) + ".";
-        var tourdisplay = BORDER + "<br>"
+        var tourdisplay = border + "<br>"
         + this.bot(bots.tour) + "A Tournament has been started by " + tour[channel].tourstarter + "!" + minutesagostring + "<br>"
         + this.bot("<timestamp/>" + botsymbol + "Players: ") + String(tour[channel].tournumber) + "<br>"
         + this.bot("<timestamp/>" + botsymbol + "Battle Type: ") + "Singles<br>"
         + this.bot("<timestamp/>" + botsymbol + "Tier: ") + tour[channel].tourtier + "<br>"
         + this.bot("<timestamp/>" + botsymbol + "Clauses: ") + String(this.listOfClauses(tour[channel].tourclauses)).replace(/,/g, ", ") + "<br><br>"
         + joinmodestring + "<br>"
-        + BORDER2;
+        + border2;
         tourdisplayversion === 0 ? sys.sendHtmlMain(tourdisplay) : sys.sendHtmlMessage(src, tourdisplay, channel);
     }
 
@@ -1800,11 +1801,11 @@ helpers = {
         var battlesleft = Math.floor((tour[channel].tourcurrentnumber - tour[channel].tourlosers.length - tour[channel].tourwinners.length)/2);
         if (battlesleft !== 0 && tour[channel].tourlosers.indexOf(winnername) == -1 && tour[channel].tourmembers.indexOf(winnername) != -1) {
             var plurality = battlesleft == 1 ? "match" : "matches";
-            var battlesleftstring =  BORDER2 + "<br/>" 
+            var battlesleftstring =  border2 + "<br/>" 
             + "<font color='blue'><b>" + battlesleft + " more " + plurality  + " to be completed in this round!</b></font>";
             sys.sendHtmlMain(battlesleftstring);
         }
-        sys.sendHtmlAll(BORDER2, channel);
+        sys.sendHtmlAll(border2, channel);
         if (battlesleft === 0) {
             if (tour[channel].tourmembers[tour[channel].tourcurrentnumber] == "|bye|") {
                 tour[channel].tourmembers.splice(tour[channel].tourmembers.indexOf("|bye|"),1);
@@ -1812,10 +1813,10 @@ helpers = {
             tour[channel].tourcurrentnumber -= tour[channel].tourlosers.length;
             if (tour[channel].tourcurrentnumber == 1) {
                 tour[channel].tourmode = 0;
-                var winnermessage = BORDER + "<br>"
+                var winnermessage = border + "<br>"
                 + this.bot(bots.tour) + "The *** WINNER *** of the tournament is... <b>" + members[winnername] + "!</b><br>"
                 + this.bot(bots.tour) + "Congratulations, " + members[winnername] + ", on your success!<br>"
-                + BORDER2;
+                + border2;
                 sys.sendHtmlMain(winnermessage);
                 sys.write("data/lasttourmatch.txt", 1);
                 return;
@@ -1853,7 +1854,7 @@ helpers = {
 
     rounddisplay: function (rounddisplayversion, channel) {
         var send = rounddisplayversion === 0 ? this.sendmessage : sys.sendHtmlAll;
-        var correctborder = rounddisplayversion === 0 ? BORDER : BORDER2;
+        var correctborder = rounddisplayversion === 0 ? border : border2;
         var finalroundcheck = tour[channel].tourcurrentnumber == 2 ? "Final Round" : "Round " + tour[channel].roundnumber;
         var roundstring = correctborder + "<br/>"
         + "<timestamp/><font size=4><b>" + finalroundcheck + " of " + tour[channel].tourtier + " Tournament</b></font><br/>"

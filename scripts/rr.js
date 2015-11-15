@@ -13,7 +13,7 @@
 */
 rrcommands = {
     rrcommands: function (src, channel, command) {
-        var commandsmessage = BORDER;
+        var commandsmessage = border;
         commandsmessage += "<h2>Russian Roulette Commands</h2>"
         + "<br>"
         + "<b>" + helpers.user("/load") + "</b>: load a bullet into your revolver. You can load multiple, but that'll lead to a higher death rate, effectively making you worse ;)<br>"
@@ -23,7 +23,7 @@ rrcommands = {
         + "<b>" + helpers.user("/stats") + "</b>: shows your current Russian Roulette play data.<br>"
         + "<b>" + helpers.user("/resetstats") + "</b>: resets your Russian Roulette data. WARNING! This cannot be undone.<br>"
         + "<br><timestamp/><br>"
-        + BORDER2;
+        + border2;
         sys.sendHtmlMessage(src, commandsmessage, channel);
     }
     
@@ -127,14 +127,14 @@ rrcommands = {
             return;
         }
         deathrate = (rr[lower].deaths / rr[lower].shots * 100).toPrecision(2) + "%";
-        message = BORDER + "<h2>Russian Roulette Stats</h2><br>"
+        message = border + "<h2>Russian Roulette Stats</h2><br>"
         + "<br>"
         + "<b>Shots fired:</b> " + rr[lower].shots + "<br>"
         + "<b>Survivals:</b> " + rr[lower].survivals + "<br>"
         + "<b>Deaths:</b> " + rr[lower].deaths + "<br>"
         + "<b>Death rate:</b> " + deathrate + "<br>"
         + "<b>Longest streak:</b> " + rr[lower].longest + "<br>"
-        + "<br><timestamp/><br>" + BORDER2;
+        + "<br><timestamp/><br>" + border2;
         sys.sendHtmlMessage(src, message, rrchannel);
     }
     
