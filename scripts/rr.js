@@ -2,7 +2,7 @@
 /*
     ----------------------------------------------
     FUN COMMUNITY RUSSIAN ROULETTE rr.js
-    © Leon Powalski Productions 2015-2015
+     - by Maribel Hearn, 2015-2015
     
     This file contains the scripts necessary
     for Russian Roulette, a luck 'game' in
