@@ -681,39 +681,6 @@ ownercommands = {
     
     ,
     
-    updateold: function (src, channel, command) {
-        var name = sys.name(src), date = new Date(), time;
-        if (!command[1]) {
-            try {
-                sys.changeScript(sys.read("scripts.js"));
-            } catch (e) {
-                sys.sendHtmlAuths(helpers.bot(bots.script) + e);
-                return;
-            }
-            time = new Date() - date;
-            sys.sendHtmlAuths(helpers.bot(bots.script) + name + " has reloaded the server scripts! [Loading time: " + (time / 1000) + " seconds.]");
-            return;
-        }
-        if (command[1] == "helpers") {
-            sys.exec("scripts/helpers.js");
-        } else if (command[1] == "base64") {
-            sys.exec("scripts/base64.js");
-        } else if (command[1] == "user") {
-            sys.exec("scripts/usercmds1.js");
-            sys.exec("scripts/usercmds2.js");
-        } else if (command[1] == "admin" || command[1] == "mod" || command[1] == "owner" || command[1] == "cuser" || command[1] == "cmod" || command[1] == "cadmin" || command[1] == "cowner") {
-            sys.exec("scripts/" + command[1] + "cmds.js");
-        } else {
-            sys.sendHtmlMessage(src, helpers.bot(bots.script) +
-            "This script doesn't exist or isn't supported by this command. Accepted arguments are: (c)user, (c)mod, (c)admin, (c)owner, helpers and base64. The argument you gave was: " + command[1] + ".", channel);
-            return;
-        }
-        time = new Date() - date;
-        sys.sendHtmlAuths(helpers.bot(bots.script) + name + " has reloaded the " + command[1] + " script module! [Loading time: " + (time / 1000) + " seconds.]");
-    }
-    
-    ,
-    
     "var": function (src, channel, command) {
         var forbidden = ["=", ";", "+", "-", "*", "/", "add", "del", "sys.system", "remove", "erase", "write", "append", "change", "set"], allow = true, result, html;
         if (!command[1]) {
