@@ -403,7 +403,6 @@
             Set Host IP, Country and Time Zone
             ----------------------------------
         **/
-        
         sys.webCall(IP_RETRIEVAL_URL, function (resp) {
             if (resp === "") {
                 print("An error occurred while loading the host IP address.");
