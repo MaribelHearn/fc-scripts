@@ -24,7 +24,7 @@
     IP_RETRIEVAL_URL = "http://whatismyip.akamai.com";
 	REGISTRY_URL = "http://registry.pokemon-online.eu/";
 	BETA_TIERS_URL = "https://raw.githubusercontent.com/po-devs/po-server-goodies/master/tiers.xml";
-	SCRIPT_URL = "https://raw.githubusercontent.com/MaribelHearn/fc-scripts/master/main.js";
+	SCRIPT_URL = "https://raw.githubusercontent.com/MaribelHearn/fc-scripts/master/";
 	AUTH_NAME = ["User", "Moderator", "Administrator", "Owner"];
 	PARTY_MODES = ["joke", "nightclub", "desu", "rainbow", "nyan", "dennis", "cirno", "sparta", "luigi", "roflcopter", "derp", "asdf", "leet", "morse", "reverse"];
 	LEGENDARY_LIST = ["Articuno", "Zapdos", "Moltres", "Mewtwo", "Mew", "Raikou", "Entei", "Suicune", "Ho-Oh", "Lugia", "Celebi", "Kyogre", "Groudon", "Rayquaza", "Latios",
