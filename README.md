@@ -1,8 +1,6 @@
 # fc-scripts
 The Fun Community Pokémon Online server scripts. Not intended for server use outside of Fun Community itself yet (there is still a lot of mess to be fixed); please wait patiently for a thread to appear on the Pokémon Online forums. The scripts were never intended to be released to the public, and as a result, many things have not yet been adapted to that; that is being worked on at the moment.
 
-(Files are currently being added.)
-
 ### About
 
 The Fun Community scripts, used on Fun Community (of course!), are intended for small servers, with a main focus being customisation; you can customise its settings to your liking! They have been developed since the release of Pokémon Online V2, on July 9, 2012, and are loosely based on the V1 server scripts by [Lutra](https://github.com/Jakilutra) (credit to him for these great scripts!). Fun Community used to run the Lutra scripts, but when V2 was released, it branched off and started developing the Fun Community scripts. Some functionality, such as a few methods, and tournaments, is taken from those scripts, though modified to work with these scripts.
