@@ -1621,7 +1621,7 @@ helpers = {
             }
             return 0;
         } else {
-            return 0;
+            return sys.dbAuth(name);
         }
     }
     
