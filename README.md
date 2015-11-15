@@ -9,7 +9,7 @@ Currently a large portion of the scripts is still quite messy, although the scri
 
 ### How to use
 
-Click 'Download ZIP' to download this repository, then extract it into your server folder. The scripts will initialise the data that they use when you open your server, for which they will create a folder called `data`. Be careful if you touch this folder; you might break the scripts! If you already have a folder called `data` in your server folder, make sure you either rename or delete it before running your server with the scripts for the first time, or else it won't initialise and, therefore, won't work.
+Click 'Download ZIP' to download this repository, then create a folder called `scripts` in your server folder and extract the ZIP into it. The scripts will initialise the data that they use when you open your server, for which they will create a folder called `data`. Be careful if you touch this folder; you might break the scripts! If you already have a folder called `data` in your server folder, make sure you either rename or delete it before running your server with the scripts for the first time, or else it won't initialise and, therefore, won't work.
 
 You will also need to put the `bansites.txt` and `proxy_list.txt` files from the [po-server-goodies](https://github.com/po-devs/po-server-goodies) repository in your server folder. The scripts will read these and use them when they initialise.
 
