@@ -11,11 +11,6 @@
 */
 
 helpers = {
-    /**
-        ---------------
-        Setting Helpers
-        ---------------
-    **/
     initData: function () {
         sys.mkdir("data");
         
@@ -83,6 +78,13 @@ helpers = {
         sys.write("data/rangebanlist.txt", "{}");
         sys.write("data/selfkickmsg.txt", "{}");
         sys.write("data/rangebanmsg.txt", "{}");
+    }
+    
+    ,
+    
+    saveDataFile: function (dataFile) {
+        var data = (typeof(global[dataFile]) == "object" ? JSON.stringify(global[dataFile]) : global[dataFile]);
+        sys.write(DATA_FOLDER + dataFile + ".txt", data);
     }
     
     ,

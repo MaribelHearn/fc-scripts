@@ -250,7 +250,8 @@ usercommands1 = {
             + "With a single bullet loaded, your chance to die is 1 / 6. If you die,<br>"
             + "you will get kicked from the channel. Try to get your longest survival streak<br>"
             + "as long as possible! Use <b>" + helpers.user("/load") + "</b> to load a bullet into your revolver,<br>"
-            + "and <b>" + helpers.user("/shoot") + "</b> to pull the trigger.<br>"
+            + "and <b>" + helpers.user("/shoot") + "</b> to pull the trigger. The <b>" + helpers.user("/load") + "</b> command<br>"
+            + "will automatically start the game for you, by initialising your data on top of loading a bullet.<br>"
             + "<br>"
             + "Use <b>" + helpers.user("/rrcommands") + "</b> to list the commands for Russian Roulette.<br>";
         } else {

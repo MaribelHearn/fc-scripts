@@ -13,8 +13,8 @@
 */
 rrcommands = {
     rrcommands: function (src, channel, command) {
-        var commandsmessage = border;
-        commandsmessage += "<h2>Russian Roulette Commands</h2>"
+        var commandsMessage = border;
+        commandsMessage += "<h2>Russian Roulette Commands</h2>"
         + "<br>"
         + "<b>" + helpers.user("/load") + "</b>: load a bullet into your revolver. You can load multiple, but that'll lead to a higher death rate, effectively making you worse ;)<br>"
         + "<b>" + helpers.user("/unload") + "</b>: unload a bullet from your revolver. Probably the best command to use when you have multiple bullets loaded!<br>"
@@ -24,7 +24,7 @@ rrcommands = {
         + "<b>" + helpers.user("/resetstats") + "</b>: resets your Russian Roulette data. WARNING! This cannot be undone.<br>"
         + "<br><timestamp/><br>"
         + border2;
-        sys.sendHtmlMessage(src, commandsmessage, channel);
+        sys.sendHtmlMessage(src, commandsMessage, channel);
     }
     
     ,
@@ -45,7 +45,7 @@ rrcommands = {
             return;
         }
         rr[lower].bullets++;
-        sys.write("data/rr.txt", JSON.stringify(rr));
+        helpers.saveDataFile("rr");
         sys.sendHtmlAll(helpers.bot(bots.rr) + name + " has loaded a bullet into their revolver!", rrchannel);
     }
     
@@ -54,20 +54,15 @@ rrcommands = {
     unload: function (src, channel, command) {
         var name = sys.name(src), lower = name.toLowerCase();
         if (!rr[lower]) {
-            rr[lower] = {};
-            rr[lower].survivals = 0;
-            rr[lower].longest = 0;
-            rr[lower].bullets = 0;
-            rr[lower].deaths = 0;
-            rr[lower].streak = 0;
-            rr[lower].shots = 0;
+            helpers.starfox(src, channel, command, bots.rr, "Error 400, you haven't played yet!");
+            return;
         }
         if (rr[lower].bullets === 0) {
             helpers.starfox(src, channel, command, bots.rr, "Error 400, your revolver is empty!");
             return;
         }
         rr[lower].bullets--;
-        sys.write("data/rr.txt", JSON.stringify(rr));
+        helpers.saveDataFile("rr");
         sys.sendHtmlAll(helpers.bot(bots.rr) + name + " has unloaded a bullet from their revolver!", rrchannel);
     }
     
@@ -76,13 +71,8 @@ rrcommands = {
     shoot: function (src, channel, command) {
         var name = sys.name(src), lower = name.toLowerCase(), random = sys.rand(0, 6);
         if (!rr[lower]) {
-            rr[lower] = {};
-            rr[lower].survivals = 0;
-            rr[lower].longest = 0;
-            rr[lower].bullets = 0;
-            rr[lower].deaths = 0;
-            rr[lower].streak = 0;
-            rr[lower].shots = 0;
+            helpers.starfox(src, channel, command, bots.rr, "Error 400, you haven't played yet!");
+            return;
         }
         if (rr[lower].bullets === 0) {
             helpers.starfox(src, channel, command, bots.rr, "Error 400, your revolver is empty!");
@@ -103,7 +93,7 @@ rrcommands = {
             }
             sys.sendHtmlAll(helpers.bot(bots.rr) + name + " has spun the cylinder and pulled the trigger... nothing happened! Whew!", rrchannel);
         }
-        sys.write("data/rr.txt", JSON.stringify(rr));
+        helpers.saveDataFile("rr");
     }
     
     ,
@@ -147,7 +137,7 @@ rrcommands = {
             return;
         }
         delete rr[lower];
-        sys.write("data/rr.txt", JSON.stringify(rr));
+        helpers.saveDataFile("rr");
         sys.sendHtmlMessage(src, helpers.bot(bots.rr) + "Your Russian Roulette data has been reset.", rrchannel);
     }
 };
