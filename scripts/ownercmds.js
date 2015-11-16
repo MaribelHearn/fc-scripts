@@ -691,7 +691,7 @@ ownercommands = {
                 this.updateplugin(src, channel, [command[0], SCRIPT_PLUGINS[i].split('.')[0]]);
             }
         } else {
-            module = command[1];
+            plugin = command[1];
             if (!helpers.isInArray(plugin + ".js", SCRIPT_PLUGINS)) {
                 helpers.starfox(src, channel, command, bots.main, "Error 404, plugin '" + plugin + "' not found.");
                 return;
