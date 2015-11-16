@@ -67,6 +67,7 @@
     RULE5 = "Rule 5: Do not attempt to circumvent the rules.<br>";
     EXPL5 = "Taking the rules too literally is no use when you know you are supposed to be punished anyway. Don't try to find loopholes in the rules, it will result in even more punishment.<br>";
     SCRIPT_MODULES = sys.filesForDirectory("scripts");
+    DATA_FOLDER = "data/";
     /**
         ------------
         Load Modules
