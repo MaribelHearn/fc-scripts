@@ -331,7 +331,7 @@
     allcommands = helpers.allCommands();
     
     // Plugins
-    if (pluginLoaded["party") {
+    if (pluginLoaded["party"]) {
         PARTY_MODES = ["joke", "nightclub", "desu", "rainbow", "nyan", "dennis", "cirno", "sparta", "luigi", "roflcopter", "derp", "asdf", "leet", "morse", "reverse"];
         partyMode = sys.read(DATA_FOLDER + "partyMode.txt");
         partyNyan = 0;
