@@ -25,7 +25,7 @@ partycommands = {
     ,
     
     mode: function (src, channel, command) {
-        var name = helpers.escapehtml(sys.name(src)), lower = sys.name(src).toLowerCase(), channelname = sys.channel(channel).toLowerCase(), oldmode = partymode, mode;
+        var name = helpers.escapehtml(sys.name(src)), lower = sys.name(src).toLowerCase(), channelname = sys.channel(channel).toLowerCase(), oldmode = partyMode, mode;
         if (helpers.cauth(lower, channelname) <= 0) {
             helpers.starfox(src, channel, command, bots.starfox, "I can't let you do that star " + sys.name(src) + "!");
             return;
@@ -35,31 +35,31 @@ partycommands = {
             return;
         }
         if (command[1] == "off") {
-            if (partymode == "none") {
+            if (partyMode == "none") {
                 helpers.starfox(src, channel, command, bots.party, "Error 400, you can't turn the current party mode off, because it is already off!");
                 return;
             }
-            mode = helpers.cap(partymode) + " Mode";
-            if (partymode == "nightclub") {
+            mode = helpers.cap(partyMode) + " Mode";
+            if (partyMode == "nightclub") {
                 sys.sendHtmlAll(":<div>", channel);
             }
             sys.sendHtmlAll(border + "<br>" + helpers.bot(bots.party) + "<b>" + helpers.user(name) + " has turned " + helpers.arg(mode) + " off.</b><br>" + border2, channel);
-            partymode = "none";
-            sys.write("data/partymode.txt", "none");
+            partyMode = "none";
+            sys.write("data/partyMode.txt", "none");
             regchannels[permchannels[3].toLowerCase()].topic = ["Welcome to " + permchannels[3] + "!"];
             sys.write("data/regchannels.txt", JSON.stringify(regchannels));
             return;
         }
         for (var index in PARTY_MODES) {
             if (PARTY_MODES[index] == command[1].toLowerCase()) {
-                partymode = PARTY_MODES[index];
-                sys.write("data/partymode.txt", PARTY_MODES[index]);
+                partyMode = PARTY_MODES[index];
+                sys.write("data/partyMode.txt", PARTY_MODES[index]);
                 mode = helpers.cap(PARTY_MODES[index]) + " Mode";
                 if (oldmode == "nightclub") {
                     sys.sendHtmlAll(":<div>", channel);
                 }
                 sys.sendHtmlAll(border + "<br>" + helpers.bot(bots.party) + "<b>" + helpers.user(name) + " has turned " + helpers.arg(mode) + " on!</b><br>" + border2, channel);
-                if (partymode == "nightclub") {
+                if (partyMode == "nightclub") {
                     sys.sendHtmlAll("<font color='white'>:</font><div style='background:black'>", channel);
                     regchannels[permchannels[3].toLowerCase()].topic = ["This channel is currently in " + mode + ".<font color='white'>:</font><div style='background:black'>"];
                     sys.write("data/regchannels.txt", JSON.stringify(regchannels));
