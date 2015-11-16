@@ -25,6 +25,7 @@
     REGISTRY_URL = "http://registry.pokemon-online.eu/";
     BETA_TIERS_URL = "https://raw.githubusercontent.com/po-devs/po-server-goodies/master/tiers.xml";
     SCRIPT_URL = "https://raw.githubusercontent.com/MaribelHearn/fc-scripts/master/scripts/";
+    PLUGIN_URL = "https://raw.githubusercontent.com/MaribelHearn/fc-scripts/master/plugins/";
     REACTIVATE_REGISTER_BUTTON = 14;
     FAKEI = /\u00A1/;
     LAGCHAR = /\u0E4F/;
