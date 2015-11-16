@@ -526,6 +526,8 @@ ownercommands = {
         + "<br>"
         + "<b>" + helpers.user("/update ") + helpers.arg("module") + "</b>: updates the <b>module</b> module. Updates the main script file by default.<br>"
         + "<b>" + helpers.user("/silentupdate ") + helpers.arg("module") + "</b>: silently updates the <b>module</b> module. Updates the main script file by default. Also /supdate.<br>"
+        + "<b>" + helpers.user("/updateplugin ") + helpers.arg("plugin") + "</b>: updates the <b>plugin</b> plugin. Updates the main script file by default.<br>"
+        + "<b>" + helpers.user("/silentupdateplugin ") + helpers.arg("plugin") + "</b>: silently updates the <b>plugin</b> plugin. Updates the main script file by default. Also /supdateplugin.<br>"
         + "<b>" + helpers.user("/var ") + helpers.arg("variable") + helpers.arg2("*html") + "</b>: displays the value of <b>variable</b>. If <b>html</b> is specified, enables HTML.<br>"
         + "<b>" + helpers.user("/content ") + helpers.arg("object") + "</b>: displays only the content of <b>object</b>, so no keys. HTML always enabled.<br>"
         + "<b>" + helpers.user("/time ") + helpers.arg("command") + "</b>: runs <b>command</b> and prints its runtime. An indefinite number of arguments can be passed to this command.<br>"
@@ -541,7 +543,7 @@ ownercommands = {
     
     update: function (src, channel, command) {
         var name = sys.name(src), date = new Date(), silent = command[0].substr(0, 6), module, time;
-        var noncmds = ["main", "helpers", "handler", "base64", "tierchecks", "rr", "roulette", "party"];
+        var noncmds = ["main", "helpers", "handler", "base64", "tierchecks"];
         if (!command[1]) {
             silent == "silent" ? sys.sendHtmlMessage(src, helpers.bot(bots.script) + "Downloading scripts...", channel) : sys.sendHtmlAuths(helpers.bot(bots.script) + "Downloading scripts...");
             sys.webCall(SCRIPT_URL + "main.js", function (resp) {
@@ -553,10 +555,10 @@ ownercommands = {
                     }
                     return;
                 }
-                sys.write("scripts/main.js", resp);
+                sys.write(SCRIPTS_FOLDER + "main.js", resp);
                 try {
                     sys.changeScript(sys.read("scripts.js"));
-                    sys.exec("scripts/main.js");
+                    sys.exec(SCRIPTS_FOLDER + "main.js");
                 } catch (e) {
                     silent == "silent" ? sys.sendHtmlMessage(src, helpers.bot(bots.script) + e, channel) : sys.sendHtmlAuths(helpers.bot(bots.script) + e);
                     return;
@@ -579,9 +581,9 @@ ownercommands = {
                     }
                     return;
                 }
-                sys.write("scripts/usercmds1.js", resp);
+                sys.write(SCRIPTS_FOLDER + "usercmds1.js", resp);
                 try {
-                    sys.exec("scripts/usercmds1.js");
+                    sys.exec(SCRIPTS_FOLDER + "usercmds1.js");
                 } catch (e) {
                     silent == "silent" ? sys.sendHtmlMessage(src, helpers.bot(bots.script) + e, channel) : sys.sendHtmlAuths(helpers.bot(bots.script) + e);
                     return;
@@ -596,9 +598,9 @@ ownercommands = {
                     }
                     return;
                 }
-                sys.write("scripts/usercmds2.js", resp);
+                sys.write(SCRIPTS_FOLDER + "usercmds2.js", resp);
                 try {
-                    sys.exec("scripts/usercmds2.js");
+                    sys.exec(SCRIPTS_FOLDER + "usercmds2.js");
                 } catch (e) {
                     silent == "silent" ? sys.sendHtmlMessage(src, helpers.bot(bots.script) + e, channel) : sys.sendHtmlAuths(helpers.bot(bots.script) + e);
                     return;
@@ -612,9 +614,6 @@ ownercommands = {
             });
         } else if (command[1] == "all") {
             for (var i = 0; i < SCRIPT_MODULES.length; i++) {
-                if (SCRIPT_MODULES[i] == "banner.html" || SCRIPT_MODULES[i] == "description.html") {
-                    continue;
-                }
                 this.update(src, channel, [command[0], SCRIPT_MODULES[i].split('.')[0].replace(/cmds1|cmds2|cmds/, "")]);
             }
         } else {
@@ -636,9 +635,9 @@ ownercommands = {
                     }
                     return;
                 }
-                sys.write("scripts/" + module + ".js", resp);
+                sys.write(SCRIPTS_FOLDER + "" + module + ".js", resp);
                 try {
-                    sys.exec("scripts/" + module + ".js");
+                    sys.exec(SCRIPTS_FOLDER + "" + module + ".js");
                 } catch (e) {
                     silent == "silent" ? sys.sendHtmlMessage(src, helpers.bot(bots.script) + e, channel) : sys.sendHtmlAuths(helpers.bot(bots.script) + e);
                     return;
@@ -677,6 +676,69 @@ ownercommands = {
     supdate: function (src, channel, command) {
         command[0] = "silentupdate";
         this.update(src, channel, command);
+    }
+    
+    ,
+    
+    updateplugin: function (src, channel, command) {
+        var name = sys.name(src), date = new Date(), silent = command[0].substr(0, 6), plugin, time;
+        if (!command[1]) {
+            helpers.starfox(src, channel, command, bots.command, "Error 404, plugin not found.");
+            return;
+        }
+        if (command[1] == "all") {
+            for (var i = 0; i < SCRIPT_PLUGINS.length; i++) {
+                this.updateplugin(src, channel, [command[0], SCRIPT_PLUGINS[i].split('.')[0]]);
+            }
+        } else {
+            module = command[1];
+            if (!helpers.isInArray(plugin + ".js", SCRIPT_PLUGINS)) {
+                helpers.starfox(src, channel, command, bots.main, "Error 404, plugin '" + plugin + "' not found.");
+                return;
+            }
+            silent == "silent" ? sys.sendHtmlMessage(src, helpers.bot(bots.script) + "Downloading scripts...", channel) : sys.sendHtmlAuths(helpers.bot(bots.script) + "Downloading scripts...");
+            sys.webCall(PLUGIN_URL + plugin + ".js", function (resp) {
+                if (resp === "") {
+                    if (silent == "silent") {
+                        sys.sendHtmlMessage(src, helpers.bot(bots.script) + "An error occurred while downloading the scripts. The scripts have not been updated.", channel);
+                    } else {
+                        sys.sendHtmlAuths(helpers.bot(bots.script) + "An error occurred while downloading the scripts. The scripts have not been updated.");
+                    }
+                    return;
+                }
+                sys.write(PLUGINS_FOLDER + plugin + ".js", resp);
+                try {
+                    sys.exec(PLUGINS_FOLDER + plugin + ".js");
+                } catch (e) {
+                    silent == "silent" ? sys.sendHtmlMessage(src, helpers.bot(bots.script) + e, channel) : sys.sendHtmlAuths(helpers.bot(bots.script) + e);
+                    return;
+                }
+                time = new Date() - date;
+                if (silent == "silent") {
+                    sys.sendHtmlMessage(src, helpers.bot(bots.script) + " The " + plugin + " script plugin has been reloaded. [Time elapsed: " + (time / 1000) + " seconds.]", channel);
+                } else {
+                    sys.sendHtmlAuths(helpers.bot(bots.script) + name + " has reloaded the " + plugin + " script plugin! [Time elapsed: " + (time / 1000) + " seconds.]");
+                }
+            });
+        }
+        for (var i = SCRIPT_PLUGINS.length; i > 1; i--) {
+            if (command[i]) {
+                this.update(src, channel, [command[0], command[i]]);
+            }
+        }
+    }
+    
+    ,
+    
+    silentupdateplugin: function (src, channel, command) {
+        this.updateplugin(src, channel, command);
+    }
+    
+    ,
+    
+    supdateplugin: function (src, channel, command) {
+        command[0] = "silentupdateplugin";
+        this.updateplugin(src, channel, command);
     }
     
     ,

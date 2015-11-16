@@ -39,7 +39,7 @@ helpers = {
         sys.write(DATA_FOLDER + "allowedrange.txt", '["192.168"]');
         sys.write(DATA_FOLDER + "namestounban.txt", "[]");
         sys.write(DATA_FOLDER + "silentcmds.txt", '["future","spoiler","seval","sseval","skick",' +
-        '"invisibleowner","invisible","invis","silentupdate","silenteval","secretsilenteval","silentkick","supdate"]');
+        '"invisibleowner","invisible","invis","silentupdate","silenteval","secretsilenteval","silentkick","supdate","silentupdateplugin", "supdateplugin"]');
         sys.write(DATA_FOLDER + "nameblocklist.txt", '["fuck","bitch","gay","fag","sex","condom",' +
         '"vagina","dildo","vibrator","orgasm","cunt","cock","dick","asshole","blow","slut","pussy","rape","penis",' +
         '"horny","intercourse","nigger","nigga","shit","cum","bastard","anus","porn","fap","hitler",":","masturbat","rapist"]');
