@@ -35,7 +35,7 @@ helpers = {
         sys.write(DATA_FOLDER + "allowed.txt", '["127.0.0.1"]');
         sys.write(DATA_FOLDER + "cmdcolors.txt", '["royalblue","green","red","orange","gold","blue"]');
         sys.write(DATA_FOLDER + "exceptions.txt", '["cofagrigus"]');
-        sys.write(DATA_FOLDER + "permchannels.txt", '["Watch","Auth Channel","Owner Channel","Party","Russian Roulette","Roulette"]');
+        sys.write(DATA_FOLDER + "permchannels.txt", '["Watch","Auth Channel","Owner Channel"]');
         sys.write(DATA_FOLDER + "allowedrange.txt", '["192.168"]');
         sys.write(DATA_FOLDER + "namestounban.txt", "[]");
         sys.write(DATA_FOLDER + "silentcmds.txt", '["future","spoiler","seval","sseval","skick",' +
@@ -77,16 +77,24 @@ helpers = {
         sys.write(DATA_FOLDER + "rangebanmsg.txt", "{}");
         
         // Plugins
-        if (pluginLoaded["party"]) {
-            sys.write(DATA_FOLDER + "partyMode.txt", "none");
+        var permchannels = JSON.parse(sys.read(DATA_FOLDER + "permchannels.txt"));
+        
+        if (helpers.isLoaded("party.js")) {
+            permchannels.push("Party");
+            sys.write(DATA_FOLDER + "partymode.txt", "none");
+            sys.write(DATA_FOLDER + "permchannels.txt", JSON.stringify(permchannels));
         }
         
-        if (pluginLoaded["rr"]) {
+        if (helpers.isLoaded("rr.js")) {
+            permchannels.push("Russian Roulette");
             sys.write(DATA_FOLDER + "rr.txt", "{}");
+            sys.write(DATA_FOLDER + "permchannels.txt", JSON.stringify(permchannels));
         }
         
-        if (pluginLoaded["roulette"]) {
+        if (helpers.isLoaded("roulette.js")) {
+            permchannels.push("Roulette");
             sys.write(DATA_FOLDER + "roulette.txt", "{}");
+            sys.write(DATA_FOLDER + "permchannels.txt", JSON.stringify(permchannels));
         }
     }
     
@@ -112,6 +120,12 @@ helpers = {
         Checking Helpers
         ----------------
     **/
+    isLoaded: function (plugin) {
+        return pluginLoaded[SCRIPT_PLUGINS.indexOf(plugin)];
+    }
+    
+    ,
+    
     isLetter: function (c) {
         var lower = c.toLowerCase();
         return lower >= 'a' && lower <= 'z';
@@ -972,14 +986,20 @@ helpers = {
         for (var i in cownercommands) {
             array.push(i);
         }
-        for (var i in roulettecommands) {
-            array.push(i);
+        if (helpers.isLoaded("roulette.js")) {
+            for (var i in roulettecommands) {
+                array.push(i);
+            }
         }
-        for (var i in rrcommands) {
-            array.push(i);
+        if (helpers.isLoaded("rr.js")) {
+            for (var i in rrcommands) {
+                array.push(i);
+            }
         }
-        for (var i in partycommands) {
-            array.push(i);
+        if (helpers.isLoaded("party.js")) {
+            for (var i in partycommands) {
+                array.push(i);
+            }
         }
         return array;
     }
