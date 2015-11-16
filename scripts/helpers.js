@@ -15,69 +15,79 @@ helpers = {
         sys.mkdir("data");
         
         // Booleans
-        sys.write("data/open.txt", "true");
+        sys.write(DATA_FOLDER + "open.txt", "true");
         
         // Numbers
-        sys.write("data/allowance.txt", 8);
-        sys.write("data/floodtime.txt", 10);
-        sys.write("data/floodlevel.txt", 1);
-        sys.write("data/maxplayers.txt", 0);
+        sys.write(DATA_FOLDER + "allowance.txt", 8);
+        sys.write(DATA_FOLDER + "floodtime.txt", 10);
+        sys.write(DATA_FOLDER + "floodlevel.txt", 1);
+        sys.write(DATA_FOLDER + "maxplayers.txt", 0);
         
         // Strings
-        sys.write("data/API_KEY.txt", "");
-        sys.write("data/botcolor.txt", "#318739");
-        sys.write("data/partymode.txt", "none");
-        sys.write("data/botsymbol.txt", "±");
-        sys.write("data/servertopic.txt", "Welcome to " + sys.getServerName() + "!");
-        sys.write("data/botsymbolcolor.txt", "#318739");
-        sys.write("data/bordercolor.txt", "darkblue");
+        sys.write(DATA_FOLDER + "API_KEY.txt", "");
+        sys.write(DATA_FOLDER + "botcolor.txt", "#318739");
+        sys.write(DATA_FOLDER + "botsymbol.txt", "±");
+        sys.write(DATA_FOLDER + "servertopic.txt", "Welcome to " + sys.getServerName() + "!");
+        sys.write(DATA_FOLDER + "botsymbolcolor.txt", "#318739");
+        sys.write(DATA_FOLDER + "bordercolor.txt", "darkblue");
         
         // Arrays
-        sys.write("data/allowed.txt", '["127.0.0.1"]');
-        sys.write("data/cmdcolors.txt", '["royalblue","green","red","orange","gold","blue"]');
-        sys.write("data/exceptions.txt", '["cofagrigus"]');
-        sys.write("data/permchannels.txt", '["Watch","Auth Channel","Owner Channel","Party","Russian Roulette","Roulette"]');
-        sys.write("data/allowedrange.txt", '["192.168"]');
-        sys.write("data/namestounban.txt", "[]");
-        sys.write("data/silentcmds.txt", '["future","spoiler","seval","sseval","skick",' +
+        sys.write(DATA_FOLDER + "allowed.txt", '["127.0.0.1"]');
+        sys.write(DATA_FOLDER + "cmdcolors.txt", '["royalblue","green","red","orange","gold","blue"]');
+        sys.write(DATA_FOLDER + "exceptions.txt", '["cofagrigus"]');
+        sys.write(DATA_FOLDER + "permchannels.txt", '["Watch","Auth Channel","Owner Channel","Party","Russian Roulette","Roulette"]');
+        sys.write(DATA_FOLDER + "allowedrange.txt", '["192.168"]');
+        sys.write(DATA_FOLDER + "namestounban.txt", "[]");
+        sys.write(DATA_FOLDER + "silentcmds.txt", '["future","spoiler","seval","sseval","skick",' +
         '"invisibleowner","invisible","invis","silentupdate","silenteval","secretsilenteval","silentkick","supdate"]');
-        sys.write("data/nameblocklist.txt", '["fuck","bitch","gay","fag","sex","condom",' +
+        sys.write(DATA_FOLDER + "nameblocklist.txt", '["fuck","bitch","gay","fag","sex","condom",' +
         '"vagina","dildo","vibrator","orgasm","cunt","cock","dick","asshole","blow","slut","pussy","rape","penis",' +
         '"horny","intercourse","nigger","nigga","shit","cum","bastard","anus","porn","fap","hitler",":","masturbat","rapist"]');
-        sys.write("data/proxylist.txt", sys.read("proxy_list.txt"));
-        sys.write("data/bansites.txt", sys.read("bansites.txt"));
+        sys.write(DATA_FOLDER + "proxylist.txt", sys.read("proxy_list.txt"));
+        sys.write(DATA_FOLDER + "bansites.txt", sys.read("bansites.txt"));
         sys.rm("proxy_list.txt");
         sys.rm("bansites.txt");
         
         // Objects
-        sys.write("data/bots.txt", '{"attack":"AttackBot","armyof":"ArmyBot","auth":"AuthBot","ban":"BanBot","caps":"CapsBot","channel":"ChannelBot",' +
+        sys.write(DATA_FOLDER + "bots.txt", '{"attack":"AttackBot","armyof":"ArmyBot","auth":"AuthBot","ban":"BanBot","caps":"CapsBot","channel":"ChannelBot",' +
         '"clear":"ClearBot","command":"CommandBot","flood":"FloodBot","fun":"FunBot","gigaban":"GigabanBot","idle":"IdleBot","kick":"KickBot",' +
         '"main":"Bot","megaban":"MegabanBot","mute":"MuteBot","name":"NameBot","party":"PartyBot","pass":"PassBot",' +
         '"priv":"PrivacyBot","reverse":"ReverseBot","rr":"RussiaBot","russia":"RussiaBot","script":"ScriptBot","silence":"SilenceBot",' +
         '"spy":"WatchBot","starfox":"Wolf","status":"StatusBot","tour":"TourBot","topic":"TopicBot","warn":"WarnBot","welcome":"WelcomeBot",' +
         '"roulette": "RouletteBot"}');
-        sys.write("data/regchannels.txt", "{}");
-        sys.write("data/rr.txt", "{}");
-        sys.write("data/iplist.txt", "{}");
-        sys.write("data/banlist.txt", "{}");
-        sys.write("data/roulette.txt", "{}");
-        sys.write("data/mutelist.txt", "{}");
-        sys.write("data/bigtexts.txt", "{}");
-        sys.write("data/timezone.txt", "{}");
-        sys.write("data/cityname.txt", "{}");
-        sys.write("data/versions.txt", "{}");
-        sys.write("data/memberlist.txt", "{}");
-        sys.write("data/banmsg.txt", "{}");
-        sys.write("data/os.txt", "{}");
-        sys.write("data/kickmsg.txt", "{}");
-        sys.write("data/mutemsg.txt", "{}");
-        sys.write("data/authtitles.txt", "{}");
-        sys.write("data/megabanlist.txt", "{}");
-        sys.write("data/gigabanlist.txt", "{}");
-        sys.write("data/countryname.txt", "{}");
-        sys.write("data/rangebanlist.txt", "{}");
-        sys.write("data/selfkickmsg.txt", "{}");
-        sys.write("data/rangebanmsg.txt", "{}");
+        sys.write(DATA_FOLDER + "regchannels.txt", "{}");
+        sys.write(DATA_FOLDER + "iplist.txt", "{}");
+        sys.write(DATA_FOLDER + "banlist.txt", "{}");
+        sys.write(DATA_FOLDER + "mutelist.txt", "{}");
+        sys.write(DATA_FOLDER + "bigtexts.txt", "{}");
+        sys.write(DATA_FOLDER + "timezone.txt", "{}");
+        sys.write(DATA_FOLDER + "cityname.txt", "{}");
+        sys.write(DATA_FOLDER + "versions.txt", "{}");
+        sys.write(DATA_FOLDER + "memberlist.txt", "{}");
+        sys.write(DATA_FOLDER + "banmsg.txt", "{}");
+        sys.write(DATA_FOLDER + "os.txt", "{}");
+        sys.write(DATA_FOLDER + "kickmsg.txt", "{}");
+        sys.write(DATA_FOLDER + "mutemsg.txt", "{}");
+        sys.write(DATA_FOLDER + "authtitles.txt", "{}");
+        sys.write(DATA_FOLDER + "megabanlist.txt", "{}");
+        sys.write(DATA_FOLDER + "gigabanlist.txt", "{}");
+        sys.write(DATA_FOLDER + "countryname.txt", "{}");
+        sys.write(DATA_FOLDER + "rangebanlist.txt", "{}");
+        sys.write(DATA_FOLDER + "selfkickmsg.txt", "{}");
+        sys.write(DATA_FOLDER + "rangebanmsg.txt", "{}");
+        
+        // Plugins
+        if (pluginLoaded["party"]) {
+            sys.write(DATA_FOLDER + "partyMode.txt", "none");
+        }
+        
+        if (pluginLoaded["rr"]) {
+            sys.write(DATA_FOLDER + "rr.txt", "{}");
+        }
+        
+        if (pluginLoaded["roulette"]) {
+            sys.write(DATA_FOLDER + "roulette.txt", "{}");
+        }
     }
     
     ,
@@ -89,23 +99,9 @@ helpers = {
     
     ,
     
-    setvariable: function (variable, data) {
+    setVariable: function (variable, data) {
         if (typeof(global[variable]) == "undefined") {
             global[variable] = data;
-        }
-    }
-    
-    ,
-    
-    memberslist: function () {
-        var membersdatabase = sys.dbAll(), membersindex, playernumber;
-        members = {};
-        for (membersindex in membersdatabase) {
-            members[membersdatabase[membersindex]] = membersdatabase[membersindex];
-            playernumber = sys.id(membersdatabase[membersindex]);
-            if (playernumber !== undefined) {
-                members[membersdatabase[membersindex]] = sys.name(playernumber);
-            }
         }
     }
     
@@ -674,10 +670,10 @@ helpers = {
                 message += " Nyan";
                 index++;
             }
-            sys.sendHtmlAll("<font color='white'>:</font><div style='background:" + this.nyancolor(partynyan) + "'><center><span style='font-size:16px'>" + message + "</span></center>", channel);
-            partynyan++;
-            if (partynyan == 7) {
-                partynyan = 0;
+            sys.sendHtmlAll("<font color='white'>:</font><div style='background:" + this.nyancolor(partyNyan) + "'><center><span style='font-size:16px'>" + message + "</span></center>", channel);
+            partyNyan++;
+            if (partyNyan == 7) {
+                partyNyan = 0;
             }
             return;
         } else if (mode == "dennis") {

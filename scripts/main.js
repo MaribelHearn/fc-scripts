@@ -25,21 +25,7 @@
     REGISTRY_URL = "http://registry.pokemon-online.eu/";
     BETA_TIERS_URL = "https://raw.githubusercontent.com/po-devs/po-server-goodies/master/tiers.xml";
     SCRIPT_URL = "https://raw.githubusercontent.com/MaribelHearn/fc-scripts/master/scripts/";
-    AUTH_NAME = ["User", "Moderator", "Administrator", "Owner"];
-    PARTY_MODES = ["joke", "nightclub", "desu", "rainbow", "nyan", "dennis", "cirno", "sparta", "luigi", "roflcopter", "derp", "asdf", "leet", "morse", "reverse"];
-    LEGENDARY_LIST = ["Articuno", "Zapdos", "Moltres", "Mewtwo", "Mew", "Raikou", "Entei", "Suicune", "Ho-Oh", "Lugia", "Celebi", "Kyogre", "Groudon", "Rayquaza", "Latios",
-    "Latias", "Regirock", "Regice", "Registeel", "Jirachi", "Deoxys", "Uxie", "Mesprit", "Azelf", "Dialga", "Palkia", "Giratina", "Heatran", "Regigigas", "Cresselia", "Darkrai",
-    "Manaphy", "Shaymin", "Arceus", "Victini", "Cobalion", "Terrakion", "Virizion", "Tornadus", "Thundurus", "Landorus", "Reshiram", "Zekrom", "Kyurem", "Meloetta", "Genesect",
-    "Xerneas", "Yveltal", "Zygarde"];
-    ROULETTE_EVENTS = ["frenzy", "chainfest", "type", "legendary"];
-    NUMBER_OF_POKEMON = 721;
     REACTIVATE_REGISTER_BUTTON = 14;
-    ROULETTE_WAIT_MIN = 90;
-    ROULETTE_WAIT_MAX = 271;
-    ROULETTE_EVENT_MIN = 66;
-    ROULETTE_EVENT_MAX = 135;
-    ROULETTE_FEST_MIN = 22;
-    ROULETTE_FEST_MAX = 45;
     FAKEI = /\u00A1/;
     LAGCHAR = /\u0E4F/;
     OTHER = /\u3061|\u65532/;
@@ -66,25 +52,42 @@
     EXPL4 = "You may get auth when recognized for coming on a lot, chat activity, good behaviour and maybe even contribution. Asking for it will not get you any further.<br>";
     RULE5 = "Rule 5: Do not attempt to circumvent the rules.<br>";
     EXPL5 = "Taking the rules too literally is no use when you know you are supposed to be punished anyway. Don't try to find loopholes in the rules, it will result in even more punishment.<br>";
-    SCRIPT_MODULES = sys.filesForDirectory("scripts");
+    AUTH_NAME = ["User", "Moderator", "Administrator", "Owner"];
+    MODULES = ["usercmds1", "usercmds2", "modcmds", "admincmds", "ownercmds", "cusercmds", "cmodcmds", "cadmincmds", "cownercmds", "helpers", "handler", "tierchecks", "base64"];
+    PLUGINS = ["party", "roulette", "rr"];
+    SCRIPTS_FOLDER = "scripts/";
+    PLUGINS_FOLDER = "plugins/";
     DATA_FOLDER = "data/";
+    SCRIPT_MODULES = sys.filesForDirectory(SCRIPTS_FOLDER);
+    SCRIPT_PLUGINS = sys.filesForDirectory(PLUGINS_FOLDER);
     /**
-        ------------
-        Load Modules
-        ------------
+        ------------------------
+        Load Modules and Plugins
+        ------------------------
     **/
+    var fileName, fileExtension;
     if (typeof(moduleLoaded) == "undefined") {
         moduleLoaded = {};
     }
     for (var i in SCRIPT_MODULES) {
         fileName = SCRIPT_MODULES[i].split('.')[0];
         fileExtension = SCRIPT_MODULES[i].split('.')[1];
-        if (fileName != "main" && fileExtension == "js") {
-            if (!moduleLoaded[fileName]) {
-                print("Loaded module " + SCRIPT_MODULES[i]);
-                sys.exec("scripts/" + SCRIPT_MODULES[i]);
-                moduleLoaded[fileName] = true;
-            }
+        if (fileName in MODULES && fileExtension == "js" && !moduleLoaded[fileName]) {
+            print("Loaded module " + SCRIPT_MODULES[i]);
+            sys.exec(SCRIPTS_FOLDER + SCRIPT_MODULES[i]);
+            moduleLoaded[fileName] = true;
+        }
+    }
+    if (typeof(pluginLoaded) == "undefined") {
+        pluginLoaded = {};
+    }
+    for (var i in SCRIPT_PLUGINS) {
+        fileName = SCRIPT_PLUGINS[i].split('.')[0];
+        fileExtension = SCRIPT_PLUGINS[i].split('.')[1];
+        if (fileName in PLUGINS && fileExtension == "js" && !pluginLoaded[fileName]) {
+            print("Loaded plugin " + SCRIPT_PLUGINS[i]);
+            sys.exec(PLUGINS_FOLDER + SCRIPT_PLUGINS[i]);
+            pluginLoaded[fileName] = true;
         }
     }
     /**
@@ -95,7 +98,7 @@
     if (!helpers.isInArray("data", sys.dirsForDirectory(sys.cwd()))) {
         helpers.initData();
     }
-    API = sys.read("data/API_KEY.txt");
+    API = sys.read(DATA_FOLDER + "API_KEY.txt");
     /**
         ----------------------
         Additional Sys Methods
@@ -243,7 +246,7 @@
         ----------------
     **/
     // Boolean from data file
-    helpers.setvariable("open", sys.read("data/open.txt") == "true" ? true : false);
+    helpers.setVariable("open", sys.read("data/open.txt") == "true" ? true : false);
     
     // Number from data file
     allowance = parseInt(sys.read("data/allowance.txt"));
@@ -253,7 +256,6 @@
     
     // String from data file
     botcolor = sys.read("data/botcolor.txt");
-    partymode = sys.read("data/partymode.txt");
     botsymbol = sys.read("data/botsymbol.txt");
     servertopic = sys.read("data/servertopic.txt");
     botsymbolcolor = sys.read("data/botsymbolcolor.txt");
@@ -272,11 +274,9 @@
     blocklist = sys.read("data/bansites.txt").replace(/\r/g, "").split('\n');
     
     // Object from data file
-    rr = JSON.parse(sys.read("data/rr.txt"));
     bots = JSON.parse(sys.read("data/bots.txt"));
     iplist = JSON.parse(sys.read("data/iplist.txt"));
     banlist = JSON.parse(sys.read("data/banlist.txt"));
-    roulette = JSON.parse(sys.read("data/roulette.txt"));
     mutelist = JSON.parse(sys.read("data/mutelist.txt"));
     bigtexts = JSON.parse(sys.read("data/bigtexts.txt"));
     timezone = JSON.parse(sys.read("data/timezone.txt"));
@@ -297,42 +297,66 @@
     rangebanmessages = JSON.parse(sys.read("data/rangebanmsg.txt"));
     
     // Boolean
-    helpers.setvariable("tor", false);
-    helpers.setvariable("stopbattles", false);
-    helpers.setvariable("megabancheck", false);
-    helpers.setvariable("gigabancheck", false);
-    helpers.setvariable("serverStarting", false);
+    helpers.setVariable("tor", false);
+    helpers.setVariable("stopbattles", false);
+    helpers.setVariable("megabancheck", false);
+    helpers.setVariable("gigabancheck", false);
+    helpers.setVariable("serverStarting", false);
     
     // Number
     timer = 0;
-    partynyan = 0;
-    rouletteStep = 0;
-    rouletteTime = sys.rand(ROULETTE_WAIT_MIN, ROULETTE_WAIT_MAX);
     
     // String
-    helpers.setvariable("rouletteEvent", "");
-    helpers.setvariable("layout", "new");
-    helpers.setvariable("hostIp", "");
-    helpers.setvariable("hostCountry", "");
-    helpers.setvariable("hostCity", "");
-    helpers.setvariable("hostTimeZone", "");
-    helpers.setvariable("border", "<font color='" + bordercolor + "'><b>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>></b></font>");
-    helpers.setvariable("border2", "<font color='" + bordercolor + "'><b>&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;" +
+    helpers.setVariable("layout", "new");
+    helpers.setVariable("hostIp", "");
+    helpers.setVariable("hostCountry", "");
+    helpers.setVariable("hostCity", "");
+    helpers.setVariable("hostTimeZone", "");
+    helpers.setVariable("border", "<font color='" + bordercolor + "'><b>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>></b></font>");
+    helpers.setVariable("border2", "<font color='" + bordercolor + "'><b>&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;" +
     "&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;</b></font>");
     
     // Array
-    helpers.setvariable("players", []);
-    helpers.setvariable("floodplayers", []);
+    helpers.setVariable("players", []);
+    helpers.setVariable("floodplayers", []);
     
     // Object
-    helpers.setvariable("tour", {});
-    helpers.setvariable("battles", {});
-    helpers.setvariable("battlesf", {});
+    helpers.setVariable("tour", {});
+    helpers.setVariable("battles", {});
+    helpers.setVariable("battlesf", {});
     
     // Special
     tour[0] = {};
     tour[0].tourmode = 0;
     allcommands = helpers.allCommands();
+    
+    // Plugins
+    if (pluginLoaded["party") {
+        PARTY_MODES = ["joke", "nightclub", "desu", "rainbow", "nyan", "dennis", "cirno", "sparta", "luigi", "roflcopter", "derp", "asdf", "leet", "morse", "reverse"];
+        partyMode = sys.read(DATA_FOLDER + "partyMode.txt");
+        partyNyan = 0;
+    }
+    
+    if (pluginLoaded["rr"]) {
+        rr = JSON.parse(sys.read("data/rr.txt"));
+    }
+    
+    if (pluginLoaded["roulette"]) {
+        LEGENDARY_LIST = ["Articuno", "Zapdos", "Moltres", "Mewtwo", "Mew", "Raikou", "Entei", "Suicune", "Ho-Oh", "Lugia", "Celebi", "Kyogre", "Groudon", "Rayquaza", "Latios",
+        "Latias", "Regirock", "Regice", "Registeel", "Jirachi", "Deoxys", "Uxie", "Mesprit", "Azelf", "Dialga", "Palkia", "Giratina", "Heatran", "Regigigas", "Cresselia", "Darkrai",
+        "Manaphy", "Shaymin", "Arceus", "Victini", "Cobalion", "Terrakion", "Virizion", "Tornadus", "Thundurus", "Landorus", "Reshiram", "Zekrom", "Kyurem", "Meloetta", "Genesect",
+        "Xerneas", "Yveltal", "Zygarde"];
+        ROULETTE_WAIT_MIN = 90;
+        ROULETTE_WAIT_MAX = 271;
+        ROULETTE_EVENT_MIN = 66;
+        ROULETTE_EVENT_MAX = 135;
+        ROULETTE_FEST_MIN = 22;
+        ROULETTE_FEST_MAX = 45;
+        helpers.setVariable("rouletteEvent", "");
+        helpers.setVariable("rouletteStep", 0);
+        helpers.setVariable("rouletteTime", sys.rand(ROULETTE_WAIT_MIN, ROULETTE_WAIT_MAX));
+        roulette = JSON.parse(sys.read(DATA_FOLDER + "roulette.txt"));
+    }
 }
 ).call(null);
 
@@ -394,9 +418,15 @@
             watch = sys.channelId(permchannels[0]);
             authchannel = sys.channelId(permchannels[1]);
             ownerchannel = sys.channelId(permchannels[2]);
-            partychannel = sys.channelId(permchannels[3]);
-            rrchannel = sys.channelId(permchannels[4]);
-            roulettechannel = sys.channelId(permchannels[5]);
+            if (pluginLoaded["party"]) {
+                partychannel = sys.channelId(permchannels[3]);
+            }
+            if (pluginLoaded["rr"]) {
+                rrchannel = sys.channelId(permchannels[4]);
+            }
+            if (pluginLoaded["roulette"]) {
+                roulettechannel = sys.channelId(permchannels[5]);
+            }
             print("The default channels have been created.");
             serverStarting = false;
         }, 3500, 0);
@@ -508,48 +538,50 @@
             Roulette Events
             ---------------
         **/
-        if (sys.playersOfChannel(roulettechannel).length !== 0) { // only trigger events when at least one person is in the channel
-            rouletteStep += 1;
-            
-            // if the waiting time's up and there is no event going, start a new event
-            if (rouletteEvent === "" && rouletteStep == rouletteTime) {
-                randomEvent = sys.rand(0, 100);
-                if (randomEvent < 34) {
-                    rouletteEvent = "frenzy";
-                    for (var i in roulette) {
-                        roulette[i].shinyChance = parseInt(4096 / (4096 / 33));
+        if (pluginLoaded["roulette"]) {
+            if (sys.playersOfChannel(roulettechannel).length !== 0) { // only trigger events when at least one person is in the channel
+                rouletteStep += 1;
+                
+                // if the waiting time's up and there is no event going, start a new event
+                if (rouletteEvent === "" && rouletteStep == rouletteTime) {
+                    randomEvent = sys.rand(0, 100);
+                    if (randomEvent < 34) {
+                        rouletteEvent = "frenzy";
+                        for (var i in roulette) {
+                            roulette[i].shinyChance = parseInt(4096 / (4096 / 33));
+                        }
+                        rouletteTime = 33;
+                    } else if (randomEvent < 55) {
+                        rouletteEvent = "fest";
+                        rouletteTime = sys.rand(ROULETTE_FEST_MIN, ROULETTE_FEST_MAX);
+                    } else if (randomEvent < 76) {
+                        rouletteEvent = sys.type(sys.rand(0, 19));
+                        rouletteTime = sys.rand(ROULETTE_EVENT_MIN, ROULETTE_EVENT_MAX);
+                    } else {
+                        rouletteEvent = "legendary";
+                        rouletteTime = sys.rand(ROULETTE_EVENT_MIN, ROULETTE_EVENT_MAX);
                     }
-                    rouletteTime = 33;
-                } else if (randomEvent < 55) {
-                    rouletteEvent = "fest";
-                    rouletteTime = sys.rand(ROULETTE_FEST_MIN, ROULETTE_FEST_MAX);
-                } else if (randomEvent < 76) {
-                    rouletteEvent = sys.type(sys.rand(0, 19));
-                    rouletteTime = sys.rand(ROULETTE_EVENT_MIN, ROULETTE_EVENT_MAX);
-                } else {
-                    rouletteEvent = "legendary";
-                    rouletteTime = sys.rand(ROULETTE_EVENT_MIN, ROULETTE_EVENT_MAX);
-                }
-                for (var i in roulette) { // flash those with event flashing on
-                    if (roulette[i].eventFlash && sys.id(i)) {
-                        sys.sendHtmlMessage(sys.id(i), "<ping/>", roulette);
+                    for (var i in roulette) { // flash those with event flashing on
+                        if (roulette[i].eventFlash && sys.id(i)) {
+                            sys.sendHtmlMessage(sys.id(i), "<ping/>", roulette);
+                        }
                     }
+                    helpers.rouletteEventMessage(rouletteEvent, false);
+                    rouletteStep = 0;
                 }
-                helpers.rouletteEventMessage(rouletteEvent, false);
-                rouletteStep = 0;
-            }
-            
-            // stop an event once its time is up and set new waiting time
-            if (rouletteEvent !== "" && rouletteStep == rouletteTime) {
-                rouletteTime = sys.rand(ROULETTE_WAIT_MIN, ROULETTE_WAIT_MAX);
-                helpers.rouletteEventMessage(rouletteEvent, true); // sets 'ended' to true
-                if (rouletteEvent == "frenzy") {
-                    for (var i in roulette) {
-                        roulette[i].shinyChance = parseInt(roulette[i].shinyChance * (4096 / 33));
+                
+                // stop an event once its time is up and set new waiting time
+                if (rouletteEvent !== "" && rouletteStep == rouletteTime) {
+                    rouletteTime = sys.rand(ROULETTE_WAIT_MIN, ROULETTE_WAIT_MAX);
+                    helpers.rouletteEventMessage(rouletteEvent, true); // sets 'ended' to true
+                    if (rouletteEvent == "frenzy") {
+                        for (var i in roulette) {
+                            roulette[i].shinyChance = parseInt(roulette[i].shinyChance * (4096 / 33));
+                        }
                     }
+                    rouletteEvent = "";
+                    rouletteStep = 0;
                 }
-                rouletteEvent = "";
-                rouletteStep = 0;
             }
         }
     }
@@ -906,10 +938,12 @@
         } else {
             sys.sendHtmlMessage(src, "<b style='color:orange'>Channel Topic:</b> Welcome to " + channelname + "!", channel);
         }
-        if (channel == partychannel && partymode == "nightclub") {
-            sys.sendHtmlAuth(helpers.bot(bots.spy) + "[Server] <b style='color:" + helpers.color(src) + "'>" + sys.name(src) + "</b> has joined the channel <a href=\"po:join/" + sys.channel(channel) +
-            "\">#" + sys.channel(channel) + "</a>.");
-            return;
+        if (pluginLoaded["party"]) {
+            if (channel == partychannel && partyMode == "nightclub") {
+                sys.sendHtmlAuth(helpers.bot(bots.spy) + "[Server] <b style='color:" + helpers.color(src) + "'>" + sys.name(src) + "</b> has joined the channel <a href=\"po:join/" + sys.channel(channel) +
+                "\">#" + sys.channel(channel) + "</a>.");
+                return;
+            }
         }
         /**
             ---------------
@@ -944,10 +978,12 @@
             -------------
         **/
         var cauth = helpers.cauthname(players[src].name.toLowerCase(), channel), channelname = sys.channel(channel), cookie = sys.cookie(src) ? sys.cookie(src) : "none", id = sys.uniqueId(src) ? sys.uniqueId(src).id : "none";
-        if (channel == partychannel && partymode == "nightclub") {
-            sys.sendHtmlAuth(helpers.bot(bots.spy) + "[Server] <b style='color:" + helpers.color(src) + "'>" + sys.name(src) + "</b> has left the channel <a href=\"po:join/" + sys.channel(channel) +
-            "\">#" + sys.channel(channel) + "</a>.");
-            return;
+        if (pluginLoaded["party"]) {
+            if (channel == partychannel && partyMode == "nightclub") {
+                sys.sendHtmlAuth(helpers.bot(bots.spy) + "[Server] <b style='color:" + helpers.color(src) + "'>" + sys.name(src) + "</b> has left the channel <a href=\"po:join/" + sys.channel(channel) +
+                "\">#" + sys.channel(channel) + "</a>.");
+                return;
+            }
         }
         if (cookie == "banned" || cookie.substr(0, 6) === "banned") {
             megabancheck = false;
@@ -1282,10 +1318,12 @@
             Party
             -----
         **/
-        if (channel == partychannel && partymode != "none" && (message.charAt(0) + message.charAt(1) + message.charAt(2) + message.charAt(3) + message.charAt(4)) != "/mode") {
-            sys.stopEvent();
-            helpers.mode(src, message, channel, partymode);
-            return;
+        if (pluginLoaded["party"]) {
+            if (channel == partychannel && partyMode != "none" && message != "/mode") {
+                sys.stopEvent();
+                helpers.mode(src, message, channel, partyMode);
+                return;
+            }
         }
         /**
             --------
