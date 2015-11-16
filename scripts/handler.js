@@ -61,7 +61,7 @@ mutableUserCommand = function (src, channel, command, lower, name, auth) {
 };
 
 rouletteCommand = function (src, channel, command, lower, name, auth) {
-    if (pluginLoaded["roulette"] && roulettecommands[lower] !== undefined) {
+    if (helpers.isLoaded("roulette.js") && roulettecommands[lower] !== undefined) {
         if (channel != roulettechannel) {
             helpers.starfox(src, channel, command, bots.roulette, "Error 403, this command is meant to be used in the <a href='po:join/" + permchannels[5] + "'>#" + permchannels[5] + "</a> channel.");
             return;
@@ -74,7 +74,7 @@ rouletteCommand = function (src, channel, command, lower, name, auth) {
 };
 
 russianRouletteCommand = function (src, channel, command, lower, name, auth) {
-    if (pluginLoaded["rr"] && rrcommands[lower] !== undefined) {
+    if (helpers.isLoaded("rr.js") && rrcommands[lower] !== undefined) {
         if (channel != rrchannel) {
             helpers.starfox(src, channel, command, bots.rr, "Error 403, this command is meant to be used in the the <a href='po:join/" + permchannels[4] + "'>#" + permchannels[4] + "</a> channel.");
             return;
@@ -87,7 +87,7 @@ russianRouletteCommand = function (src, channel, command, lower, name, auth) {
 };
 
 partyCommand = function (src, channel, command, lower, name, auth) {
-    if (pluginLoaded["party"] && partycommands[lower] !== undefined) {
+    if (helpers.isLoaded("party.js") && partycommands[lower] !== undefined) {
         if (channel != partychannel) {
             helpers.starfox(src, channel, command, bots.party, "Error 403, this command is meant to be used in the <a href='po:join/" + permchannels[3] + "'>#" + permchannels[3] + "</a> channel.");
             return;

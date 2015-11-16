@@ -45,7 +45,7 @@ partycommands = {
             }
             sys.sendHtmlAll(border + "<br>" + helpers.bot(bots.party) + "<b>" + helpers.user(name) + " has turned " + helpers.arg(mode) + " off.</b><br>" + border2, channel);
             partyMode = "none";
-            sys.write("data/partyMode.txt", "none");
+            sys.write("data/partymode.txt", "none");
             regchannels[permchannels[3].toLowerCase()].topic = ["Welcome to " + permchannels[3] + "!"];
             sys.write("data/regchannels.txt", JSON.stringify(regchannels));
             return;
@@ -53,7 +53,7 @@ partycommands = {
         for (var index in PARTY_MODES) {
             if (PARTY_MODES[index] == command[1].toLowerCase()) {
                 partyMode = PARTY_MODES[index];
-                sys.write("data/partyMode.txt", PARTY_MODES[index]);
+                sys.write("data/partymode.txt", PARTY_MODES[index]);
                 mode = helpers.cap(PARTY_MODES[index]) + " Mode";
                 if (oldmode == "nightclub") {
                     sys.sendHtmlAll(":<div>", channel);

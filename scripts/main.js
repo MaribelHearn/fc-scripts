@@ -53,41 +53,36 @@
     RULE5 = "Rule 5: Do not attempt to circumvent the rules.<br>";
     EXPL5 = "Taking the rules too literally is no use when you know you are supposed to be punished anyway. Don't try to find loopholes in the rules, it will result in even more punishment.<br>";
     AUTH_NAME = ["User", "Moderator", "Administrator", "Owner"];
-    MODULES = ["usercmds1", "usercmds2", "modcmds", "admincmds", "ownercmds", "cusercmds", "cmodcmds", "cadmincmds", "cownercmds", "helpers", "handler", "tierchecks", "base64"];
-    PLUGINS = ["party", "roulette", "rr"];
+    SCRIPT_MODULES = ["usercmds1.js", "usercmds2.js", "modcmds.js", "admincmds.js", "ownercmds.js", "cusercmds.js", "cmodcmds.js", "cadmincmds.js", "cownercmds.js", "helpers.js", "handler.js", "tierchecks.js", "base64.js"];
+    SCRIPT_PLUGINS = ["party.js", "roulette.js", "rr.js"];
     SCRIPTS_FOLDER = "scripts/";
     PLUGINS_FOLDER = "plugins/";
     DATA_FOLDER = "data/";
-    SCRIPT_MODULES = sys.filesForDirectory(SCRIPTS_FOLDER);
-    SCRIPT_PLUGINS = sys.filesForDirectory(PLUGINS_FOLDER);
     /**
         ------------------------
         Load Modules and Plugins
         ------------------------
     **/
-    var fileName, fileExtension;
     if (typeof(moduleLoaded) == "undefined") {
         moduleLoaded = {};
     }
     for (var i in SCRIPT_MODULES) {
-        fileName = SCRIPT_MODULES[i].split('.')[0];
-        fileExtension = SCRIPT_MODULES[i].split('.')[1];
-        if (fileName in MODULES && fileExtension == "js" && !moduleLoaded[fileName]) {
+        if (!moduleLoaded[i]) {
             print("Loaded module " + SCRIPT_MODULES[i]);
             sys.exec(SCRIPTS_FOLDER + SCRIPT_MODULES[i]);
-            moduleLoaded[fileName] = true;
+            moduleLoaded[i] = true;
         }
     }
     if (typeof(pluginLoaded) == "undefined") {
         pluginLoaded = {};
     }
-    for (var i in SCRIPT_PLUGINS) {
-        fileName = SCRIPT_PLUGINS[i].split('.')[0];
-        fileExtension = SCRIPT_PLUGINS[i].split('.')[1];
-        if (fileName in PLUGINS && fileExtension == "js" && !pluginLoaded[fileName]) {
-            print("Loaded plugin " + SCRIPT_PLUGINS[i]);
-            sys.exec(PLUGINS_FOLDER + SCRIPT_PLUGINS[i]);
-            pluginLoaded[fileName] = true;
+    if (helpers.isInArray("plugins", sys.dirsForDirectory(sys.cwd()))) {
+        for (var i in SCRIPT_PLUGINS) {
+            if (sys.fileExists(PLUGINS_FOLDER + SCRIPT_PLUGINS[i]) && !pluginLoaded[i]) {
+                print("Loaded plugin " + SCRIPT_PLUGINS[i]);
+                sys.exec(PLUGINS_FOLDER + SCRIPT_PLUGINS[i]);
+                pluginLoaded[i] = true;
+            }
         }
     }
     /**
@@ -331,17 +326,17 @@
     allcommands = helpers.allCommands();
     
     // Plugins
-    if (pluginLoaded["party"]) {
+    if (helpers.isLoaded("party.js")) {
         PARTY_MODES = ["joke", "nightclub", "desu", "rainbow", "nyan", "dennis", "cirno", "sparta", "luigi", "roflcopter", "derp", "asdf", "leet", "morse", "reverse"];
-        partyMode = sys.read(DATA_FOLDER + "partyMode.txt");
+        partyMode = sys.read(DATA_FOLDER + "partymode.txt");
         partyNyan = 0;
     }
     
-    if (pluginLoaded["rr"]) {
+    if (helpers.isLoaded("rr.js")) {
         rr = JSON.parse(sys.read("data/rr.txt"));
     }
     
-    if (pluginLoaded["roulette"]) {
+    if (helpers.isLoaded("roulette.js")) {
         LEGENDARY_LIST = ["Articuno", "Zapdos", "Moltres", "Mewtwo", "Mew", "Raikou", "Entei", "Suicune", "Ho-Oh", "Lugia", "Celebi", "Kyogre", "Groudon", "Rayquaza", "Latios",
         "Latias", "Regirock", "Regice", "Registeel", "Jirachi", "Deoxys", "Uxie", "Mesprit", "Azelf", "Dialga", "Palkia", "Giratina", "Heatran", "Regigigas", "Cresselia", "Darkrai",
         "Manaphy", "Shaymin", "Arceus", "Victini", "Cobalion", "Terrakion", "Virizion", "Tornadus", "Thundurus", "Landorus", "Reshiram", "Zekrom", "Kyurem", "Meloetta", "Genesect",
@@ -396,40 +391,53 @@
             Channel Creation
             ----------------
         **/
+        var time = 500;
         sys.setTimer(function () {
             sys.createChannel(permchannels[0]);
-        }, 500, 0);
+        }, time, 0);
+        time += 500;
         sys.setTimer(function () {
             sys.createChannel(permchannels[1]);
-        }, 1000, 0);
+        }, time, 0);
+        time += 500;
         sys.setTimer(function () {
             sys.createChannel(permchannels[2]);
-        }, 1500, 0);
-        sys.setTimer(function () {
-            sys.createChannel(permchannels[3]);
-        }, 2000, 0);
-        sys.setTimer(function () {
-            sys.createChannel(permchannels[4]);
-        }, 2500, 0);
-        sys.setTimer(function () {
-            sys.createChannel(permchannels[5]);
-        }, 3000, 0);
+        }, time, 0);
+        if (helpers.isLoaded("party.js")) {
+            time += 500;
+            sys.setTimer(function () {
+                sys.createChannel(permchannels[3]);
+            }, time, 0);
+        }
+        if (helpers.isLoaded("rr.js")) {
+            time += 500;
+            sys.setTimer(function () {
+                sys.createChannel(permchannels[4]);
+            }, time, 0);
+        }
+        if (helpers.isLoaded("roulette.js")) {
+            time += 500;
+            sys.setTimer(function () {
+                sys.createChannel(permchannels[5]);
+            }, time, 0);
+        }
+        time += 500;
         sys.setTimer(function () {
             watch = sys.channelId(permchannels[0]);
             authchannel = sys.channelId(permchannels[1]);
             ownerchannel = sys.channelId(permchannels[2]);
-            if (pluginLoaded["party"]) {
+            if (helpers.isLoaded("party.js")) {
                 partychannel = sys.channelId(permchannels[3]);
             }
-            if (pluginLoaded["rr"]) {
+            if (helpers.isLoaded("rr.js")) {
                 rrchannel = sys.channelId(permchannels[4]);
             }
-            if (pluginLoaded["roulette"]) {
+            if (helpers.isLoaded("roulette.js")) {
                 roulettechannel = sys.channelId(permchannels[5]);
             }
             print("The default channels have been created.");
             serverStarting = false;
-        }, 3500, 0);
+        }, time, 0);
         /**
             ----------------------------------
             Set Host IP, Country and Time Zone
@@ -538,7 +546,7 @@
             Roulette Events
             ---------------
         **/
-        if (pluginLoaded["roulette"]) {
+        if (helpers.isLoaded("roulette.js")) {
             if (sys.playersOfChannel(roulettechannel).length !== 0) { // only trigger events when at least one person is in the channel
                 rouletteStep += 1;
                 
@@ -938,7 +946,7 @@
         } else {
             sys.sendHtmlMessage(src, "<b style='color:orange'>Channel Topic:</b> Welcome to " + channelname + "!", channel);
         }
-        if (pluginLoaded["party"]) {
+        if (helpers.isLoaded("party.js")) {
             if (channel == partychannel && partyMode == "nightclub") {
                 sys.sendHtmlAuth(helpers.bot(bots.spy) + "[Server] <b style='color:" + helpers.color(src) + "'>" + sys.name(src) + "</b> has joined the channel <a href=\"po:join/" + sys.channel(channel) +
                 "\">#" + sys.channel(channel) + "</a>.");
@@ -978,7 +986,7 @@
             -------------
         **/
         var cauth = helpers.cauthname(players[src].name.toLowerCase(), channel), channelname = sys.channel(channel), cookie = sys.cookie(src) ? sys.cookie(src) : "none", id = sys.uniqueId(src) ? sys.uniqueId(src).id : "none";
-        if (pluginLoaded["party"]) {
+        if (helpers.isLoaded("party.js")) {
             if (channel == partychannel && partyMode == "nightclub") {
                 sys.sendHtmlAuth(helpers.bot(bots.spy) + "[Server] <b style='color:" + helpers.color(src) + "'>" + sys.name(src) + "</b> has left the channel <a href=\"po:join/" + sys.channel(channel) +
                 "\">#" + sys.channel(channel) + "</a>.");
@@ -1318,7 +1326,7 @@
             Party
             -----
         **/
-        if (pluginLoaded["party"]) {
+        if (helpers.isLoaded("party.js")) {
             if (channel == partychannel && partyMode != "none" && message != "/mode") {
                 sys.stopEvent();
                 helpers.mode(src, message, channel, partyMode);
