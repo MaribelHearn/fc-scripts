@@ -187,7 +187,11 @@ modcommands = {
     
     mute: function (src, channel, command, time, unit) {
         var name = sys.name(src), original = players[src].name, trgtname = command[1], trgt = sys.id(trgtname), reason = command[2], auth = sys.auth(src),
-            srcip = sys.ip(src), trgtauth, trgtip, lower = command[1].toLowerCase(), msg;
+            srcip = sys.ip(src), trgtauth, trgtip, lower, msg;
+        if (!trgtname) {
+            helpers.starfox(src, channel, command, bots.mute, "Error 404, player not found.");
+            return;
+        }
         if (helpers.muteCheck(name)) {
             helpers.muteMessage(src, channel);
             return;
@@ -199,13 +203,17 @@ modcommands = {
         if (!trgt) {
             trgtauth = sys.dbAuth(command[1]);
             trgtip = sys.dbIp(command[1]);
-        }
-        else {
+        } else {
             trgtauth = sys.auth(trgt);
             trgtip = sys.ip(trgt);
         }
+        lower = command[1].toLowerCase();
         if (trgtauth >= auth && lower != name.toLowerCase() && lower != players[src].name.toLowerCase()) {
             helpers.starfox(src, channel, command, bots.mute, "Error 403, you can't mute " + trgtname + " because their auth level is higher or equal to yours.");
+            return;
+        }
+        if (sys.aliases(srcip).indexOf(lower) != -1) {
+            helpers.starfox(src, channel, command, bots.mute, "Error 400, you can't mute yourself!");
             return;
         }
         if (helpers.muteCheck(trgtname)) {

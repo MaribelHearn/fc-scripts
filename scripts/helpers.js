@@ -126,6 +126,12 @@ helpers = {
     
     ,
     
+    isMutable: function (command) {
+        return /sendAll|sendHtmlAll|sendMain|sendHtmlMain|sendHtmlAuths|sendHtmlAuth|sendHtmlOwner/.test(command.toString());
+    }
+    
+    ,
+    
     isLetter: function (c) {
         var lower = c.toLowerCase();
         return lower >= 'a' && lower <= 'z';
@@ -211,7 +217,7 @@ helpers = {
                 "</a>] <b style='color:" + this.color(src) + "'>" + this.escapehtml(name) + "</b> got Star Fox'd because of trying to kill Chuck Norris. How silly.");
             } else if (message == "Error 403, you are not allowed to post banned links or characters.") {
                 sys.sendHtmlAuth(this.bot(bots.spy) + "[<a href=\"po:join/" + channelname + "\">#" + channelname +
-                "</a>] <b style='color:" + color + "'>" + name + "</b> tried to  post (a) banned link(s) or character(s). (Error 403 Forbidden)");
+                "</a>] <b style='color:" + this.color(src) + "'>" + name + "</b> tried to  post (a) banned link(s) or character(s). (Error 403 Forbidden)");
             } else {
                 sys.sendHtmlAuth(this.bot(bots.spy) + "[<a href=\"po:join/" + channelname + "\">#" + channelname +
                 "</a>] <b style='color:" + this.color(src) + "'>" + this.escapehtml(name) + "</b> got Star Fox'd because of trying to run /" + this.escapehtml(cmd) + ".");
@@ -230,15 +236,25 @@ helpers = {
     ,
     
     muteMessage: function (src, channel) {
-        var lower = players[src].name.toLowerCase();
+        var alts = sys.aliases(sys.ip(src)), lower;
+        for (var i in alts) {
+            if (mutelist[alts[i]]) {
+                lower = alts[i];
+            }
+        }
         sys.sendHtmlMessage(src, this.bot(bots.mute) + "Sorry, you are muted on the server. [Time until expiration: " + this.formatMuteTime(mutelist[lower].time) +
         "] [Reason: " + mutelist[lower].reason + "]", channel);
     }
     
     ,
     
+    channelMuteMessage: function (src, channel) {
+        sys.sendHtmlMessage(src, this.bot(bots.mute) + "Sorry, you are muted on this channel.", channel);
+    }
+    
+    ,
+    
     silenceMessage: function (src, channel) {
-        var lower = players[src].name.toLowerCase();
         sys.sendHtmlMessage(src, this.bot(bots.silence) + (bots.silence == "Achmed the Dead Terrorist" ? "I KILL YOOOOUUUU!!!" : "Sorry, this channel is currently silenced."), channel);
     }
     
@@ -461,6 +477,9 @@ helpers = {
     
     formatMuteTime: function (muteTime) { // muteTime is in seconds
         var str = "", days = 0, hours = 0, minutes = 0, seconds = 0;
+        if (muteTime === null) {
+            return "indefinite";
+        }
         while (muteTime >= 86400) {
             days += 1;
             muteTime -= 86400;
@@ -600,8 +619,8 @@ helpers = {
     ,
     
     bannedcharacters: function (message, lower) {
-        for (var index in blocklist) {
-            if (message.indexOf(blocklist[index]) != -1) {
+        for (var i in blocklist) {
+            if (message.indexOf(blocklist[i]) != -1) {
                 return true;
             }
         }
@@ -692,7 +711,7 @@ helpers = {
             return;
         } else if (mode == "dennis") {
             if (message.toLowerCase() == "/dennis") {
-                usercommands2.dennis(src, channel, ["dennis"]);
+                usercommands.dennis(src, channel, ["dennis"]);
                 return true;
             }
             var index = 1;
@@ -959,10 +978,7 @@ helpers = {
     
     allCommands: function () {
         var array = [];
-        for (var i in usercommands1) {
-            array.push(i);
-        }
-        for (var i in usercommands2) {
+        for (var i in usercommands) {
             array.push(i);
         }
         for (var i in modcommands) {
