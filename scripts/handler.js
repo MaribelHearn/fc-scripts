@@ -96,6 +96,15 @@ partyCommand = function (src, channel, command, lower, name, auth) {
     }
 };
 
+funCommand = function (src, channel, command, lower, name, auth) {
+    if (helpers.isLoaded("funcmds.js") && funcommands[lower] !== undefined) {
+        if (helpers.isMutable(funcommands[lower]) && mutedOrSilenced(src, channel, command, name, auth)) {
+            return;
+        }
+        funcommands[lower](src, channel, command);
+    }
+};
+
 channelUserCommand = function (src, channel, command, lower, name, auth) {
     if (cusercommands[lower] !== undefined) {
         if (helpers.isMutable(cusercommands[lower]) && mutedOrSilenced(src, channel, command, name, auth)) {
@@ -189,6 +198,7 @@ executeCommand = function (src, channel, command, name, lower, auth, cauth) {
     rouletteCommand(src, channel, command, lower, name, auth);
     russianRouletteCommand(src, channel, command, lower, name, auth);
     partyCommand(src, channel, command, lower, name, auth);
+    funCommand(src, channel, command, lower, name, auth);
     channelUserCommand(src, channel, command, lower, name, auth);
     channelModCommand(src, channel, command, lower, name, auth, cauth);
     channelAdminCommand(src, channel, command, lower, name, auth, cauth);

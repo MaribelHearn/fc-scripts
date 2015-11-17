@@ -576,7 +576,7 @@ ownercommands = {
             }
         } else {
             module = command[1];
-            if (!helpers.isInArray(command[1], noncmds)) {
+            if (!helpers.isInArray(module, noncmds)) {
                 module += "cmds";
             }
             if (!helpers.isInArray(module + ".js", SCRIPT_MODULES)) {
@@ -640,16 +640,20 @@ ownercommands = {
     
     updateplugin: function (src, channel, command) {
         var name = sys.name(src), date = new Date(), silent = command[0].substr(0, 6), plugin, time;
+        var noncmds = ["party", "rr", "roulette"];
         if (!command[1]) {
             helpers.starfox(src, channel, command, bots.command, "Error 404, plugin not found.");
             return;
         }
         if (command[1] == "all") {
             for (var i = 0; i < SCRIPT_PLUGINS.length; i++) {
-                this.updateplugin(src, channel, [command[0], SCRIPT_PLUGINS[i].split('.')[0]]);
+                this.updateplugin(src, channel, [command[0], SCRIPT_PLUGINS[i].split('.')[0]].replace(/cmds/, ""));
             }
         } else {
             plugin = command[1];
+            if (!helpers.isInArray(plugin, noncmds)) {
+                plugin += "cmds";
+            }
             if (!helpers.isInArray(plugin + ".js", SCRIPT_PLUGINS)) {
                 helpers.starfox(src, channel, command, bots.main, "Error 404, plugin '" + plugin + "' not found.");
                 return;
@@ -673,15 +677,15 @@ ownercommands = {
                 }
                 time = new Date() - date;
                 if (silent == "silent") {
-                    sys.sendHtmlMessage(src, helpers.bot(bots.script) + " The " + plugin + " script plugin has been reloaded. [Time elapsed: " + (time / 1000) + " seconds.]", channel);
+                    sys.sendHtmlMessage(src, helpers.bot(bots.script) + " The " + plugin.replace("cmds", "") + " script plugin has been reloaded. [Time elapsed: " + (time / 1000) + " seconds.]", channel);
                 } else {
-                    sys.sendHtmlAuths(helpers.bot(bots.script) + name + " has reloaded the " + plugin + " script plugin! [Time elapsed: " + (time / 1000) + " seconds.]");
+                    sys.sendHtmlAuths(helpers.bot(bots.script) + name + " has reloaded the " + plugin.replace("cmds", "") + " script plugin! [Time elapsed: " + (time / 1000) + " seconds.]");
                 }
             });
         }
         for (var i = SCRIPT_PLUGINS.length; i > 1; i--) {
             if (command[i]) {
-                this.update(src, channel, [command[0], command[i]]);
+                this.updateplugin(src, channel, [command[0], command[i]]);
             }
         }
     }
@@ -1688,7 +1692,7 @@ ownercommands = {
         + "<b>" + helpers.user("/clearpass ") + helpers.arg("player") + "</b>: clears <b>player</b>'s password.<br>"
         + "<b>" + helpers.user("/servertopic ") + helpers.arg("text") + "</b>: changes the server topic to <b>text</b>.<br>"
         + "<b>" + helpers.user("/regchannelinfo") + "</b>: lists all registered channels and their info.<br>"
-        + "<b>" + helpers.user("/commandlist") + "</b>: lists all available commands.<br>"
+        + "<b>" + helpers.user("/commandlist") + "</b>: lists all available commands. Also /allcommands.<br>"
         + "<b>" + helpers.user("/stopbattles") + "</b>: disallows battles to be started.<br>"
         + "<b>" + helpers.user("/resumebattles") + "</b>: allows battles to be started again.<br>"
         + "<b>" + helpers.user("/updatetiers") + "</b>: updates the server tier list to the most recent version of the main server tier list.<br>"
@@ -1885,11 +1889,28 @@ ownercommands = {
         "<b>Total Channel User Commands:</b> " + Object.keys(cusercommands).length + "<br>" +
         "<b>Total Channel Mod Commands:</b> " + Object.keys(cmodcommands).length + "<br>" +
         "<b>Total Channel Admin Commands:</b> " + Object.keys(cadmincommands).length + "<br>" +
-        "<b>Total Channel Owner Commands:</b> " + Object.keys(cownercommands).length + "<br>" +
-        "<b>Total Helpers:</b> " + Object.keys(helpers).length + "<br>" +
-        "<b><u>Total Commands:</u></b> " + allcommands.length + "<br>";
-        scriptmessage += "<br><timestamp/><br>" + border2;
+        "<b>Total Channel Owner Commands:</b> " + Object.keys(cownercommands).length + "<br>";
+        if (helpers.isLoaded("funcmds.js")) {
+            scriptmessage += "<br>Total Fun Commands:</b> " + Object.keys(funcommands).length + "<br>";
+        }
+        if (helpers.isLoaded("party.js")) {
+            scriptmessage += "<br>Total Party Commands:</b> " + Object.keys(partycommands).length + "<br>";
+        }
+        if (helpers.isLoaded("rr.js")) {
+            scriptmessage += "<br>Total Russian Roulette Commands:</b> " + Object.keys(rcommands).length + "<br>";
+        }
+        if (helpers.isLoaded("roulette.js")) {
+            scriptmessage += "<br>Total Roulette Commands:</b> " + Object.keys(roulettecommands).length + "<br>";
+        }
+        scriptmessage += "<b>Total Helpers:</b> " + Object.keys(helpers).length + "<br>" +
+        "<b><u>Total Commands:</u></b> " + allcommands.length + "<br><br><timestamp/><br>" + border2;
         sys.sendHtmlMessage(src, scriptmessage, channel);
+    }
+    
+    ,
+    
+    allcommands: function (src, channel, command) {
+        this.commandlist(src, channel, command);
     }
     
     ,

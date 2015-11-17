@@ -55,7 +55,7 @@
     EXPL5 = "Taking the rules too literally is no use when you know you are supposed to be punished anyway. Don't try to find loopholes in the rules, it will result in even more punishment.<br>";
     AUTH_NAME = ["User", "Moderator", "Administrator", "Owner"];
     SCRIPT_MODULES = ["usercmds.js", "modcmds.js", "admincmds.js", "ownercmds.js", "cusercmds.js", "cmodcmds.js", "cadmincmds.js", "cownercmds.js", "helpers.js", "handler.js", "tierchecks.js", "base64.js"];
-    SCRIPT_PLUGINS = ["party.js", "roulette.js", "rr.js"];
+    SCRIPT_PLUGINS = ["funcmds.js", "party.js", "roulette.js", "rr.js"];
     SCRIPTS_FOLDER = "scripts/";
     PLUGINS_FOLDER = "plugins/";
     DATA_FOLDER = "data/";
