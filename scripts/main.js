@@ -54,7 +54,7 @@
     RULE5 = "Rule 5: Do not attempt to circumvent the rules.<br>";
     EXPL5 = "Taking the rules too literally is no use when you know you are supposed to be punished anyway. Don't try to find loopholes in the rules, it will result in even more punishment.<br>";
     AUTH_NAME = ["User", "Moderator", "Administrator", "Owner"];
-    SCRIPT_MODULES = ["usercmds1.js", "usercmds2.js", "modcmds.js", "admincmds.js", "ownercmds.js", "cusercmds.js", "cmodcmds.js", "cadmincmds.js", "cownercmds.js", "helpers.js", "handler.js", "tierchecks.js", "base64.js"];
+    SCRIPT_MODULES = ["usercmds.js", "modcmds.js", "admincmds.js", "ownercmds.js", "cusercmds.js", "cmodcmds.js", "cadmincmds.js", "cownercmds.js", "helpers.js", "handler.js", "tierchecks.js", "base64.js"];
     SCRIPT_PLUGINS = ["party.js", "roulette.js", "rr.js"];
     SCRIPTS_FOLDER = "scripts/";
     PLUGINS_FOLDER = "plugins/";
@@ -324,6 +324,8 @@
     // Special
     tour[0] = {};
     tour[0].tourmode = 0;
+    blocklist.splice(blocklist.indexOf(""), 1);
+    blocklist.splice(blocklist.lastIndexOf(""), 1);
     allcommands = helpers.allCommands();
     
     // Plugins
@@ -1279,8 +1281,8 @@
             Last Messages
             -------------
         **/
-        if (regchannels[sys.channel(channel).toLowerCase()]) {
-            if (!regchannels[sys.channel(channel).toLowerCase()].priv && !helpers.isInString(message, silentcommands)) {
+        if (regchannels[channelname2]) {
+            if (!regchannels[channelname2].priv && !helpers.isInString(message, silentcommands)) {
                 players[src].lastmessages.push(message);
                 if (players[src].lastmessages.length > 10) {
                     players[src].lastmessages.splice(0, 1);
@@ -1292,8 +1294,8 @@
             Last Message Times
             ------------------
         **/
-        if (regchannels[sys.channel(channel).toLowerCase()]) {
-            if (!regchannels[sys.channel(channel).toLowerCase()].priv) {
+        if (regchannels[channelname2]) {
+            if (!regchannels[channelname2].priv) {
                 if (!helpers.isInString(message, silentcommands)) {
                     players[src].lastmessagetimes.push(new Date());
                     if (players[src].lastmessagetimes.length > 10) {
@@ -1316,8 +1318,8 @@
             Last Message Private Channel Filter
             -----------------------------------
         **/
-        if (regchannels[sys.channel(channel).toLowerCase()]) {
-            if (!regchannels[sys.channel(channel).toLowerCase()].priv && !helpers.isInString(message, silentcommands)) {
+        if (regchannels[channelname2]) {
+            if (!regchannels[channelname2].priv && !helpers.isInString(message, silentcommands)) {
                 players[src].lastmessage = message;
                 players[src].lastmessagetime = new Date();
             }
@@ -1359,9 +1361,9 @@
             Channel Mute Check
             ------------------
         **/
-        if (helpers.cmuteCheck(players[src].name, sys.channel(channel).toLowerCase()) && auth < 3) {
+        if (helpers.cmuteCheck(players[src].name, channelname2) && auth < 3) {
             sys.stopEvent();
-            sys.sendHtmlMessage(src, helpers.bot(bots.channel) + "Sorry, you are muted on this channel.", channel);
+            helpers.channelMuteMessage(src, channel);
             return;
         }
         /**
@@ -1369,8 +1371,8 @@
             Silence Check
             -------------
         **/
-        if (regchannels[sys.channel(channel).toLowerCase()]) {
-            if (regchannels[sys.channel(channel).toLowerCase()].silence > auth) {
+        if (regchannels[channelname2]) {
+            if (regchannels[channelname2].silence > auth) {
                 sys.stopEvent();
                 helpers.silenceMessage(src, channel);
                 return;
@@ -1381,8 +1383,8 @@
             Watch Channel Logging
             ---------------------
         **/
-        if (regchannels[sys.channel(channel).toLowerCase()]) {
-            if (!regchannels[sys.channel(channel).toLowerCase()].priv) {
+        if (regchannels[channelname2]) {
+            if (!regchannels[channelname2].priv) {
                 sys.sendHtmlAuth(helpers.bot(bots.spy) + "[<a href=\"po:join/" + sys.channel(channel) + "\">#" + sys.channel(channel) +
                 "</a>] <b style='color:" + color + "'>" + helpers.escapehtml(name) + ":</b> " + helpers.escapehtml(message));
             }

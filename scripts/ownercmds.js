@@ -570,51 +570,9 @@ ownercommands = {
                     sys.sendHtmlAuths(helpers.bot(bots.script) + name + " has reloaded the server scripts! [Time elapsed: " + (time / 1000) + " seconds.]");
                 }
             });
-        } else if (command[1] == "user") {
-            silent == "silent" ? sys.sendHtmlMessage(src, helpers.bot(bots.script) + "Downloading scripts...", channel) : sys.sendHtmlAuths(helpers.bot(bots.script) + "Downloading scripts...");
-            sys.webCall(SCRIPT_URL + "usercmds1.js", function (resp) {
-                if (resp === "") {
-                    if (silent == "silent") {
-                        sys.sendHtmlMessage(src, helpers.bot(bots.script) + "An error occurred while downloading the scripts. The scripts have not been updated.", channel);
-                    } else {
-                        sys.sendHtmlAuths(helpers.bot(bots.script) + "An error occurred while downloading the scripts. The scripts have not been updated.");
-                    }
-                    return;
-                }
-                sys.write(SCRIPTS_FOLDER + "usercmds1.js", resp);
-                try {
-                    sys.exec(SCRIPTS_FOLDER + "usercmds1.js");
-                } catch (e) {
-                    silent == "silent" ? sys.sendHtmlMessage(src, helpers.bot(bots.script) + e, channel) : sys.sendHtmlAuths(helpers.bot(bots.script) + e);
-                    return;
-                }
-            });
-            sys.webCall(SCRIPT_URL + "usercmds2.js", function (resp) {
-                if (resp === "") {
-                    if (silent == "silent") {
-                        sys.sendHtmlMessage(src, helpers.bot(bots.script) + "An error occurred while downloading the scripts. The scripts have not been updated.", channel);
-                    } else {
-                        sys.sendHtmlAuths(helpers.bot(bots.script) + "An error occurred while downloading the scripts. The scripts have not been updated.");
-                    }
-                    return;
-                }
-                sys.write(SCRIPTS_FOLDER + "usercmds2.js", resp);
-                try {
-                    sys.exec(SCRIPTS_FOLDER + "usercmds2.js");
-                } catch (e) {
-                    silent == "silent" ? sys.sendHtmlMessage(src, helpers.bot(bots.script) + e, channel) : sys.sendHtmlAuths(helpers.bot(bots.script) + e);
-                    return;
-                }
-                time = new Date() - date;
-                if (silent == "silent") {
-                    sys.sendHtmlMessage(src, helpers.bot(bots.script) + " The user script module has been reloaded. [Time elapsed: " + (time / 1000) + " seconds.]", channel);
-                } else {
-                    sys.sendHtmlAuths(helpers.bot(bots.script) + name + " has reloaded the user script module! [Time elapsed: " + (time / 1000) + " seconds.]");
-                }
-            });
         } else if (command[1] == "all") {
             for (var i = 0; i < SCRIPT_MODULES.length; i++) {
-                this.update(src, channel, [command[0], SCRIPT_MODULES[i].split('.')[0].replace(/cmds1|cmds2|cmds/, "")]);
+                this.update(src, channel, [command[0], SCRIPT_MODULES[i].split('.')[0].replace(/cmds/, "")]);
             }
         } else {
             module = command[1];
@@ -1910,9 +1868,7 @@ ownercommands = {
     
     commandlist: function (src, channel, command) {
         var scriptmessage = border + "<h2>List of Commands</h2><br>", length, totallength;
-        length = Object.keys(usercommands1).length;
-        length = eval(length) + Object.keys(usercommands2).length * 1;
-        scriptmessage += "<b>User Commands:</b> " + Object.keys(usercommands1).sort().join(", ") + ", " + Object.keys(usercommands2).join(", ") + "<br>" +
+        scriptmessage += "<b>User Commands:</b> " + Object.keys(usercommands).sort().join(", ") + "<br>" +
         "<b>Moderator Commands:</b> " + Object.keys(modcommands).sort().join(", ") + "<br>" +
         "<b>Administrator Commands:</b> " + Object.keys(admincommands).sort().join(", ") + "<br>" +
         "<b>Owner Commands:</b> " + Object.keys(ownercommands).sort().join(", ") + "<br>" +
@@ -1922,7 +1878,7 @@ ownercommands = {
         "<b>Channel Owner Commands:</b> " + Object.keys(cownercommands).sort().join(", ") + "<br>" +
         "<b>All Commands:</b> " + allcommands.sort().join(", ") + "<br>" +
         "<b>Helpers:</b> " + Object.keys(helpers).sort().join(", ") + "<br><br>" +
-        "<b>Total User Commands:</b> " + length + "<br>" +
+        "<b>Total User Commands:</b> " + Object.keys(usercommands).length + "<br>" +
         "<b>Total Moderator Commands:</b> " + Object.keys(modcommands).length + "<br>" +
         "<b>Total Administrator Commands:</b> " + Object.keys(admincommands).length + "<br>" +
         "<b>Total Owner Commands:</b> " + Object.keys(ownercommands).length + "<br>" +
