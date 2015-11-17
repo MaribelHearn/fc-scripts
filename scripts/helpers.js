@@ -711,8 +711,10 @@ helpers = {
             return;
         } else if (mode == "dennis") {
             if (message.toLowerCase() == "/dennis") {
-                usercommands.dennis(src, channel, ["dennis"]);
-                return true;
+                if (helpers.isLoaded("funcmds.js")) {
+                    funcommands.dennis(src, channel, ["dennis"]);
+                    return true;
+                }
             }
             var index = 1;
             message = "D";
@@ -1014,6 +1016,11 @@ helpers = {
         }
         if (helpers.isLoaded("party.js")) {
             for (var i in partycommands) {
+                array.push(i);
+            }
+        }
+        if (helpers.isLoaded("funcmds.js")) {
+            for (var i in funcommands) {
                 array.push(i);
             }
         }
