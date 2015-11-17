@@ -1152,6 +1152,7 @@ helpers = {
     date: function (date) {
         date = date.toString().split(' ');
         date[5] = date[5].replace(/0/g, "");
+        date.splice(6, 1);
         return date.join(' ');
     }
     
