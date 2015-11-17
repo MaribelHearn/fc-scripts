@@ -477,7 +477,7 @@ helpers = {
     
     formatMuteTime: function (muteTime) { // muteTime is in seconds
         var str = "", days = 0, hours = 0, minutes = 0, seconds = 0;
-        if (muteTime === null) {
+        if (isNaN(muteTime)) {
             return "indefinite";
         }
         while (muteTime >= 86400) {
@@ -1150,16 +1150,9 @@ helpers = {
     ,
     
     date: function (date) {
-        var string = date.toString();
-        if (string.indexOf("GMT-0400 (Eastern Daylight Time)") != -1) {
-            return string.replace("GMT-0400 (Eastern Daylight Time)", "GMT-4");
-        } else if (string.indexOf("GMT-0500 (Eastern Standard Time)") != -1) {
-            return string.replace("GMT-0500 (Eastern Standard Time)", "GMT-5");
-        } else if (string.indexOf("GMT+0200 (West-Europa (zomertijd))") != -1) {
-            return string.replace("GMT+0200 (West-Europa (zomertijd))", "GMT+2");
-        } else if (string.indexOf("GMT+0100 (West-Europa (standaardtijd))") != -1) {
-            return string.replace("GMT+0100 (West-Europa (standaardtijd))", "GMT+1");
-        }
+        date = date.toString().split(' ');
+        date[5] = date[5].replace(/0/g, "");
+        return date.join(' ');
     }
     
     ,

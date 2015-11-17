@@ -212,10 +212,6 @@ modcommands = {
             helpers.starfox(src, channel, command, bots.mute, "Error 403, you can't mute " + trgtname + " because their auth level is higher or equal to yours.");
             return;
         }
-        if (sys.aliases(srcip).indexOf(lower) != -1) {
-            helpers.starfox(src, channel, command, bots.mute, "Error 400, you can't mute yourself!");
-            return;
-        }
         if (helpers.muteCheck(trgtname)) {
             helpers.starfox(src, channel, command, bots.mute, "Error 400, you can't mute " + trgtname + " because they already are muted!");
             return;

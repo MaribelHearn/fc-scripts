@@ -20,6 +20,9 @@ filterLastMessage = function (src, message, channel) {
 };
 
 mutedOrSilenced = function (src, channel, command, name, auth) {
+    if (auth >= 3) {
+        return false;
+    }
     if (helpers.muteCheck(name)) {
         helpers.muteMessage(src, channel);
         return true;
