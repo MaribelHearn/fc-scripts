@@ -855,6 +855,7 @@
         versions[lower] = helpers.version(version);
         sys.write("data/versions.txt", JSON.stringify(versions));
         version = versions[lower];
+        sys.sendHtmlAuth(helpers.bot(bots.spy) + "[Server] <b style='color:" + color + "'>" + name + "</b> is using " + os + (version === "" ? "" : ", " + version) + ".");
         /**
             ---------------------
             Time Zone and Country
@@ -870,7 +871,6 @@
                 sys.write("data/countryname.txt", JSON.stringify(countryname));
                 sys.write("data/cityname.txt", JSON.stringify(cityname));
                 country = helpers.toFlagKey(helpers.removespaces(countryname[lower].toUpperCase()));
-                sys.sendHtmlAuth(helpers.bot(bots.spy) + "[Server] <b style='color:" + color + "'>" + name + "</b> is using " + os + (version === "" ? "" : ", " + version) + ".");
                 sys.sendHtmlAuth(helpers.bot(bots.spy) + "[Server] <b style='color:" + color + "'>" + name + "</b> is from " + FLAGS[country] + " " + countryname[lower] + ".");
                 if (helpers.isGuest(name) && sys.os(src) != "android") {
                     sys.sendHtmlAuths(helpers.bot(bots.welcome) + "This person is using a guest name, but isn't actually on " + helpers.os("android") + ". Keep an eye on them!");
