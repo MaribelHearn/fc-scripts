@@ -1819,6 +1819,13 @@ helpers = {
     }
     
     ,
+        
+    displayNum: function (pokeId) {
+        var id = pokeId % 65536, forme = (pokeId - id) / 65536;
+        return forme === 0 ? id : id + '-' + forme;
+    }
+    
+    ,
     
     height: function (pokeId) {
         var heightList = {}, data = sys.getFileContent("db/pokes/height.txt").split('\n'), index, id, height, key, base;
