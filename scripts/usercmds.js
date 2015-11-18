@@ -633,7 +633,7 @@ usercommands = {
     
     pokedex: function (src, channel, command) {
         var UNKNOWN_TYPE = 18, MAX_IV = 31, MIN_EV = 0, MAX_EV = 252, MIN_NATURE = 0.9, NEUTRAL_NATURE = 1.0, MAX_NATURE = 1.1;
-        var pokemon = command[1], pokeNum, type1, type2, types = [], abilities = [], genders = [], height, weight, weightPower, baseStats, bst, dexmessage, stat;
+        var pokemon = command[1], pokeNum, type1, type2, types = [], abilities = [], genders = [], height, weight, americanHeight, americanWeight, weightPower, baseStats, bst, dexmessage, stat;
         if (!pokemon) {
             helpers.starfox(src, channel, command, bots.command, "Error 404, Pokémon not found.");
             return;
@@ -660,16 +660,18 @@ usercommands = {
         }
         height = helpers.height(pokeNum);
         weight = helpers.weight(pokeNum);
+        americanHeight = (height * 32.808399 / 10).toPrecision(2);
+        americanWeight = weight * 22 / 10;
         weightPower = helpers.weightPower(pokeNum);
         baseStats = sys.pokeBaseStats(pokeNum);
         bst = helpers.sum(baseStats);
-        dexmessage = border + "<h2>#" + pokeNum + " " + pokemon + "</h2>"
+        dexmessage = border + "<h2>#" + helpers.getDbIndex(pokeNum).replace(':', '-') + " " + pokemon + "</h2>"
         + "<br>" + helpers.pokeImage(pokeNum)
         + "<br><b>Type:</b> " + types.join("")
         + "<br><b>Abilities:</b> " + abilities.join(" / ")
         + "<br><b>Gender:</b> " + genders.join(/img/.test(genders.toString()) ? "" : " / ")
-        + "<br><b>Height:</b> " + height
-        + "<br><b>Weight:</b> " + weight
+        + "<br><b>Height:</b> " + height + " m / " + americanHeight + " ft"
+        + "<br><b>Weight:</b> " + weight + " kg / " + americanWeight + " lbs"
         + "<br><b>Power of Grass Knot / Low Kick:</b> " + weightPower
         + "<style>table {border-width:1px; border-style:solid; border-color:#000;} thead {font-weight:bold;}</style>"
         + "<br><table cellpadding='2' cellspacing='0'><thead><tr><th>Stat</th><th>Base</th><th>Min-</th><th>Min</th><th>Max</th><th>Max+</th></tr></thead><tbody>";
