@@ -324,11 +324,11 @@ funcommands = {
         var name = sys.name(src), text, nukemessage;
         !command[1] ? player = "Someone" : player = command[1];
         text = player + " has been nuked by " + name + "!";
-        nukemessage = "<font color='purple'><timestamp/></font><b><font size='6' color='red'>?</font>" + helpers.duoColor(text, "purple", "red");
+        nukemessage = "<font color='purple'><timestamp/></font><b><font size='6' color='red'>☢ </font>" + helpers.duoColor(text, "purple", "red");
         if (text.length / 2 != parseInt(text.length / 2)) {
-            sys.sendHtmlAll(nukemessage + "<font size='6' color='red'>?</font></b>", channel);
+            sys.sendHtmlAll(nukemessage + "<font size='6' color='red'>☢ </font></b>", channel);
         } else {
-            sys.sendHtmlAll(nukemessage + "<font size='6' color='purple'>?</font></b>", channel);
+            sys.sendHtmlAll(nukemessage + "<font size='6' color='purple'>☢ </font></b>", channel);
         }
     }
     
