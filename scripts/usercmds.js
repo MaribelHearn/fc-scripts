@@ -665,7 +665,7 @@ usercommands = {
         weightPower = helpers.weightPower(pokeNum);
         baseStats = sys.pokeBaseStats(pokeNum);
         bst = helpers.sum(baseStats);
-        dexmessage = border + "<h2>#" + helpers.getDbIndex(pokeNum).replace(':', '-') + " " + pokemon + "</h2>"
+        dexmessage = border + "<h2>#" + helpers.displayNum(pokeNum) + " " + pokemon + "</h2>"
         + "<br>" + helpers.pokeImage(pokeNum)
         + "<br><b>Type:</b> " + types.join("")
         + "<br><b>Abilities:</b> " + abilities.join(" / ")
