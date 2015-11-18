@@ -91,7 +91,7 @@ funcommands = {
     attract: function (src, channel, command) {
         var name = helpers.escapehtml(sys.name(src));
         !command[1] ? player = "Someone" : player = helpers.escapehtml(command[1]);
-        sys.sendHtmlAll("<font color='fuchsia'><timestamp/><b><font size='8'>?</font> " + player + " has been attracted by " + name + "! <font size='8'>?</font</b></font>", channel);
+        sys.sendHtmlAll("<font color='fuchsia'><timestamp/><b><font size='8'>♥</font> " + player + " has been attracted by " + name + "! <font size='8'>♥</font</b></font>", channel);
     }
     
     ,
