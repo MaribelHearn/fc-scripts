@@ -19,7 +19,7 @@ modcommands = {
         + "<b>" + helpers.userl("/otheroptions") + "</b>: displays other options.<br>"
         + "<b>" + helpers.userl("/altsettings") + "</b>: displays alt settings.<br>"
         + "<b>" + helpers.userl("/bigtextsettings") + "</b>: displays custom bigtext settings.<br>"
-        + "<b>" + helpers.userl("/customsettings") + "</b>: displays justice message customisation settings.<br>"
+        + "<b>" + helpers.userl("/justicesettings") + "</b>: displays justice message customisation settings.<br>"
         + "<br><timestamp/><br>"
         + border2;
         sys.sendHtmlMessage(src, commandsmessage, channel);
@@ -1322,13 +1322,13 @@ modcommands = {
     ,
     
     /**
-        ---------------
-        Custom Settings
-        ---------------
+        ----------------
+        Justice Settings
+        ----------------
     **/
-    customsettings: function (src, channel, command) {
-        var lower = sys.name(src).toLowerCase(), auth = sys.auth(src), commandsmessage = border + "<h2>Moderator Commands ~ Custom Settings</h2><br>"
-        + "Your current custom messages:<br>"
+    justicesettings: function (src, channel, command) {
+        var lower = sys.name(src).toLowerCase(), auth = sys.auth(src), commandsmessage = border + "<h2>Moderator Commands ~ Justice Settings</h2><br>"
+        + "Your current custom justice messages:<br>"
         + "<br>"
         + "<b>Self Kick message:</b> " + (!selfkickmessages[lower] ? "none" : selfkickmessages[lower]) + "<br>"
         + "<b>Kick message:</b> " + (!kickmessages[lower] ? "none" : kickmessages[lower]) + "<br>"

@@ -23,6 +23,7 @@ ownercommands = {
         + "<b>" + helpers.userl("/serversettings") + "</b>: displays server settings.<br>"
         + "<b>" + helpers.userl("/silentsettings") + "</b>: displays silent settings.<br>"
         + "<b>" + helpers.userl("/filtersettings") + "</b>: displays name filtering settings.<br>"
+        + "<b>" + helpers.userl("/customsettings") + "</b>: displays customisation options.<br>"
         + "<b>" + helpers.userl("/miscellaneous") + "</b>: displays other commands.<br>"
         + "<br><timestamp/><br>"
         + border2;
@@ -1672,6 +1673,191 @@ ownercommands = {
     ,
     
     /**
+        ---------------
+        Custom Settings
+        ---------------
+    **/
+    customsettings: function (src, channel, command) {
+        var commandsmessage = border
+        + "<h2>Owner Commands ~ Custom Settings</h2>"
+        + "<br>"
+        + "Your current colorings:<br>"
+        + "<br>"
+        + "<b>Border color:</b> " + borderColor + "<br>"
+        + "<b>Server topic color:</b> " + serverTopicColor + "<br>"
+        + "<b>Channel topic color:</b> " + channelTopicColor + "<br>"
+        + "<b>Command colors:</b> " + cmdcolors.join(", ") + "<br>"
+        + "<br>"
+        + "Your current messages:<br>"
+        + "<br>"
+        + "<b>Welcome message: </b>" + welcomeMessage + "<br>"
+        + "<b>Channel welcome message: </b>" + channelWelcomeMessage + "<br>"
+        + "<b>No permission message: </b>" + noPermissionMessage + "<br>"
+        + "<br>"
+        + "Syntax for the messages:<br>"
+        + "<br>"
+        + "<b>~Player~</b> will be replaced by someone's username. (for all messages)<br>"
+        + "<b>~Server~</b> will be replaced by the server name. (welcome message only)<br>"
+        + "<b>~Channel~</b> will be replaced by the channel name. (channel welcome message only)<br>"
+        + "<br>"
+        + "Use <b>" + helpers.user("/layout") + "</b> to toggle the layout of certain messages between the old one and the new one.<br>"
+        + "Use <b>" + helpers.user("/bordercolor ") + helpers.arg("color") + "</b> to change the border color to <b>color</b>. Also /bordercolour.<br>"
+        + "Use <b>" + helpers.user("/servertopiccolor ") + helpers.arg("color") + "</b> to change the color of 'Server Topic' in the server topic message to to <b>color</b>. Also /servertopiccolour.<br>"
+        + "Use <b>" + helpers.user("/channeltopiccolor ") + helpers.arg("color") + "</b> to change the color of 'Channel Topic' in the channel topic message to to <b>color</b>. Also /channeltopiccolour.<br>"
+        + "Use <b>" + helpers.user("/commandcolor ") + helpers.arg("number") + helpers.arg2("*color") + "</b> to change command color <b>number</b> to <b>color</b>.<br>"
+        + "0 is the user, 1 is the first argument, 2 the second argument, and so on. Also /commandcolour.<br>"
+        + "Use <b>" + helpers.user("/welcomemsg ") + helpers.arg("text") + "</b> to change the welcome message to <b>text</b>.<br>"
+        + "Use <b>" + helpers.user("/channelwelcomemsg ") + helpers.arg("text") + "</b> to change the channel welcome message to <b>text</b>.<br>"
+        + "Use <b>" + helpers.user("/nopermissionmsg ") + helpers.arg("text") + "</b> to change the message someone gets when trying to use a command for higher auth to <b>text</b>.<br>"
+        + "<br><timestamp/><br>"
+        + border2;
+        sys.sendHtmlMessage(src, commandsmessage, channel);
+    }
+    
+    ,
+    
+    bordercolor: function (src, channel, command) {
+        var color = command[1];
+        if (!color) {
+            helpers.starfox(src, channel, command, bots.command, "Error 404, " + command[0].slice(6) + " not found.");
+            return;
+        }
+        if (!sys.validColor(color)) {
+            helpers.starfox(src, channel, command, bots.command, "Error 403, invalid " + command[0].slice(6) + ".");
+            return;
+        }
+        borderColor = color;
+        sys.write("data/bordercolor.txt", borderColor);
+        border = "<font color='" + color + "'><b>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>></b></font>";
+        border2 = "<font color='" + color + "'><b>&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;" +
+        "&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;</b></font>";
+        sys.sendHtmlMessage(src, helpers.bot(bots.main) + "The border " + command[0].slice(6) + " has been changed to " + color + ".", channel);
+    }
+    
+    ,
+    
+    bordercolour: function (src, channel, command) {
+        this.bordercolor(src, channel, command);
+    }
+    
+    ,
+    
+    servertopiccolor: function (src, channel, command) {
+        var color = command[1];
+        if (!color) {
+            helpers.starfox(src, channel, command, bots.command, "Error 404, " + command[0].slice(11) + " not found.");
+            return;
+        }
+        if (!sys.validColor(color)) {
+            helpers.starfox(src, channel, command, bots.command, "Error 403, invalid " + command[0].slice(11) + ".");
+            return;
+        }
+        channelTopicColor = color;
+        sys.write("data/servertopiccolor.txt", serverTopicColor);
+        sys.sendHtmlMessage(src, helpers.bot(bots.main) + "The server topic " + command[0].slice(11) + " has been changed to " + color + ".", channel);
+    }
+    
+    ,
+    
+    servertopiccolour: function (src, channel, command) {
+        this.servertopiccolor(src, channel, command);
+    }
+    
+    ,
+    
+    channeltopiccolor: function (src, channel, command) {
+        var color = command[1];
+        if (!color) {
+            helpers.starfox(src, channel, command, bots.command, "Error 404, " + command[0].slice(12) + " not found.");
+            return;
+        }
+        if (!sys.validColor(color)) {
+            helpers.starfox(src, channel, command, bots.command, "Error 403, invalid " + command[0].slice(12) + ".");
+            return;
+        }
+        channelTopicColor = color;
+        sys.write("data/channeltopiccolor.txt", channelTopicColor);
+        sys.sendHtmlMessage(src, helpers.bot(bots.main) + "The channel topic " + command[0].slice(12) + " has been changed to " + color + ".", channel);
+    }
+    
+    ,
+    
+    channeltopiccolour: function (src, channel, command) {
+        this.channeltopiccolor(src, channel, command);
+    }
+    
+    ,
+    
+    commandcolor: function (src, channel, command) {
+        if (!command[1]) {
+            helpers.starfox(src, channel, command, bots.command, "Error 404, number not found.");
+            return;
+        }
+        if (isNaN(command[1]) || command[1] < 0 ||command[1] >= cmdcolors.length) {
+            helpers.starfox(src, channel, command, bots.command, "Error 403, invalid number.");
+            return;
+        }
+        if (!command[2]) {
+            helpers.starfox(src, channel, command, bots.command, "Error 404, " + command[0].slice(7) + " not found.");
+            return;
+        }
+        if (!sys.validColor(command[2])) {
+            helpers.starfox(src, channel, command, bots.command, "Error 403, invalid " + command[0].slice(7) + ".");
+            return;
+        }
+        cmdcolors[command[1]] = command[2];
+        sys.write("data/cmdcolors.txt", JSON.stringify(cmdcolors));
+        sys.sendHtmlMessage(src, helpers.bot(bots.main) + "Command " + command[0].slice(7) + " " + command[1] + " has been changed to " + command[2] + ".", channel);
+    }
+    
+    ,
+    
+    commandcolour: function (src, channel, command) {
+        this.commandcolor(src, channel, command);
+    }
+    
+    ,
+    
+    welcomemsg: function (src, channel, command) {
+        var message = command[1];
+        if (!message) {
+            sys.sendHtmlMessage(src, helpers.bot(bots.main) + "The current welcome message is: " + welcomeMessage + ".", channel);
+            return;
+        }
+        welcomeMessage = message;
+        sys.write("data/welcomemsg.txt", welcomeMessage);
+        sys.sendHtmlMessage(src, helpers.bot(bots.main) + "The welcome message has been changed successfully.", channel);
+    }
+    
+    ,
+    
+    channelwelcomemsg: function (src, channel, command) {
+        var message = command[1];
+        if (!message) {
+            sys.sendHtmlMessage(src, helpers.bot(bots.main) + "The current channel welcome message is: " + welcomeMessage + ".", channel);
+            return;
+        }
+        channelWelcomeMessage = message;
+        sys.write("data/channelwelcomemsg.txt", channelWelcomeMessage);
+        sys.sendHtmlMessage(src, helpers.bot(bots.main) + "The channel welcome message has been changed successfully.", channel);
+    }
+    
+    ,
+    
+    nopermissionmsg: function (src, channel, command) {
+        var message = command[1];
+        if (!message) {
+            sys.sendHtmlMessage(src, helpers.bot(bots.main) + "The current no permission message is: " + noPermissionMessage + ".", channel);
+            return;
+        }
+        nopermissionmsg = message;
+        sys.write("data/nopermissionmsg.txt", noPermissionMessage);
+        sys.sendHtmlMessage(src, helpers.bot(bots.main) + "The no permission message has been changed successfully.", channel);
+    }
+    
+    ,
+    
+    /**
         -------------
         Miscellaneous
         -------------
@@ -1686,10 +1872,7 @@ ownercommands = {
         } else {
             commandsmessage += "<b>" + helpers.user("/removeapi") + "</b>: removes your IPinfoDB API key. This will disable country and time zone retrieval and reset all corresponding data.<br>";
         }
-        commandsmessage += "<b>" + helpers.user("/layout") + "</b>: changes the layout of certain messages to the old one or the new one.<br>"
-        + "<b>" + helpers.user("/bordercolor ") + helpers.arg("color") + "</b>: changes the border color to <b>color</b>.<br>"
-        + "<b>" + helpers.user("/commandcolor ") + helpers.arg("number") + helpers.arg2("*color") + "</b>: changes command color <b>number</b> to <b>color</b>. 0 is the user, 1 is the first argument, and so on.<br>"
-        + "<b>" + helpers.user("/clearpass ") + helpers.arg("player") + "</b>: clears <b>player</b>'s password.<br>"
+        commandsmessage += "<b>" + helpers.user("/clearpass ") + helpers.arg("player") + "</b>: clears <b>player</b>'s password.<br>"
         + "<b>" + helpers.user("/servertopic ") + helpers.arg("text") + "</b>: changes the server topic to <b>text</b>.<br>"
         + "<b>" + helpers.user("/regchannelinfo") + "</b>: lists all registered channels and their info.<br>"
         + "<b>" + helpers.user("/commandlist") + "</b>: lists all available commands. Also /allcommands.<br>"
@@ -1763,50 +1946,6 @@ ownercommands = {
             layout = "old";
             sys.sendHtmlMain(helpers.bot(bots.main) + "<b>" + helpers.user(name) + " changed certain messages to the old, nostalgic layout!</b>");
         }
-    }
-    
-    ,
-    
-    bordercolor: function (src, channel, command) {
-        var color = command[1];
-        if (!color) {
-            helpers.starfox(src, channel, command, bots.command, "Error 404, number not found.");
-            return;
-        }
-        if (!sys.validColor(color)) {
-            helpers.starfox(src, channel, command, bots.command, "Error 403, invalid color.");
-            return;
-        }
-        bordercolor = color;
-        sys.write("data/bordercolor.txt", bordercolor);
-        border = "<font color='" + color + "'><b>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>></b></font>";
-        border2 = "<font color='" + color + "'><b>&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;" +
-        "&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;</b></font>";
-        sys.sendHtmlMessage(src, helpers.bot(bots.main) + "The border color has been changed to " + color + ".", channel);
-    }
-    
-    ,
-    
-    commandcolor: function (src, channel, command) {
-        if (!command[1]) {
-            helpers.starfox(src, channel, command, bots.command, "Error 404, number not found.");
-            return;
-        }
-        if (isNaN(command[1]) || command[1] < 0 ||command[1] >= cmdcolors.length) {
-            helpers.starfox(src, channel, command, bots.command, "Error 403, invalid number.");
-            return;
-        }
-        if (!command[2]) {
-            helpers.starfox(src, channel, command, bots.command, "Error 404, color not found.");
-            return;
-        }
-        if (!sys.validColor(command[2])) {
-            helpers.starfox(src, channel, command, bots.command, "Error 403, invalid color.");
-            return;
-        }
-        cmdcolors[command[1]] = command[2];
-        sys.write("data/cmdcolors.txt", JSON.stringify(cmdcolors));
-        sys.sendHtmlMessage(src, helpers.bot(bots.main) + "Command color " + command[1] + " has been changed to " + command[2] + ".", channel);
     }
     
     ,
