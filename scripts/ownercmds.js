@@ -23,7 +23,8 @@ ownercommands = {
         + "<b>" + helpers.userl("/serversettings") + "</b>: displays server settings.<br>"
         + "<b>" + helpers.userl("/silentsettings") + "</b>: displays silent settings.<br>"
         + "<b>" + helpers.userl("/filtersettings") + "</b>: displays name filtering settings.<br>"
-        + "<b>" + helpers.userl("/customsettings") + "</b>: displays customisation options.<br>"
+        + "<b>" + helpers.userl("/customsettings") + "</b>: displays customisation settings.<br>"
+        + "<b>" + helpers.userl("/channelsettings") + "</b>: displays channel settings.<br>"
         + "<b>" + helpers.userl("/miscellaneous") + "</b>: displays other commands.<br>"
         + "<br><timestamp/><br>"
         + border2;
@@ -1716,6 +1717,23 @@ ownercommands = {
     
     ,
     
+    layout: function (src, channel, command) {
+        var name = sys.name(src);
+        if (!command[1] || (command[1] != "old" && command[1] != "new")) {
+            helpers.starfox(src, channel, command, bots.command, "Error 404, layout not found.");
+            return;
+        }
+        if (command[1] == "new") {
+            layout = "new";
+            sys.sendHtmlMain(helpers.bot(bots.main) + "<b>" + helpers.user(name) + " changed certain messages to the new layout!</b>");
+        } else {
+            layout = "old";
+            sys.sendHtmlMain(helpers.bot(bots.main) + "<b>" + helpers.user(name) + " changed certain messages to the old, nostalgic layout!</b>");
+        }
+    }
+    
+    ,
+    
     bordercolor: function (src, channel, command) {
         var color = command[1];
         if (!color) {
@@ -1858,6 +1876,37 @@ ownercommands = {
     ,
     
     /**
+        ----------------
+        Channel Settings
+        ----------------
+    **/
+    channelsettings: function (src, channel, command) {
+        var permChannelList, commandsmessage = border
+        + "<h2>Owner Commands ~ Channel Settings</h2>"
+        + "<br>"
+        + "Current permanent channel names:<br>"
+        + "<br>";
+        for (var i in permchannels) {
+            permChannelList.push(helpers.channelLink(permchannels[i]));
+        }
+        commandsmessage += permChannelList.join(", ") + "<br>"
+        + "<br>"
+        + "<br>"
+        + "Use <b>" + helpers.userg("/changechannel ") + helpers.arg("number") + helpers.arg2("*name") + "</b> to change the name of perm channel <b>number</b> to <b>name</b>.<br>"
+        + "<br><timestamp/><br>"
+        + border2;
+        sys.sendHtmlMessage(src, commandsmessage, channel);
+    }
+    
+    ,
+    
+    changechannel: function (src, channel, command) {
+        return;
+    }
+    
+    ,
+    
+    /**
         -------------
         Miscellaneous
         -------------
@@ -1929,23 +1978,6 @@ ownercommands = {
         sys.write("data/cityname.txt", "{}");
         sys.write("data/timezone.txt", "{}");
         sys.sendHtmlMessage(src, helpers.bot(bots.main) + "Your API key has been removed.", channel);
-    }
-    
-    ,
-    
-    layout: function (src, channel, command) {
-        var name = sys.name(src);
-        if (!command[1] || (command[1] != "old" && command[1] != "new")) {
-            helpers.starfox(src, channel, command, bots.command, "Error 404, layout not found.");
-            return;
-        }
-        if (command[1] == "new") {
-            layout = "new";
-            sys.sendHtmlMain(helpers.bot(bots.main) + "<b>" + helpers.user(name) + " changed certain messages to the new layout!</b>");
-        } else {
-            layout = "old";
-            sys.sendHtmlMain(helpers.bot(bots.main) + "<b>" + helpers.user(name) + " changed certain messages to the old, nostalgic layout!</b>");
-        }
     }
     
     ,
