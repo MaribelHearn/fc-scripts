@@ -1542,6 +1542,18 @@
                     return;
                 }
                 print(text);
+            } else if (lower == "send") {
+                var channel = command[1], message;
+                if (!channel) {
+                    print("Error 404, channel not found.");
+                    return;
+                }
+                message = command[2];
+                if (!message) {
+                    print("Error 404, message not found.");
+                    return;
+                }
+                sys.sendHtmlAll("<span style='color:orange'><timestamp/><b>~~Server~~:</b></span> " + message, sys.channelId(channel));
             } else if (lower == "memdump") {
                 print(sys.memoryDump());
             } else if (lower == "commands") {
