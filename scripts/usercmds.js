@@ -660,7 +660,7 @@ usercommands = {
         }
         height = helpers.height(pokeNum);
         weight = helpers.weight(pokeNum);
-        americanHeight = (height * 32.808399 / 10).toPrecision(2);
+        americanHeight = parseInt(height * 32.808399) / 10;
         americanWeight = weight * 22 / 10;
         weightPower = helpers.weightPower(pokeNum);
         baseStats = sys.pokeBaseStats(pokeNum);
