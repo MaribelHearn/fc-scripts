@@ -1561,6 +1561,7 @@
                 print("/eval <code>: executes <code> and prints its runtime.");
                 print("/print <text>: prints <text> to standard output.");
                 print("/var <variable>: prints the value of <variable>.");
+                print("/send <channel>*<message>: sends <message> on <channel>.");
                 print("/memdump: prints a memory dump.");
                 print("");
             } else {
