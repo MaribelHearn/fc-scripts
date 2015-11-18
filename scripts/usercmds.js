@@ -478,16 +478,16 @@ usercommands = {
         scriptcontent.push(sys.read(SCRIPTS_FOLDER + "cadmincmds.js"));
         scriptcontent.push(sys.read(SCRIPTS_FOLDER + "cownercmds.js"));
         if (helpers.isLoaded("funcmds.js")) {
-            scriptcontent.push(sys.read(SCRIPTS_FOLDER + "funcmds.js"));
+            scriptcontent.push(sys.read(PLUGINS_FOLDER + "funcmds.js"));
         }
         if (helpers.isLoaded("party.js")) {
-            scriptcontent.push(sys.read(SCRIPTS_FOLDER + "party.js"));
+            scriptcontent.push(sys.read(PLUGINS_FOLDER + "party.js"));
         }
         if (helpers.isLoaded("rr.js")) {
-            scriptcontent.push(sys.read(SCRIPTS_FOLDER + "rr.js"));
+            scriptcontent.push(sys.read(PLUGINS_FOLDER + "rr.js"));
         }
         if (helpers.isLoaded("roulette.js")) {
-            scriptcontent.push(sys.read(SCRIPTS_FOLDER + "roulette.js"));
+            scriptcontent.push(sys.read(PLUGINS_FOLDER + "roulette.js"));
         }
         scriptcontent = scriptcontent.join();
         scriptmessage += "<h3>Basic Information</h3><br>" +
@@ -632,127 +632,59 @@ usercommands = {
     ,
     
     pokedex: function (src, channel, command) {
-        var dexmessage = border, index = 27, form = 0, pokenum, pokenumdisplay, pokemon, stats, feet, lbs;
-        if (!command[1]) {
+        var UNKNOWN_TYPE = 18, MAX_IV = 31, MIN_EV = 0, MAX_EV = 252, MIN_NATURE = 0.9, NEUTRAL_NATURE = 1.0, MAX_NATURE = 1.1;
+        var pokemon = command[1], pokeNum, type1, type2, types = [], abilities = [], genders = [], height, weight, weightPower, baseStats, bst, dexmessage, stat;
+        if (!pokemon) {
             helpers.starfox(src, channel, command, bots.command, "Error 404, Pokémon not found.");
             return;
-        } else {
-            if (isNaN(command[1]) || command[1] == "2012") {
-                if (!sys.pokeNum(command[1])) {
-                    helpers.starfox(src, channel, command, bots.command, "Error 403, invalid Pokémon name.", channel);
-                    return;
-                }
-                pokenum = sys.pokeNum(command[1]);
-                if (pokenum < 1) {
-                    helpers.starfox(src, channel, command, bots.command, "Error 403, invalid Pokémon name.", channel);
-                    return;
-                }
-                pokemon = sys.pokemon(pokenum);
-            } else {
-                if (!sys.pokemon(command[1])) {
-                    helpers.starfox(src, channel, command, bots.command, "Error 403, invalid Pokémon ID.", channel);
-                    return;
-                }
-                pokenum = command[1];
-                if (pokenum < 1) {
-                    helpers.starfox(src, channel, command, bots.command, "Error 403, invalid Pokémon ID.", channel);
-                    return;
-                }
-                pokemon = sys.pokemon(command[1]);
+        }
+        if (!sys.pokeNum(pokemon)) {
+            helpers.starfox(src, channel, command, bots.command, "Error 403, invalid Pokémon name.");
+            return;
+        }
+        pokeNum = sys.pokeNum(pokemon);
+        pokemon = sys.pokemon(pokeNum);
+        type1 = sys.pokeType1(pokeNum);
+        type2 = sys.pokeType2(pokeNum);
+        types.push(helpers.typeImage(src, type1));
+        if (type2 != UNKNOWN_TYPE) {
+            types.push(helpers.typeImage(src, type2));
+        }
+        for (var i = 0; i <= 2; i++) {
+            if (sys.pokeAbility(pokeNum, i) !== 0) {
+                abilities.push(sys.ability(sys.pokeAbility(pokeNum, i)) + (i == 2 ? " (Hidden)" : ""));
             }
         }
-        !sys.pokeAbility(pokenum, 1) && !sys.pokeAbility(pokenum, 2) ? plural = "y" : plural = "ies";
-        stats = sys.pokeBaseStats(pokenum), stat = ["HP", "Attack", "Defense", "Sp. Atk.", "Sp. Def.", "Speed"];
-        var genders = sys.read("db/pokes/gender.txt"), grammar = "feet", gendernum, gender;
-        while (index > 0) {
-            if (pokenum >= (65536 * index)) {
-                form = Math.floor(pokenum / (65536 * index));
-                pokenumdisplay = (pokenum - (65536 * index)).toString() + "-" + index;
-                break;
-            }
-            index--;
-            if (index === 0) {
-                pokenumdisplay = pokenum;
-            }
+        for (var j in sys.pokeGenders(pokeNum)) {
+            genders.push(helpers.genderImage(src, sys.genderNum(j == "neutral" ? "genderless" : j)));
         }
-        if (form > 0) {
-            index = genders.indexOf(pokenumdisplay.slice(0, -2) + ":" + form);
-            index = eval(index) + 3 * 1 + pokenumdisplay.slice(0, -2).toString().length * 1;
-        } else {
-            index = genders.indexOf(pokenum + ":" + form);
-            index = eval(index) + 3 * 1 + pokenum.toString().length * 1;
+        height = helpers.height(pokeNum);
+        weight = helpers.weight(pokeNum);
+        weightPower = helpers.weightPower(pokeNum);
+        baseStats = sys.pokeBaseStats(pokeNum);
+        bst = helpers.sum(baseStats);
+        dexmessage = border + "<h2>#" + pokeNum + " " + pokemon + "</h2>"
+        + "<br>" + helpers.pokeImage(pokeNum)
+        + "<br><b>Type:</b> " + types.join("")
+        + "<br><b>Abilities:</b> " + abilities.join(" / ")
+        + "<br><b>Gender:</b> " + genders.join(/img/.test(genders.toString()) ? "" : " / ")
+        + "<br><b>Height:</b> " + height
+        + "<br><b>Weight:</b> " + weight
+        + "<br><b>Power of Grass Knot / Low Kick:</b> " + weightPower
+        + "<style>table {border-width:1px; border-style:solid; border-color:#000;} thead {font-weight:bold;}</style>"
+        + "<br><table cellpadding='2' cellspacing='0'><thead><tr><th>Stat</th><th>Base</th><th>Min-</th><th>Min</th><th>Max</th><th>Max+</th></tr></thead><tbody>";
+        for (var k in baseStats) {
+            stat = baseStats[k];
+            dexmessage += "<tr>"
+            + "<th>" + helpers.statName(k) + "</th>"
+            + "<td>" + helpers.colorStat(stat) + "</td>"
+            + "<td>" + (k === 0 ? '-' : helpers.calcStat(k, stat, MAX_IV, MIN_EV, MIN_NATURE)) + "</td>"
+            + "<td>" + helpers.calcStat(k, stat, MAX_IV, MIN_EV, NEUTRAL_NATURE) + "</td>"
+            + "<td>" + helpers.calcStat(k, stat, MAX_IV, MAX_EV, NEUTRAL_NATURE) + "</td>"
+            + "<td>" + (k === 0 ? '-' : helpers.calcStat(k, stat, MAX_IV, MAX_EV, MAX_NATURE)) + "</td>"
+            + "</tr>";
         }
-        genders = genders.substr(index);
-        genders = genders.split('\n');
-        gendernum = genders[0].slice(0, -1);
-        if (gendernum === "") {
-            gender = "<img src='Themes/Classic/genders/gender0.png'>";
-        } else if (gendernum == 3) {
-            gender = "<img src='Themes/Classic/genders/gender1.png'><img src='Themes/Classic/genders/gender2.png'>";
-        } else if (gendernum == 2) {
-            gender = "<img src='Themes/Classic/genders/gender2.png'>";
-        } else if (gendernum == 1) {
-            gender = "<img src='Themes/Classic/genders/gender1.png'>";
-        } else if (gendernum === 0) {
-            gender = "<img src='Themes/Classic/genders/gender0.png'>";
-        } else {
-            gender = "<img src='Themes/Classic/genders/gender" + gendernum + ".png'>";
-        }
-        if (pokenum >= (65536 * index)) {
-            pokenumdisplay = (pokenum - (65536 * index)).toString() + "-" + index;
-        }
-        height = sys.height(pokenum);
-        weight = sys.weight(pokenum);
-        if (height == "Unknown") {
-            feet = "Unknown";
-        } else {
-            feet = height * 3.2808399;
-            feet = feet * 10;
-            feet = parseInt(feet);
-            feet = feet / 10;
-            if (feet == 1 || feet == 1.0) {
-                grammar = "foot";
-            }
-        }
-        if (isNaN(feet)) {
-            feet = "Unknown";
-        }
-        lbs = weight * 2.2;
-        lbs = lbs * 10;
-        lbs = parseInt(lbs);
-        lbs = lbs / 10;
-        dexmessage += "<style type='text/css'>table {border-width:1px; border-style:solid; border-color:#000;}</style><h2>#" + pokenumdisplay + " " + pokemon + "</h2><br><img src='pokemon:" + pokenum + "'><br>" 
-        + "<b>Typing:</b> <img src='Themes/Classic/types/type" + sys.pokeType1(pokenum) + ".png'>" + (sys.pokeType2(pokenum) < 18 ? "<img src='Themes/Classic/types/type" + sys.pokeType2(pokenum) + ".png'>" : "") + "<br>"
-        + "<b>Abilit" + plural + ":</b> " + sys.ability(sys.pokeAbility(pokenum, 0))
-        + (sys.pokeAbility(pokenum, 1) ? " / " + sys.ability(sys.pokeAbility(pokenum, 1)) : "")
-        + (sys.pokeAbility(pokenum, 2) ? " / " + sys.ability(sys.pokeAbility(pokenum, 2)) + " (Hidden)" : "") + "<br>"
-        + "<b>Gender:</b> " + gender + "<br>"
-        + "<b>Height:</b> " + height + " m / " + feet + " " + grammar + "<br>"
-        + "<b>Weight:</b> " + weight + " kg / " + lbs + " lbs<br>"
-        + "<b>Power of Grass Knot / Low Kick:</b> " + sys.weightPower(sys.weight(pokenum)) + "<br>"
-        + "<table cellpadding=2 cellspacing=0><thead><tr><th>Stat</th><th>Base</th><th>Min-</th><th>Min</th><th>Max</th><th>Max+</th></tr></thead><tbody>";
-        for (var index in stat) {
-            if (index === 0) {
-                dexmessage += "<tr>"
-                + "<th>" + stat[index] + "</th>"
-                + "<th><span style='color:" + helpers.statcolor(stats[index]) + "'>" + stats[index] + "</span></th>"
-                + "<td>-</td>"
-                + "<td>" + sys.calcHP(stats[index], 31, 0, 100) + "</td>"
-                + "<td>" + sys.calcHP(stats[index], 31, 252, 100) + "</td>"
-                + "<td>-</td>"
-                + "</tr>";
-            } else {
-                dexmessage += "<tr>"
-                + "<th>" + stat[index] + "</td>"
-                + "<th><span style='color:" + helpers.statcolor(stats[index]) + "'>" + stats[index] + "</span></th>"
-                + "<td>" + sys.calcStat(stats[index], 31, 0, 100, 0.9) +"</td>"
-                + "<td>" + sys.calcStat(stats[index], 31, 0, 100, 1) + "</td>"
-                + "<td>" + sys.calcStat(stats[index], 31, 252, 100, 1) + "</td>"
-                + "<td>" + sys.calcStat(stats[index], 31, 252, 100, 1.1) + "</td>"
-                + "</tr>";
-            }
-        }
-        dexmessage += "</tbody></table><br><br><timestamp/><br>" + border2;
+        dexmessage += "</tbody><tfoot><tr><td colspan='6'><b>Base Stat Total:</b> " + bst + "</td></tr></tfoot></table><br><br><timestamp/><br>" + border2;
         sys.sendHtmlMessage(src, dexmessage, channel);
     }
     

@@ -303,6 +303,16 @@ helpers = {
         Return Helpers
         --------------
     **/
+    sum: function (array) {
+        var sum = 0;
+        for (var i in array) {
+            sum += parseInt(array[i]);
+        }
+        return sum;
+    }
+    
+    ,
+    
     timestampify: function (time) { // time must be a date object
         var hours = JSON.stringify(time.getHours());
         if (hours.length == 1) {
@@ -1492,21 +1502,34 @@ helpers = {
     
     ,
     
-    statcolor: function (stat) {
+    statName: function (stat) {
+        return([
+            "HP",
+            "Attack",
+            "Defense",
+            "Sp. Atk.",
+            "Sp. Def.",
+            "Speed"
+        ][stat]);
+    }
+    
+    ,
+    
+    colorStat: function (stat) {
         if (stat <= 30) {
-            return "darkred";
+            return "<b style='color:darkred'>" + stat + "</b>";
         } else if (stat < 60) {
-            return "red";
+            return "<b style='color:red'>" + stat + "</b>";
         } else if (stat < 90) {
-            return "orangered";
+            return "<b style='color:orangered'>" + stat + "</b>";
         } else if (stat < 120) {
-            return "lime";
+            return "<b style='color:lime'>" + stat + "</b>";
         } else if (stat < 150) {
-            return "green";
+            return "<b style='color:green'>" + stat + "</b>";
         } else if (stat < 180) {
-            return "blue";
+            return "<b style='color:blue'>" + stat + "</b>";
         } else {
-            return "darkblue";
+            return "<b style='color:darkblue'>" + stat + "</b>";
         }
     }
     
@@ -1593,7 +1616,7 @@ helpers = {
 
     ,
     
-    typecolor: function (pokenum) {
+    typecolor: function (pokeNum) {
         return ([
             "olive",
             "darkred",
@@ -1614,7 +1637,31 @@ helpers = {
             "black",
             "fuchsia",
             "seagreen",
-        ][sys.pokeType1(pokenum)]);
+        ][sys.pokeType1(pokeNum)]);
+    }
+    
+    ,
+    
+    pokeImage: function (pokeNum) {
+        return "<img src='pokemon:" + pokeNum + "'>";
+    }
+    
+    ,
+    
+    typeImage: function (src, type) {
+        if (sys.os(src) == "webclient" || sys.os(src) == "android") {
+            return sys.type(type);
+        }
+        return "<img src='Themes/Classic/types/type" + type + ".png'>";
+    }
+    
+    ,
+    
+    genderImage: function (src, gender) {
+        if (sys.os(src) == "webclient" || sys.os(src) == "android") {
+            return this.cap(sys.gender(gender));
+        }
+        return "<img src='Themes/Classic/genders/gender" + gender + ".png'>";
     }
     
     ,
@@ -1753,6 +1800,80 @@ helpers = {
             list = "none";
         }
         return list;
+    }
+    
+    ,
+    
+    calcStat: function (stat, base, IV, EV, nature) {
+        if (stat === 0) {
+            return base == 1 ? 1 : Math.floor((IV + (2 * base) + Math.floor(EV / 4) + 100) * 100 / 100 + 10);
+        }
+        return Math.floor(Math.floor((IV + (2 * base) + Math.floor(EV / 4)) * 100 / 100 + 5) * nature);
+    }
+    
+    ,
+        
+    getDbIndex: function (pokeId) {
+        var id = pokeId % 65536, forme = (pokeId - id) / 65536;
+        return id + ':' + forme;
+    }
+    
+    ,
+    
+    height: function (pokeId) {
+        var heightList = {}, data = sys.getFileContent("db/pokes/height.txt").split('\n'), index, id, height, key, base;
+        for (var i = 0; i < data.length; i++) {
+            index = data[i].indexOf(" ");
+            id = data[i].substr(0, index);
+            height = data[i].substr(index + 1);
+            heightList[id] = height;
+        }
+        key = this.getDbIndex(pokeId);
+        if (heightList[key] !== undefined) {
+            return heightList[key];
+        }
+        index = key.indexOf(':') + 1;
+        base = key.substr(0, index);
+        return heightList[base + '0'];
+    }
+    
+    ,
+    
+    weight: function (pokeId) {
+        var weightList = {}, data = sys.getFileContent("db/pokes/weight.txt").split('\n'), index, id, weight, key, base;
+        for (var i = 0; i < data.length; i++) {
+            index = data[i].indexOf(" ");
+            id = data[i].substr(0, index);
+            weight = data[i].substr(index + 1);
+            weightList[id] = weight;
+        }
+        key = this.getDbIndex(pokeId);
+        if (weightList[key] !== undefined) {
+            return weightList[key];
+        }
+        index = key.indexOf(':') + 1;
+        base = key.substr(0, index);
+        return weightList[base + '0'];
+    }
+    
+    ,
+    
+    weightPower: function (weight) {
+        var power;
+        if (weight < 10) {
+            power = 20;
+        } else if (weight >= 10 && weight < 25) {
+            power = 40;
+        } else if (weight >= 25 && weight < 50) {
+            power = 60;
+        } else if (weight >= 50 && weight < 100) {
+            power = 80;
+        } else if (weight >= 100 && weight < 200) {
+            power = 100;
+        } else { // weight >= 200
+            power = 120;
+        }
+        return power;
     }
     
     ,
