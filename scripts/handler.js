@@ -44,7 +44,7 @@ bigtextCommand = function (src, channel, command, lower, name, auth) {
         if (mutedOrSilenced(src, channel, command, name, auth)) {
             return;
         }
-        usercommands.bigtext(src, channel, bigtexts[lower]);
+        funcommands.bigtext(src, channel, bigtexts[lower]);
     }
 };
 
