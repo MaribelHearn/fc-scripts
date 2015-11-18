@@ -117,7 +117,7 @@ channelUserCommand = function (src, channel, command, lower, name, auth) {
 channelModCommand = function (src, channel, command, lower, name, auth, cauth) {
     if (cmodcommands[lower] !== undefined) {
         if (cauth < 1 && auth < 1) {
-            helpers.starfox(src, channel, command, bots.starfox, "I can't let you do that star " + sys.name(src) + "!");
+            helpers.starfox(src, channel, command, bots.starfox, noPermissionMessage.replace(/~Player~/, name));
             return;
         } else if (helpers.isMutable(cmodcommands[lower]) && mutedOrSilenced(src, channel, command, name, auth)) {
             return;
@@ -130,7 +130,7 @@ channelModCommand = function (src, channel, command, lower, name, auth, cauth) {
 channelAdminCommand = function (src, channel, command, lower, name, auth, cauth) {
     if (cadmincommands[lower] !== undefined) {
         if (cauth < 2 && auth < 2) {
-            helpers.starfox(src, channel, command, bots.starfox, "I can't let you do that star " + sys.name(src) + "!");
+            helpers.starfox(src, channel, command, bots.starfox, noPermissionMessage.replace(/~Player~/, name));
             return;
         } else if (helpers.isMutable(cadmincommands[lower]) && mutedOrSilenced(src, channel, command, name, auth)) {
             return;
@@ -143,7 +143,7 @@ channelAdminCommand = function (src, channel, command, lower, name, auth, cauth)
 channelOwnerCommand = function (src, channel, command, lower, name, auth, cauth) {
     if (cownercommands[lower] !== undefined) {
         if (cauth < 3 && auth < 3) {
-            helpers.starfox(src, channel, command, bots.starfox, "I can't let you do that star " + sys.name(src) + "!");
+            helpers.starfox(src, channel, command, bots.starfox, noPermissionMessage.replace(/~Player~/, name));
             return;
         } else if (helpers.isMutable(cownercommands[lower]) && mutedOrSilenced(src, channel, command, name, auth)) {
             return;
@@ -156,7 +156,7 @@ channelOwnerCommand = function (src, channel, command, lower, name, auth, cauth)
 modCommand = function (src, channel, command, lower, name, auth) {
     if (modcommands[lower] !== undefined) {
         if (auth < 1) {
-            helpers.starfox(src, channel, command, bots.starfox, "I can't let you do that star " + sys.name(src) + "!");
+            helpers.starfox(src, channel, command, bots.starfox, noPermissionMessage.replace(/~Player~/, name));
             return;
         } else if (helpers.isMutable(modcommands[lower]) && mutedOrSilenced(src, channel, command, name, auth)) {
             return;
@@ -169,7 +169,7 @@ modCommand = function (src, channel, command, lower, name, auth) {
 adminCommand = function (src, channel, command, lower, name, auth) {
     if (admincommands[lower] !== undefined) {
         if (auth < 2) {
-            helpers.starfox(src, channel, command, bots.starfox, "I can't let you do that star " + sys.name(src) + "!");
+            helpers.starfox(src, channel, command, bots.starfox, noPermissionMessage.replace(/~Player~/, name));
             return;
         } else if (helpers.isMutable(admincommands[lower]) && mutedOrSilenced(src, channel, command, name, auth)) {
             return;
@@ -182,7 +182,7 @@ adminCommand = function (src, channel, command, lower, name, auth) {
 ownerCommand = function (src, channel, command, lower, name, auth) {
     if (ownercommands[lower] !== undefined) {
         if (auth < 3) {
-            helpers.starfox(src, channel, command, bots.starfox, "I can't let you do that star " + sys.name(src) + "!");
+            helpers.starfox(src, channel, command, bots.starfox, noPermissionMessage.replace(/~Player~/, name));
             return;
         } else if (helpers.isMutable(ownercommands[lower]) && mutedOrSilenced(src, channel, command, name, auth)) {
             return;

@@ -30,6 +30,11 @@ helpers = {
         sys.write(DATA_FOLDER + "servertopic.txt", "Welcome to " + sys.getServerName() + "!");
         sys.write(DATA_FOLDER + "botsymbolcolor.txt", "#318739");
         sys.write(DATA_FOLDER + "bordercolor.txt", "darkblue");
+        sys.write(DATA_FOLDER + "servertopiccolor.txt", "red");
+        sys.write(DATA_FOLDER + "channeltopiccolor.txt", "orange");
+        sys.write(DATA_FOLDER + "welcomemsg.txt", "Please welcome ~Player~ to ~Server~!");
+        sys.write(DATA_FOLDER + "channelwelcomemsg.txt", "Please welcome ~Player~ to ~Channel~!");
+        sys.write(DATA_FOLDER + "nopermissionmsg.txt", "Can't let you do that, Star ~Player~!");
         
         // Arrays
         sys.write(DATA_FOLDER + "allowed.txt", '["127.0.0.1"]');

@@ -255,7 +255,12 @@
     botsymbol = sys.read("data/botsymbol.txt");
     servertopic = sys.read("data/servertopic.txt");
     botsymbolcolor = sys.read("data/botsymbolcolor.txt");
-    bordercolor = sys.read("data/bordercolor.txt");
+    borderColor = sys.read("data/bordercolor.txt");
+    serverTopicColor = sys.read("data/servertopiccolor.txt");
+    channelTopicColor = sys.read("data/channeltopiccolor.txt");
+    welcomeMessage = sys.read("data/welcomemsg.txt");
+    channelWelcomeMessage = sys.read("data/channelwelcomemsg.txt");
+    noPermissionMessage = sys.read("data/nopermissionmsg.txt");
     
     // Array from data file
     allowed = JSON.parse(sys.read("data/allowed.txt"));
@@ -308,8 +313,8 @@
     helpers.setVariable("hostCountry", "");
     helpers.setVariable("hostCity", "");
     helpers.setVariable("hostTimeZone", "");
-    helpers.setVariable("border", "<font color='" + bordercolor + "'><b>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>></b></font>");
-    helpers.setVariable("border2", "<font color='" + bordercolor + "'><b>&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;" +
+    helpers.setVariable("border", "<font color='" + borderColor + "'><b>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>></b></font>");
+    helpers.setVariable("border2", "<font color='" + borderColor + "'><b>&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;" +
     "&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;</b></font>");
     
     // Array
@@ -830,22 +835,14 @@
             Welcome Message
             ---------------
         **/
-        authtitle = (authtitles[lower] ? authtitles[lower] : AUTH_NAME[auth]);
+        authtitle = (authtitles[lower] ? authtitles[lower] : AUTH_NAME[auth]) + " ";
         if (auth === 0 || auth >= 4) {
             authtitle = "";
         }
         if (layout == "new") {
-            if (servername == "Fun Community") {
-                sys.sendHtmlMain(helpers.bot(bots.welcome) + "Please welcome " + authtitle + " " + name + " to the " + servername + "!");
-            } else {
-                sys.sendHtmlMain(helpers.bot(bots.welcome) + "Please welcome " + authtitle + " " + name + " to " + servername + "!");
-            }
+            sys.sendHtmlMain(helpers.bot(bots.welcome) + welcomeMessage.replace(/~Player~/, authtitle + name).replace(/~Server~/, servername));
         } else {
-            if (auth > 0) {
-                sys.sendHtmlMain("<timestamp/><b>~Please Welcome " + AUTH_NAME[auth] + " " + helpers.rainbow(name) + "~</b>");
-            } else {
-                sys.sendHtmlMain("<timestamp/><b>~Please Welcome " + helpers.rainbow(name) + "~</b>");
-            }
+            sys.sendHtmlMain("<timestamp/><b>~Please Welcome " + (auth >= 1 ? AUTH_NAME[auth] + " " : "") + helpers.rainbow(name) + "~</b>");
         }
         /**
             -----------------------------------
@@ -943,11 +940,11 @@
             Server and Channel Topic
             ------------------------
         **/
-        sys.sendHtmlMessage(src, "<b style='color:red'>Server Topic:</b> " + servertopic, channel);
+        sys.sendHtmlMessage(src, "<b style='color:" + serverTopicColor + "'>Server Topic:</b> " + servertopic, channel);
         if (regchannels[lower]) {
-            sys.sendHtmlMessage(src, "<b style='color:orange'>Channel Topic:</b> " + regchannels[lower].topic.join(TOPIC_DELIMITER), channel);
+            sys.sendHtmlMessage(src, "<b style='color:" + channelTopicColor + "'>Channel Topic:</b> " + regchannels[lower].topic.join(TOPIC_DELIMITER), channel);
         } else {
-            sys.sendHtmlMessage(src, "<b style='color:orange'>Channel Topic:</b> Welcome to " + channelname + "!", channel);
+            sys.sendHtmlMessage(src, "<b style='color:" + channelTopicColor + "'>Channel Topic:</b> Welcome to " + channelname + "!", channel);
         }
         if (helpers.isLoaded("party.js")) {
             if (channel == partychannel && partyMode == "nightclub") {
@@ -961,13 +958,11 @@
             Welcome Message
             ---------------
         **/
-        var cauth = helpers.cauthname(name.toLowerCase(), channel);
-        if (layout == "new") {
-            if (channel > 0) {
-                sys.sendHtmlAll(helpers.bot(bots.channel) + "Please welcome " + cauth + " "    + name + " to " + channelname + "!", channel);
-            }
-        } else {
-            if (channel > 0) {
+        var cauth = (helpers.cauth(name.toLowerCase(), channel) >= 1 ? helpers.cauthname(name.toLowerCase(), channel) + " " : "");
+        if (channel > 0) {
+            if (layout == "new") {
+                sys.sendHtmlAll(helpers.bot(bots.channel) + channelWelcomeMessage.replace(/~Player~/, cauth + name).replace(/~Channel~/, channelname), channel);
+            } else {
                 sys.sendHtmlAll("<timestamp/><b>~Please Welcome " + helpers.rainbow(name) + " to " + channelname + "~</b>", channel);
             }
         }
