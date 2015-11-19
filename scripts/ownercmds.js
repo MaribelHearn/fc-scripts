@@ -793,47 +793,51 @@ ownercommands = {
     ,
     
     eval: function (src, channel, command) {
-        var name = sys.name(src), starttime, runtime;
+        var name = sys.name(src), silent = command[0].slice(0, -4), starttime, runtime;
         command.splice(0, 1);
         command = command.join(DELIMITER);
-        sys.sendHtmlAll(border + "<br><timestamp/> <b>" + helpers.user(name) + " executed the following code:</b><br><b style='font-family: courier new;'>"
-        + helpers.escapehtml(command) + "</b><br>" + border2, channel);
+        if (silent == "silent") {
+            sys.sendHtmlMessage(src, border + "<br><timestamp/> <b>You executed the following code silently:</b><br><b style='font-family:courier new;'>"
+            + helpers.escapehtml(command) + "</b><br>" + border2, channel);
+        } else {
+            sys.sendHtmlAll(border + "<br><timestamp/> <b>" + helpers.user(name) + " executed the following code:</b><br><b style='font-family: courier new;'>"
+            + helpers.escapehtml(command) + "</b><br>" + border2, channel);
+        }
         starttime = new Date();
         try {
             eval(command);
-            sys.sendHtmlAll(helpers.bot(bots.script) + "Script ran successfully.", channel);
+            if (silent == "silent") {
+                sys.sendHtmlMessage(src, helpers.bot(bots.script) + "Script ran successfully.", channel);
+            } else {
+                sys.sendHtmlAll(helpers.bot(bots.script) + "Script ran successfully.", channel);
+            }
         }
-        catch (error) { 
-            sys.sendHtmlAll(helpers.bot(bots.script) + "An error occurred: " + error, channel);
+        catch (error) {
+            if (silent == "silent") {
+                sys.sendHtmlMessage(src, helpers.bot(bots.script) + "An error occurred: " + error, channel);
+            } else {
+                sys.sendHtmlAll(helpers.bot(bots.script) + "An error occurred: " + error, channel);
+            }
         }
         runtime = new Date() - starttime;
-        sys.sendHtmlAll(helpers.bot(bots.script) + "The eval runtime was " + runtime + " milliseconds.", channel);
+        if (silent == "silent") {
+            sys.sendHtmlMessage(src, helpers.bot(bots.script) + "The eval runtime was " + runtime + " milliseconds.", channel);
+        } else {
+            sys.sendHtmlAll(helpers.bot(bots.script) + "The eval runtime was " + runtime + " milliseconds.", channel);
+        }
     }
     
     ,
     
     silenteval: function (src, channel, command) {
-        var name = sys.name(src), starttime, runtime;
-        command.splice(0, 1);
-        command = command.join(DELIMITER);
-        sys.sendHtmlMessage(src, border + "<br><timestamp/> <b>You executed the following code silently:</b><br><b style='font-family:courier new;'>"
-        + helpers.escapehtml(command) + "</b><br>" + border2, channel);
-        starttime = new Date();
-        try {
-            eval(command);
-            sys.sendHtmlMessage(src, helpers.bot(bots.script) + "Script ran successfully.", channel);
-        }
-        catch (error) { 
-            sys.sendHtmlMessage(src, helpers.bot(bots.script) + "An error occurred: " + error, channel);
-        }
-        runtime = new Date() - starttime;
-        sys.sendHtmlMessage(src, helpers.bot(bots.script) + "The eval runtime was " + runtime + " milliseconds.", channel);
+        this.eval(src, channel, command);
     }
     
     ,
     
     seval: function (src, channel, command) {
-        this.silenteval(src, channel, command);
+        command[0] = "silenteval";
+        this.eval(src, channel, command);
     }
     
     ,
