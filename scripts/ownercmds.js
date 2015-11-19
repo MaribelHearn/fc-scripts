@@ -797,11 +797,11 @@ ownercommands = {
         command.splice(0, 1);
         command = command.join(DELIMITER);
         if (silent == "silent") {
-            sys.sendHtmlMessage(src, border + "<br><timestamp/> <b>You executed the following code silently:</b><br><b style='font-family:courier new;'>"
-            + helpers.escapehtml(command) + "</b><br>" + border2, channel);
+            sys.sendHtmlMessage(src, border + "<br><timestamp/> <b>You executed the following code silently:</b><br><span style='font-family: dejavu sans mono;'>"
+            + helpers.syntaxHighlight(helpers.escapehtml(command)) + "</span><br>" + border2, channel);
         } else {
-            sys.sendHtmlAll(border + "<br><timestamp/> <b>" + helpers.user(name) + " executed the following code:</b><br><b style='font-family: courier new;'>"
-            + helpers.escapehtml(command) + "</b><br>" + border2, channel);
+            sys.sendHtmlAll(border + "<br><timestamp/> <b>" + helpers.user(name) + " executed the following code:</b><br><span style='font-family: dejavu sans mono;'>"
+            + helpers.syntaxHighlight(helpers.escapehtml(command)) + "</span><br>" + border2, channel);
         }
         starttime = new Date();
         try {
