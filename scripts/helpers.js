@@ -303,6 +303,37 @@ helpers = {
         Return Helpers
         --------------
     **/
+    syntaxHighlight: function (code) {
+        var KEYWORDS = ["abstract", "boolean", "break", "byte", "case", "catch", "char", "class", "const", "continue", "debugger", 
+        "default", "delete", "do", "double", "else", "enum", "export", "extends", "final", "finally", "float", "for", "function", 
+        "goto", "if", "implements", "import", "in", "instanceof", "int", "interface", "long", "native", "new", "package", "private", 
+        "protected", "public", "return", "short", "static", "super", "switch", "synchronized", "this", "throw", "throws", "transient", 
+        "try", "typeof", "var", "void", "volatile", "while", "with", "true", "false", "prototype"];
+        var NUMBERS = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
+        var index = 0, pattern;
+        code = code.replace(/;/g, ";<br>").replace(/\{/g, "{<br>&nbsp;&nbsp;&nbsp;&nbsp;");
+        if (code.substr(code.length - 4) == "<br>") {
+            code = code.slice(0, -4);
+        }
+        for (var i in KEYWORDS) {
+            pattern = new RegExp(KEYWORDS[i], "g");
+            code = code.replace(pattern, "<b style='color: darkblue;'>" + KEYWORDS[i] + "</b>");
+        }
+        for (var i in NUMBERS) {
+            pattern = new RegExp(NUMBERS[i], "g");
+            code = code.replace(pattern, "<span style='color: orangered;'>" + NUMBERS[i] + "</span>");
+        }
+        while (code.indexOf('"') != -1) {
+            code = code.replace('"', (index % 2 === 0 ? "<span style='color: gray;'>&quot;" : "&quot;</span>"));
+            index++;
+        }
+        code = code.replace(/\/\*/g, "<br><span style='color: green;'>/*");
+        code = code.replace(/\*\//g, "*/</span>");
+        return code;
+    }
+    
+    ,
+    
     sum: function (array) {
         var sum = 0;
         for (var i in array) {
