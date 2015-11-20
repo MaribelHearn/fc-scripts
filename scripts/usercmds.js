@@ -348,7 +348,7 @@ usercommands = {
             } else if (name == permchannels[5]) {
                 descr = "To play Roulette.";
             } else {
-                descr = "An unofficial channel.";
+                descr = "A user-created channel.";
             }
             channelmessage += "<tr><td>" + id + "</td><td><a href='po:join/" + name + "'>#" + name + "</a></td><td>" + descr + "</td></tr>";
         }
