@@ -715,7 +715,7 @@
         } else {
             if (sys.isMegaBanned(cookie)) {
                 sys.sendMessage(src, "You are banned!");
-                sys.sendHtmlAuth(helpers.bot(bots.spy) + "[Server] Mega banned user <b style='color:" + color + "'>" + name + "</b> tried to enter the server.");
+                sys.sendHtmlAuth(helpers.bot(bots.spy) + "[Server] Mega banned user <b><font color='" + color + "'>" + name + "</font></b> tried to enter the server.");
                 megabancheck = true;
                 sys.kick(src);
                 return;
@@ -761,8 +761,9 @@
         **/
         sys.sendMessage(src, "Welcome Message: The server has been up for " + helpers.formatUptime(uptime));
         sys.sendMessage(src, "Welcome Message: The current number of players online is " + (eval(sys.numPlayers())) + " out of a record maximum of " + maxplayers + ".");
-        sys.sendHtmlMessage(src, "<span style='color: #0000FF;'><timestamp/><b>Welcome Message:</b></span> Type /commands in the chat window, <a href='po:send//commands'>or click here</a>, to view a list of commands. " +
-        "Type /rules, <a href='po:send//rules'>or click here</a>, for our server rules. You are supposed to know them, so you should read them!");
+        sys.sendHtmlMessage(src, "<font color='blue'><timestamp/></font><b><font color='blue'>Welcome Message:</font></b> Type /commands in the chat window, "
+        + "<a href='po:send//commands'>or click here</a>, to view a list of commands. Type /rules, <a href='po:send//rules'>or click here</a>, "
+        + "for our server rules. You are supposed to know them, so you should read them!");
         /**
             ---------------
             Welcome Message
@@ -788,34 +789,44 @@
         versions[lower] = helpers.version(version);
         sys.write("data/versions.txt", JSON.stringify(versions));
         version = versions[lower];
-        sys.sendHtmlAuth(helpers.bot(bots.spy) + "[Server] <b style='color:" + color + "'>" + name + "</b> is using " + os + (version === "" ? "" : ", " + version) + ".");
+        sys.sendHtmlAuth(helpers.bot(bots.spy) + "[Server] <b><font color='" + color + "'>" + name + "</font></b> is using " + os + (version === "" ? "" : ", " + version) + ".");
+        /**
+            -----------------------------
+            Fake Guest / Evasion Warnings
+            -----------------------------
+        **/
+        if (helpers.isGuest(name) && sys.os(src) != "android" && sys.os(src) != "webclient") {
+            sys.sendHtmlAuths(helpers.bot(bots.welcome) + "This person is using a guest name, but isn't actually on " + helpers.os("android") + " or " + helpers.os("webclient") + ". Keep an eye on them!");
+        }
+        for (var index in banlist) {
+            if (sys.dbIp(index)) {
+                if (range == sys.dbRange(index) && !helpers.isauthip(ip) && !helpers.isInArray(ip, allowed) && !helpers.isInArray(range, allowedrange)) {
+                    sys.sendHtmlAuths(helpers.bot(bots.welcome) + "This person might be ban evading, as an IP on the banlist is in their range (" + range + "). Keep an eye on them!");
+                }
+            }
+        }
         /**
             ---------------------
             Time Zone and Country
             ---------------------
         **/
         if (API !== "") {
-            sys.webCall(helpers.countryRetrievalUrl(ip), function (resp) {
-                resp = JSON.parse(resp);
-                timezone[lower] = helpers.timezonedata(resp.countryName, resp.timeZone);
-                countryname[lower] = helpers.countrydata(resp.countryName);
-                cityname[lower] = helpers.citydata(resp.cityName);
-                sys.write("data/timezone.txt", JSON.stringify(timezone));
-                sys.write("data/countryname.txt", JSON.stringify(countryname));
-                sys.write("data/cityname.txt", JSON.stringify(cityname));
+            if (countryname[lower]) {
                 country = helpers.toFlagKey(helpers.removespaces(countryname[lower].toUpperCase()));
-                sys.sendHtmlAuth(helpers.bot(bots.spy) + "[Server] <b style='color:" + color + "'>" + name + "</b> is from " + FLAGS[country] + " " + countryname[lower] + ".");
-                if (helpers.isGuest(name) && sys.os(src) != "android") {
-                    sys.sendHtmlAuths(helpers.bot(bots.welcome) + "This person is using a guest name, but isn't actually on " + helpers.os("android") + ". Keep an eye on them!");
-                }
-                for (var index in banlist) {
-                    if (sys.dbIp(index)) {
-                        if (range == sys.dbRange(index) && !helpers.isauthip(ip) && !helpers.isInArray(ip, allowed) && !helpers.isInArray(range, allowedrange)) {
-                            sys.sendHtmlAuths(helpers.bot(bots.welcome) + "This person might be ban evading, as an IP on the banlist is in their range (" + range + "). Keep an eye on them!");
-                        }
-                    }
-                }
-            });
+                sys.sendHtmlAuth(helpers.bot(bots.spy) + "[Server] <b><font color='" + color + "'>" + name + "</font></b> is from " + FLAGS[country] + " " + countryname[lower] + ".");
+            } else {
+                sys.webCall(helpers.countryRetrievalUrl(ip), function (resp) {
+                    resp = JSON.parse(resp);
+                    timezone[lower] = helpers.timezonedata(resp.countryName, resp.timeZone);
+                    countryname[lower] = helpers.countrydata(resp.countryName);
+                    cityname[lower] = helpers.citydata(resp.cityName);
+                    sys.write("data/timezone.txt", JSON.stringify(timezone));
+                    sys.write("data/countryname.txt", JSON.stringify(countryname));
+                    sys.write("data/cityname.txt", JSON.stringify(cityname));
+                    country = helpers.toFlagKey(helpers.removespaces(countryname[lower].toUpperCase()));
+                    sys.sendHtmlAuth(helpers.bot(bots.spy) + "[Server] <b><font color='" + color + "'>" + name + "</font></b> is from " + FLAGS[country] + " " + countryname[lower] + ".");
+                });
+            }
         }
     }
 
@@ -873,11 +884,11 @@
             Server and Channel Topic
             ------------------------
         **/
-        sys.sendHtmlMessage(src, "<b style='color:" + serverTopicColor + "'>Server Topic:</b> " + servertopic, channel);
+        sys.sendHtmlMessage(src, "<b><font color='" + serverTopicColor + "'>Server Topic:</font></b> " + servertopic, channel);
         if (regchannels[lower]) {
-            sys.sendHtmlMessage(src, "<b style='color:" + channelTopicColor + "'>Channel Topic:</b> " + regchannels[lower].topic.join(TOPIC_DELIMITER), channel);
+            sys.sendHtmlMessage(src, "<b><font color='" + channelTopicColor + "'>Channel Topic:</font></b> " + regchannels[lower].topic.join(TOPIC_DELIMITER), channel);
         } else {
-            sys.sendHtmlMessage(src, "<b style='color:" + channelTopicColor + "'>Channel Topic:</b> Welcome to " + channelname + "!", channel);
+            sys.sendHtmlMessage(src, "<b><font color='" + channelTopicColor + "'>Channel Topic:</font></b> Welcome to " + channelname + "!", channel);
         }
         if (helpers.isLoaded("party.js")) {
             if (channel == partychannel && partyMode == "nightclub") {
@@ -1475,27 +1486,11 @@
                     return;
                 }
                 print(text);
-            } else if (lower == "send") {
-                var channel = command[1], message;
-                if (!channel) {
-                    print("Error 404, channel not found.");
-                    return;
-                }
-                message = command[2];
-                if (!message) {
-                    print("Error 404, message not found.");
-                    return;
-                }
-                sys.sendHtmlAll("<span style='color:orange'><timestamp/><b>~~Server~~:</b></span> " + message, sys.channelId(channel));
-            } else if (lower == "memdump") {
-                print(sys.memoryDump());
             } else if (lower == "commands") {
                 print("");
                 print("/eval <code>: executes <code> and prints its runtime.");
                 print("/print <text>: prints <text> to standard output.");
                 print("/var <variable>: prints the value of <variable>.");
-                print("/send <channel>*<message>: sends <message> on <channel>.");
-                print("/memdump: prints a memory dump.");
                 print("");
             } else {
                 print("Error 404, command '" + lower + "' not found. Use /commands to show the list of commands.");
