@@ -303,6 +303,12 @@ helpers = {
         Return Helpers
         --------------
     **/
+    channelLink: function (channelName) {
+        return "<a href='po:join/" + channelName + "'>#" + channelName + "</a>";
+    }
+    
+    ,
+    
     syntaxHighlight: function (code) {
         var KEYWORDS = ["abstract", "boolean", "break", "byte", "case", "catch", "char", "class", "const", "continue", "debugger", 
         "default", "delete", "do", "double", "else", "enum", "export", "extends", "final", "finally", "float", "for", "function", 
@@ -310,25 +316,26 @@ helpers = {
         "protected", "public", "return", "short", "static", "super", "switch", "synchronized", "this", "throw", "throws", "transient", 
         "try", "typeof", "var", "void", "volatile", "while", "with", "true", "false", "prototype"];
         var NUMBERS = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
-        var index = 0, pattern;
-        code = code.replace(/;/g, ";<br>").replace(/\{/g, "{<br>&nbsp;&nbsp;&nbsp;&nbsp;");
+        var index = 0, pattern, pattern1, pattern2;
+        code = code.replace(/;/g, ";<br>").replace(/\}/g, "}<br>").replace(/\{/g, "{<br>");
         if (code.substr(code.length - 4) == "<br>") {
             code = code.slice(0, -4);
         }
         for (var i in KEYWORDS) {
-            pattern = new RegExp(KEYWORDS[i], "g");
-            code = code.replace(pattern, "<b style='color: darkblue;'>" + KEYWORDS[i] + "</b>");
+            pattern1 = new RegExp(KEYWORDS[i] + ' ', "g");
+            pattern2 = new RegExp(' ' + KEYWORDS[i], "g");
+            code = code.replace(pattern1, "<b><font color='darkblue'>" + KEYWORDS[i] + "</font></b> ");
+            code = code.replace(pattern2, " <b><font color='darkblue'>" + KEYWORDS[i] + "</font></b>");
         }
         for (var i in NUMBERS) {
             pattern = new RegExp(NUMBERS[i], "g");
-            code = code.replace(pattern, "<span style='color: orangered;'>" + NUMBERS[i] + "</span>");
+            code = code.replace(pattern, "<font color='orangered'>" + NUMBERS[i] + "</font>");
         }
         while (code.indexOf('"') != -1) {
-            code = code.replace('"', (index % 2 === 0 ? "<span style='color: gray;'>&quot;" : "&quot;</span>"));
+            code = code.replace('"', (index % 2 === 0 ? "<font color='gray'>&quot;" : "&quot;</font>"));
             index++;
         }
-        code = code.replace(/\/\*/g, "<br><span style='color: green;'>/*");
-        code = code.replace(/\*\//g, "*/</span>");
+        code = code.replace(/\/\*/g, "<font color='green'>/*").replace(/\*\//g, "*/</font>");
         return code;
     }
     
