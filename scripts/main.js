@@ -258,6 +258,24 @@
     helpers.setVariable("tour", {});
     helpers.setVariable("battles", {});
     helpers.setVariable("battlesf", {});
+    helpers.setVariable("heightList", {});
+    helpers.setVariable("weightList", {});
+    helpers.setVariable("movepoolList", {});
+    helpers.setVariable("powerList", {});
+    helpers.setVariable("categoryList", {});
+    helpers.setVariable("accList", {});
+    helpers.setVariable("ppList", {});
+    helpers.setVariable("moveEffList", {});
+    helpers.setVariable("moveFlagList", {});
+    helpers.setVariable("movePriorityList", {});
+    helpers.setVariable("moveRangeList", {});
+    helpers.setVariable("abilityList", {});
+    helpers.setVariable("pokemonWithAbilityList", {});
+    helpers.setVariable("itemList", {});
+    helpers.setVariable("berryList", {});
+    helpers.setVariable("flingPowerList", {});
+    helpers.setVariable("berryPowerList", {});
+    helpers.setVariable("berryTypeList", {});
     
     // Special
     tour[0] = {};
@@ -278,10 +296,6 @@
     }
     
     if (helpers.isLoaded("roulette.js")) {
-        LEGENDARY_LIST = ["Articuno", "Zapdos", "Moltres", "Mewtwo", "Mew", "Raikou", "Entei", "Suicune", "Ho-Oh", "Lugia", "Celebi", "Kyogre", "Groudon", "Rayquaza", "Latios",
-        "Latias", "Regirock", "Regice", "Registeel", "Jirachi", "Deoxys", "Uxie", "Mesprit", "Azelf", "Dialga", "Palkia", "Giratina", "Heatran", "Regigigas", "Cresselia", "Darkrai",
-        "Manaphy", "Shaymin", "Arceus", "Victini", "Cobalion", "Terrakion", "Virizion", "Tornadus", "Thundurus", "Landorus", "Reshiram", "Zekrom", "Kyurem", "Meloetta", "Genesect",
-        "Xerneas", "Yveltal", "Zygarde"];
         ROULETTE_WAIT_MIN = 90;
         ROULETTE_WAIT_MAX = 271;
         ROULETTE_EVENT_MIN = 66;
@@ -546,7 +560,7 @@
         if (serverStarting) {
             sys.stopEvent();
             sys.sendMessage(src, "Sorry, the server is still busy setting up at the moment. Please wait a few seconds before entering.");
-            sys.sendHtmlAuth(helpers.bot(bots.spy) + "[Server] <b style='color:" + color + "'>" + name + "</b> tried to enter during server setup.");
+            sys.sendHtmlAuth(helpers.bot(bots.spy) + "[Server] <b><font color='" + color + "'>" + name + "</font></b> tried to enter during server setup.");
             return;
         }
         /**
@@ -594,7 +608,7 @@
             if (ip == proxylist[i].split(':')[0]) {
                 sys.stopEvent();
                 sys.sendMessage(src, "You are banned!");
-                sys.sendHtmlAuth(helpers.bot(bots.spy) + "[Server] <b style='color:" + color + "'>" + name + "</b> tried to enter the server using a proxy.");
+                sys.sendHtmlAuth(helpers.bot(bots.spy) + "[Server] <b><font color='" + color + "'>" + name + "</font></b> tried to enter the server using a proxy.");
                 return;
             }
         }
@@ -613,7 +627,7 @@
                 if (banlist[i].ip == ip) {
                     sys.stopEvent();
                     sys.sendMessage(src, "You are banned!");
-                    sys.sendHtmlAuth(helpers.bot(bots.spy) + "[Server] Banned user <b style='color:" + color + "'>" + name + "</b> tried to enter the server.");
+                    sys.sendHtmlAuth(helpers.bot(bots.spy) + "[Server] Banned user <b><font color='" + color + "'>" + name + "</font></b> tried to enter the server.");
                     return;
                 }
             }
@@ -626,7 +640,7 @@
                 if (rangebanlist[i].range == range) {
                     sys.stopEvent();
                     sys.sendMessage(src, "You are banned!");
-                    sys.sendHtmlAuth(helpers.bot(bots.spy) + "[Server] Range banned user <b style='color:" + color + "'>" + name + "</b> tried to enter the server.");
+                    sys.sendHtmlAuth(helpers.bot(bots.spy) + "[Server] Range banned user <b><font color='" + color + "'>" + name + "</font></b> tried to enter the server.");
                     return;
                 }
             }
@@ -638,7 +652,7 @@
             if (!open) {
                 sys.stopEvent();
                 sys.sendMessage(src, "Sorry, the server is closed for maintenance at the moment.");
-                sys.sendHtmlAuth(helpers.bot(bots.spy) + "[Server] <b style='color:" + color + "'>" + name + "</b> tried to enter the server during closure.");
+                sys.sendHtmlAuth(helpers.bot(bots.spy) + "[Server] <b><font color='" + color + "'>" + name + "</font></b> tried to enter the server during closure.");
                 return;
             }
         }
@@ -652,7 +666,7 @@
             if (name.indexOf(nameblocklist[index]) != -1 && !helpers.isInArray(name, exceptions) && auth < 3) {
                 sys.stopEvent();
                 sys.sendMessage(src, helpers.bot(bots.welcome) + "Your name contains a banned word: " + nameblocklist[index] + ". Please change your name and try entering again.");
-                sys.sendHtmlAuth(helpers.bot(bots.spy) + "[Server] <b style='color:" + color + "'>" + name + "</b> tried to enter the server with a banned word in their username.");
+                sys.sendHtmlAuth(helpers.bot(bots.spy) + "[Server] <b><font color='" + color + "'>" + name + "</font></b> tried to enter the server with a banned word in their username.");
                 return;
             }
         }
@@ -664,8 +678,8 @@
         if (helpers.bannedchars(name)[0] && auth < 3) {
             sys.stopEvent();
             sys.sendMessage(src, helpers.bot(bots.welcome) + "Your name contains " + helpers.bannedchars(name)[1] + ". Please change your name and try entering again.");
-            sys.sendHtmlAuth(helpers.bot(bots.spy) + "[Server] <b style='color:" + color + "'>" + name +
-            "</b> tried to enter the server with " + helpers.bannedchars(name)[1] + " in their username.");
+            sys.sendHtmlAuth(helpers.bot(bots.spy) + "[Server] <b><font color='" + color + "'>" + name +
+            "</font></b> tried to enter the server with " + helpers.bannedchars(name)[1] + " in their username.");
             return;
         }
     }
@@ -698,7 +712,7 @@
         **/
         if (sys.isGigaBanned(id)) {
             sys.sendMessage(src, "You are banned!");
-            sys.sendHtmlAuth(helpers.bot(bots.spy) + "[Server] Giga banned user <b style='color:" + color + "'>" + name + "</b> tried to enter the server.");
+            sys.sendHtmlAuth(helpers.bot(bots.spy) + "[Server] Giga banned user <b><font color='" + color + "'>" + name + "</font></b> tried to enter the server.");
             gigabancheck = true;
             sys.kick(src);
             return;
@@ -761,9 +775,14 @@
         **/
         sys.sendMessage(src, "Welcome Message: The server has been up for " + helpers.formatUptime(uptime));
         sys.sendMessage(src, "Welcome Message: The current number of players online is " + (eval(sys.numPlayers())) + " out of a record maximum of " + maxplayers + ".");
-        sys.sendHtmlMessage(src, "<font color='blue'><timestamp/></font><b><font color='blue'>Welcome Message:</font></b> Type /commands in the chat window, "
-        + "<a href='po:send//commands'>or click here</a>, to view a list of commands. Type /rules, <a href='po:send//rules'>or click here</a>, "
-        + "for our server rules. You are supposed to know them, so you should read them!");
+        if (helpers.isAndroid(src)) {
+            sys.sendHtmlMessage(src, "<font color='blue'><timestamp/></font><b><font color='blue'>Welcome Message:</font></b> Type /commands in the chat window "
+            + "to view a list of commands. Type /rules for our server rules. You are supposed to know them, so you should read them!");
+        } else {
+            sys.sendHtmlMessage(src, "<font color='blue'><timestamp/></font><b><font color='blue'>Welcome Message:</font></b> Type /commands in the chat window, "
+            + "<a href='po:send//commands'>or click here</a>, to view a list of commands. Type /rules, <a href='po:send//rules'>or click here</a>, "
+            + "for our server rules. You are supposed to know them, so you should read them!");
+        }
         /**
             ---------------
             Welcome Message
@@ -892,7 +911,7 @@
         }
         if (helpers.isLoaded("party.js")) {
             if (channel == partychannel && partyMode == "nightclub") {
-                sys.sendHtmlAuth(helpers.bot(bots.spy) + "[Server] <b style='color:" + helpers.color(src) + "'>" + sys.name(src) + "</b> has joined the channel <a href=\"po:join/" + sys.channel(channel) +
+                sys.sendHtmlAuth(helpers.bot(bots.spy) + "[Server] <b><font color='" + helpers.color(src) + "'>" + sys.name(src) + "</b> has joined the channel <a href=\"po:join/" + sys.channel(channel) +
                 "\">#" + sys.channel(channel) + "</a>.");
                 return;
             }
@@ -910,7 +929,7 @@
                 sys.sendHtmlAll("<timestamp/><b>~Please Welcome " + helpers.rainbow(name) + " to " + channelname + "~</b>", channel);
             }
         }
-        sys.sendHtmlAuth(helpers.bot(bots.spy) + "[Server] <b style='color:" + helpers.color(src) + "'>" + sys.name(src) + "</b> has joined the channel <a href=\"po:join/" + sys.channel(channel) +
+        sys.sendHtmlAuth(helpers.bot(bots.spy) + "[Server] <b><font color='" + helpers.color(src) + "'>" + sys.name(src) + "</font></b> has joined the channel <a href=\"po:join/" + sys.channel(channel) +
         "\">#" + sys.channel(channel) + "</a>.");
     }
 
@@ -930,7 +949,7 @@
         var cauth = helpers.cauthname(players[src].name.toLowerCase(), channel), channelname = sys.channel(channel), cookie = sys.cookie(src) ? sys.cookie(src) : "none", id = sys.uniqueId(src) ? sys.uniqueId(src).id : "none";
         if (helpers.isLoaded("party.js")) {
             if (channel == partychannel && partyMode == "nightclub") {
-                sys.sendHtmlAuth(helpers.bot(bots.spy) + "[Server] <b style='color:" + helpers.color(src) + "'>" + sys.name(src) + "</b> has left the channel <a href=\"po:join/" + sys.channel(channel) +
+                sys.sendHtmlAuth(helpers.bot(bots.spy) + "[Server] <b><font color='" + helpers.color(src) + "'>" + sys.name(src) + "</font></b> has left the channel <a href=\"po:join/" + sys.channel(channel) +
                 "\">#" + sys.channel(channel) + "</a>.");
                 return;
             }
@@ -949,7 +968,7 @@
                     sys.sendHtmlAll("<timestamp/><b>~" + helpers.rainbow(name) + " has left " + channelname + "~</b>", channel);
                 }
             }
-            sys.sendHtmlAuth(helpers.bot(bots.spy) + "[Server] <b style='color:" + helpers.color(src) + "'>" + sys.name(src) + "</b> has left the channel <a href=\"po:join/" + channelname + "\">#" + channelname + "</a>.");
+            sys.sendHtmlAuth(helpers.bot(bots.spy) + "[Server] <b><font color='" + helpers.color(src) + "'>" + sys.name(src) + "</font></b> has left the channel <a href=\"po:join/" + channelname + "\">#" + channelname + "</a>.");
         }
     }
 
@@ -1013,7 +1032,7 @@
             floodplayers.splice(floodplayers.indexOf(src), 1);
         }
         if (players[src]) {
-            delete players[src];
+            players.splice(src, 1);
         }
     }
 
@@ -1047,8 +1066,8 @@
         **/
         members[name.toLowerCase()] = name;
         sys.write("data/memberlist.txt", JSON.stringify(members));
-        sys.sendHtmlAuth(helpers.bot(bots.spy) + "[Player] <b style='color:" + players[src].color + "'>" + players[src].name + "</b> changed their team, and their name to <b style='color:" + color +
-        "'>" + name + "</b>.");
+        sys.sendHtmlAuth(helpers.bot(bots.spy) + "[Player] <b><font color='" + players[src].color + "'>" + players[src].name + "</font></b> changed their team, and their name to <b><font color='" + color +
+        "'>" + name + "</font></b>.");
         players[src].name = name;
         players[src].color = color;
         /**
@@ -1114,7 +1133,7 @@
         monospeciescheck(src, team);
         monogencheck(src, team);
         monolettercheck(src, team);
-        sys.sendHtmlAuth(helpers.bot(bots.spy) + "[Player] <b style='color:" + helpers.color(src) + "'>" + sys.name(src) + "</b> has changed team " + team + " from the " + oldtier +
+        sys.sendHtmlAuth(helpers.bot(bots.spy) + "[Player] <b><font color='" + helpers.color(src) + "'>" + sys.name(src) + "</font></b> has changed team " + team + " from the " + oldtier +
         " tier to the " + newtier + " tier.");
     }
 
@@ -1148,8 +1167,8 @@
 
     afterChannelCreated: function (channel, channelname, creator) {
         var lower = sys.channel(channel).toLowerCase();
-        sys.sendHtmlAuth(helpers.bot(bots.spy) + "[Server] <b style='color:" + helpers.color(creator) + "'>" + sys.name(creator) +
-        "</b> has created the channel <a href='po:join/" + sys.channel(channel) + "'>#" + sys.channel(channel) + "</a>.");
+        sys.sendHtmlAuth(helpers.bot(bots.spy) + "[Server] <b><font color='" + helpers.color(creator) + "'>" + sys.name(creator) +
+        "</font></b> has created the channel <a href='po:join/" + sys.channel(channel) + "'>#" + sys.channel(channel) + "</a>.");
     }
 
     ,
@@ -1325,7 +1344,7 @@
         if (regchannels[channelname2]) {
             if (!regchannels[channelname2].priv) {
                 sys.sendHtmlAuth(helpers.bot(bots.spy) + "[<a href=\"po:join/" + sys.channel(channel) + "\">#" + sys.channel(channel) +
-                "</a>] <b style='color:" + color + "'>" + helpers.escapehtml(name) + ":</b> " + helpers.escapehtml(message));
+                "</a>] <b><font color='" + color + "'>" + helpers.escapehtml(name) + ":</font></b> " + helpers.escapehtml(message));
             }
         }
     }
@@ -1552,7 +1571,7 @@
     ,
 
     afterPlayerAway: function (src, away) {
-        sys.sendHtmlAuth(helpers.bot(bots.spy) + "[Player] <b style='color:" + helpers.color(src) + "'>" + sys.name(src) + "</b> is " + (away ? "idling" : "back") + ".");
+        sys.sendHtmlAuth(helpers.bot(bots.spy) + "[Player] <b><font color='" + helpers.color(src) + "'>" + sys.name(src) + "</font></b> is " + (away ? "idling" : "back") + ".");
     }
 
     ,
@@ -1562,10 +1581,10 @@
         if (helpers.isGuest(name)) {
             sys.stopEvent();
             sys.sendMessage(src, helpers.bot(bots.pass) + "You may not register guest names!");
-            sys.sendHtmlAuth(helpers.bot(bots.spy) + "[Player] <b style='color:" + color + "'>" + name + "</b> tried to register a guest name.");
+            sys.sendHtmlAuth(helpers.bot(bots.spy) + "[Player] <b><font color='" + color + "'>" + name + "</font></b> tried to register a guest name.");
             return;
         }
-        sys.sendHtmlAuth(helpers.bot(bots.spy) + "[Player] <b style='color:" + color + "'>" + name + "</b> registered.");
+        sys.sendHtmlAuth(helpers.bot(bots.spy) + "[Player] <b><font color='" + color + "'>" + name + "</font></b> registered.");
     }
     
     ,
@@ -1603,12 +1622,12 @@
 
     afterChallengeIssued: function (src, trgt, clauses, rated, mode) {
         if (clauses === 0) {
-            sys.sendHtmlAuth(helpers.bot(bots.spy) + "[Battle] <b style='color:" + helpers.color(src) + "'>" + sys.name(src) + "</b> has challenged <b style='color:" + helpers.color(trgt) +
-            "'>" + sys.name(trgt) + "</b> without any clauses.");
+            sys.sendHtmlAuth(helpers.bot(bots.spy) + "[Battle] <b><font color='" + helpers.color(src) + "'>" + sys.name(src) + "</font></b> has challenged <b><font color='" + helpers.color(trgt) +
+            "'>" + sys.name(trgt) + "</font></b> without any clauses.");
         } else {
             var list = helpers.listOfClauses(clauses);
-            sys.sendHtmlAuth(helpers.bot(bots.spy) + "[Battle] <b style='color:" + helpers.color(src) + "'>" + sys.name(src) + "</b> has challenged <b style='color:" + helpers.color(trgt) +
-            "'>" + sys.name(trgt) + "</b> with the clauses " + (typeof(list) == "string" ? list : list.join(", ")) + ".");
+            sys.sendHtmlAuth(helpers.bot(bots.spy) + "[Battle] <b><font color='" + helpers.color(src) + "'>" + sys.name(src) + "</font></b> has challenged <b><font color='" + helpers.color(trgt) +
+            "'>" + sys.name(trgt) + "</font></b> with the clauses " + (typeof(list) == "string" ? list : list.join(", ")) + ".");
         }
     }
 
@@ -1630,7 +1649,7 @@
     ,
     
     afterFindBattle: function (src, team) {
-        sys.sendHtmlAuth(helpers.bot(bots.spy) + "[Battle] <b style='color:" + helpers.color(src) + "'>" + sys.name(src) + "</b> has used the Find Battle button.");
+        sys.sendHtmlAuth(helpers.bot(bots.spy) + "[Battle] <b><font color='" + helpers.color(src) + "'>" + sys.name(src) + "</font></b> has used the Find Battle button.");
     }
 
     ,
@@ -1687,8 +1706,8 @@
                 }
             }
         } else {
-            sys.sendHtmlAuth(helpers.bot(bots.spy) + "[Battle] A battle has started between <b style='color:" + helpers.color(src) + "'>" + sys.name(src) +
-            "</b> and <b style='color:" + helpers.color(trgt) + "'>" + sys.name(trgt) + "</b>.");
+            sys.sendHtmlAuth(helpers.bot(bots.spy) + "[Battle] A battle has started between <b><font color='" + helpers.color(src) + "'>" + sys.name(src) +
+            "</font></b> and <b><font color='" + helpers.color(trgt) + "'>" + sys.name(trgt) + "</font></b>.");
         }
     }
 
@@ -1705,8 +1724,8 @@
     ,
 
     afterSpectateBattle: function (src, battler1, battler2) {
-        sys.sendHtmlAuth(helpers.bot(bots.spy) + "[Battle] <b style='color:" + helpers.color(src) + "'>" + sys.name(src) + "</b> is spectating the battle between " +
-        "<b style='color:" + helpers.color(battler1) + "'>" + sys.name(battler1) + "</b> and <b style='color:" + helpers.color(battler2) + "'>" + sys.name(battler2) + "</b>.");
+        sys.sendHtmlAuth(helpers.bot(bots.spy) + "[Battle] <b><font color='" + helpers.color(src) + "'>" + sys.name(src) + "</font></b> is spectating the battle between " +
+        "<b><font color='" + helpers.color(battler1) + "'>" + sys.name(battler1) + "</font></b> and <b><font color='" + helpers.color(battler2) + "'>" + sys.name(battler2) + "</font></b>.");
     }
 
     ,    
@@ -1720,7 +1739,7 @@
         var winnername, losername;
         !players[winner] ? winnername = "[no data]" : winnername = players[winner].name;
         !players[loser] ? losername = "[no data]" : losername = players[loser].name;
-        delete battles[battle];
+        battles.splice(battle, 1);
         /**
             ------------------------
             Tournament Battle Ending
@@ -1751,14 +1770,14 @@
         **/
         } else {
             if (result == "tie") {
-                sys.sendHtmlAuth(helpers.bot(bots.spy) + "[Battle] <b style='color:" + helpers.color(winner) + "'>" + winnername +
-                "</b> has tied against <b style='color:" + helpers.color(loser) + "'>" + losername + "</b>.");
+                sys.sendHtmlAuth(helpers.bot(bots.spy) + "[Battle] <b><font color='" + helpers.color(winner) + "'>" + winnername +
+                "</font></b> has tied against <b><font color='" + helpers.color(loser) + "'>" + losername + "</font></b>.");
             } else if (result == "forfeit") {
-                sys.sendHtmlAuth(helpers.bot(bots.spy) + "[Battle] <b style='color:" + helpers.color(loser) + "'>" + losername +
-                "</b> has forfeited against <b style='color:" + helpers.color(winner) + "'>" + winnername + "</b>.");
+                sys.sendHtmlAuth(helpers.bot(bots.spy) + "[Battle] <b><font color='" + helpers.color(loser) + "'>" + losername +
+                "</font></b> has forfeited against <b><font color='" + helpers.color(winner) + "'>" + winnername + "</font></b>.");
             } else {
-                sys.sendHtmlAuth(helpers.bot(bots.spy) + "[Battle] <b style='color:" + helpers.color(winner) + "'>" + winnername +
-                "</b> has beaten <b style='color:" + helpers.color(loser) + "'>" + losername  + "</b>.");
+                sys.sendHtmlAuth(helpers.bot(bots.spy) + "[Battle] <b><font color='" + helpers.color(winner) + "'>" + winnername +
+                "</font></b> has beaten <b><font color='" + helpers.color(loser) + "'>" + losername + "</font></b>.");
             }
         }
     }

@@ -29,16 +29,16 @@ helpers = {
         sys.write(DATA_FOLDER + "botsymbol.txt", "±");
         sys.write(DATA_FOLDER + "servertopic.txt", "Welcome to " + sys.getServerName() + "!");
         sys.write(DATA_FOLDER + "botsymbolcolor.txt", "#318739");
-        sys.write(DATA_FOLDER + "bordercolor.txt", "darkblue");
-        sys.write(DATA_FOLDER + "servertopiccolor.txt", "red");
-        sys.write(DATA_FOLDER + "channeltopiccolor.txt", "orange");
+        sys.write(DATA_FOLDER + "bordercolor.txt", "#00008B");
+        sys.write(DATA_FOLDER + "servertopiccolor.txt", "#FF0000");
+        sys.write(DATA_FOLDER + "channeltopiccolor.txt", "#FFA500");
         sys.write(DATA_FOLDER + "welcomemsg.txt", "Please welcome ~Player~ to ~Server~!");
         sys.write(DATA_FOLDER + "channelwelcomemsg.txt", "Please welcome ~Player~ to ~Channel~!");
         sys.write(DATA_FOLDER + "nopermissionmsg.txt", "Can't let you do that, Star ~Player~!");
         
         // Arrays
         sys.write(DATA_FOLDER + "allowed.txt", '["127.0.0.1"]');
-        sys.write(DATA_FOLDER + "cmdcolors.txt", '["royalblue","green","red","orange","gold","blue"]');
+        sys.write(DATA_FOLDER + "cmdcolors.txt", '["#4169E1","#008000","#FF0000","#FFA500","#FFD700","#0000FF"]');
         sys.write(DATA_FOLDER + "exceptions.txt", '["cofagrigus"]');
         sys.write(DATA_FOLDER + "permchannels.txt", '["Watch","Auth Channel","Owner Channel"]');
         sys.write(DATA_FOLDER + "allowedrange.txt", '["192.168"]');
@@ -137,9 +137,34 @@ helpers = {
     
     ,
     
+    isAndroid: function (src) {
+        return sys.os(src) == "android";
+    }
+    
+    ,
+    
+    isWeb: function (src) {
+        return sys.os(src) == "webclient";
+    }
+    
+    ,
+    
+    isAndroidOrWeb: function (src) {
+        return sys.os(src) == "android" || sys.os(src) == "webclient";
+    }
+    
+    ,
+    
     isLetter: function (c) {
         var lower = c.toLowerCase();
         return lower >= 'a' && lower <= 'z';
+    }
+    
+    ,
+    
+    isVowel: function (letter) {
+        letter = letter.toLowerCase();
+        return letter == 'a' || letter == 'e' || letter == 'i' || letter == 'o' || letter == 'u';
     }
     
     ,
@@ -207,33 +232,33 @@ helpers = {
             cmd = (typeof(command) == "string" ? command : command.join(DELIMITER).replace(DELIMITER, ' '));
             if ((message.indexOf("Error 403, ") != -1 || bot == bots.starfox) && message != "Error 403, you are not allowed to post banned links or characters.") {
                 sys.sendHtmlAuth(this.bot(bots.spy ) + "[<a href=\"po:join/" + channelname + "\">#" + channelname +
-                "</a>] <b style='color:" + this.color(src) + "'>" + this.escapehtml(name) + "</b> got Star Fox'd because of trying to run /" + this.escapehtml(cmd) + " (Error 403 Forbidden).");
+                "</a>] <b><font color='" + this.color(src) + "'>" + this.escapehtml(name) + "</font></b> got Star Fox'd because of trying to run /" + this.escapehtml(cmd) + " (Error 403 Forbidden).");
             } else if (message.indexOf("Error 404, ") != -1) {
                 sys.sendHtmlAuth(this.bot(bots.spy) + "[<a href=\"po:join/" + channelname + "\">#" + channelname +
-                "</a>] <b style='color:" + this.color(src) + "'>" + this.escapehtml(name) + "</b> got Star Fox'd because of trying to run /" + this.escapehtml(cmd) + " (Error 404 Not Found).");
+                "</a>] <b><font color='" + this.color(src) + "'>" + this.escapehtml(name) + "</font></b> got Star Fox'd because of trying to run /" + this.escapehtml(cmd) + " (Error 404 Not Found).");
             } else if (message.indexOf("Error 400, ") != -1) {
                 sys.sendHtmlAuth(this.bot(bots.spy) + "[<a href=\"po:join/" + channelname + "\">#" + channelname +
-                "</a>] <b style='color:" + this.color(src) + "'>" + this.escapehtml(name) + "</b> got Star Fox'd because of trying to run /" + this.escapehtml(cmd) + " (Error 400 Bad Request).");
+                "</a>] <b><font color='" + this.color(src) + "'>" + this.escapehtml(name) + "</font></b> got Star Fox'd because of trying to run /" + this.escapehtml(cmd) + " (Error 400 Bad Request).");
             } else if (message.indexOf("I KILL YOOOOUUUU!!!") != -1 || message.indexOf("Sorry, this channel is currently silenced.") != -1) {
                 sys.sendHtmlAuth(this.bot(bots.spy) + "[<a href=\"po:join/" + channelname + "\">#" + channelname +
-                "</a>] <b style='color:" + this.color(src) + "'>" + this.escapehtml(name) + "</b> got Star Fox'd because of trying to post during silence.");
+                "</a>] <b><font color='" + this.color(src) + "'>" + this.escapehtml(name) + "</font></b> got Star Fox'd because of trying to post during silence.");
             } else if (message == "You tried.") {
                 sys.sendHtmlAuth(this.bot(bots.spy) + "[<a href=\"po:join/" + channelname + "\">#" + channelname +
-                "</a>] <b style='color:" + this.color(src) + "'>" + this.escapehtml(name) + "</b> got Star Fox'd because of trying to kill Chuck Norris. How silly.");
+                "</a>] <b><font color='" + this.color(src) + "'>" + this.escapehtml(name) + "</font></b> got Star Fox'd because of trying to kill Chuck Norris. How silly.");
             } else if (message == "Error 403, you are not allowed to post banned links or characters.") {
                 sys.sendHtmlAuth(this.bot(bots.spy) + "[<a href=\"po:join/" + channelname + "\">#" + channelname +
-                "</a>] <b style='color:" + this.color(src) + "'>" + name + "</b> tried to  post (a) banned link(s) or character(s). (Error 403 Forbidden)");
+                "</a>] <b><font color='" + this.color(src) + "'>" + name + "</font></b> tried to  post (a) banned link(s) or character(s). (Error 403 Forbidden)");
             } else {
                 sys.sendHtmlAuth(this.bot(bots.spy) + "[<a href=\"po:join/" + channelname + "\">#" + channelname +
-                "</a>] <b style='color:" + this.color(src) + "'>" + this.escapehtml(name) + "</b> got Star Fox'd because of trying to run /" + this.escapehtml(cmd) + ".");
+                "</a>] <b><font color='" + this.color(src) + "'>" + this.escapehtml(name) + "</font></b> got Star Fox'd because of trying to run /" + this.escapehtml(cmd) + ".");
             }
         } else {
             if (message.indexOf("I KILL YOOOOUUUU!!!") != -1 || message.indexOf("Sorry, this channel is currently silenced.") != -1) {
                 sys.sendHtmlAuth(this.bot(bots.spy) + "[<a href=\"po:join/" + channelname + "\">#" + channelname +
-                "</a>] <b style='color:" + this.color(src) + "'>" + this.escapehtml(name) + "</b> got Star Fox'd because of trying to talk during silence.");
+                "</a>] <b><font color='" + this.color(src) + "'>" + this.escapehtml(name) + "</font></b> got Star Fox'd because of trying to talk during silence.");
             } else {
-                sys.sendHtmlAuth(this.bot(bots.spy) + "[<a href=\"po:join/" + channelname + "\">#" + channelname + "</a>] <b style='color:" + this.color(src) + "'>" + this.escapehtml(name) +
-                "</b> got Star Fox'd.");
+                sys.sendHtmlAuth(this.bot(bots.spy) + "[<a href=\"po:join/" + channelname + "\">#" + channelname + "</a>] <b><font color='" + this.color(src) + "'>" + this.escapehtml(name) +
+                "</font></b> got Star Fox'd.");
             }
         }
     }
@@ -303,6 +328,51 @@ helpers = {
         Return Helpers
         --------------
     **/
+    timePassed: function (color, lastMessageTime) {
+        var timePassed = new Date() - lastMessageTime, unit;
+        timePassed = Math.round(timePassed / 1000);
+        unit = (timePassed == 1 ? "second" : "seconds");
+        if (timePassed > 60) {
+            timePassed = Math.round(timePassed / 60);
+            unit = (timePassed == 1 ? "minute" : "minutes");
+        }
+        if (timePassed > 60) {
+            timePassed = Math.round((timePassed / 60) * 10) / 10;
+            unit = (timePassed == 1 ? "hour" : "hours");
+        }
+        if (isNaN(timePassed)) {
+            timePassed = "";
+            unit = "";
+        }
+        if (unit == "minutes" && timePassed > 5 && timePassed <= 15) {
+            color = "#FFA500";
+        } else if ((unit == "minutes" && timePassed > 15) || unit == "hour") {
+            color = "#FF4500";
+        } else if (unit == "hours") {
+            color = "#FF0000";
+        } else {
+            color = "#008000";
+        }
+        return "<b><font color='" + color + "'>(" + timePassed + " " + unit + " ago)</font></b>";
+    }
+    
+    ,
+    
+    imageIndex: function (src) {
+        var imageIndex = sys.auth(src);
+        if (imageIndex > 3) {
+            imageIndex = 0;
+        }
+        if (sys.battling(id)) {
+            imageIndex += 8;
+        } else if (sys.away(id)) {
+            imageIndex += 4;
+        }
+        return imageIndex;
+    }
+    
+    ,
+    
     channelLink: function (channelName) {
         return "<a href='po:join/" + channelName + "'>#" + channelName + "</a>";
     }
@@ -324,18 +394,20 @@ helpers = {
         for (var i in KEYWORDS) {
             pattern1 = new RegExp(KEYWORDS[i] + ' ', "g");
             pattern2 = new RegExp(' ' + KEYWORDS[i], "g");
-            code = code.replace(pattern1, "<b><font color='darkblue'>" + KEYWORDS[i] + "</font></b> ");
-            code = code.replace(pattern2, " <b><font color='darkblue'>" + KEYWORDS[i] + "</font></b>");
+            code = code.replace(pattern1, "<b><font color='#00008B'>" + KEYWORDS[i] + "</font></b> ");
+            code = code.replace(pattern2, " <b><font color='#00008B'>" + KEYWORDS[i] + "</font></b>");
         }
         for (var i in NUMBERS) {
             pattern = new RegExp(NUMBERS[i], "g");
-            code = code.replace(pattern, "<font color='orangered'>" + NUMBERS[i] + "</font>");
+            if (pattern.test(this.strip(code))) {
+                code = code.replace(pattern, "<font color='#FF4500'>" + NUMBERS[i] + "</font>");
+            }
         }
         while (code.indexOf('"') != -1) {
-            code = code.replace('"', (index % 2 === 0 ? "<font color='gray'>&quot;" : "&quot;</font>"));
+            code = code.replace('"', (index % 2 === 0 ? "<font color='#808080'>&quot;" : "&quot;</font>"));
             index++;
         }
-        code = code.replace(/\/\*/g, "<font color='green'>/*").replace(/\*\//g, "*/</font>");
+        code = code.replace(/\/\*/g, "<font color='#008000'>/*").replace(/\*\//g, "*/</font>");
         return code;
     }
     
@@ -365,13 +437,6 @@ helpers = {
             seconds = "0" + seconds;
         }
         return "(" + hours + ":" + minutes + ":" + seconds + ")";
-    }
-    
-    ,
-    
-    isVowel: function (letter) {
-        letter = letter.toLowerCase();
-        return letter == 'a' || letter == 'e' || letter == 'i' || letter == 'o' || letter == 'u';
     }
     
     ,
@@ -660,13 +725,33 @@ helpers = {
             return APPLE_BASE64 + " Mac";
         } else if (srcos == "linux") {
             return LINUX_BASE64 + " Linux";
-        } else if (srcos == "freebsd") {
-            return FREEBSD_BASE64 + " FreeBSD";
         } else if (srcos == "android") {
             return ANDROID_BASE64 + " Android";
         } else if (srcos == "webclient") {
             return IE_BASE64 + " Web Client";
         }
+    }
+    
+    ,
+    
+    osImage: function (srcos) {
+        if (srcos == "windows") {
+            return WINDOWS_BASE64;
+        } else if (srcos == "mac") {
+            return APPLE_BASE64;
+        } else if (srcos == "linux") {
+            return LINUX_BASE64;
+        } else if (srcos == "android") {
+            return ANDROID_BASE64;
+        } else if (srcos == "webclient") {
+            return IE_BASE64;
+        }
+    }
+    
+    ,
+    
+    osName: function (srcos) {
+        return (srcos == "webclient" ? "Web Client" : this.cap(srcos));
     }
     
     ,
@@ -705,19 +790,19 @@ helpers = {
     nyancolor: function (number) {
         switch (number) {
             case 1:
-                return "orangered";
+                return "#FF4500";
             case 2:
-                return "gold";
+                return "#FFD700";
             case 3:
-                return "green";
+                return "#008000";
             case 4:
-                return "blue";
+                return "#0000FF";
             case 5:
-                return "darkblue";
+                return "#00008B";
             case 6:
-                return "purple";
+                return "#800080";
             default:
-                return "red";
+                return "#FF0000";
         }
     }
     
@@ -1094,7 +1179,7 @@ helpers = {
     
     bot: function (string) {
         if (string.charAt(0) == '•') {
-            return "<b style='color:" + botsymbolcolor + "'>" + string.substr(0, 3) + "</b><b style='color:" + botcolor + "'>" + string.slice(3) + "</b>";
+            return "<b><font color='" + botsymbolcolor + "'>" + string.substr(0, 3) + "</font></b><b><font color='" + botcolor + "'>" + string.slice(3) + "</font></b>";
         }
         return "<font color='" + botcolor + "'><timestamp/></font><font color='" + botsymbolcolor + "'><b>" + this.escapehtml(botsymbol) + "</b></font><font color='" + botcolor + "'><b>" + string + ": </b></font>";
     }
@@ -1255,7 +1340,7 @@ helpers = {
         var moveindex = moves.indexOf(id + ":" + form);
         moveindex = eval(moveindex) + 3 * 1 + num * 1;
         moves = moves.substr(moveindex);
-        var movesarraya = moves.split("\n");
+        var movesarraya = moves.split('\n');
         movesarraya[0] = movesarraya[0].split(" ");
         for (var i in movesarraya[0]) {
             movesarraya[0][i] = sys.move(movesarraya[0][i]);
@@ -1270,7 +1355,7 @@ helpers = {
         var moveindex = moves.indexOf(id + ":" + form);
         moveindex = eval(moveindex) + 3 * 1 + num * 1;
         moves = moves.substr(moveindex);
-        var movesarraya = moves.split("\n");
+        var movesarraya = moves.split('\n');
         movesarraya[0] = movesarraya[0].split(" ");
         for (var i in movesarraya[0]) {
             movesarraya[0][i] = sys.move(movesarraya[0][i]);
@@ -1359,13 +1444,13 @@ helpers = {
     ,
     
     userb: function (string) {
-        return "<b style='color:" + cmdcolors[0] + "'>" + this.escapehtml(string) + "</b>";
+        return "<b><font color='" + cmdcolors[0] + "'>" + this.escapehtml(string) + "</font></b>";
     }
     
     ,
     
     userg: function (string) {
-        return "<b style='color:gray'>" + this.escapehtml(string) + "</b>";
+        return "<b><font color='gray'>" + this.escapehtml(string) + "</font></b>";
     }
     
     ,
@@ -1487,7 +1572,7 @@ helpers = {
     ,
         
     leet: function (text) {
-        return text.toLowerCase().replace(/a/g, "4").replace(/e/g, "3").replace(/g/g, "9").replace(/l/g, "1").replace(/o/g, "0").replace(/s/g, "5").replace(/t/g, "7").replace(/z/g, "2");
+        return text.toLowerCase().replace(/a/gi, "4").replace(/e/gi, "3").replace(/g/gi, "9").replace(/l/gi, "1").replace(/o/gi, "0").replace(/s/gi, "5").replace(/t/gi, "7").replace(/z/gi, "2");
     }
         
     ,
@@ -1555,19 +1640,19 @@ helpers = {
     
     colorStat: function (stat) {
         if (stat <= 30) {
-            return "<b style='color:darkred'>" + stat + "</b>";
+            return "<b><font color='#8B0000'>" + stat + "</font></b>";
         } else if (stat < 60) {
-            return "<b style='color:red'>" + stat + "</b>";
+            return "<b><font color='#FF0000'>" + stat + "</font></b>";
         } else if (stat < 90) {
-            return "<b style='color:orangered'>" + stat + "</b>";
+            return "<b><font color='#FF4500'>" + stat + "</font></b>";
         } else if (stat < 120) {
-            return "<b style='color:lime'>" + stat + "</b>";
+            return "<b><font color='#00FF00'>" + stat + "</font></b>";
         } else if (stat < 150) {
-            return "<b style='color:green'>" + stat + "</b>";
+            return "<b><font color='#008000'>" + stat + "</font></b>";
         } else if (stat < 180) {
-            return "<b style='color:blue'>" + stat + "</b>";
+            return "<b><font color='#0000FF'>" + stat + "</font></b>";
         } else {
-            return "<b style='color:darkblue'>" + stat + "</b>";
+            return "<b><font color='#00008B'>" + stat + "</font></b>";
         }
     }
     
@@ -1583,6 +1668,20 @@ helpers = {
         return string.split(" ").join("");
     }
 
+    ,
+    
+    spaces: function (num) {
+        if (isNaN(num)) {
+            return "";
+        }
+        var spaces = "";
+        while (num > 0) {
+            spaces += "&nbsp;"
+            num--;
+        }
+        return spaces;
+    }
+    
     ,
     
     strip: function (str) {
@@ -1687,7 +1786,7 @@ helpers = {
     ,
     
     typeImage: function (src, type) {
-        if (sys.os(src) == "webclient" || sys.os(src) == "android") {
+        if (this.isAndroidOrWeb(src)) {
             return sys.type(type);
         }
         return "<img src='Themes/Classic/types/type" + type + ".png'>";
@@ -1696,7 +1795,7 @@ helpers = {
     ,
     
     genderImage: function (src, gender) {
-        if (sys.os(src) == "webclient" || sys.os(src) == "android") {
+        if (this.isAndroidOrWeb(src)) {
             return this.cap(sys.gender(gender));
         }
         return "<img src='Themes/Classic/genders/gender" + gender + ".png'>";
@@ -1705,8 +1804,8 @@ helpers = {
     ,
     
     color: function (src) {
-        if (sys.getColor(src) == '#000000') {
-            var colorlist = ['#5811b1', '#399bcd', '#0474bb', '#f8760d', '#a00c9e', '#0d762b', '#5f4c00', '#9a4f6d', '#d0990f', '#1b1390', '#028678', '#0324b1'];
+        if (sys.getColor(src) == "#000000") {
+            var colorlist = ["#5811b1", "#399bcd", "#0474bb", "#f8760d", "#a00c9e", "#0d762b", "#5f4c00", "#9a4f6d", "#d0990f", "#1b1390", "#028678", "#0324b1"];
             return colorlist[src % colorlist.length]; 
         }
         return sys.getColor(src);
@@ -1787,7 +1886,7 @@ helpers = {
     ,
     
     authimage: function (src, authlevel) {
-        if (sys.os(src) == "webclient" || sys.os(src) == "android") {
+        if (this.isAndroidOrWeb(src)) {
             return ({
                 11: AUTHIMAGE.BATTLING_OWNER,
                 10: AUTHIMAGE.BATTLING_ADMIN,
@@ -1866,39 +1965,67 @@ helpers = {
     ,
     
     height: function (pokeId) {
-        var heightList = {}, data = sys.getFileContent("db/pokes/height.txt").split('\n'), index, id, height, key, base;
-        for (var i = 0; i < data.length; i++) {
-            index = data[i].indexOf(" ");
-            id = data[i].substr(0, index);
-            height = data[i].substr(index + 1);
-            heightList[id] = height;
+        if (Object.keys(heightList).length === 0) {
+            var data = sys.read("db/pokes/height.txt").split('\n');
+            for (var i = 0; i < data.length; i++) {
+                var index = data[i].indexOf(' ');
+                var id = data[i].substr(0, index);
+                var height = data[i].substr(index + 1);
+                heightList[id] = height;
+            }
         }
-        key = this.getDbIndex(pokeId);
+        var key = this.getDbIndex(pokeId);
         if (heightList[key] !== undefined) {
             return heightList[key];
         }
-        index = key.indexOf(':') + 1;
-        base = key.substr(0, index);
+        var index = key.indexOf(':') + 1;
+        var base = key.substr(0, index);
         return heightList[base + '0'];
     }
     
     ,
     
     weight: function (pokeId) {
-        var weightList = {}, data = sys.getFileContent("db/pokes/weight.txt").split('\n'), index, id, weight, key, base;
-        for (var i = 0; i < data.length; i++) {
-            index = data[i].indexOf(" ");
-            id = data[i].substr(0, index);
-            weight = data[i].substr(index + 1);
-            weightList[id] = weight;
+        if (Object.keys(weightList).length === 0) {
+            var data = sys.read("db/pokes/weight.txt").split('\n');
+            for (var i = 0; i < data.length; i++) {
+                var index = data[i].indexOf(' ');
+                var id = data[i].substr(0, index);
+                var weight = data[i].substr(index + 1);
+                weightList[id] = weight;
+            }
         }
-        key = this.getDbIndex(pokeId);
+        var key = this.getDbIndex(pokeId);
         if (weightList[key] !== undefined) {
             return weightList[key];
         }
-        index = key.indexOf(':') + 1;
-        base = key.substr(0, index);
+        var index = key.indexOf(':') + 1;
+        var base = key.substr(0, index);
         return weightList[base + '0'];
+    }
+    
+    ,
+    
+    movepool: function (pokeId) {
+        if (Object.keys(movepoolList).length === 0) {
+            var data = sys.read("db/pokes/6G/all_moves.txt").split('\n');
+            for (var i = 0; i < data.length; i++) {
+                var index = data[i].indexOf(' ');
+                var id = data[i].substr(0, index);
+                var movepool = data[i].substr(index + 1).split(' ');
+                for (var j in movepool) {
+                    movepool[j] = sys.move(movepool[j]);
+                }
+                movepoolList[id] = movepool;
+            }
+        }
+        var key = this.getDbIndex(pokeId);
+        if (movepoolList[key] !== undefined) {
+            return movepoolList[key];
+        }
+        var index = key.indexOf(':') + 1;
+        var base = key.substr(0, index);
+        return movepoolList[base];
     }
     
     ,
@@ -1919,6 +2046,299 @@ helpers = {
             power = 120;
         }
         return power;
+    }
+    
+    ,
+    
+    movePower: function (moveId) {
+        if (Object.keys(powerList).length === 0) {
+            var data = sys.read("db/moves/6G/power.txt").split('\n');
+            for (var i = 0; i < data.length; i++) {
+                var index = data[i].indexOf(' ');
+                var key = data[i].substr(0, index);
+                var power = data[i].substr(index + 1);
+                powerList[key] = power;
+            }
+        }
+        if (powerList[moveId] === undefined || powerList[moveId] == '1') {
+            return '-';
+        }
+        return powerList[moveId];
+    }
+    
+    ,
+
+    moveCategory: function (moveId) {
+        if (Object.keys(categoryList).length === 0) {
+            var data = sys.read("db/moves/6G/damage_class.txt").split('\n');
+            for (var i = 0; i < data.length; i++) {
+                var index = data[i].indexOf(' ');
+                var key = data[i].substr(0, index);
+                var category = data[i].substr(index + 1);
+                categoryList[key] = category;
+            }
+        }
+        if (categoryList[moveId] == 1) {
+            return "<font color='#800000'>Physical</font>";
+        }
+        if (categoryList[moveId] == 2) {
+            return "<font color='#FF69B4'>Special</font>";
+        }
+        return "<font color='#2E8B57'>Other</font>";
+    }
+    
+    ,
+
+    moveAccuracy: function (moveId) {
+        if (Object.keys(accList).length === 0) {
+            var data = sys.read("db/moves/6G/accuracy.txt").split('\n');
+            for (var i = 0; i < data.length; i++) {
+                var index = data[i].indexOf(' ');
+                var key = data[i].substr(0, index);
+                var accuracy = data[i].substr(index + 1);
+                accList[key] = accuracy;
+            }
+        }
+        if (accList[moveId] == 101) {
+            return '-';
+        }
+        return accList[moveId];
+    }
+    
+    ,
+
+    movePP: function (moveId) {
+        if (Object.keys(ppList).length === 0) {
+            var data = sys.read("db/moves/6G/pp.txt").split('\n');
+            for (var i = 0; i < data.length; i++) {
+                var index = data[i].indexOf(' ');
+                var key = data[i].substr(0, index);
+                var pp = data[i].substr(index + 1);
+                ppList[key] = pp;
+            }
+        }
+        return [ppList[moveId], ppList[moveId] * 8 / 5];
+    }
+    
+    ,
+
+    moveEffect: function (moveId) {
+        if (Object.keys(moveEffList).length === 0) {
+            var data = sys.read("db/moves/6G/effect.txt").split('\n');
+            for (var i = 0; i < data.length; i++) {
+                var index = data[i].indexOf(" ");
+                var key = data[i].substr(0, index);
+                var effect = data[i].substr(index + 1);
+                moveEffList[key] = effect;
+            }
+        }
+        if (moveEffList[moveId] === undefined) {
+            return "Deals normal damage.";
+        }
+        return moveEffList[moveId].replace(/[\[\]{}]/g, "");
+    }
+    
+    ,
+
+    moveContact: function (moveId) {
+        if (Object.keys(moveFlagList).length === 0) {
+            var data = sys.read("db/moves/6G/flags.txt").split('\n');
+            for (var i = 0; i < data.length; i++) {
+                var index = data[i].indexOf(' ');
+                var key = data[i].substr(0, index);
+                var flags = data[i].substr(index + 1);
+                moveFlagList[key] = flags;
+            }
+        }
+        return (moveFlagList[moveId] % 2 === 1) ? "<font color='#008000'>Yes</font>" : "<font color='#FF0000'>No</font>";
+    }
+    
+    ,
+
+    movePriority: function (moveId) {
+        if (Object.keys(movePriorityList).length === 0) {
+            var data = sys.read("db/moves/6G/priority.txt").split('\n');
+            for (var i = 0; i < data.length; i++) {
+                var index = data[i].indexOf(' ');
+                var key = data[i].substr(0, index);
+                var priority = data[i].substr(index + 1);
+                movePriorityList[key] = priority;
+            }
+        }
+        if (movePriorityList[moveId] === undefined) {
+            return 0;
+        }
+        return movePriorityList[moveId];
+    }
+    
+    ,
+
+    moveRange: function (moveId) {
+        if (Object.keys(moveRangeList).length === 0) {
+            var data = sys.read("db/moves/6G/range.txt").split('\n');
+            for (var i = 0; i < data.length; i++) {
+                var index = data[i].indexOf(' ');
+                var key = data[i].substr(0, index);
+                var range = data[i].substr(index + 1);
+                moveRangeList[key] = range.replace(/\r/g, "");
+            }
+        }
+        if (moveRangeList[moveId] === undefined) {
+            return "Single Target";
+        }
+        return this.moveRangeToText(parseInt(moveRangeList[moveId]));
+    }
+    
+    ,
+    
+    moveRangeToText: function (moveRange) {
+        switch (moveRange) {
+            case 2:
+                return "Ally";
+            case 4:
+                return "All But Self";
+            case 5:
+                return "Adjacent Foes";
+            case 6:
+                return "User's Team";
+            case 7:
+                return "Self";
+            case 8:
+                return "All";
+            case 9:
+                return "Random";
+            case 10:
+                return "Field";
+            case 11:
+                return "All Foes";
+            case 12:
+                return "All Allies";
+            case 13:
+                return "Special";
+            default:
+                return "Single Target";
+        }
+    }
+    
+    ,
+
+    ability: function (abilityId) {
+        if (Object.keys(abilityList).length === 0) {
+            var data = sys.read("db/abilities/ability_battledesc.txt").split('\n');
+            for (var i = 0; i < data.length; i++) {
+                var index = data[i].indexOf(' ');
+                var key = data[i].substr(0, index);
+                var ability = data[i].substr(index + 1);
+                abilityList[key] = ability.replace(/\r/g, "");
+            }
+        }
+        return abilityList[abilityId];
+    }
+    
+    ,
+    
+    pokemonWithAbility: function (abilityId) {
+        if (!pokemonWithAbilityList[abilityId]) {
+            var data1, data2, data3, index;
+            data1 = sys.read("db/pokes/6G/ability1.txt").split('\n');
+            data2 = sys.read("db/pokes/6G/ability2.txt").split('\n');
+            data3 = sys.read("db/pokes/6G/ability3.txt").split('\n');
+            pokemonWithAbilityList[abilityId] = [];
+            for (var index1 in data1) {
+                index = data1[index1].split(' ');
+                if (index[1] == abilityId) {
+                    pokemonWithAbilityList[abilityId].push(sys.pokemon(index[0].split(':')[0]));
+                }
+            }
+            for (var index2 in data2) {
+                index = data2[index2].split(' ');
+                if (index[1] == abilityId) {
+                    pokemonWithAbilityList[abilityId].push(sys.pokemon(index[0].split(':')[0]));
+                }
+            }
+            for (var index3 in data3) {
+                index = data3[index3].split(' ');
+                if (index[1] == abilityId) {
+                    pokemonWithAbilityList[abilityId].push(sys.pokemon(index[0].split(':')[0]));
+                }
+            }
+        }
+        return pokemonWithAbilityList[abilityId];
+    }
+    
+    ,
+
+    getItem: function (itemId) {
+        if (Object.keys(itemList).length === 0) {
+            var data = sys.read("db/items/items_description.txt").split('\n');
+            for (var i = 0; i < data.length; i++) {
+                var index = data[i].indexOf(' ');
+                var key = data[i].substr(0, index);
+                var item = data[i].substr(index + 1);
+                itemList[key] = item;
+            }
+        }
+        return itemList[itemId];
+    }
+    
+    ,
+
+    getBerry: function (berryId) {
+        if (Object.keys(berryList).length === 0) {
+            var data = sys.read("db/items/berries_description.txt").split('\n');
+            for (var i = 0; i < data.length; i++) {
+                var index = data[i].indexOf(' ');
+                var key = data[i].substr(0, index);
+                var berry = data[i].substr(index + 1);
+                berryList[key] = berry;
+            }
+        }
+        return berryList[berryId];
+    }
+    
+    ,
+
+    getFlingPower: function (itemId) {
+        if (Object.keys(flingPowerList).length === 0) {
+            var data = sys.read("db/items/items_pow.txt").split('\n');
+            for (var i = 0; i < data.length; i++) {
+                var index = data[i].indexOf(' ');
+                var key = data[i].substr(0, index);
+                var power = data[i].substr(index + 1);
+                flingPowerList[key] = power;
+            }
+        }
+        return flingPowerList[itemId];
+    }
+    
+    ,
+
+    getBerryPower: function (berryId) {
+        if (Object.keys(berryPowerList).length === 0) {
+            var data = sys.read("db/items/berry_pow.txt").split('\n');
+            for (var i = 0; i < data.length; i++) {
+                var index = data[i].indexOf(' ');
+                var key = data[i].substr(0, index);
+                var power = data[i].substr(index + 1);
+                berryPowerList[key] = power;
+            }
+        }
+        return +berryPowerList[berryId] + 20;
+    }
+    
+    ,
+
+    getBerryType: function (berryId) {
+        if (Object.keys(berryTypeList).length === 0) {
+            var data = sys.read("db/items/berry_type.txt").split('\n');
+            for (var i = 0; i < data.length; i++) {
+                var index = data[i].indexOf(' ');
+                var key = data[i].substr(0, index);
+                var type = data[i].substr(index + 1);
+                berryTypeList[key] = sys.type(type);
+            }
+        }
+        return berryTypeList[berryId];
     }
     
     ,
