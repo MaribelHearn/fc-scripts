@@ -27,6 +27,10 @@ roulettecommands = {
     ,
     
     roulette: function (src, channel, command) {
+        var LEGENDARY_LIST = ["Articuno", "Zapdos", "Moltres", "Mewtwo", "Mew", "Raikou", "Entei", "Suicune", "Ho-Oh", "Lugia", "Celebi", "Kyogre", "Groudon", "Rayquaza", "Latios",
+        "Latias", "Regirock", "Regice", "Registeel", "Jirachi", "Deoxys", "Uxie", "Mesprit", "Azelf", "Dialga", "Palkia", "Giratina", "Heatran", "Regigigas", "Cresselia", "Darkrai",
+        "Manaphy", "Shaymin", "Arceus", "Victini", "Cobalion", "Terrakion", "Virizion", "Tornadus", "Thundurus", "Landorus", "Reshiram", "Zekrom", "Kyurem", "Meloetta", "Genesect",
+        "Xerneas", "Yveltal", "Zygarde"];
         var name = sys.name(src), rouletteMessage = name + " has rolled ", lower = name.toLowerCase();
         
         if (!roulette[lower]) {
