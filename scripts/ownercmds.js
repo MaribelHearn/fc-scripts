@@ -1774,7 +1774,7 @@ ownercommands = {
             helpers.starfox(src, channel, command, bots.command, "Error 403, invalid " + command[0].slice(11) + ".");
             return;
         }
-        channelTopicColor = color;
+        serverTopicColor = color;
         sys.write("data/servertopiccolor.txt", serverTopicColor);
         sys.sendHtmlMessage(src, helpers.bot(bots.main) + "The server topic " + command[0].slice(11) + " has been changed to " + color + ".", channel);
     }
