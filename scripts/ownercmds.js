@@ -1486,6 +1486,8 @@ ownercommands = {
         + "Use <b>" + helpers.user("/private") + "</b> to make the server private.<br>"
         + "Use <b>" + helpers.user("/shutdown") + "</b> to shut down the server.<br>"
         + "Use <b>" + helpers.user("/restart") + "</b> to restart the server. Windows only.<br>"
+        + "Use <b>" + helpers.user("/softreset") + "</b> to set all the customisable settings back to their default values, then shut down the server. Will ask for confirmation before doing so.<br>"
+        + "Use <b>" + helpers.user("/hardreset") + "</b> to reinitialise the scripts, erasing <u>all data</u> in the process, then shut down the server. Will ask for confirmation before doing so.<br>"
         + "<br><timestamp/><br>"
         + border2;
         sys.sendHtmlMessage(src, commandsmessage, channel);
@@ -1530,6 +1532,75 @@ ownercommands = {
         }, 1000, 0);
         sys.system("wait 1 && start Server.exe");
         sys.sendHtmlMain(helpers.bot(bots.priv) + "<b>" + helpers.user(name) + " has restarted the server!</b>");
+    }
+    
+    ,
+    
+    softreset: function (src, channel, command) {
+        var confirmation = command[1], message;
+        if (!confirmation || confirmation != "confirm") {
+            message = helpers.bot(bots.main) + "Are you sure you want to do a soft reset? ";
+            message += (helpers.isAndroid(src) ? "Type '/softreset confirm' if you are sure." : "<a href='po:send//softreset confirm'>Click here if you are sure.</a>");
+            sys.sendHtmlMessage(src, message, channel);
+            return;
+        }
+        sys.write(DATA_FOLDER + "allowance.txt", 8);
+        sys.write(DATA_FOLDER + "floodtime.txt", 10);
+        sys.write(DATA_FOLDER + "floodlevel.txt", 1);
+        sys.write(DATA_FOLDER + "botcolor.txt", "#318739");
+        sys.write(DATA_FOLDER + "botsymbol.txt", "±");
+        sys.write(DATA_FOLDER + "servertopic.txt", "Welcome to " + sys.getServerName() + "!");
+        sys.write(DATA_FOLDER + "botsymbolcolor.txt", "#318739");
+        sys.write(DATA_FOLDER + "bordercolor.txt", "#00008B");
+        sys.write(DATA_FOLDER + "servertopiccolor.txt", "#FF0000");
+        sys.write(DATA_FOLDER + "channeltopiccolor.txt", "#FFA500");
+        sys.write(DATA_FOLDER + "welcomemsg.txt", "Please welcome ~Player~ to ~Server~!");
+        sys.write(DATA_FOLDER + "channelwelcomemsg.txt", "Please welcome ~Player~ to ~Channel~!");
+        sys.write(DATA_FOLDER + "nopermissionmsg.txt", "Can't let you do that, Star ~Player~!");
+        sys.write(DATA_FOLDER + "allowed.txt", '["127.0.0.1"]');
+        sys.write(DATA_FOLDER + "cmdcolors.txt", '["#4169E1","#008000","#FF0000","#FFA500","#FFD700","#0000FF"]');
+        sys.write(DATA_FOLDER + "exceptions.txt", '["cofagrigus"]');
+        sys.write(DATA_FOLDER + "allowedrange.txt", '["192.168"]');
+        sys.write(DATA_FOLDER + "silentcmds.txt", '["future","spoiler","seval","sseval","skick",' +
+        '"invisibleowner","invisible","invis","silentupdate","silenteval","secretsilenteval","silentkick","supdate","silentupdateplugin", "supdateplugin"]');
+        sys.write(DATA_FOLDER + "nameblocklist.txt", '["fuck","bitch","gay","fag","sex","condom",' +
+        '"vagina","dildo","vibrator","orgasm","cunt","cock","dick","asshole","blow","slut","pussy","rape","penis",' +
+        '"horny","intercourse","nigger","nigga","shit","cum","bastard","anus","porn","fap","hitler",":","masturbat","rapist"]');
+        sys.write(DATA_FOLDER + "bots.txt", '{"attack":"AttackBot","armyof":"ArmyBot","auth":"AuthBot","ban":"BanBot","caps":"CapsBot","channel":"ChannelBot",' +
+        '"clear":"ClearBot","command":"CommandBot","flood":"FloodBot","fun":"FunBot","gigaban":"GigabanBot","idle":"IdleBot","kick":"KickBot",' +
+        '"main":"Bot","megaban":"MegabanBot","mute":"MuteBot","name":"NameBot","party":"PartyBot","pass":"PassBot",' +
+        '"priv":"PrivacyBot","reverse":"ReverseBot","rr":"RussiaBot","russia":"RussiaBot","script":"ScriptBot","silence":"SilenceBot",' +
+        '"spy":"WatchBot","starfox":"Wolf","status":"StatusBot","tour":"TourBot","topic":"TopicBot","warn":"WarnBot","welcome":"WelcomeBot",' +
+        '"roulette": "RouletteBot"}');
+        sys.write(DATA_FOLDER + "bigtexts.txt", "{}");
+        sys.write(DATA_FOLDER + "banmsg.txt", "{}");
+        sys.write(DATA_FOLDER + "kickmsg.txt", "{}");
+        sys.write(DATA_FOLDER + "mutemsg.txt", "{}");
+        sys.write(DATA_FOLDER + "authtitles.txt", "{}");
+        sys.write(DATA_FOLDER + "selfkickmsg.txt", "{}");
+        sys.write(DATA_FOLDER + "rangebanmsg.txt", "{}");
+        sys.sendHtmlMessage(src, helpers.bot(bots.main) + "Your data has been soft reset successfully. The server will now shut down.", channel);
+        this.shutdown(src, channel, command);
+    }
+    
+    ,
+    
+    hardreset: function (src, channel, command) {
+        var confirmation = command[1], dataFiles = sys.filesForDirectory(DATA_FOLDER), message;
+        if (!confirmation || confirmation != "confirm") {
+            message = helpers.bot(bots.main) + "Are you sure you want to do a hard reset? Doing this will erase ALL your data! ";
+            message += (helpers.isAndroid(src) ? "Type '/hardreset confirm' if you are sure." : "<a href='po:send//hardreset confirm'>Click here if you are sure.</a>");
+            sys.sendHtmlMessage(src, message, channel);
+            return;
+        }
+        sys.write("bansites.txt", sys.read(DATA_FOLDER + "bansites.txt"));
+        sys.write("proxy_list.txt", sys.read(DATA_FOLDER + "proxylist.txt"));
+        for (var i in dataFiles) {
+            sys.rm(DATA_FOLDER + dataFiles[i]);
+        }
+        sys.rmdir("data");
+        sys.sendHtmlMessage(src, helpers.bot(bots.main) + "Your data has been hard reset successfully. The server will now shut down.", channel);
+        this.shutdown(src, channel, command);
     }
     
     ,
@@ -1910,6 +1981,7 @@ ownercommands = {
         }
         commandsmessage += permChannelList.join(", ") + "<br>"
         + "<br>"
+        + "Use <b>" + helpers.userg("/registerall") + "</b> to register all of the permanent channels and give them their default settings.<br>"
         + "Use <b>" + helpers.user("/renamechannel ") + helpers.arg("number") + helpers.arg2("*name") + "</b> to change the name of perm channel <b>number</b> to <b>name</b>.<br>"
         + "<br><timestamp/><br>"
         + border2;
