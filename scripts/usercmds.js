@@ -241,84 +241,58 @@ usercommands = {
     ,
     
     online: function (src, channel, command) {
-        var onlinemessage = border + "<style type='text/css'>table {border-width:1px; border-style:solid; border-color:#000;}" 
-        + "thead {font-weight:bold;}</style><h2>Players Online</h2><br>"
-        + "<table cellpadding=2 cellspacing=0><thead><tr style='background-color:#b0b0b0;'>"
-        + "<td>Icon</td><td>Auth</td><td>Name</td><td>ID</td>", srcauth = sys.auth(src), date = new Date(), unit;
-        if (srcauth >= 1) {
-            onlinemessage += "<td>IP Address</td><td>Client</td><td>Country</td><td>Time Zone</td><td>Last Message</td>";
+        var DISPLAY_USER = true, HIDE_INVIS = true, onlinemessage = border + "<h2>Players Online</h2><br>", srcauth = sys.auth(src), index = 0, lower;
+        var icons = [], auths = [], names = [], colors = [], ids = [], ips = [], clients = [], countries = [], timeZones = [], lastMessages = [], times = [];
+        for (var i in players) {
+            ids.push(i);
+            ips.push(sys.ip(i));
+            auths.push(sys.auth(i));
+            clients.push(sys.os(i));
+            colors.push(helpers.color(i));
+            names.push(players[i].name + (sys.name(i) != players[i].name ? " (" + sys.name(i) + ")" : ""));
+            lower = names[index].toLowerCase();
+            countries.push(countryname[lower] ? countryname[lower] : "[no data]");
+            timeZones.push(timezone[lower] ? timezone[lower] : "[no data]");
+            lastMessages.push(helpers.escapehtml(players[i].lastmessage));
+            times.push(helpers.timePassed(colors[i], players[i].lastmessagetime));
+            index++;
         }
-        onlinemessage += "</tr></thead><tbody>";
-        for (var index in players) {
-            var id = index, timepassed = date - players[index].lastmessagetime, name = players[index].name;
-            var auth = sys.auth(id), imageindex = sys.auth(id), lower = name.toLowerCase(), os, country, timezone2;
-            timepassed = Math.round(timepassed / 1000);
-            unit = "seconds";
-            if (timepassed == 1) {
-                unit = "second";
-            }
-            if (timepassed > 60) {
-                timepassed = Math.round(timepassed / 60);
-                unit = "minutes";
-                if (timepassed == 1) {
-                    unit = "minute";
+        if (helpers.isAndroid(src)) {
+            onlinemessage += "<tt>";
+            for (var i in ids) {
+                onlinemessage += helpers.authname(auths[i], true) + " | " + "<b><font color='" + colors[i] + "'>" + names[i] + "</font></b> | " + ids[i];
+                if (srcauth >= 1) {
+                    onlinemessage += " | " + ips[i] + " | " + helpers.osName(clients[i]);
                 }
+                onlinemessage += "<br>";
             }
-            if (timepassed > 60) {
-                timepassed = Math.round((timepassed / 60) * 10) / 10;
-                unit = "hours";
-                if (timepassed == 1) {
-                    unit = "hour";
-                }
-            }
-            if (isNaN(timepassed)) {
-                timepassed = "";
-                unit = "";
-            }
-            if (unit == "minutes" && timepassed > 5 && timepassed <= 15) {
-                color = "orange";
-            } else if ((unit == "minutes" && timepassed > 15) || unit == "hour") {
-                color = "orangered";
-            } else if (unit == "hours") {
-                color = "red";
-            } else {
-                color = "green";
-            }
-            if (imageindex > 3) {
-                imageindex = 0;
-            }
-            if (sys.battling(id)) {
-                imageindex += 8;
-            } else if (sys.away(id)) {
-                imageindex += 4;
-            }
-            if (name != sys.name(id)) {
-                name += " (" + sys.name(id) + ")";
-            }
-            onlinemessage += "<tr>" +
-            "<td>" + helpers.authimage(src, imageindex) + "</td>" +
-            "<td>" + helpers.authname(auth, true) + "</td>" +
-            "<td><b style='color:" + helpers.color(id) + "'>" + name + "</b></td>" +
-            "<td>" + id + "</td>";
-            !operatingsystem[lower] ? os = "[no data]" : os = operatingsystem[lower].split(' ')[0] + " " + operatingsystem[lower].split(' ')[1];
-            !timezone[lower] ? timezone2 = "[no data]" : timezone2 = timezone[lower];
-            if (!countryname[lower]) {
-                country = "[no data]";
-            } else {
-                country = helpers.toFlagKey(helpers.removespaces(countryname[lower].toUpperCase()));
-                !FLAGS[country] ? country = "[no data]" : country = FLAGS[country];
-            }
+            onlinemessage += "</tt>";
+        } else {
+            onlinemessage += "<style type='text/css'>table {border-width: 1px; border-style: solid; border-color: #000000;}</style>"
+            + "<table cellpadding='2' cellspacing='0'><thead><tr style='background-color: #B0B0B0;'>"
+            + "<th>Icon</th><th>Auth</th><th>Name</th><th>ID</th>";
             if (srcauth >= 1) {
-                onlinemessage += "<td>" + sys.ip(id) + "</td>" +
-                "<td>" + os + "</td>" +
-                "<td>" + country + "</td>" +
-                "<td>" + timezone2 + "</td>" +
-                "<td>" + helpers.escapehtml(players[id].lastmessage) + " <b style='color:" + color + "'>(" + timepassed + " " + unit + " ago)</b></td>";
+                onlinemessage += "<th>IP Address</th><th>Client</th><th>Country</th><th>Time Zone</th><th>Last Message</th>";
             }
-            onlinemessage += "</tr>";
+            onlinemessage += "</tr></thead><tbody>";
+            for (var i in ids) {
+                onlinemessage += "<tr>"
+                + "<td>" + helpers.authimage(src, helpers.imageIndex(ids[i])) + "</td>"
+                + "<td>" + helpers.authname(auths[i], DISPLAY_USER, HIDE_INVIS) + "</td>"
+                + "<td><b><font color='" + colors[i] + "'>" + names[i] + "</font></b></td>"
+                + "<td>" + ids[i] + "</td>";
+                if (srcauth >= 1) {
+                    onlinemessage += "<td>" + ips[i] + "</td>"
+                    + "<td>" + helpers.osImage(clients[i]) + "</td>"
+                    + "<td>" + FLAGS[helpers.toFlagKey(countries[i])] + "</td>"
+                    + "<td>" + timeZones[i] + "</td>"
+                    + "<td>" + lastMessages[i] + " " + times[i] + "</td>";
+                }
+                onlinemessage += "</tr>";
+            }
+            onlinemessage += "</tbody><tfoot><tr><td colspan='" + (srcauth >= 1 ? 9 : 4) + "'><b>Total Players Online:</b> " + sys.numPlayers() + "</td></tr></tfoot></table>";
         }
-        var playernum = sys.numPlayers();
-        onlinemessage += "</tbody></table><br><br><b>Total Players Online:</b> " + playernum + "<br><br><timestamp/><br>" + border2;
+        onlinemessage += "<br><br><timestamp/><br>" + border2;
         sys.sendHtmlMessage(src, onlinemessage, channel);
     }
     
@@ -633,7 +607,7 @@ usercommands = {
     
     pokedex: function (src, channel, command) {
         var UNKNOWN_TYPE = 18, MAX_IV = 31, MIN_EV = 0, MAX_EV = 252, MIN_NATURE = 0.9, NEUTRAL_NATURE = 1.0, MAX_NATURE = 1.1;
-        var pokemon = command[1], pokeNum, type1, type2, types = [], abilities = [], genders = [], height, weight, americanHeight, americanWeight, weightPower, baseStats, bst, dexmessage, stat;
+        var pokemon = command[1], pokeNum, type1, type2, types = [], abilities = [], genders = [], height, weight, americanHeight, americanWeight, weightPower, baseStats, bst, stat, dexmessage;
         if (!pokemon) {
             helpers.starfox(src, channel, command, bots.command, "Error 404, Pokémon not found.");
             return;
@@ -667,26 +641,39 @@ usercommands = {
         bst = helpers.sum(baseStats);
         dexmessage = border + "<h2>#" + helpers.displayNum(pokeNum) + " " + pokemon + "</h2>"
         + "<br>" + helpers.pokeImage(pokeNum)
-        + "<br><b>Type:</b> " + types.join("")
-        + "<br><b>Abilities:</b> " + abilities.join(" / ")
+        + "<br><b>Type:</b> " + types.join(/img/.test(types.toString()) ? "" : " / ")
+        + "<br><b>" + (abilities.length == 1 ? "Ability" : "Abilities") + ":</b> " + abilities.join(" / ")
         + "<br><b>Gender:</b> " + genders.join(/img/.test(genders.toString()) ? "" : " / ")
         + "<br><b>Height:</b> " + height + " m / " + americanHeight + " ft"
         + "<br><b>Weight:</b> " + weight + " kg / " + americanWeight + " lbs"
         + "<br><b>Power of Grass Knot / Low Kick:</b> " + weightPower
-        + "<style>table {border-width:1px; border-style:solid; border-color:#000;} thead {font-weight:bold;}</style>"
-        + "<br><table cellpadding='2' cellspacing='0'><thead><tr><th>Stat</th><th>Base</th><th>Min-</th><th>Min</th><th>Max</th><th>Max+</th></tr></thead><tbody>";
-        for (var k in baseStats) {
-            stat = baseStats[k];
-            dexmessage += "<tr>"
-            + "<th>" + helpers.statName(k) + "</th>"
-            + "<td>" + helpers.colorStat(stat) + "</td>"
-            + "<td>" + (k === 0 ? '-' : helpers.calcStat(k, stat, MAX_IV, MIN_EV, MIN_NATURE)) + "</td>"
-            + "<td>" + helpers.calcStat(k, stat, MAX_IV, MIN_EV, NEUTRAL_NATURE) + "</td>"
-            + "<td>" + helpers.calcStat(k, stat, MAX_IV, MAX_EV, NEUTRAL_NATURE) + "</td>"
-            + "<td>" + (k === 0 ? '-' : helpers.calcStat(k, stat, MAX_IV, MAX_EV, MAX_NATURE)) + "</td>"
-            + "</tr>";
+        if (helpers.isAndroid(src)) {
+            dexmessage += "<tt>";
+            for (var k in baseStats) {
+                stat = baseStats[k];
+                dexmessage += "<br><b>" + helpers.statName(k) + "</b>" + helpers.spaces(8 - helpers.statName(k).length) + " "
+                + helpers.colorStat(stat) + (stat >= 100 ? " " : " &nbsp;")
+                + (k === 0 ? '-' : helpers.calcStat(k, stat, MAX_IV, MIN_EV, MIN_NATURE)) + " | "
+                + helpers.calcStat(k, stat, MAX_IV, MIN_EV, NEUTRAL_NATURE) + " | "
+                + helpers.calcStat(k, stat, MAX_IV, MAX_EV, NEUTRAL_NATURE) + " | "
+                + (k === 0 ? '-' : helpers.calcStat(k, stat, MAX_IV, MAX_EV, MAX_NATURE));
+            }
+            dexmessage += "<br><b>Base Stat Total:</b> " + bst + "</tt>";
+        } else {
+            dexmessage += "<style>table {border-width: 1px; border-style: solid; border-color: #000000;}</style>"
+            + "<br><table cellpadding='2' cellspacing='0'><thead><tr><th>Stat</th><th>Base</th><th>Min-</th><th>Min</th><th>Max</th><th>Max+</th></tr></thead><tbody>"
+            for (var k in baseStats) {
+                stat = baseStats[k];
+                dexmessage += "<tr><th>" + helpers.statName(k) + "</th>"
+                + "<td>" + helpers.colorStat(stat) + "</td>"
+                + "<td>" + (k === 0 ? '-' : helpers.calcStat(k, stat, MAX_IV, MIN_EV, MIN_NATURE)) + "</td>"
+                + "<td>" + helpers.calcStat(k, stat, MAX_IV, MIN_EV, NEUTRAL_NATURE) + "</td>"
+                + "<td>" + helpers.calcStat(k, stat, MAX_IV, MAX_EV, NEUTRAL_NATURE) + "</td>"
+                + "<td>" + (k === 0 ? '-' : helpers.calcStat(k, stat, MAX_IV, MAX_EV, MAX_NATURE)) + "</td></tr>"
+            }
+            dexmessage += "</tbody><tfoot><tr><td colspan='6'><b>Base Stat Total:</b> " + bst + "</td></tr></tfoot></table>";
         }
-        dexmessage += "</tbody><tfoot><tr><td colspan='6'><b>Base Stat Total:</b> " + bst + "</td></tr></tfoot></table><br><br><timestamp/><br>" + border2;
+        dexmessage += "<br><br><timestamp/><br>" + border2;
         sys.sendHtmlMessage(src, dexmessage, channel);
     }
     
@@ -699,66 +686,36 @@ usercommands = {
     ,
     
     movedex: function (src, channel, command) {
-        if (!command[1]) {
-            helpers.starfox(src, channel, command, bots.command, "Error 403, invalid move name or ID.");
+        var move = command[1], moveNum, type, power, category, accuracy, pp, effect, contact, priority, range, movemessage;
+        if (!move) {
+            helpers.starfox(src, channel, command, bots.command, "Error 404, move not found.");
             return;
         }
-        if (!isNaN(command[1])) {
-            id = command[1];
-            if (id < 1 || id > 1122) {
-                helpers.starfox(src, channel, command, bots.command, "Error 403, invalid move ID.");
-                return;
-            }
-        } else {
-            id = sys.moveNum(command[1]);
-            if (id === undefined || id < 1 || id > 1122) {
-                helpers.starfox(src, channel, command, bots.command, "Error 403, invalid move name.");
-                return;
-            }
+        if (!sys.moveNum(move)) {
+            helpers.starfox(src, channel, command, bots.command, "Error 403, invalid move.");
+            return;
         }
-        var type = "<img src='Themes/Classic/types/type" + sys.moveType(id) + ".png'>", name = sys.move(id);
-        var movedexmessage = border + "<br><h2>Movedex</h2><br>"
-        + "<style type='text/css'>table {border-width:1px; border-style:solid; border-color:#000;}thead {font-weight:bold;}tfoot {font-style:italic;}</style>"
-        + "<table cellpadding=2 cellspacing=0><thead><tr style='background-color:#b0b0b0;'><td>Number</td><td>Name</td><td>Type</td><td>Category</td><td>Base Power</td>"
-        + "<td>PP</td><td>Accuracy</td><td>Priority</td><td>Range</td></tr></thead><tbody><tr><td>" + id + "</td><td>" + name + "</td><td>" + type + "</td>";
-        var powers = sys.read("db/moves/5G/power.txt"), pps = sys.read("db/moves/5G/pp.txt"), accs = sys.read("db/moves/5G/accuracy.txt");
-        var prios = sys.read("db/moves/5G/priority.txt"), ranges = sys.read("db/moves/5G/range.txt");
-        var cats = sys.read("db/moves/5G/damage_class.txt"), chances = sys.read("db/moves/5G/effect_chance.txt");
-        var effects = sys.read("db/moves/5G/power.txt"), descrs = sys.read("db/moves/move_description.txt");
-        powers = powers.split("\n");pps = pps.split("\n");accs = accs.split("\n");descrs = descrs.split("\n");cats = cats.split("\n");prios = prios.split("\n");ranges = ranges.split("\n");
-        var powerarray = [], pparray = [], accarray = [], catarray = [], prioarray = [], rangearray = [], derp;
-        for (var index in powers) {
-            derp = powers[index].split(" ");
-            powerarray[derp[0]] = derp[1];
-        }
-        for (var index2 in pps) {
-            derp = pps[index2].split(" ");
-            pparray[derp[0]] = derp[1];
-        }
-        for (var index3 in accs) {
-            derp = accs[index3].split(" ");
-            accarray[derp[0]] = derp[1];
-        }
-        for (var index4 in cats) {
-            derp = cats[index4].split(" ");
-            catarray[derp[0]] = derp[1];
-        }
-        for (var index5 in prios) {
-            derp = prios[index5].split(" ");
-            prioarray[derp[0]] = derp[1];
-        }
-        for (var index6 in ranges) {
-            derp = ranges[index6].split(" ");
-            rangearray[derp[0]] = derp[1];
-        }
-        var power = powerarray[id], pp = pparray[id], acc = accarray[id], descr = descrs[id], cat = catarray[id], prio = prioarray[id], range = rangearray[id];
-        if (power === undefined)power = "-";if (prio === undefined)prio = "0";if (range === undefined)range = "Single foe";
-        if (range === 0)range = "Single foe";else if (range == 4)range = "All";else if (range == 5)range = "Both foes";else if (range == 7)range = "Self";
-        if (range == 12)range = "Team";if (cat == 1)cat = "Physical";else if (cat == 2)cat = "Special";else if (cat === 0)cat = "Other";
-        if (acc > 100)acc = "-";if (cat == 1)cat = "Physical";else if (cat == 2)cat = "Special";else if (cat === 0)cat = "Other";else if (cat === undefined)cat = "-";
-        movedexmessage += "<td>" + cat + "</td><td>" + power + "</td><td>" + pp + "</td><td>" + acc + "</td><td>" + prio + "</td><td>" + range + "</td></tbody>"
-        + "<tfoot><tr><td colspan=9>" + descr.slice(id.toString().length + 1) + "</td></tr></tfoot></table><br><br><timestamp/><br>" + border2;
-        sys.sendHtmlMessage(src, movedexmessage, channel);
+        moveNum = sys.moveNum(move);
+        move = sys.move(moveNum);
+        type = sys.moveType(moveNum);
+        power = helpers.movePower(moveNum);
+        category = helpers.moveCategory(moveNum);
+        accuracy = helpers.moveAccuracy(moveNum);
+        pp = helpers.movePP(moveNum);
+        effect = helpers.moveEffect(moveNum);
+        contact = helpers.moveContact(moveNum);
+        range = helpers.moveRange(moveNum);
+        movemessage = border + "<h2>#" + moveNum + " " + move + "</h2>"
+        + "<br><b>Type:</b> " + helpers.typeImage(src, type)
+        + "<br><b>Power:</b> " + power
+        + "<br><b>Category:</b> " + category
+        + "<br><b>Accuracy:</b> " + accuracy
+        + "<br><b>PP:</b> " + pp[0] + " (" + pp[1] + ")"
+        + "<br><b>Contact:</b> " + contact
+        + "<br><b>Range:</b> " + range
+        + "<br><b>Effect:</b> " + effect
+        + "<br><br><timestamp/><br>" + border2;
+        sys.sendHtmlMessage(src, movemessage, channel);
     }
     
     ,
@@ -770,87 +727,32 @@ usercommands = {
     ,
     
     movepool: function (src, channel, command) {
-        var learnmessage = border, index = 27, form = 0, pokenum, pokenumdisplay, pokemon, move, id, movelist;
-        if (!command[1]) {
+        var pokemon = command[1], pokeNum, move, moveNum, movepool, learnmessage;
+        if (!pokemon) {
             helpers.starfox(src, channel, command, bots.command, "Error 404, Pokémon not found.");
             return;
-        } else {
-            if (isNaN(command[1]) || command[1] == "2012") {
-                if (!sys.pokeNum(command[1])) {
-                    helpers.starfox(src, channel, command, bots.command, "Error 403, invalid Pokémon name.", channel);
-                    return;
-                }
-                pokenum = sys.pokeNum(command[1]);
-                if (pokenum < 1) {
-                    helpers.starfox(src, channel, command, bots.command, "Error 403, invalid Pokémon name.", channel);
-                    return;
-                }
-                pokemon = sys.pokemon(pokenum);
-            } else {
-                if (!sys.pokemon(command[1])) {
-                    helpers.starfox(src, channel, command, bots.command, "Error 403, invalid Pokémon ID.", channel);
-                    return;
-                }
-                pokenum = command[1];
-                if (pokenum < 1) {
-                    helpers.starfox(src, channel, command, bots.command, "Error 403, invalid Pokémon ID.", channel);
-                    return;
-                }
-                pokemon = sys.pokemon(command[1]);
-            }
         }
-        if (command[2]) {
-            if (!isNaN(command[2])) {
-                id = command[2];
-                if (id < 1 || id > 1122) {
-                    helpers.starfox(src, channel, command, bots.command, "Error 403, invalid move ID.");
-                    return;
-                }
-            } else {
-                id = sys.moveNum(command[2]);
-                if (id === undefined || id < 1 || id > 1122) {
-                    helpers.starfox(src, channel, command, bots.command, "Error 403, invalid move name.");
-                    return;
-                }
-            }
-            move = sys.move(id);
+        if (!sys.pokeNum(pokemon)) {
+            helpers.starfox(src, channel, command, bots.command, "Error 403, invalid Pokémon.", channel);
+            return;
         }
-        var moves = sys.read("db/pokes/5G/all_moves.txt");
-        moves = moves.split("\n");
-        while (index > 0) {
-            if (pokenum >= (65536 * index)) {
-                form = Math.floor(pokenum / (65536 * index));
-                pokenumdisplay = (pokenum - (65536 * index)).toString() + "-" + index;
-                break;
+        pokeNum = sys.pokeNum(pokemon);
+        pokemon = sys.pokemon(pokeNum);
+        move = command[2];
+        if (move) {
+            if (!sys.moveNum(move)) {
+                helpers.starfox(src, channel, command, bots.command, "Error 403, invalid move name.");
+                return;
             }
-            index--;
-            if (index === 0) {
-                pokenumdisplay = pokenum;
-            }
+            moveNum = sys.moveNum(move);
+            move = sys.move(moveNum);
         }
-        learnmessage += "<br><h2>#" + pokenumdisplay + " " + pokemon + "</h2><br><b>Movepool:</b> ";
-        if (form > 0) {
-            pokenum = pokenumdisplay.slice(0, -2);
-        }
-        for (var index2 in moves) {
-            movelist = moves[index2].split(" ");
-            if (movelist[0].split(":")[0] == pokenum && movelist[0].split(":")[1] == form) {
-                movelist.splice(0, 1);
-                for (var index2 in movelist) {
-                    movelist[index2] = sys.move(movelist[index2]);
-                }
-                learnmessage += movelist.sort().join(", ") + ".<br><br><b>Total Moves:</b> " + movelist.length + "<br><br><timestamp/><br>" + border2;
-                if (command[2]) {
-                    for (var index2 in movelist) {
-                        if (movelist[index2] == move) {
-                            sys.sendHtmlMessage(src, helpers.bot(bots.command) + pokemon + " can learn " + move + ".", channel);
-                            return;
-                        }
-                    }
-                    sys.sendHtmlMessage(src, helpers.bot(bots.command) + pokemon + " can't learn " + move + ".", channel);
-                    return;
-                }
-            }
+        movepool = helpers.movepool(pokeNum);
+        learnmessage = border + "<h2>#" + helpers.displayNum(pokeNum) + " " + pokemon + "</h2><br><b>Movepool:</b> " + movepool.join(", ")
+        + "<br><br><b>Total Moves:</b> " + movepool.length + "<br><br><timestamp/><br>" + border2;
+        if (move) {
+            sys.sendHtmlMessage(src, helpers.bot(bots.command) + pokemon + " can" + (!helpers.isInArray(move, movepool) ? "not" : "") + " learn " + move + ".", channel);
+            return;
         }
         sys.sendHtmlMessage(src, learnmessage, channel);
     }
@@ -864,56 +766,22 @@ usercommands = {
     ,
     
     abilitydex: function (src, channel, command) {
-        if (!command[1]) {
-            helpers.starfox(src, channel, command, bots.command, "Error 403, invalid ability name or ID.");
+        var ability = command[1], abilityNum, description, pokemonList, abilitymessage;
+        if (!ability) {
+            helpers.starfox(src, channel, command, bots.command, "Error 404, ability not found.");
             return;
         }
-        if (!isNaN(command[1])) {
-            id = command[1];
-            if (id < 1 || id > 192) {
-                helpers.starfox(src, channel, command, bots.command, "Error 403, invalid ability ID.");
-                return;
-            }
-        } else {
-            id = sys.abilityNum(command[1]);
-            if (id === undefined || id < 1 || id > 192) {
-                helpers.starfox(src, channel, command, bots.command, "Error 403, invalid ability name.");
-                return;
-            }
+        if (!sys.abilityNum(ability)) {
+            helpers.starfox(src, channel, command, bots.command, "Error 403, invalid ability.");
+            return;
         }
-        var name = sys.ability(id), descrs = sys.read("db/abilities/ability_battledesc.txt"), abdexmessage = border + "<br><h2>#" + id + " " + name + "</h2><br><b>Description:</b> ";
-        descrs = descrs.split("\n");
-        var descrarray = [], derp, herp;
-        for (var index in descrs) {
-            derp = descrs[index].split(" ");
-            herp = derp[0];
-            delete derp[0];
-            derp = derp.join(" ");
-            descrarray[herp] = derp;
-        }
-        var descr = descrarray[id], ablist = [];
-        abdexmessage += descr + "<br><b>Pokemon that get this ability:</b> ";
-        var ab1 = sys.read("db/pokes/5G/ability1.txt"), ab2 = sys.read("db/pokes/5G/ability2.txt"), ab3 = sys.read("db/pokes/5G/ability3.txt");
-        ab1 = ab1.split("\n");ab2 = ab2.split("\n");ab3 = ab3.split("\n");
-        for (var index1 in ab1) {
-            derp = ab1[index1].split(" ");
-            if (derp[1] == id)ablist.push(derp[0]);
-        }
-        for (var index2 in ab2) {
-            derp = ab2[index2].split(" ");
-            if (derp[1] == id)ablist.push(derp[0]);
-        }
-        for (var index3 in ab3) {
-            derp = ab3[index3].split(" ");
-            if (derp[1] == id)ablist.push(derp[0]);
-        }
-        for (var index4 in ablist) {
-            derp = ablist[index4].split(":");
-            ablist[index4] = derp[0];
-            ablist[index4] = sys.pokemon(ablist[index4]);
-        }
-        abdexmessage += ablist.join(", ") + ".<br><br><timestamp/><br>" + border2;
-        sys.sendHtmlMessage(src, abdexmessage, channel);
+        abilityNum = sys.abilityNum(ability);
+        ability = sys.ability(id);
+        abilitymessage = border + "<h2>#" + abilityNum + " " + ability + "</h2>"
+        + "<br><b>Description:</b> " + helpers.ability(abilityNum)
+        + "<br><b>Pokémon with this ability:</b> " + helpers.pokemonWithAbility(abilityNum).join(", ")
+        + "<br><br><timestamp/><br>" + border2;
+        sys.sendHtmlMessage(src, abilitymessage, channel);
     }
     
     ,
@@ -1054,12 +922,12 @@ usercommands = {
             helpers.starfox(src, channel, command, bots.command, "Error 404, gradient not found.");
             return;
         }
-        if (sys.os(src) == "webclient") {
-            helpers.starfox(src, channel, command, bots.command, "Error 400, this command won't work on the web client.");
+        if (helpers.isWeb(src)) {
+            helpers.starfox(src, channel, command, bots.command, "Error 400, this command does not work on the web client.");
             return;
         }
-        if (sys.os(src) == "android") {
-            helpers.starfox(src, channel, command, bots.command, "Error 400, this command won't work on Android.");
+        if (helpers.isAndroid(src)) {
+            helpers.starfox(src, channel, command, bots.command, "Error 400, this command does not work on Android.");
             return;
         }
         sys.sendHtmlMessage(src, helpers.bot(bots.command) + "Your gradient will be shown below. If it's not there, or it's wrong, it doesn't work. Gradient:<br>" +
@@ -1293,9 +1161,9 @@ usercommands = {
             sys.changeColor(src, "#000000");
         } else {
             if (auth === 0 && color != "random") {
-                sys.changeColorStrict(src, color);
+                sys.changeColorStrict(src, sys.hexColor(color));
             } else {
-                sys.changeColor(src, color);
+                sys.changeColor(src, sys.hexColor(color));
             }
         }
         sys.sendHtmlAll(helpers.bot(bots.main) + "<b>" + helpers.user(name) + " changed their " + command[0] + " to " + helpers.arg(color) + "!</b>", channel);

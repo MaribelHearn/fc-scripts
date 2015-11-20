@@ -212,14 +212,14 @@ watchChannelLogging = function (message, channel, name, lower, color) {
     if (regchannels[sys.channel(channel).toLowerCase()]) {
         if (!regchannels[sys.channel(channel).toLowerCase()].priv) {
             if (!helpers.isInArray(lower, silentcommands)) {
-                sys.sendHtmlAuth(helpers.bot(bots.spy) + "[<a href=\"po:join/" + sys.channel(channel) + "\">#" + sys.channel(channel) + "</a>] <b style='color:" + color +
-                "'>" + helpers.escapehtml(name) + "</b> ran /" + helpers.escapehtml(message.slice(1)) + ".");
+                sys.sendHtmlAuth(helpers.bot(bots.spy) + "[<a href=\"po:join/" + sys.channel(channel) + "\">#" + sys.channel(channel) + "</a>] <b><font color='" + color +
+                "'>" + helpers.escapehtml(name) + "</font></b> ran /" + helpers.escapehtml(message.slice(1)) + ".");
             }
         }
     } else {
         if (!helpers.isInArray(lower, silentcommands)) {
-            sys.sendHtmlAuth(helpers.bot(bots.spy) + "[<a href=\"po:join/" + sys.channel(channel) + "\">#" + sys.channel(channel) + "</a>] <b style='color:" + color +
-            "'>" + helpers.escapehtml(name) + "</b> ran /" + helpers.escapehtml(message.slice(1)) + ".");
+            sys.sendHtmlAuth(helpers.bot(bots.spy) + "[<a href=\"po:join/" + sys.channel(channel) + "\">#" + sys.channel(channel) + "</a>] <b><font color='" + color +
+            "'>" + helpers.escapehtml(name) + "</font></b> ran /" + helpers.escapehtml(message.slice(1)) + ".");
         }
     }
 };

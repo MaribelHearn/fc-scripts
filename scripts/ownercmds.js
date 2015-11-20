@@ -526,6 +526,7 @@ ownercommands = {
         var commandsmessage = border
         + "<h2>Owner Commands ~ Script Options</h2>"
         + "<br>"
+        + "<b>" + helpers.user("/reload") + "</b>: reloads the scripts from the local files.<br>"
         + "<b>" + helpers.user("/update ") + helpers.arg("module") + "</b>: updates the <b>module</b> module. Updates the main script file by default.<br>"
         + "<b>" + helpers.user("/silentupdate ") + helpers.arg("module") + "</b>: silently updates the <b>module</b> module. Updates the main script file by default. Also /supdate.<br>"
         + "<b>" + helpers.user("/updateplugin ") + helpers.arg("plugin") + "</b>: updates the <b>plugin</b> plugin. Updates the main script file by default.<br>"
@@ -539,6 +540,30 @@ ownercommands = {
         + "<br><timestamp/><br>"
         + border2;
         sys.sendHtmlMessage(src, commandsmessage, channel);
+    }
+    
+    ,
+    
+    reload: function (src, channel, command) {
+        try {
+            for (var i in SCRIPT_MODULES) {
+                print("Loaded module " + SCRIPT_MODULES[i]);
+                sys.exec(SCRIPTS_FOLDER + SCRIPT_MODULES[i]);
+                moduleLoaded[i] = true;
+            }
+            if (helpers.isInArray("plugins", sys.dirsForDirectory(sys.cwd()))) {
+                for (var i in SCRIPT_PLUGINS) {
+                    if (sys.fileExists(PLUGINS_FOLDER + SCRIPT_PLUGINS[i])) {
+                        print("Loaded plugin " + SCRIPT_PLUGINS[i]);
+                        sys.exec(PLUGINS_FOLDER + SCRIPT_PLUGINS[i]);
+                        pluginLoaded[i] = true;
+                    }
+                }
+            }
+            sys.sendHtmlMessage(src, helpers.bot(bots.script) + "The server scripts have been reloaded successfully.", channel);
+        } catch (e) {
+            sys.sendHtmlMessage(src, helpers.bot(bots.script) + "An error occurred while reloading the scripts: " + e, channel);
+        }
     }
     
     ,
@@ -708,22 +733,12 @@ ownercommands = {
     ,
     
     "var": function (src, channel, command) {
-        var forbidden = ["=", ";", "+", "-", "*", "/", "add", "del", "sys.system", "remove", "erase", "write", "append", "change", "set"], allow = true, result, html;
+        var allow = true, result, html;
         if (!command[1]) {
             helpers.starfox(src, channel, command, bots.main, "Error 404, variable not found.");
             return;
         }
         html = (!command[2] ? false : true);
-        for (var i in forbidden) {
-            if (command[1].indexOf(forbidden[i]) != -1) {
-                allow = false;
-                break;
-            }
-        }
-        if (!allow) {
-            helpers.starfox(src, channel, command, bots.main, "Error 403, you are not allowed to use '" + forbidden[i] + "'!");
-            return;
-        }
         try {
             result = eval(command[1]);
         } catch (e) {
@@ -1748,10 +1763,10 @@ ownercommands = {
             helpers.starfox(src, channel, command, bots.command, "Error 403, invalid " + command[0].slice(6) + ".");
             return;
         }
-        borderColor = color;
-        sys.write("data/bordercolor.txt", borderColor);
-        border = "<font color='" + color + "'><b>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>></b></font>";
-        border2 = "<font color='" + color + "'><b>&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;" +
+        borderColor = sys.hexColor(color);
+        sys.write("data/bordercolor.txt", sys.hexColor(borderColor));
+        border = "<font color='" + sys.hexColor(color) + "'><b>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>></b></font>";
+        border2 = "<font color='" + sys.hexColor(color) + "'><b>&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;" +
         "&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;</b></font>";
         sys.sendHtmlMessage(src, helpers.bot(bots.main) + "The border " + command[0].slice(6) + " has been changed to " + color + ".", channel);
     }
@@ -1774,8 +1789,8 @@ ownercommands = {
             helpers.starfox(src, channel, command, bots.command, "Error 403, invalid " + command[0].slice(11) + ".");
             return;
         }
-        serverTopicColor = color;
-        sys.write("data/servertopiccolor.txt", serverTopicColor);
+        serverTopicColor = sys.hexColor(color);
+        sys.write("data/servertopiccolor.txt", sys.hexColor(serverTopicColor));
         sys.sendHtmlMessage(src, helpers.bot(bots.main) + "The server topic " + command[0].slice(11) + " has been changed to " + color + ".", channel);
     }
     
@@ -1797,8 +1812,8 @@ ownercommands = {
             helpers.starfox(src, channel, command, bots.command, "Error 403, invalid " + command[0].slice(12) + ".");
             return;
         }
-        channelTopicColor = color;
-        sys.write("data/channeltopiccolor.txt", channelTopicColor);
+        channelTopicColor = sys.hexColor(color);
+        sys.write("data/channeltopiccolor.txt", sys.hexColor(channelTopicColor));
         sys.sendHtmlMessage(src, helpers.bot(bots.main) + "The channel topic " + command[0].slice(12) + " has been changed to " + color + ".", channel);
     }
     
@@ -1827,7 +1842,7 @@ ownercommands = {
             helpers.starfox(src, channel, command, bots.command, "Error 403, invalid " + command[0].slice(7) + ".");
             return;
         }
-        cmdcolors[command[1]] = command[2];
+        cmdcolors[command[1]] = sys.hexColor(command[2]);
         sys.write("data/cmdcolors.txt", JSON.stringify(cmdcolors));
         sys.sendHtmlMessage(src, helpers.bot(bots.main) + "Command " + command[0].slice(7) + " " + command[1] + " has been changed to " + command[2] + ".", channel);
     }
