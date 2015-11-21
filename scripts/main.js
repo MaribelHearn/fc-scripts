@@ -230,17 +230,13 @@
     selfkickmessages = JSON.parse(sys.read("data/selfkickmsg.txt"));
     rangebanmessages = JSON.parse(sys.read("data/rangebanmsg.txt"));
     
-    // Boolean
+    // Other globals
     helpers.setVariable("tor", false);
     helpers.setVariable("stopbattles", false);
     helpers.setVariable("megabancheck", false);
     helpers.setVariable("gigabancheck", false);
     helpers.setVariable("serverStarting", false);
-    
-    // Number
-    timer = 0;
-    
-    // String
+    helpers.setVariable("timer", 0);
     helpers.setVariable("layout", "new");
     helpers.setVariable("hostIp", "");
     helpers.setVariable("hostCountry", "");
@@ -249,12 +245,8 @@
     helpers.setVariable("border", "<font color='" + borderColor + "'><b>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>></b></font>");
     helpers.setVariable("border2", "<font color='" + borderColor + "'><b>&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;" +
     "&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;</b></font>");
-    
-    // Array
     helpers.setVariable("players", []);
     helpers.setVariable("floodplayers", []);
-    
-    // Object
     helpers.setVariable("tour", {});
     helpers.setVariable("battles", {});
     helpers.setVariable("battlesf", {});
