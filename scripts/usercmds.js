@@ -31,13 +31,13 @@ usercommands = {
             commandsmessage += "<b>" + helpers.userl("/funcommands") + "</b>: displays fun commands.<br>"
         }
         if (helpers.isLoaded("party.js")) {
-            commandsmessage += "<b>" + helpers.userl("/partycommands") + "</b>: displays Party commands. Only for the <a href='po:join/" + permchannels[3] + "'>#" + permchannels[3] + "</a> channel.<br>";
+            commandsmessage += "<b>" + helpers.userl("/partycommands") + "</b>: displays Party commands. Only for the " + helpers.channelLink(permchannels[3]) + " channel.<br>";
         }
         if (helpers.isLoaded("roulette.js")) {
-            commandsmessage += "<b>" + helpers.userl("/roulettecommands") + "</b>: displays Roulette commands. Only for the <a href='po:join/" + permchannels[5] + "'>#" + permchannels[5] + "</a> channel.<br>";
+            commandsmessage += "<b>" + helpers.userl("/roulettecommands") + "</b>: displays Roulette commands. Only for the " + helpers.channelLink(permchannels[5]) + " channel.<br>";
         }
         if (helpers.isLoaded("rr.js")) {
-            commandsmessage += "<b>" + helpers.userl("/rrcommands") + "</b>: displays Russian Roulette options. Only for the <a href='po:join/" + permchannels[4] + "'>#" + permchannels[4] + "</a> channel.<br>";
+            commandsmessage += "<b>" + helpers.userl("/rrcommands") + "</b>: displays Russian Roulette options. Only for the " + helpers.channelLink(permchannels[4]) + " channel.<br>";
         }
         commandsmessage += "<br><timestamp/><br>" + border2;
         sys.sendHtmlMessage(src, commandsmessage, channel);
@@ -324,7 +324,7 @@ usercommands = {
             } else {
                 descr = "A user-created channel.";
             }
-            channelmessage += "<tr><td>" + id + "</td><td><a href='po:join/" + name + "'>#" + name + "</a></td><td>" + descr + "</td></tr>";
+            channelmessage += "<tr><td>" + id + "</td><td>" + helpers.channelLink(name) + "</td><td>" + descr + "</td></tr>";
         }
         channelmessage += "</table><br><br><b>Total Channels Online:</b> " + total + "<br><br><timestamp/><br>" + border2;
         sys.sendHtmlMessage(src, channelmessage, channel);

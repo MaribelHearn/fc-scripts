@@ -1291,7 +1291,7 @@ ownercommands = {
         var trustedIps = sys.trustedIps(), dosChannel = sys.dosChannel() === "" ? "none" : sys.dosChannel(), commandsmessage = border
         + "<h2>Owner Commands ~ Anti DoS Settings</h2>"
         + "<br>"
-        + "The current anti DoS message channel is " + (dosChannel == "none" ? "none" : "<a href='po:join/" + dosChannel + "'>#" + dosChannel + "</a>") + ".<br>"
+        + "The current anti DoS message channel is " + (dosChannel == "none" ? "none" : helpers.channelLink(dosChannel)) + ".<br>"
         + "The following IPs are trusted and will bypass the server anti DoS:<br>"
         + "<br>"
         + trustedIps.join(", ") + "<br>"
@@ -1614,7 +1614,7 @@ ownercommands = {
         var commandsmessage = border
         + "<h2>Owner Commands ~ Silent Settings</h2>"
         + "<br>"
-        + "The following commands will currently bypass logging in <a href='po:join/" + permchannels[0] + "'>#" + permchannels[0] + "</a>:<br>"
+        + "The following commands will currently bypass logging in " + helpers.channelLink(permchannels[0]) + ":<br>"
         + "<br>"
         + silentcommands.join(", ") + "<br>"
         + "<br>"
@@ -2171,8 +2171,7 @@ ownercommands = {
         + "<td>Channel</td><td>Permanent</td><td>Private</td><td>Closure Level</td><td>Owners</td></tr></thead><tbody>";
         for (var i in regchannels) {
             message += "<tr>";
-            typeof(sys.channelId(i)) == "number" ? message += "<td><a href='po:join/" + sys.channel(sys.channelId(i)) +
-            "'>#" + sys.channel(sys.channelId(i)) + "</a></td>" : message += "<td>#" + i + "</td>";
+            typeof(sys.channelId(i)) == "number" ? message += "<td>" + helpers.channelLink(sys.channel(sys.channelId(i))) + "</td>" : message += "<td>#" + i + "</td>";
             regchannels[i].stay || sys.channelId(i) <= permchannels.length ? message += "<td><b style='color:green'>Yes</b></td>" : message += "<td><b style='color:red'>No</b></td>";
             regchannels[i].priv ? message += "<td><b style='color:green'>Yes</b></td>" : message += "<td><b style='color:red'>No</b></td>";
             message += "<td>" + regchannels[i].close + "</td><td>" + regchannels[i].owners.join(", ") + "</td></tr>";

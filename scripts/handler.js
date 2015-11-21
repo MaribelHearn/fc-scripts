@@ -60,7 +60,7 @@ userCommand = function (src, channel, command, lower, name, auth) {
 rouletteCommand = function (src, channel, command, lower, name, auth) {
     if (helpers.isLoaded("roulette.js") && roulettecommands[lower] !== undefined) {
         if (channel != roulettechannel) {
-            helpers.starfox(src, channel, command, bots.roulette, "Error 403, this command is meant to be used in the <a href='po:join/" + permchannels[5] + "'>#" + permchannels[5] + "</a> channel.");
+            helpers.starfox(src, channel, command, bots.roulette, "Error 403, this command is meant to be used in the " + helpers.channelLink(permchannels[5]) + " channel.");
             return;
         }
         if (helpers.isMutable(roulettecommands[lower]) && mutedOrSilenced(src, channel, command, name, auth)) {
@@ -73,7 +73,7 @@ rouletteCommand = function (src, channel, command, lower, name, auth) {
 russianRouletteCommand = function (src, channel, command, lower, name, auth) {
     if (helpers.isLoaded("rr.js") && rrcommands[lower] !== undefined) {
         if (channel != rrchannel) {
-            helpers.starfox(src, channel, command, bots.rr, "Error 403, this command is meant to be used in the the <a href='po:join/" + permchannels[4] + "'>#" + permchannels[4] + "</a> channel.");
+            helpers.starfox(src, channel, command, bots.rr, "Error 403, this command is meant to be used in the the " + helpers.channelLink(permchannels[4]) + " channel.");
             return;
         }
         if (helpers.isMutable(rrcommands[lower]) && mutedOrSilenced(src, channel, command, name, auth)) {
@@ -86,7 +86,7 @@ russianRouletteCommand = function (src, channel, command, lower, name, auth) {
 partyCommand = function (src, channel, command, lower, name, auth) {
     if (helpers.isLoaded("party.js") && partycommands[lower] !== undefined) {
         if (channel != partychannel) {
-            helpers.starfox(src, channel, command, bots.party, "Error 403, this command is meant to be used in the <a href='po:join/" + permchannels[3] + "'>#" + permchannels[3] + "</a> channel.");
+            helpers.starfox(src, channel, command, bots.party, "Error 403, this command is meant to be used in the " + helpers.channelLink(permchannels[3]) + " channel.");
             return;
         }
         if (helpers.isMutable(partycommands[lower]) && mutedOrSilenced(src, channel, command, name, auth)) {
