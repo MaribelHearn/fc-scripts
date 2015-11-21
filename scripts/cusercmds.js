@@ -219,7 +219,7 @@ cusercommands = {
     ,
     
     channelauth: function (src, channel, command) {
-        var lower = sys.channel(channel).toLowerCase(), mods, admins, owners, i, imageIndex, name, lastLogin, ip, status, total = 0, message;
+        var lower = sys.channel(channel).toLowerCase(), mods, admins, owners, i, auth, name, lastLogin, ip, status, total = 0, message;
         if (!regchannels[lower]) {
             helpers.starfox(src, channel, command, bots.channel, "Error 400, this channel isn't registered!");
             return;
@@ -232,40 +232,40 @@ cusercommands = {
         // Channel Owners
         for (i in owners) {
             name = owners[i];
-            imageIndex = helpers.imageIndex(name);
+            auth = (sys.dbAuth(name) >= 4 ? 0 : sys.dbAuth(name));
             lastLogin = helpers.formatLastOn(src, sys.dbLastOn(name));
             ip = sys.dbIp(name);
             status = (sys.id(name) ? "<font color='green'><b>Online</b></font>" : "<font color='red'>Offline</font>");
             if (members[name]) {
                 name = members[name];
             }
-            message += "<tr><td>" + helpers.authimage(src, imageIndex) + "</td><td>Channel Owner</td><td>" + name + "</td><td>" + lastLogin + "</td><td>" + status + "</td></tr>";
+            message += "<tr><td>" + helpers.authimage(src, auth) + "</td><td>Channel Owner</td><td>" + name + "</td><td>" + lastLogin + "</td><td>" + status + "</td></tr>";
             total++;
         }
         // Channel Admins
         for (i in admins) {
             name = admins[i];
-            imageIndex = helpers.imageIndex(name);
+            auth = (sys.dbAuth(name) >= 4 ? 0 : sys.dbAuth(name));
             lastLogin = helpers.formatLastOn(src, sys.dbLastOn(name));
             ip = sys.dbIp(name);
             status = (sys.id(name) ? "<font color='green'><b>Online</b></font>" : "<font color='red'>Offline</font>");
             if (members[name]) {
                 name = members[name];
             }
-            message += "<tr><td>" + helpers.authimage(src, imageIndex) + "</td><td>Channel Admin</td><td>" + name + "</td><td>" + lastLogin + "</td><td>" + status + "</td></tr>";
+            message += "<tr><td>" + helpers.authimage(src, auth) + "</td><td>Channel Admin</td><td>" + name + "</td><td>" + lastLogin + "</td><td>" + status + "</td></tr>";
             total++;
         }
         // Channel Mods
         for (i in mods) {
             name = mods[i];
-            imageIndex = helpers.imageIndex(name);
+            auth = (sys.dbAuth(name) >= 4 ? 0 : sys.dbAuth(name));
             lastLogin = helpers.formatLastOn(src, sys.dbLastOn(name));
             ip = sys.dbIp(name);
             status = (sys.id(name) ? "<font color='green'><b>Online</b></font>" : "<font color='red'>Offline</font>");
             if (members[name]) {
                 name = members[name];
             }
-            message += "<tr><td>" + helpers.authimage(src, imageIndex) + "</td><td>Channel Mod</td><td>" + name + "</td><td>" + lastLogin + "</td><td>" + status + "</td></tr>";
+            message += "<tr><td>" + helpers.authimage(src, auth) + "</td><td>Channel Mod</td><td>" + name + "</td><td>" + lastLogin + "</td><td>" + status + "</td></tr>";
             total++;
         }
         message += "</tbody><tfoot><tr><td colspan='5'><b>Total Channel Auth Members:</b> " + total + "</td></tr></tfoot></table><br><br><timestamp/><br>" + border2;
