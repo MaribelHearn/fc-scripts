@@ -328,6 +328,14 @@ helpers = {
         Return Helpers
         --------------
     **/
+    calcDamage: function (attack, defense, power, modifier) {
+        // assumes the attacking Pokémon is level 100
+        var damage = Math.floor((0.84 * (attack / defense) * power + 2) * modifier);
+        return [Math.floor(damage * 0.85), damage];
+    }
+    
+    ,
+    
     timePassed: function (color, lastMessageTime) {
         var timePassed = new Date() - lastMessageTime, unit;
         timePassed = Math.round(timePassed / 1000);
