@@ -1981,11 +1981,39 @@ ownercommands = {
         }
         commandsmessage += permChannelList.join(", ") + "<br>"
         + "<br>"
-        + "Use <b>" + helpers.userg("/registerall") + "</b> to register all of the permanent channels and give them their default settings.<br>"
+        + "Use <b>" + helpers.user("/registerall") + "</b> to register all of the permanent channels and give them their default settings. Make sure you have chosen a main channel name before doing this,<br>"
+        + "or it will have to be reregistered when you change its name.<br>"
         + "Use <b>" + helpers.user("/renamechannel ") + helpers.arg("name") + helpers.arg2("*new name") + "</b> to change the name of a perm channel from <b>name</b> to <b>new name</b>.<br>"
         + "<br><timestamp/><br>"
         + border2;
         sys.sendHtmlMessage(src, commandsmessage, channel);
+    }
+    
+    ,
+    
+    registerall: function (src, channel, command) {
+        cusercommands.registerthis(src, 0, ["registerthis"]);
+        cownercommands.perm(src, 0, ["perm"]);
+        for (var i in permchannels) {
+            cusercommands.registerthis(src, sys.channelId(permchannels[i]), ["registerthis"]);
+            cownercommands.perm(src, sys.channelId(permchannels[i]), ["perm"]);
+        }
+        cmodcommands.cclose(src, sys.channelId(permchannels[0]), ["cclose", 1]);
+        cownercommands.priv(src, sys.channelId(permchannels[0]), ["priv"]);
+        cmodcommands.cclose(src, sys.channelId(permchannels[1]), ["cclose", 1]);
+        cmodcommands.cclose(src, sys.channelId(permchannels[2]), ["cclose", 3]);
+        cownercommands.priv(src, sys.channelId(permchannels[2]), ["priv"]);
+        if (helpers.isLoaded("party.js")) {
+            cownercommands.priv(src, sys.channelId(permchannels[3]), ["priv"]);
+        }
+        if (helpers.isLoaded("rr.js")) {
+            cownercommands.priv(src, sys.channelId(permchannels[4]), ["priv"]);
+        }
+        if (helpers.isLoaded("roulette.js")) {
+            cownercommands.priv(src, sys.channelId(permchannels[5]), ["priv"]);
+        }
+        helpers.saveDataFile("regchannels");
+        sys.sendHtmlMessage(src, helpers.bot(bots.main) + "All permanent channels have been registered successfully and have been given their default settings.", channel);
     }
     
     ,
@@ -2008,6 +2036,7 @@ ownercommands = {
                 if (regchannels[lower]) {
                     regchannels[newName.toLowerCase()] = regchannels[lower];
                     delete regchannels[lower];
+                    helpers.saveDataFile("regchannels");
                 }
                 permchannels[i] = newName;
                 helpers.saveDataFile("permchannels");

@@ -49,7 +49,7 @@ cusercommands = {
         regchannels[lower].topicmakers = [players[src].name.toLowerCase()];
         regchannels[lower].mods = [];
         regchannels[lower].admins = [];
-        regchannels[lower].owners = [];
+        regchannels[lower].owners = [players[src].name.toLowerCase()];
         regchannels[lower].mutelist = {};
         regchannels[lower].mutedips = {};
         regchannels[lower].banlist = {};
@@ -57,7 +57,6 @@ cusercommands = {
         regchannels[lower].rules = [];
         regchannels[lower].silence = 0;
         regchannels[lower].close = 0;
-        regchannels[lower].owners.push(players[src].name.toLowerCase());
         sys.write("data/regchannels.txt", JSON.stringify(regchannels));
         sys.sendHtmlAll(helpers.bot(bots.channel) + "The channel has been registered by " + name + "!", channel);
     }
@@ -227,24 +226,14 @@ cusercommands = {
         }
         var mods = regchannels[lower].mods, admins = regchannels[lower].admins, owners = regchannels[lower].owners;
         var index, i_auth, i_authname, i_name, i_lastlogin, i_status, total = 0;
-        var message = border + "<h2>Channel Auth of " + sys.channel(channel) + "</h2><br><style type='text/css'>table {border-width:1px; border-style:solid; border-color:#000;}"
-        + "thead {font-weight:bold;}</style>"
-        + "<table cellpadding=2 cellspacing=0><thead><tr style='background-color:#b0b0b0;'>"
-        + "<td>Icon</td><td>Auth</td><td>Name</td><td>Last Online</td><td>Status</td></tr></thead>";
+        var message = border + "<h2>Channel Auth of " + sys.channel(channel) + "</h2><br><style type='text/css'>table {border-width: 1px; border-style: solid; border-color: #000000;}</style>"
+        + "<table cellpadding=2 cellspacing=0><thead><tr style='background-color: #B0B0B0;'><th>Icon</th><th>Auth</th><th>Name</th><th>Last Online</th><th>Status</th></tr></thead><tbody>";
         // Channel Owners
         for (index in owners) {
             i_name = owners[index];
             i_auth = sys.dbAuth(i_name);
-            if (i_auth >= 4) {
-                continue; // do not display invisible owners
-            }
             i_authname = "Channel Owner";
-            lastlogin = sys.dbLastOn(i_name);
-            lastlogin = helpers.totimezone(lastlogin, timezone[players[src].name.toLowerCase()].split(':')[0]);
-            !timezone[i_name] ? timezone2 = "[no data]" : timezone2 = timezone[i_name];
-            lastlogin = lastlogin.split('.')[0];
-            lastlogin = lastlogin.replace('T', ", ");
-            i_lastlogin = lastlogin;
+            i_lastlogin = helpers.formatLastOn(src, sys.dbLastOn(i_name));
             i_ip = sys.dbIp(i_name);
             sys.id(i_name) ? i_status = "<font color='green'><b>Online</b></font>" : i_status = "<font color='red'>Offline</font>";
             if (members[i_name]) {
@@ -257,16 +246,8 @@ cusercommands = {
         for (index in admins) {
             i_name = admins[index];
             i_auth = sys.dbAuth(i_name);
-            if (i_auth >= 4) {
-                continue; // do not display invisible owners
-            }
             i_authname = "Channel Admin";
-            lastlogin = sys.dbLastOn(i_name);
-            lastlogin = helpers.totimezone(lastlogin, timezone[players[src].name.toLowerCase()].split(':')[0]);
-            !timezone[i_name] ? timezone2 = "[no data]" : timezone2 = timezone[i_name];
-            lastlogin = lastlogin.split('.')[0];
-            lastlogin = lastlogin.replace('T', ", ");
-            i_lastlogin = lastlogin;
+            i_lastlogin = helpers.formatLastOn(src, sys.dbLastOn(i_name));
             i_ip = sys.dbIp(i_name);
             sys.id(i_name) ? i_status = "<font color='green'><b>Online</b></font>" : i_status = "<font color='red'>Offline</font>";
             if (members[i_name]) {
@@ -279,16 +260,8 @@ cusercommands = {
         for (index in mods) {
             i_name = mods[index];
             i_auth = sys.dbAuth(i_name);
-            if (i_auth >= 4) {
-                continue; // do not display invisible owners
-            }
             i_authname = "Channel Mod";
-            lastlogin = sys.dbLastOn(i_name);
-            lastlogin = helpers.totimezone(lastlogin, timezone[players[src].name.toLowerCase()].split(':')[0]);
-            !timezone[i_name] ? timezone2 = "[no data]" : timezone2 = timezone[i_name];
-            lastlogin = lastlogin.split('.')[0];
-            lastlogin = lastlogin.replace('T', ", ");
-            i_lastlogin = lastlogin;
+            i_lastlogin = helpers.formatLastOn(src, sys.dbLastOn(i_name));
             i_ip = sys.dbIp(i_name);
             sys.id(i_name) ? i_status = "<font color='green'><b>Online</b></font>" : i_status = "<font color='red'>Offline</font>";
             if (members[i_name]) {
@@ -297,7 +270,7 @@ cusercommands = {
             message += "<tr><td>" + helpers.authimage(i_auth) + "</td><td>" + i_authname + "</td><td>" + i_name + "</td><td>" + i_lastlogin + "</td><td>" + i_status + "</td></tr>";
             total++;
         }
-        message += "</table><br><br><b>Total Channel Auth Members:</b> " + total + "<br><br><timestamp/><br>" + border2;
+        message += "</tbody></table><br><br><b>Total Channel Auth Members:</b> " + total + "<br><br><timestamp/><br>" + border2;
         sys.sendHtmlMessage(src, message, channel);
     }
     
