@@ -2202,20 +2202,20 @@ ownercommands = {
         "<b>Total Channel User Commands:</b> " + Object.keys(cusercommands).length + "<br>" +
         "<b>Total Channel Mod Commands:</b> " + Object.keys(cmodcommands).length + "<br>" +
         "<b>Total Channel Admin Commands:</b> " + Object.keys(cadmincommands).length + "<br>" +
-        "<b>Total Channel Owner Commands:</b> " + Object.keys(cownercommands).length + "<br>";
+        "<b>Total Channel Owner Commands:</b> " + Object.keys(cownercommands).length;
         if (helpers.isLoaded("funcmds.js")) {
-            scriptmessage += "<br>Total Fun Commands:</b> " + Object.keys(funcommands).length + "<br>";
+            scriptmessage += "<br><b>Total Fun Commands:</b> " + Object.keys(funcommands).length;
         }
         if (helpers.isLoaded("party.js")) {
-            scriptmessage += "<br>Total Party Commands:</b> " + Object.keys(partycommands).length + "<br>";
+            scriptmessage += "<br><b>Total Party Commands:</b> " + Object.keys(partycommands).length;
         }
         if (helpers.isLoaded("rr.js")) {
-            scriptmessage += "<br>Total Russian Roulette Commands:</b> " + Object.keys(rcommands).length + "<br>";
+            scriptmessage += "<br><b>Total Russian Roulette Commands:</b> " + Object.keys(rrcommands).length;
         }
         if (helpers.isLoaded("roulette.js")) {
-            scriptmessage += "<br>Total Roulette Commands:</b> " + Object.keys(roulettecommands).length + "<br>";
+            scriptmessage += "<br><b>Total Roulette Commands:</b> " + Object.keys(roulettecommands).length;
         }
-        scriptmessage += "<b>Total Helpers:</b> " + Object.keys(helpers).length + "<br>" +
+        scriptmessage += "<br><b>Total Helpers:</b> " + Object.keys(helpers).length + "<br>" +
         "<b><u>Total Commands:</u></b> " + allcommands.length + "<br><br><timestamp/><br>" + border2;
         sys.sendHtmlMessage(src, scriptmessage, channel);
     }
