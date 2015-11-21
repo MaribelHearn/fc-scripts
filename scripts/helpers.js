@@ -367,13 +367,16 @@ helpers = {
     ,
     
     imageIndex: function (src) {
+        if (isNaN(src)) {
+            return sys.dbAuth(src) >= 4 ? 4 : sys.dbAuth(src) + 4;
+        }
         var imageIndex = sys.auth(src);
         if (imageIndex > 3) {
             imageIndex = 0;
         }
-        if (sys.battling(id)) {
+        if (sys.battling(src)) {
             imageIndex += 8;
-        } else if (sys.away(id)) {
+        } else if (sys.away(src)) {
             imageIndex += 4;
         }
         return imageIndex;

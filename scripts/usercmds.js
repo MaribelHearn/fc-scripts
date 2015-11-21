@@ -484,20 +484,14 @@ usercommands = {
         }
         if (trgt) {
             auth = (sys.auth(trgt) >= 4 ? 0 : sys.auth(trgt));
-            imageindex = auth;
-            if (sys.battling(trgt)) {
-                imageindex += 8;
-            } else if (sys.away(trgt)) {
-                imageindex += 4;
-            }
+            imageindex = helpers.imageIndex(trgt);
             status = "<font color='green'><b>Online</b></font>";
             infomessage += helpers.authimage(src, imageindex) + " " + player + " " + status +
             "<br><b>Auth:</b> " + helpers.authname(sys.dbAuth(player), true, true) +
             "<br><b>Avatar:</b> <img src='trainer:" + sys.avatar(trgt) + "'>" +
             "<br><b>Trainer Info:</b> " + sys.info(trgt) + "";
         } else {
-            auth = (sys.dbAuth(player) >= 4 ? 0 : sys.dbAuth(player));
-            imageindex = auth + 4;
+            auth = (sys.dbAuth(player) >= 4 ? 4 : sys.dbAuth(player) + 4);
             status = "<font color='red'>Offline</font>";
             infomessage += helpers.authimage(src, imageindex) + " " + player + " " + status +
             "<br><b>Auth:</b> " + helpers.authname(sys.dbAuth(player), true, true);
@@ -513,13 +507,13 @@ usercommands = {
         var srcauth = sys.auth(src), index, auth, authname, name, ip, lastlogin, status, total, country, timezone2;
         var authlist = helpers.authSort(), length = 0;
         var message = border + "<h2>Server Authority</h2>"
-        + "<br><style type='text/css'>table {border-width:1px; border-style:solid; border-color:#000;}thead {font-weight:bold;}</style>"
-        + "<table cellpadding=2 cellspacing=0><thead><tr style='background-color:#b0b0b0;'>"
-        + "<td>Icon</td><td>Auth</td><td>Title</td><td>Name</td>";
-        if (srcauth > 0) {
-            message += "<td>IP</td><td>Country</td><td>Time Zone</td>";
+        + "<br><style>table {border-width: 1px; border-style: solid; border-color: #000000;}</style>"
+        + "<table cellpadding='2' cellspacing='0'><thead><tr style='background-color:#B0B0B0;'>"
+        + "<th>Icon</th><th>Auth</th><th>Title</th><th>Name</th>";
+        if (srcauth >= 1) {
+            message += "<th>IP</th><th>Country</th><th>Time Zone</th>";
         }
-        message += "<td>Last Online</td><td>Status</td></tr></thead>";
+        message += "<th>Last Online</th><th>Status</th></tr></thead><tbody>";
         for (index in authlist) {
             name = authlist[index];
             auth = sys.dbAuth(name);
@@ -547,7 +541,7 @@ usercommands = {
             message += "<td>" + lastlogin + "</td><td>" + status + "</td></tr>";
             length++;
         }
-        message += "</table><br><br><b>Total Auth Members:</b> " + length + "<br><br><timestamp/><br>" + border2;
+        message += "</tbody><tfoot><tr><td colspan='" + (srcauth >= 1 ? 9 : 6) + "'><b>Total Auth Members:</b> " + length + "</td></tr></tfoot></table><br><br><timestamp/><br>" + border2;
         sys.sendHtmlMessage(src, message, channel);
     }
     
