@@ -16,7 +16,7 @@ funcommands = {
         + "<b>" + helpers.user("/armyof ") + helpers.arg("Pokémon") + "</b>: posts six of the same <b>Pokémon</b>.<br>"
         + "<b>" + helpers.user("/attack ") + helpers.arg("player") + helpers.arg2("*move") + "</b>: use <b>move</b> on <b>player</b>. If <b>move</b> is not specified, a random move is selected.<br>"
         + "<b>" + helpers.user("/attract ") + helpers.arg("player") + "</b>: attracts <b>player</b>. This command no longer adds 'attracted' to the player's name.<br>"
-        + "<b>" + helpers.user("/axolotl") + "</b>: a strange command that makes you post an image of an axolotl. Only for a certain user.<br>"
+        + "<b>" + helpers.user("/axolotl") + "</b>: a strange command that makes you post an image of an axolotl.<br>"
         + "<b>" + helpers.user("/bigtext ") + helpers.arg("text") + helpers.arg2("*title") + helpers.arg3("*bot") + helpers.arg4("*color") + helpers.arg5("*size") +
         "</b>: posts <b>text</b> in a large <b>color</b> font of <b>size</b> px in size, titled <b>title</b>, with <b>bot</b> as bot.<br>"
         + "<b>" + helpers.user("/bulbaderp") + "</b>: posts an image of Bulbasaur. Bulbaderp.<br>"
@@ -91,21 +91,17 @@ funcommands = {
     attract: function (src, channel, command) {
         var name = helpers.escapehtml(sys.name(src));
         !command[1] ? player = "Someone" : player = helpers.escapehtml(command[1]);
-        sys.sendHtmlAll("<font color='fuchsia'><timestamp/><b><font size='8'>♥</font> " + player + " has been attracted by " + name + "! <font size='8'>♥</font</b></font>", channel);
+        sys.sendHtmlAll("<font color='#FF00FF'><timestamp/><b><font size='6'>♥</font> " + player + " has been attracted by " + name + "! <font size='6'>♥</font</b></font>", channel);
     }
     
     ,
     
     axolotl: function (src, channel, command) {
         var name = helpers.escapehtml(sys.name(src)), auth = sys.auth(src), color = helpers.color(src);
-        if (auth < 3 && name != "Wanderer M") {
-            helpers.starfox(src, channel, command, bots.command, "Error 403, you may not use this command.");
-            return;
-        }
-        if (auth == 3) {
-            sys.sendHtmlAll("<font color='" + color + "'><timestamp /> +<b><i>" + name + ":</i></b></font> " + AXOLOTL_BASE64, channel);
+        if (auth >= 1 && auth <= 3) {
+            sys.sendHtmlAll("<font color='" + color + "'><timestamp/> +<b><i>" + name + ":</i></b></font> " + AXOLOTL_BASE64, channel);
         } else {
-            sys.sendHtmlAll("<font color='" + color + "'><timestamp /> <b>" + name + ":</b></font> " + AXOLOTL_BASE64, channel);
+            sys.sendHtmlAll("<font color='" + color + "'><timestamp/> <b>" + name + ":</b></font> " + AXOLOTL_BASE64, channel);
         }
     }
     
@@ -116,7 +112,7 @@ funcommands = {
         !command[1] ? text = "Some text." : text = helpers.escapehtml(command[1]);
         !command[2] ? title = "Big Text" : title = helpers.escapehtml(command[2]);
         !command[3] ? bot = bots.fun : bot = helpers.escapehtml(command[3]);
-        !command[4] ? color = "black" : color = command[4];
+        !command[4] || !sys.validColor(command[4]) ? color = "#000000" : color = sys.hexColor(command[4]);
         !command[5] ? size = 32 : size = command[5];
         if (isNaN(size)) {
             helpers.starfox(src, channel, command, bots.command, "Error 400, the size must be a number.");
@@ -131,7 +127,7 @@ funcommands = {
             return;
         }
         sys.sendHtmlAll(helpers.bot(bot) + "<b>" + helpers.user(helpers.escapehtml(name)) +
-        " has used the " + helpers.arg(title) + " command.</b><br><span style='font-size:" + size + "px;color:" + color + "'>" + text + "</span>", channel);
+        " has used the " + helpers.arg(title) + " command.</b><br><span style='font-size:" + size + "px'><font color='" + color + "'>" + text + "</font></span>", channel);
     }
     
     ,
@@ -145,10 +141,17 @@ funcommands = {
     ,
     
     burn: function (src, channel, command) {
-        var name = helpers.escapehtml(sys.name(src));
+        var name = helpers.escapehtml(sys.name(src)), channelPlayers = sys.playersOfChannel(channel);
         !command[1] ? player = "Someone" : player = helpers.escapehtml(command[1]);
-        sys.sendHtmlAll("<font color='red'><timestamp/><b><img src='Themes/Classic/status/battle_status4.png'>" + player + " has been burned by " + name +
-        "!<img src='Themes/Classic/status/battle_status4.png'></b></font>", channel);
+        for (var i in channelPlayers) {
+            if (helpers.isAndroidOrWeb(channelPlayers[i])) {
+                sys.sendHtmlMessage(channelPlayers[i], "<font color='#FF0000'><timestamp/><b>" + STATUS[command[0].toUpperCase()] + player +
+                " has been burned by " + name + "!" + STATUS[command[0].toUpperCase()] + "</b></font>", channel);
+            } else {
+                sys.sendHtmlMessage(channelPlayers[i], "<font color='#FF0000'><timestamp/><b>" + helpers.statusImage(command[0]) + player +
+                " has been burned by " + name + "!" + helpers.statusImage(command[0]) + "</b></font>", channel);
+            }
+        }
     }
     
     ,
@@ -156,7 +159,7 @@ funcommands = {
     confuse: function (src, channel, command) {
         var name = helpers.escapehtml(sys.name(src));
         !command[1] ? player = "Someone" : player = helpers.escapehtml(command[1]);
-        sys.sendHtmlAll("<font color='blueviolet'><timestamp/><b><font size='8'>@</font> " + player + " has been confused by " + name + "! <font size='8'>@</font</b></font>", channel);
+        sys.sendHtmlAll("<font color='#8A2BE2'><timestamp/><b><font size='6'>@</font> " + player + " has been confused by " + name + "! <font size='6'>@</font</b></font>", channel);
     }
     
     ,
@@ -241,10 +244,17 @@ funcommands = {
     ,
     
     freeze: function (src, channel, command) {
-        var name = helpers.escapehtml(sys.name(src));
+        var name = helpers.escapehtml(sys.name(src)), channelPlayers = sys.playersOfChannel(channel);
         !command[1] ? player = "Someone" : player = helpers.escapehtml(command[1]);
-        sys.sendHtmlAll("<font color='skyblue'><timestamp/><b><img src='Themes/Classic/status/battle_status3.png'>" + player + " has been frozen by " + name +
-        "!<img src='Themes/Classic/status/battle_status3.png'></b></font>", channel);
+        for (var i in channelPlayers) {
+            if (helpers.isAndroidOrWeb(channelPlayers[i])) {
+                sys.sendHtmlMessage(channelPlayers[i], "<font color='#87CEEB'><timestamp/><b>" + STATUS[command[0].toUpperCase()] + player +
+                " has been frozen by " + name + "!" + STATUS[command[0].toUpperCase()] + "</b></font>", channel);
+            } else {
+                sys.sendHtmlMessage(channelPlayers[i], "<font color='#87CEEB'><timestamp/><b>" + helpers.statusImage(command[0]) + player +
+                " has been frozen by " + name + "!" + helpers.statusImage(command[0]) + "</b></font>", channel);
+            }
+        }
     }
     
     ,
@@ -324,30 +334,44 @@ funcommands = {
         var name = sys.name(src), text, nukemessage;
         !command[1] ? player = "Someone" : player = command[1];
         text = player + " has been nuked by " + name + "!";
-        nukemessage = "<font color='purple'><timestamp/></font><b><font size='6' color='red'>☢ </font>" + helpers.duoColor(text, "purple", "red");
+        nukemessage = "<font color='#800080'><timestamp/></font><b><font size='6' color='#FF0000'>☢</font>" + helpers.duoColor(text, "#800080", "#FF0000");
         if (text.length / 2 != parseInt(text.length / 2)) {
-            sys.sendHtmlAll(nukemessage + "<font size='6' color='red'>☢ </font></b>", channel);
+            sys.sendHtmlAll(nukemessage + "<font size='6' color='#FF0000'>☢</font></b>", channel);
         } else {
-            sys.sendHtmlAll(nukemessage + "<font size='6' color='purple'>☢ </font></b>", channel);
+            sys.sendHtmlAll(nukemessage + "<font size='6' color='#800080'>☢</font></b>", channel);
         }
     }
     
     ,
     
     paralyze: function (src, channel, command) {
-        var name = helpers.escapehtml(sys.name(src));
+        var name = helpers.escapehtml(sys.name(src)), channelPlayers = sys.playersOfChannel(channel);
         !command[1] ? player = "Someone" : player = helpers.escapehtml(command[1]);
-        sys.sendHtmlAll("<font color='orange'><timestamp/><b><img src='Themes/Classic/status/battle_status1.png'>" + player + " has been paralyzed by " + name +
-        "!<img src='Themes/Classic/status/battle_status1.png'></b></font>", channel);
+        for (var i in channelPlayers) {
+            if (helpers.isAndroidOrWeb(channelPlayers[i])) {
+                sys.sendHtmlMessage(channelPlayers[i], "<font color='#FFA500'><timestamp/><b>" + STATUS[command[0].toUpperCase()] + player +
+                " has been paralyzed by " + name + "!" + STATUS[command[0].toUpperCase()] + "</b></font>", channel);
+            } else {
+                sys.sendHtmlMessage(channelPlayers[i], "<font color='#FFA500'><timestamp/><b>" + helpers.statusImage(command[0]) + player +
+                " has been paralyzed by " + name + "!" + helpers.statusImage(command[0]) + "</b></font>", channel);
+            }
+        }
     }
     
     ,
     
     poison: function (src, channel, command) {
-        var name = helpers.escapehtml(sys.name(src));
+        var name = helpers.escapehtml(sys.name(src)), channelPlayers = sys.playersOfChannel(channel);
         !command[1] ? player = "Someone" : player = helpers.escapehtml(command[1]);
-        sys.sendHtmlAll("<font color='purple'><timestamp/><b><img src='Themes/Classic/status/battle_status5.png'>" + player + " has been poisoned by " + name +
-        "!<img src='Themes/Classic/status/battle_status5.png'></b></font>", channel);
+        for (var i in channelPlayers) {
+            if (helpers.isAndroidOrWeb(channelPlayers[i])) {
+                sys.sendHtmlMessage(channelPlayers[i], "<font color='#800080'><timestamp/><b>" + STATUS[command[0].toUpperCase()] + player +
+                " has been poisoned by " + name + "!" + STATUS[command[0].toUpperCase()] + "</b></font>", channel);
+            } else {
+                sys.sendHtmlMessage(channelPlayers[i], "<font color='#800080'><timestamp/><b>" + helpers.statusImage(command[0]) + player +
+                " has been poisoned by " + name + "!" + helpers.statusImage(command[0]) + "</b></font>", channel);
+            }
+        }
     }
     
     ,
@@ -437,10 +461,17 @@ funcommands = {
     ,
     
     sleep: function (src, channel, command) {
-        var name = helpers.escapehtml(sys.name(src));
+        var name = helpers.escapehtml(sys.name(src)), channelPlayers = sys.playersOfChannel(channel);
         !command[1] ? player = "Someone" : player = helpers.escapehtml(command[1]);
-        sys.sendHtmlAll("<timestamp/><b><img src='Themes/Classic/status/battle_status2.png'>" + player + " has been put to sleep by " + name +
-        "!<img src='Themes/Classic/status/battle_status2.png'></b>", channel);
+        for (var i in channelPlayers) {
+            if (helpers.isAndroidOrWeb(channelPlayers[i])) {
+                sys.sendHtmlMessage(channelPlayers[i], "<timestamp/><b>" + STATUS[command[0].toUpperCase()] + player +
+                " has been put to sleep by " + name + "!" + STATUS[command[0].toUpperCase()] + "</b>", channel);
+            } else {
+                sys.sendHtmlMessage(channelPlayers[i], "<timestamp/><b>" + helpers.statusImage(command[0]) + player +
+                " has been put to sleep by " + name + "!" + helpers.statusImage(command[0]) + "</b>", channel);
+            }
+        }
     }
     
     ,

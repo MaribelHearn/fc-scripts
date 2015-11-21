@@ -272,7 +272,7 @@ helpers = {
                 lower = alts[i];
             }
         }
-        sys.sendHtmlMessage(src, this.bot(bots.mute) + "Sorry, you are muted on the server. [Time until expiration: " + this.formatMuteTime(mutelist[lower].time) +
+        sys.sendHtmlMessage(src, this.bot(bots.mute) + "Sorry, you are muted on the server. [Time until expiration: " + this.formatJusticeTime(mutelist[lower].time) +
         "] [Reason: " + mutelist[lower].reason + "]", channel);
     }
     
@@ -367,9 +367,6 @@ helpers = {
     ,
     
     imageIndex: function (src) {
-        if (isNaN(src)) {
-            return sys.dbAuth(src) >= 4 ? 4 : sys.dbAuth(src) + 4;
-        }
         var imageIndex = sys.auth(src);
         if (imageIndex > 3) {
             imageIndex = 0;
@@ -386,6 +383,12 @@ helpers = {
     
     channelLink: function (channelName) {
         return "<a href='po:join/" + channelName + "'>#" + channelName + "</a>";
+    }
+    
+    ,
+    
+    battleLink: function (battle) {
+        return "<a href='po:watch/" + battle + "'>Watch</a>";
     }
     
     ,
@@ -604,35 +607,35 @@ helpers = {
     
     ,
     
-    formatMuteTime: function (muteTime) { // muteTime is in seconds
+    formatJusticeTime: function (justiceTime) { // justiceTime is in seconds
         var str = "", days = 0, hours = 0, minutes = 0, seconds = 0;
-        if (isNaN(muteTime)) {
+        if (isNaN(justiceTime) || justiceTime === null) {
             return "indefinite";
         }
-        while (muteTime >= 86400) {
+        while (justiceTime >= 86400) {
             days += 1;
-            muteTime -= 86400;
+            justiceTime -= 86400;
         }
         if (days >= 1) {
             str += days + " days, ";
         }
-        while (muteTime >= 3600) {
+        while (justiceTime >= 3600) {
             hours += 1;
-            muteTime -= 3600;
+            justiceTime -= 3600;
         }
         if (hours >= 1) {
             str += hours + " hours, ";
         }
-        while (muteTime >= 60) {
+        while (justiceTime >= 60) {
             minutes += 1;
-            muteTime -= 60;
+            justiceTime -= 60;
         }
         if (minutes >= 1) {
             str += minutes + " minutes and ";
         }
-        while (muteTime >= 1) {
+        while (justiceTime >= 1) {
             seconds += 1;
-            muteTime -= 1;
+            justiceTime -= 1;
         }
         if (seconds >= 1) {
             str += seconds + " seconds";
@@ -959,8 +962,6 @@ helpers = {
             }
         } else if (mode == "reverse") {
             message = this.reverse(this.escapehtml(message));
-        } else if (mode == "russian") {
-            message = this.russian(this.escapehtml(message));
         }
         if (auth > 0) {
             message = "<font color='" + color + "'><timestamp/> +<b><i>" + name + ":</i></b></font> " + message;
@@ -1434,22 +1435,29 @@ helpers = {
     ,
     
     authSort: function () {
-        var x, y = [], highestauth = 0, list = sys.dbAuths().sort();
-        for (x in list) {
-            auth = sys.dbAuth(list[x]);
-            if (auth > highestauth) {
-                highestauth = auth;
+        var i, authArray = [], highestAuth = 0, list = sys.dbAuths().sort();
+        for (i in list) {
+            auth = sys.dbAuth(list[i]);
+            if (auth > highestAuth) {
+                highestAuth = auth;
             }
         }
-        while (highestauth > 0) {
-            for (x in list) {
-                if (sys.dbAuth(list[x]) == highestauth) {
-                    y.push(list[x]);
+        while (highestAuth > 0) {
+            for (i in list) {
+                if (sys.dbAuth(list[i]) == highestAuth && sys.dbAuth(list[i]) <= 3) {
+                    authArray.push(list[i]);
                 }
             }
-            highestauth--;
+            highestAuth--;
         }
-        return y;
+        return authArray;
+    }
+    
+    ,
+    
+    cauthSort: function (channel) {
+        var lower = sys.channel(channel).toLowerCase();
+        return regchannels[lower].owners.sort().concat(regchannels[lower].admins.sort()).concat(regchannels[lower].mods.sort());
     }
     
     ,
@@ -1687,7 +1695,7 @@ helpers = {
         }
         var spaces = "";
         while (num > 0) {
-            spaces += "&nbsp;"
+            spaces += "&nbsp;";
             num--;
         }
         return spaces;
@@ -1814,6 +1822,24 @@ helpers = {
     
     ,
     
+    statusImage: function (status) {
+        return "<img src='Themes/Classic/status/battle_status" + this.toStatusNumber(status) + ".png'>";
+    }
+    
+    ,
+    
+    toStatusNumber: function (status) {
+        return ({
+            "paralyze": 1,
+            "sleep": 2,
+            "freeze": 3,
+            "burn": 4,
+            "poison": 5
+        }[status]);
+    }
+    
+    ,
+    
     color: function (src) {
         if (sys.getColor(src) == "#000000") {
             var colorlist = ["#5811b1", "#399bcd", "#0474bb", "#f8760d", "#a00c9e", "#0d762b", "#5f4c00", "#9a4f6d", "#d0990f", "#1b1390", "#028678", "#0324b1"];
@@ -1882,8 +1908,8 @@ helpers = {
     
     ,
     
-    cauthname: function (src, channel) {
-        var auth = this.cauth(src, channel);
+    cauthname: function (name, channel) {
+        var auth = this.cauth(name, channel);
         if (auth == 1) {
             return "Channel Mod";
         } else if (auth == 2) {
@@ -1953,10 +1979,19 @@ helpers = {
     ,
     
     calcStat: function (stat, base, IV, EV, nature) {
-        if (stat === 0) {
-            return base == 1 ? 1 : Math.floor((IV + (2 * base) + Math.floor(EV / 4) + 100) * 100 / 100 + 10);
+        if (stat == '0') {
+            return this.calcHP(base, IV, EV);
         }
         return Math.floor(Math.floor((IV + (2 * base) + Math.floor(EV / 4)) * 100 / 100 + 5) * nature);
+    }
+    
+    ,
+    
+    calcHP: function (base, IV, EV) {
+        if (base == 1) {
+            return 1;
+        }
+        return Math.floor((IV + (2 * base) + Math.floor(EV / 4) + 100) + 10);
     }
     
     ,

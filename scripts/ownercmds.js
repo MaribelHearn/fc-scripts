@@ -813,10 +813,10 @@ ownercommands = {
         command = command.join(DELIMITER);
         if (silent == "silent") {
             sys.sendHtmlMessage(src, border + "<br><timestamp/> <b>You executed the following code silently:</b><br><span style='font-family: dejavu sans mono;'>"
-            + helpers.syntaxHighlight(helpers.escapehtml(command)) + "</span><br>" + border2, channel);
+            + helpers.escapehtml(command) + "</span><br>" + border2, channel);
         } else {
             sys.sendHtmlAll(border + "<br><timestamp/> <b>" + helpers.user(name) + " executed the following code:</b><br><span style='font-family: dejavu sans mono;'>"
-            + helpers.syntaxHighlight(helpers.escapehtml(command)) + "</span><br>" + border2, channel);
+            + helpers.escapehtml(command) + "</span><br>" + border2, channel);
         }
         starttime = new Date();
         try {

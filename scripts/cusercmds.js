@@ -134,79 +134,57 @@ cusercommands = {
     ,
     
     channelonline: function (src, channel, command) {
-        var onlinemessage = border + "<style type='text/css'>table {border-width:1px; border-style:solid; border-color:#000;}" 
-        + "thead {font-weight:bold;}</style><h2>Players Online on " + sys.channel(channel) + "</h2><br>"
-        + "<table cellpadding=2 cellspacing=0><thead><tr style='background-color:#b0b0b0;'>"
-        + "<td>Icon</td><td>Auth</td><td>Name</td><td>ID</td>", date = new Date(), cplayers = sys.playersOfChannel(channel), unit, country;
-        if (sys.auth(src) >= 1) {
-            onlinemessage += "<td>IP Address</td><td>Client</td><td>Country</td><td>Time Zone</td><td>Last Message</td>";
+        var DISPLAY_USER = true, HIDE_INVIS = true, onlinemessage = border + "<h2>Players Online on " + sys.channel(channel) + "</h2><br>", srcauth = sys.auth(src), lower;
+        var channelPlayers = sys.playersOfChannel(channel), auths = [], names = [], colors = [], ids = [], ips = [], clients = [], countries = [], timeZones = [], lastMessages = [], times = [];
+        for (var i in channelPlayers) {
+            ids.push(channelPlayers[i]);
+            ips.push(sys.ip(ids[i]));
+            auths.push(sys.auth(ids[i]));
+            clients.push(sys.os(ids[i]));
+            colors.push(helpers.color(ids[i]));
+            names.push(players[ids[i]].name + (sys.name(ids[i]) != players[ids[i]].name ? " (" + sys.name(ids[i]) + ")" : ""));
+            lower = names[i].toLowerCase();
+            countries.push(countryname[lower] ? countryname[lower] : "[no data]");
+            timeZones.push(timezone[lower] ? timezone[lower] : "[no data]");
+            lastMessages.push(helpers.escapehtml(players[ids[i]].lastmessage));
+            times.push(helpers.timePassed(colors[i], players[ids[i]].lastmessagetime));
         }
-        onlinemessage += "</tr></thead><tbody>";
-        for (var index in cplayers) {
-            var id = cplayers[index], timepassed = date - players[id].lastmessagetime, name = players[id].name, 
-            auth = sys.auth(id), imageindex = sys.auth(id), lower = name.toLowerCase(), os, country, timezone2;
-            timepassed = Math.round(timepassed / 1000);
-            unit = "seconds";
-            if (timepassed == 1) {
-                unit = "second";
+        if (helpers.isAndroid(src)) {
+            onlinemessage += "<tt>";
+            for (var i in ids) {
+                onlinemessage += helpers.authname(auths[i], true) + " | " + "<b><font color='" + colors[i] + "'>" + names[i] + "</font></b> | " + ids[i];
+                if (srcauth >= 1) {
+                    onlinemessage += " | " + ips[i] + " | " + helpers.osName(clients[i]);
+                }
+                onlinemessage += "<br>";
             }
-            if (timepassed > 60) {
-                timepassed = Math.round(timepassed / 60);
-                unit = "minutes";
-                if (timepassed == 1)unit = "minute";
+            onlinemessage += "</tt><br><br><b>Total Players Online:</b> " + channelPlayers.length;
+        } else {
+            onlinemessage += "<style>table {border-width: 1px; border-style: solid; border-color: #000000;}</style>"
+            + "<table cellpadding='2' cellspacing='0'><thead><tr style='background-color: #B0B0B0;'>"
+            + "<th>Icon</th><th>Auth</th><th>Name</th><th>ID</th>";
+            if (srcauth >= 1) {
+                onlinemessage += "<th>IP Address</th><th>Client</th><th>Country</th><th>Time Zone</th><th>Last Message</th>";
             }
-            if (timepassed > 60) {
-                timepassed = Math.round((timepassed / 60) * 10) / 10;
-                unit = "hours";
-                if (timepassed == 1)unit = "hour";
+            onlinemessage += "</tr></thead><tbody>";
+            for (var i in ids) {
+                onlinemessage += "<tr>"
+                + "<td>" + helpers.authimage(src, helpers.imageIndex(ids[i])) + "</td>"
+                + "<td>" + helpers.authname(auths[i], DISPLAY_USER, HIDE_INVIS) + "</td>"
+                + "<td><b><font color='" + colors[i] + "'>" + names[i] + "</font></b></td>"
+                + "<td>" + ids[i] + "</td>";
+                if (srcauth >= 1) {
+                    onlinemessage += "<td>" + ips[i] + "</td>"
+                    + "<td>" + helpers.osImage(clients[i]) + "</td>"
+                    + "<td>" + FLAGS[helpers.toFlagKey(countries[i])] + "</td>"
+                    + "<td>" + timeZones[i] + "</td>"
+                    + "<td>" + lastMessages[i] + " " + times[i] + "</td>";
+                }
+                onlinemessage += "</tr>";
             }
-            if (isNaN(timepassed)) {
-                timepassed = "";
-                unit = "";
-            }
-            if (unit == "minutes" && timepassed > 5 && timepassed <= 15) {
-                color = "orange";
-            } else if ((unit == "minutes" && timepassed > 15) || unit == "hour") {
-                color = "orangered";
-            } else if (unit == "hours") {
-                color = "red";
-            } else {
-                color = "green";
-            }
-            if (imageindex > 3) {
-                imageindex = 0;
-            }
-            if (sys.battling(id)) {
-                imageindex += 8;
-            } else if (sys.away(id)) {
-                imageindex += 4;
-            }
-            if (name != sys.name(id)) {
-                name += " (" + sys.name(id) + ")";
-            }
-            onlinemessage += "<tr>" +
-            "<td>" + helpers.authimage(imageindex) + "</td>" +
-            "<td><font color='" + global["auth" + auth + "color"] + "'>" + helpers.authname(auth, true) + "</font></td>" +
-            "<td><b style='color:" + helpers.color(id) + "'>" + name + "</b></td>" +
-            "<td>" + id + "</td>";
-            !operatingsystem[lower] ? os = "[no data]" : os = operatingsystem[lower].split(" ")[0] + " " + operatingsystem[lower].split(" ")[1];
-            !timezone[lower] ? timezone2 = "[no data]" : timezone2 = timezone[lower];
-            if (!countryname[lower]) {
-                country = "[no data]";
-            } else {
-                country = helpers.toFlagKey(countryname[lower]);
-                !FLAGS[country] ? country = "[no data]" : country = FLAGS[country];
-            }
-            if (sys.auth(src) >= 1) {
-                onlinemessage += "<td>" + sys.ip(id) + "</td>" +
-                "<td>" + os + "</td>" +
-                "<td>" + country + "</td>" +
-                "<td>" + timezone2 + "</td>" +
-                "<td>" + helpers.escapehtml(players[id].lastmessage) + " <b style='color:" + color + "'>(" + timepassed + " " + unit + " ago)</b></td>";
-            }
-            onlinemessage += "</tr>";
+            onlinemessage += "</tbody><tfoot><tr><td colspan='" + (srcauth >= 1 ? 9 : 4) + "'><b>Total Players Online:</b> " + channelPlayers.length + "</td></tr></tfoot></table>";
         }
-        onlinemessage += "</tbody></table><br><br><b>Total Players Online:</b> " + cplayers.length + "<br><br><timestamp/><br>" + border2;
+        onlinemessage += "<br><br><timestamp/><br>" + border2;
         sys.sendHtmlMessage(src, onlinemessage, channel);
     }
     
@@ -219,57 +197,46 @@ cusercommands = {
     ,
     
     channelauth: function (src, channel, command) {
-        var lower = sys.channel(channel).toLowerCase(), mods, admins, owners, i, auth, name, lastLogin, ip, status, total = 0, message;
+        var authmessage = border + "<h2>Channel Authority of " + sys.channel(channel) + "</h2><br>", authList = helpers.cauthSort(channel), srcauth = sys.auth(src), index = 0;
+        var lower = sys.channel(channel).toLowerCase(), auths = [], names = [], lastLogins = [], statuses = [];
         if (!regchannels[lower]) {
             helpers.starfox(src, channel, command, bots.channel, "Error 400, this channel isn't registered!");
             return;
         }
-        mods = regchannels[lower].mods;
-        admins = regchannels[lower].admins;
-        owners = regchannels[lower].owners;
-        message = border + "<h2>Channel Auth of " + sys.channel(channel) + "</h2><br><style>table {border-width: 1px; border-style: solid; border-color: #000000;}</style>"
-        + "<table cellpadding='2' cellspacing='0'><thead><tr style='background-color: #B0B0B0;'><th>Icon</th><th>Auth</th><th>Name</th><th>Last Online</th><th>Status</th></tr></thead><tbody>";
-        // Channel Owners
-        for (i in owners) {
-            name = owners[i];
-            auth = (sys.dbAuth(name) >= 4 ? 0 : sys.dbAuth(name));
-            lastLogin = helpers.formatLastOn(src, sys.dbLastOn(name));
-            ip = sys.dbIp(name);
-            status = (sys.id(name) ? "<font color='green'><b>Online</b></font>" : "<font color='red'>Offline</font>");
-            if (members[name]) {
-                name = members[name];
+        for (var i in authList) {
+            names.push(authList[i]);
+            auths.push(helpers.cauthname(names[i], channel));
+            lower = names[index].toLowerCase();
+            lastLogins.push(helpers.formatLastOn(src, sys.dbLastOn(authList[i])));
+            statuses.push(sys.id(lower) ? "<b><font color='green'>Online</font></b>" : "<font color='red'>Offline</font>");
+            if (members[lower]) {
+                names[index] = members[lower];
             }
-            message += "<tr><td>" + helpers.authimage(src, auth) + "</td><td>Channel Owner</td><td>" + name + "</td><td>" + lastLogin + "</td><td>" + status + "</td></tr>";
-            total++;
+            index++;
         }
-        // Channel Admins
-        for (i in admins) {
-            name = admins[i];
-            auth = (sys.dbAuth(name) >= 4 ? 0 : sys.dbAuth(name));
-            lastLogin = helpers.formatLastOn(src, sys.dbLastOn(name));
-            ip = sys.dbIp(name);
-            status = (sys.id(name) ? "<font color='green'><b>Online</b></font>" : "<font color='red'>Offline</font>");
-            if (members[name]) {
-                name = members[name];
+        if (helpers.isAndroid(src)) {
+            authmessage += "<tt>";
+            for (var i in auths) {
+                authmessage += auths[i] + " | " + names[i] + " | " + statuses[i] + "<br>";
             }
-            message += "<tr><td>" + helpers.authimage(src, auth) + "</td><td>Channel Admin</td><td>" + name + "</td><td>" + lastLogin + "</td><td>" + status + "</td></tr>";
-            total++;
-        }
-        // Channel Mods
-        for (i in mods) {
-            name = mods[i];
-            auth = (sys.dbAuth(name) >= 4 ? 0 : sys.dbAuth(name));
-            lastLogin = helpers.formatLastOn(src, sys.dbLastOn(name));
-            ip = sys.dbIp(name);
-            status = (sys.id(name) ? "<font color='green'><b>Online</b></font>" : "<font color='red'>Offline</font>");
-            if (members[name]) {
-                name = members[name];
+            authmessage += "</tt><br><br><b>Total Channel Auth Members:</b> " + authList.length;
+        } else {
+            authmessage += "<style>table {border-width: 1px; border-style: solid; border-color: #000000;}</style>"
+            + "<table cellpadding='2' cellspacing='0'><thead><tr style='background-color: #B0B0B0;'>"
+            + "<th>Icon</th><th>Auth</th><th>Name</th><th>Last Online</th><th>Status</th></tr></thead><tbody>";
+            for (var i in auths) {
+                authmessage += "<tr>"
+                + "<td>" + helpers.authimage(src, sys.dbAuth(names[i]) >= 4 ? 0 : sys.dbAuth(names[i])) + "</td>"
+                + "<td>" + auths[i] + "</td>"
+                + "<td>" + names[i] + "</td>"
+                + "<td>" + lastLogins[i] + "</td>"
+                + "<td>" + statuses[i] + "</td>"
+                + "</tr>";
             }
-            message += "<tr><td>" + helpers.authimage(src, auth) + "</td><td>Channel Mod</td><td>" + name + "</td><td>" + lastLogin + "</td><td>" + status + "</td></tr>";
-            total++;
+            authmessage += "</tbody><tfoot><tr><td colspan='5'><b>Total Channel Auth Members:</b> " + authList.length + "</td></tr></tfoot></table>";
         }
-        message += "</tbody><tfoot><tr><td colspan='5'><b>Total Channel Auth Members:</b> " + total + "</td></tr></tfoot></table><br><br><timestamp/><br>" + border2;
-        sys.sendHtmlMessage(src, message, channel);
+        authmessage += "<br><br><timestamp/><br>" + border2;
+        sys.sendHtmlMessage(src, authmessage, channel);
     }
     
     ,
