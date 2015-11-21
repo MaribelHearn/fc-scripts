@@ -1155,7 +1155,7 @@
     afterChannelCreated: function (channel, channelname, creator) {
         var lower = sys.channel(channel).toLowerCase();
         sys.sendHtmlAuth(helpers.bot(bots.spy) + "[Server] <b><font color='" + helpers.color(creator) + "'>" + sys.name(creator) +
-        "</font></b> has created the channel <a href='po:join/" + sys.channel(channel) + "'>#" + sys.channel(channel) + "</a>.");
+        "</font></b> has created the channel " + helpers.channelLink(sys.channel(channel)) + ".");
     }
 
     ,
