@@ -72,7 +72,7 @@ usercommands = {
         + "<b>" + helpers.user("/mp") + "</b>: displays your own Control Panel data.<br>"
         + "<b>" + helpers.user("/myalts") + "</b>: displays info about your alts in a neat table.<br>"
         + "<b>" + helpers.user("/uptime") + "</b>: displays for how long the server has been up since its last restart.<br>"
-        + "<b>" + helpers.user("/registry") + "</b>: shows the current Pokémon Online registry.<br>"
+        + "<b>" + helpers.user("/registry") + "</b>: shows the current Pokémon Online registry. Counts players logged onto multiple servers multiple times.<br>"
         + "<b>" + helpers.user("/serverinfo") + "</b>: displays server information.<br>"
         + "<b>" + helpers.user("/scriptinfo") + "</b>: displays script information.<br>"
         + "<b>" + helpers.user("/playerinfo ") + helpers.arg("player") + "</b>: displays information about <b>player</b>, including when they were last seen. "
@@ -154,6 +154,10 @@ usercommands = {
         }
         topic = topic.toLowerCase();
         if (topic == "roulette") {
+            if (!helpers.isLoaded("roulette.js")) {
+                helpers.starfox(src, channel, command, bots.command, "Error 400, Roulette is not available on this server!");
+                return;
+            }
             helpmessage += "<h2>Roulette Help</h2>"
             + "<br>"
             + "<h3>General</h3>"
@@ -172,6 +176,10 @@ usercommands = {
             + "<br>"
             + "Use <b>" + helpers.user("/roulettecommands") + "</b> to list the commands for Roulette.<br>";
         } else if (topic == "party") {
+            if (!helpers.isLoaded("party.js")) {
+                helpers.starfox(src, channel, command, bots.command, "Error 400, Party is not available on this server!");
+                return;
+            }
             helpmessage += "<h2>Party Help</h2>"
             + "<br>"
             + "<h3>General</h3>"
@@ -194,10 +202,13 @@ usercommands = {
             + "<b>Leet</b>: posts will be converted to Leet.<br>"
             + "<b>Morse</b>: posts will be converted to Morse code.<br>"
             + "<b>Reverse</b>: posts will be reversed.<br>"
-            + "<b>Russian</b>: posts will be converted to the Cyrillic alphabet.<br>"
             + "<br>"
             + "Use <b>" + helpers.user("/partycommands") + "</b> to list the commands for Party.<br>";
         } else if (topic == "russian roulette" || topic == "rr") {
+            if (!helpers.isLoaded("rr.js")) {
+                helpers.starfox(src, channel, command, bots.command, "Error 400, Russian Roulette is not available on this server!");
+                return;
+            }
             helpmessage += "<h2>Russian Roulette Help</h2>"
             + "<br>"
             + "<h3>General</h3>"
@@ -242,7 +253,7 @@ usercommands = {
     
     online: function (src, channel, command) {
         var DISPLAY_USER = true, HIDE_INVIS = true, onlinemessage = border + "<h2>Players Online</h2><br>", srcauth = sys.auth(src), index = 0, lower;
-        var icons = [], auths = [], names = [], colors = [], ids = [], ips = [], clients = [], countries = [], timeZones = [], lastMessages = [], times = [];
+        var auths = [], names = [], colors = [], ids = [], ips = [], clients = [], countries = [], timeZones = [], lastMessages = [], times = [];
         for (var i in players) {
             ids.push(i);
             ips.push(sys.ip(i));
@@ -266,9 +277,9 @@ usercommands = {
                 }
                 onlinemessage += "<br>";
             }
-            onlinemessage += "</tt>";
+            onlinemessage += "</tt><br><br><b>Total Players Online:</b> " + sys.numPlayers();
         } else {
-            onlinemessage += "<style type='text/css'>table {border-width: 1px; border-style: solid; border-color: #000000;}</style>"
+            onlinemessage += "<style>table {border-width: 1px; border-style: solid; border-color: #000000;}</style>"
             + "<table cellpadding='2' cellspacing='0'><thead><tr style='background-color: #B0B0B0;'>"
             + "<th>Icon</th><th>Auth</th><th>Name</th><th>ID</th>";
             if (srcauth >= 1) {
@@ -299,55 +310,84 @@ usercommands = {
     ,
     
     channels: function (src, channel, command) {
-        var channelmessage = border + "<style type='text/css'>table {border-width:1px; border-style:solid; border-color:#000;}" 
-        + "thead {font-weight:bold;}</style><h2>Channels Online</h2><br>"
-        + "<table cellpadding=2 cellspacing=0><thead><tr style='background-color:#b0b0b0;'>"
-        + "<td>ID</td><td>Name</td><td>Description</td>";
-        var channellist = sys.channelIds().sort(), total = channellist.length;
-        channelmessage += "</tr></thead>";
-        for (var index in channellist) {
-            var name = sys.channel(channellist[index]), id = sys.channelId(name), descr;
-            if (id === 0) {
-                descr = "Main channel.";
-            } else if (name == permchannels[0]) {
-                descr = "The watch channel, for server authorities.";
-            } else if (name == permchannels[1]) {
-                descr = "Server authorities discuss things here.";
-            } else if (name == permchannels[2]) {
-                descr = "For the server owners.";
-            } else if (name == permchannels[3]) {
-                descr = "To have some fun.";
-            } else if (name == permchannels[4]) {
-                descr = "To play Russian Roulette.";
-            } else if (name == permchannels[5]) {
-                descr = "To play Roulette.";
+        var channelList = sys.channelIds().sort(), total = channelList.length, names = [], ids = [], descriptions = [], channelmessage;
+        for (var i in channelList) {
+            names.push(sys.channel(channelList[i]));
+            ids.push(sys.channelId(names[i]));
+            if (ids[i] === 0) {
+                descriptions.push("Main channel.");
+            } else if (names[i] == permchannels[0]) {
+                descriptions.push("The watch channel, for server authorities.");
+            } else if (names[i] == permchannels[1]) {
+                descriptions.push("Server authorities discuss things here.");
+            } else if (names[i] == permchannels[2]) {
+                descriptions.push("For the server owners.");
+            } else if (names[i] == permchannels[3]) {
+                descriptions.push("To have some fun.");
+            } else if (names[i] == permchannels[4]) {
+                descriptions.push("To play Russian Roulette.");
+            } else if (names[i] == permchannels[5]) {
+                descriptions.push("To play Roulette.");
             } else {
-                descr = "A user-created channel.";
+                descriptions.push("A user-created channel.");
             }
-            channelmessage += "<tr><td>" + id + "</td><td>" + helpers.channelLink(name) + "</td><td>" + descr + "</td></tr>";
         }
-        channelmessage += "</table><br><br><b>Total Channels Online:</b> " + total + "<br><br><timestamp/><br>" + border2;
+        channelmessage = border + "<h2>Channels Online</h2><br>";
+        if (helpers.isAndroid(src)) {
+            channelmessage += "<tt>";
+            for (var i in names) {
+                channelmessage += ids[i] + " | " + names[i] + " | </tt>" + descriptions[i] + "<tt><br>";
+            }
+            channelmessage += "</tt><br><br><b>Total Channels Online:</b> " + total;
+        } else {
+            channelmessage += "<style>table {border-width: 1px; border-style: solid; border-color: #000000;}</style>"
+            + "<table cellpadding='2' cellspacing='0'><thead><tr style='background-color: #B0B0B0;'><th>ID</th><th>Name</th><th>Description</th></thead><tbody>";
+            for (var i in names) {
+                channelmessage += "<tr><td>" + ids[i] + "</td><td>" + helpers.channelLink(names[i]) + "</td><td>" + descriptions[i] + "</td></tr>";
+            }
+            channelmessage += "</tbody><tfoot><tr><td colspan='3'><b>Total Channels Online:</b> " + total + "</td></tr></tfoot></table>";
+        }
+        channelmessage += "<br><br><timestamp/><br>" + border2;
         sys.sendHtmlMessage(src, channelmessage, channel);
     }
     
     ,
     
     battles: function (src, channel, command) {
-        var battlemessage = border + "<style type='text/css'>table {border-width:1px; border-style:solid; border-color:#000;}" 
-        + "thead {font-weight:bold;}</style><h2>Battles Online</h2><br>"
-        + "<table cellpadding=2 cellspacing=0><thead><tr style='background-color:#b0b0b0;'>"
-        + "<td>ID</td><td>Player 1</td><td>Player 2</td><td>Tier</td><td>Clauses</td><td>Start Time</td><td>Link</td>";
-        battlemessage += "</tr></thead>";
-        for (var index in battles) {
-            var p1 = battles[index].p1, p2 = battles[index].p2, tier = battles[index].tier, clauses = battles[index].clauses, start = battles[index].start;
-            var link = "<a href='po:watch/" + index + "'>Watch Battle</a>";
-            start = helpers.toTimeZone(start, timezone[players[src].name.toLowerCase()].split(":")[0]);
-            start = start.split(".")[0];
-            start = start.replace("T", ", ");
-            battlemessage += "<tr><td>" + index + "</td><td>" + p1 + "</td><td>" + p2 + "</td><td>" + tier + "</td><td>" + clauses + "</td><td>" + start + "</td><td>" + link + "</td></tr>";
+        var total = Object.keys(battles).length, ids = [], p1s = [], p2s = [], tiers = [], clauses = [], startTimes = [], battlemessage;
+        for (var i in battles) {
+            ids.push(i);
+            p1s.push(battles[i].p1);
+            p2s.push(battles[i].p2);
+            tiers.push(battles[i].tier);
+            clauses.push(battles[i].clauses);
+            startTimes.push(helpers.formatLastOn(src, battles[i].start));
         }
-        var total = Object.keys(battles).length;
-        battlemessage += "</table><br><br><b>Total Battles Online:</b> " + total + "<br><br><timestamp/><br>" + border2;
+        battlemessage = border + "<h2>Battles Online</h2><br>";
+        if (helpers.isAndroid(src)) {
+            battlemessage += "<tt>";
+            for (var i in ids) {
+                battlemessage += p1s[i] + " vs " + p2s[i] + " (" + tiers[i] + ") (<watch id='" + ids[i] + "'>Watch</watch>)<br>";
+            }
+            battlemessage += "</tt><br><br><b>Total Battles Online:</b> " + total;
+        } else {
+            battlemessage += "<style>table {border-width: 1px; border-style: solid; border-color: #000000;}</style>"
+            + "<table cellpadding='2' cellspacing='0'><thead><tr style='background-color: #B0B0B0;'>"
+            + "<th>ID</th><th>Player 1</th><th>Player 2</th><th>Tier</th><th>Clauses</th><th>Start Time</th><th>Link</th></thead><tbody>";
+            for (var i in ids) {
+                battlemessage += "<tr>"
+                + "<td>" + ids[i] + "</td>"
+                + "<td>" + p1s[i] + "</td>"
+                + "<td>" + p2s[i] + "</td>"
+                + "<td>" + tiers[i] + "</td>"
+                + "<td>" + clauses[i] + "</td>"
+                + "<td>" + startTimes[i] + "</td>"
+                + "<td>" + helpers.battleLink(ids[i]) + "</td>"
+                + "</tr>";
+            }
+            battlemessage += "</tbody><tfoot><tr><td colspan='7'><b>Total Battles Online:</b> " + total + "</td></tr></tfoot></table>";
+        }
+        battlemessage += "<br><br><timestamp/><br>" + border2;
         sys.sendHtmlMessage(src, battlemessage, channel);
     }
     
@@ -361,8 +401,7 @@ usercommands = {
     ,
     
     registry: function (src, channel, command) {
-        var auth = sys.auth(src), registrymessage = border + "<style type='text/css'>table {border-width: 1px; border-style: solid; border-color: black;}</style><h2>Pokémon Online Registry</h2><br>" +
-        "<table cellpadding=2 cellspacing=0><thead><tr style='background-color: #b0b0b0;'><th>Server</th><th>Players Online</th><th>Advanced Connection</th></tr></thead><tbody>";
+        var auth = sys.auth(src), registrymessage;
         var servername = sys.getServerName(), servers = [], playernums = [], serverIps = [], advConnects = [], total = 0, tmp1, tmp2;
         sys.webCall(REGISTRY_URL, function (resp) {
             if (resp === "") {
@@ -389,15 +428,28 @@ usercommands = {
                     serverIps.push(ip);
                 }
             }
-            for (var k in servers) {
-                registrymessage += "<tr><td>" + (servers[k] == servername ? "<b>" + servers[k] + "</b>" : servers[k]) + "</td><td>" + playernums[k] + "</td><td>" + advConnects[k] + "</td></tr>";
-                total += parseInt(playernums[k]);
+            registrymessage = border + "<h2>Pokémon Online Registry</h2><br>";
+            if (helpers.isAndroid(src)) {
+                registrymessage += "<tt>";
+                for (var k in servers) {
+                    registrymessage += (servers[k] == servername ? "<b>" + servers[k] + "</b>" : servers[k]) + " | " + playernums[k] + " | " + advConnects[k] + "<br>";
+                    total += parseInt(playernums[k]);
+                }
+                registrymessage += "</tt>";
+            } else {
+                registrymessage += "<style>table {border-width: 1px; border-style: solid; border-color: #000000;}</style>"
+                + "<table cellpadding='2' cellspacing='0'><thead><tr style='background-color: #B0B0B0;'>"
+                + "<th>Server</th><th>Players Online</th><th>Advanced Connection</th></tr></thead><tbody>";
+                for (var l in servers) {
+                    registrymessage += "<tr><td>" + (servers[l] == servername ? "<b>" + servers[l] + "</b>" : servers[l]) + "</td><td>" + playernums[l] + "</td><td>" + advConnects[l] + "</td></tr>";
+                    total += parseInt(playernums[l]);
+                }
+                registrymessage += "</tbody></table>";
             }
-            registrymessage += "</tbody></table><br>" +
-            "<br><b>Total Servers:</b> " + servers.length +
-            "<br><b>Total Players:</b> " + total +
-            "<br><b>Percentage on " + servername + ":</b> " + (sys.numPlayers() / total * 100).toPrecision(2) + "%" +
-            "<br>Players that are logged onto multiple servers are counted multiple times.<br><br><timestamp/><br>" + border2;
+            registrymessage += "<br><br><b>Total Servers:</b> " + servers.length
+            + "<br><b>Total Players:</b> " + total
+            + "<br><b>Percentage on " + servername + ":</b> " + (sys.numPlayers() / total * 100).toPrecision(2) + "%"
+            + "<br><br><timestamp/><br>" + border2;
             sys.sendHtmlMessage(src, registrymessage, channel);
         });
     }
@@ -504,45 +556,55 @@ usercommands = {
     ,
     
     auth: function (src, channel, command) {
-        var srcauth = sys.auth(src), index, auth, authname, name, ip, lastlogin, status, total, country, timezone2;
-        var authlist = helpers.authSort(), length = 0;
-        var message = border + "<h2>Server Authority</h2>"
-        + "<br><style>table {border-width: 1px; border-style: solid; border-color: #000000;}</style>"
-        + "<table cellpadding='2' cellspacing='0'><thead><tr style='background-color:#B0B0B0;'>"
-        + "<th>Icon</th><th>Auth</th><th>Title</th><th>Name</th>";
-        if (srcauth >= 1) {
-            message += "<th>IP</th><th>Country</th><th>Time Zone</th>";
+        var authmessage = border + "<h2>Server Authority</h2><br>", authList = helpers.authSort(), srcauth = sys.auth(src), index = 0, lower;
+        var auths = [], titles = [], names = [],  ips = [], countries = [], timeZones = [], lastLogins = [], statuses = [];
+        for (var i in authList) {
+            auths.push(sys.dbAuth(authList[i]));
+            names.push(authList[i]);
+            lower = names[index].toLowerCase();
+            titles.push(authtitles[lower] ? authtitles[lower] : '-');
+            ips.push(sys.dbIp(authList[i]));
+            countries.push(countryname[lower] ? FLAGS[helpers.toFlagKey(countryname[lower])] : "[no data]");
+            timeZones.push(timezone[lower] ? timezone[lower] : "[no data]");
+            lastLogins.push(helpers.formatLastOn(src, sys.dbLastOn(authList[i])));
+            statuses.push(sys.id(lower) ? "<b><font color='green'>Online</font></b>" : "<font color='red'>Offline</font>");
+            if (members[lower]) {
+                names[index] = members[lower];
+            }
+            index++;
         }
-        message += "<th>Last Online</th><th>Status</th></tr></thead><tbody>";
-        for (index in authlist) {
-            name = authlist[index];
-            auth = sys.dbAuth(name);
-            if (auth >= 4) {
-                continue; // do not display invisible owners
+        if (helpers.isAndroid(src)) {
+            authmessage += "<tt>";
+            for (var i in auths) {
+                authmessage += helpers.authname(auths[i]) + " | " + names[i] + " | " + statuses[i] + "<br>";
             }
-            lastlogin = helpers.formatLastOn(src, sys.dbLastOn(name));
-            ip = sys.dbIp(name);
-            authname = helpers.authname(auth, true);
-            sys.id(name) ? status = "<font color='green'><b>Online</b></font>" : status = "<font color='red'>Offline</font>";
-            !timezone[name] ? timezone2 = "[no data]" : timezone2 = timezone[name];
-            if (!countryname[name]) {
-                country = "[no data]";
-            } else {
-                country = helpers.toFlagKey(helpers.removespaces(countryname[name].toUpperCase()));
-                !FLAGS[country] ? country = "[no data]" : country = FLAGS[country];
-            }
-            if (members[name]) {
-                name = members[name];
-            }
-            message += "<tr><td>" + helpers.authimage(src, auth) + "</td><td>" + authname + "</td><td>" + authtitles[name.toLowerCase()] + "</td><td>" + name + "</td>";
+            authmessage += "</tt><br><br><b>Total Auth Members:</b> " + authList.length;
+        } else {
+            authmessage += "<style>table {border-width: 1px; border-style: solid; border-color: #000000;}</style>"
+            + "<table cellpadding='2' cellspacing='0'><thead><tr style='background-color: #B0B0B0;'>"
+            + "<th>Icon</th><th>Auth</th><th>Title</th><th>Name</th>";
             if (srcauth >= 1) {
-                message += "<td>" + ip + "</td><td>" + country + "</td><td>" + timezone2 + "</td>";
+                authmessage += "<th>IP Address</th><th>Country</th><th>Time Zone</th>";
             }
-            message += "<td>" + lastlogin + "</td><td>" + status + "</td></tr>";
-            length++;
+            authmessage += "<th>Last Online</th><th>Status</th></tr></thead><tbody>";
+            for (var i in auths) {
+                authmessage += "<tr>"
+                + "<td>" + helpers.authimage(src, auths[i]) + "</td>"
+                + "<td>" + helpers.authname(auths[i]) + "</td>"
+                + "<td>" + titles[i] + "</td>"
+                + "<td>" + names[i] + "</td>";
+                if (srcauth >= 1) {
+                    authmessage += "<td>" + ips[i] + "</td>"
+                    + "<td>" + countries[i] + "</td>"
+                    + "<td>" + timeZones[i] + "</td>";
+                }
+                authmessage += "<td>" + lastLogins[i] + "</td><td>" + statuses[i] + "</td>";
+                authmessage += "</tr>";
+            }
+            authmessage += "</tbody><tfoot><tr><td colspan='" + (srcauth >= 1 ? 9 : 4) + "'><b>Total Auth Members:</b> " + authList.length + "</td></tr></tfoot></table>";
         }
-        message += "</tbody><tfoot><tr><td colspan='" + (srcauth >= 1 ? 9 : 6) + "'><b>Total Auth Members:</b> " + length + "</td></tr></tfoot></table><br><br><timestamp/><br>" + border2;
-        sys.sendHtmlMessage(src, message, channel);
+        authmessage += "<br><br><timestamp/><br>" + border2;
+        sys.sendHtmlMessage(src, authmessage, channel);
     }
     
     ,
@@ -567,24 +629,47 @@ usercommands = {
     ,
 
     myalts: function (src, channel, command) {
-        var altsmessage = border + "<h2>My Alts</h2><br><style type='text/css'>table {border-width:1px; border-style:solid; border-color:#000;}"
-        + "thead {font-weight:bold;}</style>"
-        + "<table cellpadding=2 cellspacing=0><thead><tr style='background-color:#b0b0b0;'>"
-        + "<td>Icon</td><td>Auth</td><td>Title</td><td>Name</td><td>Registered</td><td>Last Online</td></tr></thead><tbody>", total = 0, alts = sys.aliases(sys.ip(src)), title = "", name, auth, registered, lastlogin;
-        for (var index in alts) {
-            name = alts[index];
-            auth = sys.dbAuth(name);
-            authtitles[name] ? title = authtitles[name] : title = '-';
-            sys.dbRegistered(name) ? registered = "<b style='color:green'>Yes</b>" : registered = "<font color='red'>No</font>";
-            lastlogin = helpers.formatLastOn(src, sys.dbLastOn(name));
-            if (members[alts[index]]) {
-                name = members[alts[index]];
+        var DISPLAY_USER = true, altsmessage = border + "<h2>My Alts</h2><br>", alts = sys.aliases(sys.ip(src)), index = 0, lower;
+        var auths = [], titles = [], names = [], registered = [], lastLogins = [];
+        for (var i in alts) {
+            auths.push(sys.dbAuth(alts[i]));
+            names.push(alts[i]);
+            lower = names[index].toLowerCase();
+            titles.push(authtitles[lower] ? authtitles[lower] : '-');
+            lastLogins.push(helpers.formatLastOn(src, sys.dbLastOn(alts[i])));
+            if (sys.dbRegistered(alts[i])) {
+                registered.push(helpers.isAndroid(src) ? "<b><font color='green'>Registered</font></b>" : "<b><font color='green'>Yes</font></b>");
+            } else {
+                registered.push(helpers.isAndroid(src) ? "<font color='red'>Unregistered</font>" : "<font color='red'>No</font>");
             }
-            altsmessage += "<tr><td>" + helpers.authimage(src, auth > 3 ? 0 : auth) + "</td><td>" + helpers.authname(auth, true) + "</td><td>" + title +
-            "</td><td>" + name + "</td><td>" + registered + "</td><td>" + lastlogin + "</td></tr>";
-            total++;
+            if (members[lower]) {
+                names[index] = members[lower];
+            }
+            index++;
         }
-        altsmessage += "</tbody></table><br><br><b>Total Alts:</b> " + total + "<br><br><timestamp/><br>" + border2;
+        if (helpers.isAndroid(src)) {
+            altsmessage += "<tt>";
+            for (var i in auths) {
+                altsmessage += names[i] + " | " + registered[i] + "<br>";
+            }
+            altsmessage += "</tt>";
+        } else {
+            altsmessage += "<style>table {border-width: 1px; border-style: solid; border-color: #000000;}</style>"
+            + "<table cellpadding='2' cellspacing='0'><thead><tr style='background-color: #B0B0B0;'>"
+            + "<th>Icon</th><th>Auth</th><th>Title</th><th>Name</th><th>Registered</th><th>Last Online</th></tr></thead><tbody>";
+            for (var i in auths) {
+                altsmessage += "<tr>"
+                + "<td>" + helpers.authimage(src, auths[i] >= 4 ? 0 : auths[i]) + "</td>"
+                + "<td>" + helpers.authname(auths[i], DISPLAY_USER) + "</td>"
+                + "<td>" + titles[i] + "</td>"
+                + "<td>" + names[i] + "</td>"
+                + "<td>" + registered[i] + "</td>"
+                + "<td>" + lastLogins[i] + "</td>"
+                + "</tr>";
+            }
+            altsmessage += "</tbody><tfoot><tr><td colspan='6'><b>Total Alts:</b> " + alts.length + "</td></tr></tfoot></table>";
+        }
+        altsmessage += "<br><br><timestamp/><br>" + border2;
         sys.sendHtmlMessage(src, altsmessage, channel);
     }
     
@@ -637,24 +722,25 @@ usercommands = {
             for (var k in baseStats) {
                 stat = baseStats[k];
                 dexmessage += "<br><b>" + helpers.statName(k) + "</b>" + helpers.spaces(8 - helpers.statName(k).length) + " "
-                + helpers.colorStat(stat) + (stat >= 100 ? " " : " &nbsp;")
-                + (k === 0 ? '-' : helpers.calcStat(k, stat, MAX_IV, MIN_EV, MIN_NATURE)) + " | "
-                + helpers.calcStat(k, stat, MAX_IV, MIN_EV, NEUTRAL_NATURE) + " | "
-                + helpers.calcStat(k, stat, MAX_IV, MAX_EV, NEUTRAL_NATURE) + " | "
-                + (k === 0 ? '-' : helpers.calcStat(k, stat, MAX_IV, MAX_EV, MAX_NATURE));
+                + helpers.colorStat(stat)+ helpers.spaces(3 - stat.toString().length) + " "
+                + (k == '0' ? '-' + helpers.spaces(2) : helpers.calcStat(k, stat, MAX_IV, MIN_EV, MIN_NATURE) + helpers.spaces(3 - helpers.calcStat(k, stat, MAX_IV, MIN_EV, MIN_NATURE).toString().length)) + " | "
+                + helpers.calcStat(k, stat, MAX_IV, MIN_EV, NEUTRAL_NATURE) + helpers.spaces(3 - helpers.calcStat(k, stat, MAX_IV, MIN_EV, NEUTRAL_NATURE).toString().length) + " | "
+                + helpers.calcStat(k, stat, MAX_IV, MAX_EV, NEUTRAL_NATURE) + helpers.spaces(3 - helpers.calcStat(k, stat, MAX_IV, MAX_EV, NEUTRAL_NATURE).toString().length) + " | "
+                + (k == '0' ? '-' + helpers.spaces(2) : helpers.calcStat(k, stat, MAX_IV, MAX_EV, MAX_NATURE));
             }
             dexmessage += "<br><b>Base Stat Total:</b> " + bst + "</tt>";
         } else {
             dexmessage += "<style>table {border-width: 1px; border-style: solid; border-color: #000000;}</style>"
             + "<br><table cellpadding='2' cellspacing='0'><thead><tr><th>Stat</th><th>Base</th><th>Min-</th><th>Min</th><th>Max</th><th>Max+</th></tr></thead><tbody>"
             for (var k in baseStats) {
+                print(k);
                 stat = baseStats[k];
                 dexmessage += "<tr><th>" + helpers.statName(k) + "</th>"
                 + "<td>" + helpers.colorStat(stat) + "</td>"
-                + "<td>" + (k === 0 ? '-' : helpers.calcStat(k, stat, MAX_IV, MIN_EV, MIN_NATURE)) + "</td>"
+                + "<td>" + (k == '0' ? '-' : helpers.calcStat(k, stat, MAX_IV, MIN_EV, MIN_NATURE)) + "</td>"
                 + "<td>" + helpers.calcStat(k, stat, MAX_IV, MIN_EV, NEUTRAL_NATURE) + "</td>"
                 + "<td>" + helpers.calcStat(k, stat, MAX_IV, MAX_EV, NEUTRAL_NATURE) + "</td>"
-                + "<td>" + (k === 0 ? '-' : helpers.calcStat(k, stat, MAX_IV, MAX_EV, MAX_NATURE)) + "</td></tr>"
+                + "<td>" + (k == '0' ? '-' : helpers.calcStat(k, stat, MAX_IV, MAX_EV, MAX_NATURE)) + "</td></tr>"
             }
             dexmessage += "</tbody><tfoot><tr><td colspan='6'><b>Base Stat Total:</b> " + bst + "</td></tr></tfoot></table>";
         }

@@ -46,7 +46,6 @@ modcommands = {
         + "<b>" + helpers.user("/mutelist") + "</b>: view the server's mutelist in a neat table with reason and date of mute.<br>"
         + "<b>" + helpers.user("/clearmutelist") + "</b>: clears the server's mute list.<br>"
         + "<b>" + helpers.user("/banlist") + "</b>: view the server's ban list in a neat table with reason and date of ban.<br>"
-        + "<b>" + helpers.user("/namebanlist") + "</b>: view the server's currently active name bans (all alts of banned people).<br>"
         + "<b>" + helpers.user("/rangebanlist") + "</b>: view the server's range ban list in a neat table with reason and date of ban.<br>"
         + "<b>" + helpers.user("/megabanlist") + "</b>: view the server's mega ban list in a neat table with reason and date of ban.<br>"
         + "<b>" + helpers.user("/gigabanlist") + "</b>: view the server's giga ban list in a neat table with reason and date of ban.<br>"
@@ -338,193 +337,200 @@ modcommands = {
     ,
     
     mutelist: function (src, channel, command) {
-        var onlinemessage = border + "<style type='text/css'>table {border-width:1px; border-style:solid; border-color:#000;}" +
-        "thead {font-weight:bold;}</style><h2>Mute List</h2><br><table cellpadding=2 cellspacing=0><thead><tr style='background-color:dodgerblue'>" +
-        "<td>Name</td><td>IP</td><td>Muter</td><td>Reason</td><td>Muted for</td><td>Time left</td><td>Date of muting</td></tr></thead>", id;
-        for (var index in mutelist) {
-            if (!sys.dbIp(index)) {
-                delete mutelist[index];
-                continue;
-            }
-            id = mutelist[index];
-            if (!id.time || id.time === null) {
-                time = "5ever";
-                left = "5ever";
-                unit = "";
-            } else {
-                time = id.starttime;
-                left = id.time;
-                unit = " seconds";
-                if (left == 1)unit = " second";
-                if (left >= 60) {
-                    left = left / 60;
-                    unit = " minutes";
-                    if (left == 1)unit = " minute";
-                    if (left >= 60) {
-                        left = left / 60;
-                        unit = " hours";
-                        if (left == 1)unit = " hour";
-                        if (left >= 24) {
-                            left = left / 24;
-                            unit = " days";
-                            if (left == 1)unit = " day";
-                        }
-                    }
-                }
-                if (Math.round(left) != left) {
-                    left = Math.round(left);
-                    unit += " (approx.)";
-                }
-            }
-            if (members[index])index = members[index];
-            onlinemessage += "<tr style='background-color:lightblue'><td>" + index + "</td><td>" + id.ip + "</td><td>" + id.mutedby +
-            "</td><td>" + id.reason + "</td><td>" + time + "</td><td>" + left + unit + "</td><td>" + id.date + "</td></tr>";
+        var names = [], ips = [], muters = [], reasons = [], times = [], timesLeft = [], dates = [], mutelistmessage;
+        for (var i in mutelist) {
+            names.push(members[i] ? members[i] : i);
+            ips.push(mutelist[i].ip);
+            muters.push(mutelist[i].mutedby);
+            reasons.push(mutelist[i].reason);
+            times.push(helpers.formatJusticeTime(mutelist[i].starttime));
+            timesLeft.push(helpers.formatJusticeTime(mutelist[i].time));
+            dates.push(mutelist[i].date);
         }
-        var playernum = Object.keys(mutelist).length;
-        onlinemessage += "</table><br><br><b>Total Muted Players:</b> " + playernum + "<br><br><timestamp/><br>" + border2;
-        sys.sendHtmlMessage(src, onlinemessage, channel);
+        mutelistmessage = border + "<h2>Mute List</h2><br>";
+        if (helpers.isAndroid(src)) {
+            mutelistmessage += "<tt>";
+            for (var i in names) {
+                mutelistmessage += names[i] + " | " + ips[i] + " | </tt>" + dates[i] + "<tt><br>";
+            }
+            mutelistmessage += "</tt>";
+        } else {
+            mutelistmessage += "<style>table {border-width: 1px; border-style: solid; border-color: #000000;}</style>"
+            + "<table cellpadding='2' cellspacing='0'><thead><tr style='background-color: #1E90FF;'>"
+            + "<th>Name</th><th>IP Address</th><th>Muter</th><th>Reason</th><th>Muted for</th><th>Time left</th><th>Date of muting</th></tr></thead><tbody>";
+            for (var i in names) {
+                mutelistmessage += "<tr style='background-color: #ADD8E6;'>"
+                + "<td>" + names[i] + "</td>"
+                + "<td>" + ips[i] + "</td>"
+                + "<td>" + muters[i] + "</td>"
+                + "<td>" + reasons[i] + "</td>"
+                + "<td>" + times[i] + "</td>"
+                + "<td>" + timesLeft[i] + "</td>"
+                + "<td>" + dates[i] + "</td>"
+                + "</tr>";
+            }
+            mutelistmessage += "</tbody></table>"
+        }
+        mutelistmessage += "<br><br><b>Total Muted Players:</b> " + Object.keys(mutelist).length + "<br><br><timestamp/><br>" + border2;
+        sys.sendHtmlMessage(src, mutelistmessage, channel);
     }
     
     ,
     
     clearmutelist: function (src, channel, command) {
-        var name = sys.name(src);
         mutelist = {};
         sys.write("data/mutelist.txt", "{}");
-        sys.sendHtmlMain(helpers.bot(bots.mute) + "The mute list has been cleared by " + name + "!");
+        sys.sendHtmlMain(helpers.bot(bots.mute) + "The mute list has been cleared by " + sys.name(src) + "!");
     }
     
     ,
     
     banlist: function (src, channel, command) {
-        var player, time, left, ip;
-        var onlinemessage = border + "<style type='text/css'>table {border-width:1px; border-style:solid; border-color:#000;}" +
-        "thead {font-weight:bold;}</style><h2>Ban List</h2><br><table cellpadding=2 cellspacing=0><thead><tr style='background-color:#ff6900'>" +
-        "<td>Name</td><td>IP</td><td>Banner</td><td>Reason</td><td>Banned for</td><td>Time left</td><td>Date of banning</td></tr></thead>";
-        for (var index in banlist) {
-            if (!sys.dbIp(index) && !helpers.isIp(index)) {
-                ip = banlist[index].ip;
-                banlist[ip] = banlist[index];
-                delete banlist[index];
-                continue;
-            }
-            var id = banlist[index];
-            if (!id.time || id.time === null) {
-                time = "5ever";
-                left = "5ever";
-                unit = "";
-            } else {
-                time = id.starttime;
-                left = id.time;
-                unit = " seconds";
-                if (left == 1)unit = " second";
-                if (left >= 60) {
-                    left = left / 60;
-                    unit = " minutes";
-                    if (left == 1)unit = " minute";
-                    if (left >= 60) {
-                        left = left / 60;
-                        unit = " hours";
-                        if (left == 1)unit = " hour";
-                        if (left >= 24) {
-                            left = left / 24;
-                            unit = " days";
-                            if (left == 1)unit = " day";
-                        }
-                    }
-                }
-                if (Math.round(left) != left) {
-                    left = Math.round(left);
-                    unit += " (approx.)";
-                }
-            }
-            if (index == id.ip) {
-                player = "-";
-            } else {
-                player = index;
-                if (members[player])player = members[player];
-            }
-            onlinemessage += "<tr style='background-color:orange'><td>" + player + "</td><td>" + id.ip + "</td><td>" + id.bannedby +
-            "</td><td>" + id.reason + "</td><td>" + time + "</td><td>" + left + unit + "</td><td>" + id.date + "</td></tr>";
+        var names = [], ips = [], banners = [], reasons = [], times = [], timesLeft = [], dates = [], banlistmessage;
+        for (var i in banlist) {
+            names.push(members[i] ? members[i] : i);
+            ips.push(banlist[i].ip);
+            banners.push(banlist[i].bannedby);
+            reasons.push(banlist[i].reason);
+            times.push(helpers.formatJusticeTime(banlist[i].starttime));
+            timesLeft.push(helpers.formatJusticeTime(banlist[i].time));
+            dates.push(banlist[i].date);
         }
-        var playernum = Object.keys(banlist).length;
-        onlinemessage += "</table><br><br><b>Total Banned Players:</b> " + playernum + "<br><br><timestamp/><br>" + border2;
-        sys.sendHtmlMessage(src, onlinemessage, channel);
-    }
-    
-    ,
-    
-    namebanlist: function (src, channel, command) {
-        if (sys.banList().length === 0) {
-            sys.sendHtmlMessage(src, helpers.bot(bots.ban) + "There are no name bans at the moment.", channel);
+        banlistmessage = border + "<h2>Ban List</h2><br>";
+        if (helpers.isAndroid(src)) {
+            banlistmessage += "<tt>";
+            for (var i in names) {
+                banlistmessage += names[i] + " | " + ips[i] + " | </tt>" + dates[i] + "<tt><br>";
+            }
+            banlistmessage += "</tt>";
         } else {
-            sys.sendHtmlMessage(src, helpers.bot(bots.ban) + "Name banned: " + sys.banList().join(", ") + ".", channel);
+            banlistmessage += "<style>table {border-width: 1px; border-style: solid; border-color: #000000;}</style>"
+            + "<table cellpadding='2' cellspacing='0'><thead><tr style='background-color: #FF6900;'>"
+            + "<th>Name</th><th>IP Address</th><th>Banner</th><th>Reason</th><th>Banned for</th><th>Time left</th><th>Date of banning</th></tr></thead><tbody>";
+            for (var i in names) {
+                banlistmessage += "<tr style='background-color: #FFA500;'>"
+                + "<td>" + names[i] + "</td>"
+                + "<td>" + ips[i] + "</td>"
+                + "<td>" + banners[i] + "</td>"
+                + "<td>" + reasons[i] + "</td>"
+                + "<td>" + times[i] + "</td>"
+                + "<td>" + timesLeft[i] + "</td>"
+                + "<td>" + dates[i] + "</td>"
+                + "</tr>";
+            }
+            banlistmessage += "</tbody></table>"
         }
+        banlistmessage += "<br><br><b>Total Banned Players:</b> " + Object.keys(banlist).length + "<br><br><timestamp/><br>" + border2;
+        sys.sendHtmlMessage(src, banlistmessage, channel);
     }
     
     ,
     
     rangebanlist: function (src, channel, command) {
-        var onlinemessage = border + "<style type='text/css'>table {border-width:1px; border-style:solid; border-color:#000;}" +
-        "thead {font-weight:bold;}</style><h2>Range Ban List</h2><br><table cellpadding=2 cellspacing=0><thead><tr style='background-color:green'>" +
-        "<td>Name</td><td>Range</td><td>Banner</td><td>Reason</td><td>Date</td></tr></thead>", player, range;
-        for (var index in rangebanlist) {
-            if (!sys.dbIp(index) && !helpers.isRange(index)) {
-                range = rangebanlist[index].range;
-                rangebanlist[range] = rangebanlist[index];
-                delete rangebanlist[index];
-                continue;
-            }
-            var id = rangebanlist[index];
-            if (index == id.range) {
-                player = "-";
-            } else {
-                player = index;
-                if (members[player])player = members[player];
-            }
-            onlinemessage += "<tr style='background-color:#7fff00'><td>" + player + "</td><td>" + id.range + "</td><td>" + id.banner + "</td><td>" + id.reason + "</td><td>" + id.date + "</td></tr>";
+        var names = [], ranges = [], banners = [], reasons = [], dates = [], rangebanlistmessage;
+        for (var i in rangebanlist) {
+            names.push(members[i] ? members[i] : i);
+            ranges.push(rangebanlist[i].range);
+            banners.push(rangebanlist[i].banner);
+            reasons.push(rangebanlist[i].reason);
+            dates.push(rangebanlist[i].date);
         }
-        var playernum = Object.keys(rangebanlist).length;
-        onlinemessage += "</table><br><br><b>Total Range Banned Players:</b> " + playernum + "<br><br><timestamp/><br>" + border2;
-        sys.sendHtmlMessage(src, onlinemessage, channel);
+        rangebanlistmessage = border + "<h2>Range Ban List</h2><br>";
+        if (helpers.isAndroid(src)) {
+            rangebanlistmessage += "<tt>";
+            for (var i in names) {
+                rangebanlistmessage += names[i] + " | " + ranges[i] + " | </tt>" + dates[i] + "<tt><br>";
+            }
+            rangebanlistmessage += "</tt>";
+        } else {
+            rangebanlistmessage += "<style>table {border-width: 1px; border-style: solid; border-color: #000000;}</style>"
+            + "<table cellpadding='2' cellspacing='0'><thead><tr style='background-color: #008000;'>"
+            + "<th>Name</th><th>IP Range</th><th>Banner</th><th>Reason</th><th>Date of banning</th></tr></thead><tbody>";
+            for (var i in names) {
+                rangebanlistmessage += "<tr style='background-color: #7FFF00;'>"
+                + "<td>" + names[i] + "</td>"
+                + "<td>" + ranges[i] + "</td>"
+                + "<td>" + banners[i] + "</td>"
+                + "<td>" + reasons[i] + "</td>"
+                + "<td>" + dates[i] + "</td>"
+                + "</tr>";
+            }
+            rangebanlistmessage += "</tbody></table>"
+        }
+        rangebanlistmessage += "<br><br><b>Total Range Banned Players:</b> " + Object.keys(rangebanlist).length + "<br><br><timestamp/><br>" + border2;
+        sys.sendHtmlMessage(src, rangebanlistmessage, channel);
     }
     
     ,
     
     megabanlist: function (src, channel, command) {
-        var onlinemessage = border + "<style type='text/css'>table {border-width:1px; border-style:solid; border-color:#000;}" +
-        "thead {font-weight:bold;}</style><h2>Mega Ban List</h2><br><table cellpadding=2 cellspacing=0><thead><tr style='background-color:purple'>" +
-        "<td>Name</td><td>Banner</td><td>Reason</td><td>Date</td></tr></thead>", player;
-        for (var index in megabanlist) {
-            var id = megabanlist[index];
-            player = index;
-            if (members[player]) {
-                player = members[player];
-            }
-            onlinemessage += "<tr style='background-color:fuchsia'><td>" + player + "</td><td>" + id.banner + "</td><td>" + id.reason + "</td><td>" + id.date + "</td></tr>";
+        var names = [], banners = [], reasons = [], dates = [], megabanlistmessage;
+        for (var i in megabanlist) {
+            names.push(members[i] ? members[i] : i);
+            banners.push(megabanlist[i].banner);
+            reasons.push(megabanlist[i].reason);
+            dates.push(megabanlist[i].date);
         }
-        var playernum = Object.keys(megabanlist).length;
-        onlinemessage += "</table><br><br><b>Total Mega Banned Players:</b> " + playernum + "<br><br><timestamp/><br>" + border2;
-        sys.sendHtmlMessage(src, onlinemessage, channel);
+        megabanlistmessage = border + "<h2>Mega Ban List</h2><br>";
+        if (helpers.isAndroid(src)) {
+            megabanlistmessage += "<tt>";
+            for (var i in names) {
+                megabanlistmessage += names[i] + " | </tt>" + dates[i] + "<tt><br>";
+            }
+            megabanlistmessage += "</tt>";
+        } else {
+            megabanlistmessage += "<style>table {border-width: 1px; border-style: solid; border-color: #000000;}</style>"
+            + "<table cellpadding='2' cellspacing='0'><thead><tr style='background-color: #800080;'>"
+            + "<th>Name</th><th>Banner</th><th>Reason</th><th>Date of banning</th></tr></thead><tbody>";
+            for (var i in names) {
+                megabanlistmessage += "<tr style='background-color: #FF00FF;'>"
+                + "<td>" + names[i] + "</td>"
+                + "<td>" + banners[i] + "</td>"
+                + "<td>" + reasons[i] + "</td>"
+                + "<td>" + dates[i] + "</td>"
+                + "</tr>";
+            }
+            megabanlistmessage += "</tbody></table>"
+        }
+        megabanlistmessage += "<br><br><b>Total Mega Banned Players:</b> " + Object.keys(megabanlist).length + "<br><br><timestamp/><br>" + border2;
+        sys.sendHtmlMessage(src, megabanlistmessage, channel);
     }
     
     ,
     
     gigabanlist: function (src, channel, command) {
-        var onlinemessage = border + "<style type='text/css'>table {border-width:1px; border-style:solid; border-color:#000;}" +
-        "thead {font-weight:bold;}</style><h2>Giga Ban List</h2><br><table cellpadding=2 cellspacing=0><thead><tr style='background-color:darkred'>" +
-        "<td>Name</td><td>Banner</td><td>Reason</td><td>Pseudo</td><td>Date</td></tr></thead>", player;
-        for (var index in gigabanlist) {
-            var id = gigabanlist[index];
-            player = index;
-            if (members[player]) {
-                player = members[player];
-            }
-            onlinemessage += "<tr style='background-color:red'><td>" + player + "</td><td>" + id.banner + "</td><td>" + id.reason + "</td><td>" + id.pseudo + "</td><td>" + id.date + "</td></tr>";
+        var names = [], banners = [], reasons = [], pseudos = [], dates = [], gigabanlistmessage;
+        for (var i in gigabanlist) {
+            names.push(members[i] ? members[i] : i);
+            banners.push(gigabanlist[i].banner);
+            reasons.push(gigabanlist[i].reason);
+            pseudos.push(gigabanlist[i].pseudo);
+            dates.push(gigabanlist[i].date);
         }
-        var playernum = Object.keys(gigabanlist).length;
-        onlinemessage += "</table><br><br><b>Total Giga Banned Players:</b> " + playernum + "<br><br><timestamp/><br>" + border2;
-        sys.sendHtmlMessage(src, onlinemessage, channel);
+        gigabanlistmessage = border + "<h2>Giga Ban List</h2><br>";
+        if (helpers.isAndroid(src)) {
+            gigabanlistmessage += "<tt>";
+            for (var i in names) {
+                gigabanlistmessage += names[i] + " | </tt>" + dates[i] + "<tt><br>";
+            }
+            gigabanlistmessage += "</tt>";
+        } else {
+            gigabanlistmessage += "<style>table {border-width: 1px; border-style: solid; border-color: #000000;}</style>"
+            + "<table cellpadding='2' cellspacing='0'><thead><tr style='background-color: #AA0000;'>"
+            + "<th>Name</th><th>Banner</th><th>Reason</th><th>Pseudo</th><th>Date of banning</th></tr></thead><tbody>";
+            for (var i in names) {
+                gigabanlistmessage += "<tr style='background-color: #FF0000;'>"
+                + "<td>" + names[i] + "</td>"
+                + "<td>" + banners[i] + "</td>"
+                + "<td>" + reasons[i] + "</td>"
+                + "<td>" + pseudos[i] + "</td>"
+                + "<td>" + dates[i] + "</td>"
+                + "</tr>";
+            }
+            gigabanlistmessage += "</tbody></table>"
+        }
+        gigabanlistmessage += "<br><br><b>Total Giga Banned Players:</b> " + Object.keys(gigabanlist).length + "<br><br><timestamp/><br>" + border2;
+        sys.sendHtmlMessage(src, gigabanlistmessage, channel);
     }
     
     ,
@@ -539,7 +545,7 @@ modcommands = {
         + "<h2>Moderator Commands ~ Info Options</h2>"
         + "<br>"
         + "<b>" + helpers.user("/cp ") + helpers.arg("player") + "</b>: displays Control Panel and location data for <b>player</b>. Also /whois.<br>"
-        + "<b>" + helpers.user("/recall ") + helpers.arg("player") + "</b>: recalls <b>player</b>'s country and time zone data. It will be erased again after one minute.<br>"
+        + "<b>" + helpers.user("/recall ") + helpers.arg("player") + "</b>: recalls <b>player</b>'s country and time zone data. Will be erased again after one minute.<br>"
         + "<b>" + helpers.user("/getcolor ") + helpers.arg("player") + "</b>: displays <b>player</b>'s color as hexadecimal color code. Also /getcolour.<br>"
         + "<b>" + helpers.user("/rangealts ") + helpers.arg("range") + "</b>: displays alts for <b>range</b>.<br>"
         + "<b>" + helpers.user("/lastmessages") + "</b>: Shows everyone's last 10 messages in a neat table. Also /lastmsgs or /lastposts.<br>"
@@ -551,8 +557,8 @@ modcommands = {
     ,
     
     cp: function (src, channel, command) {
-        var cpmessage = border + "<h2>Control Panel</h2><br>", gigabanned = false, megabanned = false, rangebanned = false, banned = false, muted = false;
-        var name, player, auth, imageindex, status, registered, location, country, os, derp, usedips, playerchannels, lastlogin, timezone2, flag, version;
+        var DISPLAY_USER = true, cpmessage = border + "<h2>Control Panel</h2><br>", gigabanned = false, megabanned = false, rangebanned = false, banned = false, muted = false;
+        var name, player, auth, imageindex, status, registered, location, os, country, city, usedips, playerChannels, lastLogin, timezone2, flag, version, totalAlts;
         if (!command[1]) {
             helpers.starfox(src, channel, command, bots.command, "Error 404, player not found.", channel);
             return;
@@ -591,7 +597,8 @@ modcommands = {
                 muted = true;
             }
         }
-        var alts = sys.aliases(ip), altsnum;
+        alts = sys.aliases(ip);
+        totalAlts = alts.length;
         if (id) {
             auth = sys.auth(id);
             ip = sys.ip(id);
@@ -614,11 +621,11 @@ modcommands = {
                 status += " [Muted]";
             }
             status += "</b></font>";
-            playerchannels = sys.channelsOfPlayer(id);
-            for (var index in playerchannels) {
-                playerchannels[index] = "<a href=\"po:join/" + sys.channel(playerchannels[index]) + "\">#" + sys.channel(playerchannels[index]) + "</a>";
+            playerChannels = sys.channelsOfPlayer(id);
+            for (var index in playerChannels) {
+                playerChannels[index] = "<a href=\"po:join/" + sys.channel(playerChannels[index]) + "\">#" + sys.channel(playerChannels[index]) + "</a>";
             }
-            playerchannels = playerchannels.join(", ");
+            playerChannels = playerChannels.join(", ");
         } else {
             auth = sys.dbAuth(player);
             imageindex = (auth > 3 ? 0 : auth) + 4;
@@ -635,41 +642,47 @@ modcommands = {
                 status += " [Muted]";
             }
             status += "</font>";
-            playerchannels = "None";
+            playerChannels = "None";
         }
-        lastlogin = helpers.formatLastOn(src, sys.dbLastOn(player));
-        operatingsystem[player] ? os = operatingsystem[player] : os = "[no data]";
-        versions[player] ? version = ", ver. " + versions[player] : version = "";
-        if (!countryname[player]) {
-            country = "[no data]";
-            derp = "[no data]";
-            flag = "[no data]";
+        lastLogin = helpers.formatLastOn(src, sys.dbLastOn(player));
+        if (operatingsystem[player]) {
+            os = (helpers.isAndroid(src) ? helpers.osName(operatingsystem[player]) : helpers.os(operatingsystem[player]));
         } else {
-            country = helpers.toFlagKey(helpers.removespaces(countryname[player].toUpperCase()));
-            derp = countryname[player];
-            flag = FLAGS[country];
+            os = "[no data]";
+        }
+        versions[player] ? version = ", ver. " + versions[player] : version = "";
+        if (countryname[player]) {
+            country = countryname[player];
+            flag = FLAGS[helpers.toFlagKey(countryname[player])];
+        } else {
+            country = "[no data]";
+            flag = "[no data]";
         }
         timezone[player] ? timezone2 = timezone[player] : timezone2 = "[no data]";
-        sys.dbRegistered(player) ? registered = "<b style='color:green'>Yes</b>" : registered = "<font color='red'>No</font>";
+        sys.dbRegistered(player) ? registered = "<b><font color='green'>Yes</font></b>" : registered = "<font color='red'>No</font>";
         alts = alts.join(", ");
-        altsnum = sys.aliases(ip).length;
         iplist[player] ? usedips = iplist[player].join(", ") : usedips = "Unknown";
         if (members[player]) {
             player = members[player];
         }
-        !cityname[player.toLowerCase()] ? location = "[no data]" : location = cityname[player.toLowerCase()];
-        cpmessage += helpers.authimage(src, imageindex) + " " + player + " " + status +
-        "<br><b>Auth:</b> " + helpers.authname(sys.dbAuth(player), true);
-        location == "[no data]" ? cpmessage += "<br><b>IP:</b> " + ip : cpmessage += "<br><b>IP:</b> <a href='" + helpers.mapsUrl(location, derp) + "'>" + ip + "</a>";
+        !cityname[player.toLowerCase()] ? city = "[no data]" : city = cityname[player.toLowerCase()];
+        cpmessage += (!helpers.isAndroid(src) ? helpers.authimage(src, imageindex) + " " : "") + player + " " + status +
+        "<br><b>Auth:</b> " + helpers.authname(sys.dbAuth(player), DISPLAY_USER);
+        if (city == "[no data]") {
+            cpmessage += "<br><b>IP:</b> " + ip;
+        } else {
+            cpmessage += "<br><b>IP:</b> <a href='" + helpers.mapsUrl(city, country) + "'>" + ip + "</a>";
+            location = (!helpers.isAndroid(src) ? flag + " " : "") + city + ", " + country;
+        }
         cpmessage += "<br><b>Client:</b> " + os + version +
-        "<br><b>Location:</b> " + flag + " " + location + ", " + derp +
+        "<br><b>Location:</b> " + location +
         "<br><b>Time Zone:</b> " + timezone2 +
         "<br><b>Registered:</b> " + registered +
-        "<br><b>Last Online:</b> " + lastlogin +
+        "<br><b>Last Online:</b> " + lastLogin +
         "<br><b>Alts:</b> " + alts + 
-        "<br><b>Number of Alts:</b> " + altsnum +
+        "<br><b>Number of Alts:</b> " + totalAlts +
         "<br><b>Used IPs:</b> " + usedips +
-        "<br><b>Channels:</b> " + playerchannels +
+        "<br><b>Channels:</b> " + playerChannels +
         "<br><br><timestamp/><br>" + border2;
         sys.sendHtmlMessage(src, cpmessage, channel);
     }
@@ -749,7 +762,7 @@ modcommands = {
     ,
     
     rangealts: function (src, channel, command) {
-        var altsmessage = border + "<h2>Alts for range " + command[1] + "</h2><br><table>", range = command[1], aliases = [], db;
+        var altsmessage = border + "<h2>Alts for range " + command[1] + "</h2><br>", range = command[1], aliases = [], db;
         if (!range) {
             helpers.starfox(src, channel, command, bots.command, "Error 404, range not found.");
             return;
@@ -768,8 +781,7 @@ modcommands = {
             sys.sendHtmlMessage(src, helpers.bot(bots.command) + "That range doesn't have any alts!", channel);
             return;
         }
-        altsmessage += "<tr><td>" + aliases.join(", ") + "</td></tr>";
-        altsmessage += "</table><br><br><b>Total Alts:</b> " + aliases.length + "<br><br><timestamp/><br>" + border2;
+        altsmessage += aliases.join(", ") + "<br><br><b>Total Alts:</b> " + aliases.length + "<br><br><timestamp/><br>" + border2;
         sys.sendHtmlMessage(src, altsmessage, channel);
     }
     
@@ -1084,7 +1096,7 @@ modcommands = {
     ,
     
     alts: function (src, channel, command) {
-        var title = "", isIp = false, name, auth, registered, lastlogin, player, ip, alts;
+        var isIp = false, player, ip, alts, altsmessage;
         if (!command[1]) {
             helpers.starfox(src, channel, command, bots.auth, "Error 404, player not found.", channel);
             return;
@@ -1104,23 +1116,8 @@ modcommands = {
         if (!isIp && members[player]) {
             player = members[player];
         }
-        var altsmessage = border + "<h2>" + (isIp ? "Alts for IP " + ip : player + "'s alts") + "</h2><br><style type='text/css'>table {border-width:1px; border-style:solid; border-color:#000;}"
-        + "thead {font-weight:bold;}</style>"
-        + "<table cellpadding=2 cellspacing=0><thead><tr style='background-color:#b0b0b0;'>"
-        + "<td>Icon</td><td>Auth</td><td>Title</td><td>Name</td><td>Registered</td><td>Last Online</td></tr></thead><tbody>";
-        for (var index in alts) {
-            name = alts[index];
-            auth = sys.dbAuth(name);
-            title = (authtitles[name] ? authtitles[name] : '-');
-            registered =  (sys.dbRegistered(name) ? "<b style='color:green'>Yes</b>" : "<font color='red'>No</font>");
-            lastlogin = helpers.formatLastOn(src, sys.dbLastOn(name));
-            if (members[name]) {
-                name = members[name];
-            }
-            altsmessage += "<tr><td>" + helpers.authimage(src, auth > 3 ? 0 : auth) + "</td><td>" + helpers.authname(auth, true) + "</td><td>" + title +
-            "</td><td>" + name + "</td><td>" + registered + "</td><td>" + lastlogin + "</td></tr>";
-        }
-        altsmessage += "</tbody></table><br><br><b>Total Alts:</b> " + alts.length + "<br><br><timestamp/><br>" + border2;
+        altsmessage = border + "<h2>" + (isIp ? "Alts for IP " + ip : player + "'s alts") + "</h2><br>" + alts.join(", ")
+        + "<br><br><b>Total Alts:</b> " + alts.length + "<br><br><timestamp/><br>" + border2;
         sys.sendHtmlMessage(src, altsmessage, channel);
     }
     

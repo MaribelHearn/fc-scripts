@@ -789,9 +789,9 @@
             Operating System and Client Version
             -----------------------------------
         **/
-        operatingsystem[lower] = helpers.os(os);
+        operatingsystem[lower] = os;
         sys.write("data/os.txt", JSON.stringify(operatingsystem));
-        os = operatingsystem[lower];
+        os = helpers.os(operatingsystem[lower]);
         versions[lower] = helpers.version(version);
         sys.write("data/versions.txt", JSON.stringify(versions));
         version = versions[lower];
@@ -1018,9 +1018,7 @@
         if (floodplayers.indexOf(src) != -1) {
             floodplayers.splice(floodplayers.indexOf(src), 1);
         }
-        if (players[src]) {
-            players.splice(src, 1);
-        }
+        delete players[src];
     }
 
     ,
@@ -1045,7 +1043,7 @@
     ,
 
     afterChangeTeam: function (src, team) {
-        var name = sys.name(src), ip = sys.ip(src), color = helpers.color(src), lower = sys.name(src).toLowerCase();
+        var name = sys.name(src), ip = sys.ip(src), color = helpers.color(src), lower = sys.name(src).toLowerCase(), oldName = players[src].name.toLowerCase();
         /**
             -----------------------
             Player Variable Setting
@@ -1062,7 +1060,7 @@
             Operating System and Client Version
             -----------------------------------
         **/
-        operatingsystem[lower] = helpers.os(sys.os(src));
+        operatingsystem[lower] = sys.os(src);
         sys.write("data/os.txt", JSON.stringify(operatingsystem));
         versions[lower] = helpers.version(sys.version(src));
         sys.write("data/versions.txt", JSON.stringify(versions));
@@ -1072,15 +1070,12 @@
             ---------------------
         **/
         if (API !== "") {
-            sys.webCall(helpers.countryRetrievalUrl(ip), function (resp) {
-                resp = JSON.parse(resp);
-                timezone[lower] = helpers.timezonedata(resp.countryName, resp.timeZone);
-                countryname[lower] = helpers.countrydata(resp.countryName);
-                cityname[lower] = helpers.citydata(resp.cityName);
-                sys.write("data/timezone.txt", JSON.stringify(timezone));
-                sys.write("data/countryname.txt", JSON.stringify(countryname));
-                sys.write("data/cityname.txt", JSON.stringify(cityname));
-            });
+            timezone[lower] = timezone[oldName];
+            countryname[lower] = countryname[oldName];
+            cityname[lower] = cityname[oldName];
+            helpers.saveDataFile("timezone");
+            helpers.saveDataFile("countryname");
+            helpers.saveDataFile("cityname");
         }
     }
 
@@ -1672,7 +1667,7 @@
         battles[battle].p1 = sys.name(src);
         battles[battle].p2 = sys.name(trgt);
         battles[battle].start = helpers.shortdate(new Date());
-        battles[battle].tier = sys.tier(src, team) == sys.tier(trgt, team2) ? sys.tier(src, team) : "none";
+        battles[battle].tier = sys.tier(src, team) == sys.tier(trgt, team2) ? sys.tier(src, team) : "Mixed";
         battles[battle].clauses = (typeof(list) == "string" ? list : list.join(", "));
         /**
             -----------------------
@@ -1726,7 +1721,7 @@
         var winnername, losername;
         !players[winner] ? winnername = "[no data]" : winnername = players[winner].name;
         !players[loser] ? losername = "[no data]" : losername = players[loser].name;
-        battles.splice(battle, 1);
+        delete battles[battle];
         /**
             ------------------------
             Tournament Battle Ending
