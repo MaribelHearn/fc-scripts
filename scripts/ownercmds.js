@@ -1982,7 +1982,7 @@ ownercommands = {
         commandsmessage += permChannelList.join(", ") + "<br>"
         + "<br>"
         + "Use <b>" + helpers.userg("/registerall") + "</b> to register all of the permanent channels and give them their default settings.<br>"
-        + "Use <b>" + helpers.user("/renamechannel ") + helpers.arg("number") + helpers.arg2("*name") + "</b> to change the name of perm channel <b>number</b> to <b>name</b>.<br>"
+        + "Use <b>" + helpers.user("/renamechannel ") + helpers.arg("name") + helpers.arg2("*new name") + "</b> to change the name of a perm channel from <b>name</b> to <b>new name</b>.<br>"
         + "<br><timestamp/><br>"
         + border2;
         sys.sendHtmlMessage(src, commandsmessage, channel);
@@ -1991,22 +1991,31 @@ ownercommands = {
     ,
     
     renamechannel: function (src, channel, command) {
-        var number = command[1], newName, oldName, lower;
-        if (!channelName) {
-            helpers.starfox(src, channel, command, bots.command, "Error 404, number not found.");
-            return;
-        }
-        newName = command[2];
-        if (!newName) {
+        var oldName = command[1], newName, oldName, lower;
+        if (!oldName) {
             helpers.starfox(src, channel, command, bots.command, "Error 404, name not found.");
             return;
         }
-        oldName = permchannels[number];
-        lower = oldName.toLowerCase();
-        regchannels[newName] = regchannels[lower];
-        permchannels[number] = newName;
-        helpers.saveDataFile("permchannels");
-        sys.sendHtmlMessage(src, helpers.bot(bots.main) + "Permanent channel " + number + " has been renamed from '" + oldName + "' to '" + newName + "'. Will take effect upon the next restart.", channel);
+        for (var i in permchannels) {
+            if (permchannels[i] == oldName) {
+                newName = command[2];
+                if (!newName) {
+                    helpers.starfox(src, channel, command, bots.command, "Error 404, new name not found.");
+                    return;
+                }
+                oldName = permchannels[i];
+                lower = oldName.toLowerCase();
+                if (regchannels[lower]) {
+                    regchannels[newName.toLowerCase()] = regchannels[lower];
+                    delete regchannels[lower];
+                }
+                permchannels[i] = newName;
+                helpers.saveDataFile("permchannels");
+                sys.sendHtmlMessage(src, helpers.bot(bots.main) + "The permanent channel '" + oldName + "' is now called '" + newName + "'. Will take effect upon the next server restart.", channel);
+                return;
+            }
+        }
+        helpers.starfox(src, channel, command, bots.command, "Error 403, invalid name.");
     }
     
     ,
