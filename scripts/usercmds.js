@@ -362,12 +362,8 @@ usercommands = {
     
     registry: function (src, channel, command) {
         var auth = sys.auth(src), registrymessage = border + "<style type='text/css'>table {border-width: 1px; border-style: solid; border-color: black;}</style><h2>Pokémon Online Registry</h2><br>" +
-        "<table cellpadding=2 cellspacing=0><thead><tr style='background-color: #b0b0b0;'><th>Server</th><th>Players Online</th><th>Advanced Connection</th>";
-        if (auth >= 1) {
-            registrymessage += "<th>Host Country</th>";
-        }
-        registrymessage += "</tr></thead><tbody>";
-        var servername = sys.getServerName(), servers = [], playernums = [], serverIps = [], serverCountries = [], advConnects = [], total = 0, tmp1, tmp2;
+        "<table cellpadding=2 cellspacing=0><thead><tr style='background-color: #b0b0b0;'><th>Server</th><th>Players Online</th><th>Advanced Connection</th></tr></thead><tbody>";
+        var servername = sys.getServerName(), servers = [], playernums = [], serverIps = [], advConnects = [], total = 0, tmp1, tmp2;
         sys.webCall(REGISTRY_URL, function (resp) {
             if (resp === "") {
                 sys.sendHtmlMessage(src, helpers.bot(bots.command) + "An error occurred while fetching the registry.", channel);
@@ -391,15 +387,10 @@ usercommands = {
                 if (tmp2[j].substr(0, 3) == "ip=") {
                     ip = tmp2[j].slice(4, -1);
                     serverIps.push(ip);
-                    serverCountries.push(helpers.serverCountry(ip));
                 }
             }
             for (var k in servers) {
-                registrymessage += "<tr><td>" + (servers[k] == servername ? "<b>" + servers[k] + "</b>" : servers[k]) + "</td><td>" + playernums[k] + "</td><td>" + advConnects[k] + "</td>";
-                if (auth >= 1) {
-                    registrymessage += "<td>" + serverCountries[k] + "</td>";
-                }
-                registrymessage += "</tr>";
+                registrymessage += "<tr><td>" + (servers[k] == servername ? "<b>" + servers[k] + "</b>" : servers[k]) + "</td><td>" + playernums[k] + "</td><td>" + advConnects[k] + "</td></tr>";
                 total += parseInt(playernums[k]);
             }
             registrymessage += "</tbody></table><br>" +
