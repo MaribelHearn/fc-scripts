@@ -133,11 +133,6 @@
     sys.sendHtmlOwner = function (message) {
         sys.sendHtmlAll(message, ownerchannel);
     };
-    sys.calcDamage = function (attack, defense, power, modifier) {
-        // assumes the attacking Pokémon is level 100
-        var damage = Math.floor((0.84 * (attack / defense) * power + 2) * modifier);
-        return [Math.floor(damage * 0.85), damage];
-    };
     sys.printStackTrace = function (message) {
         try {
             var table = "<style type='text/css'>table {border-width: 1px; border-style: solid; border-color: #000;}</style>" +

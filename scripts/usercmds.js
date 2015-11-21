@@ -878,44 +878,6 @@ usercommands = {
     
     ,
     
-    damagecalc: function (src, channel, command) {
-        var args = ["Pokémon", "Pokémon", "attack", "defense", "HP", "power", "modifier"], message = "";
-        var poke1, poke2, attack, defense, power, modifier, damage, percentage1, percentage2;
-        if (sys.auth(src) < 3) {
-            return;
-        }
-        for (var i = 0; i < args.length; i++) {
-            if (!command[i]) {
-                helpers.starfox(src, channel, command, bots.command, "Error 404, " + args[i] + " not found.");
-                return;
-            }
-        }
-        poke1 = sys.pokeNum(command[1]);
-        poke2 = sys.pokeNum(command[2]);
-        pokemon1 = sys.pokemon(poke1);
-        pokemon2 = sys.pokemon(poke2);
-        attack = command[3];
-        defense = command[4];
-        HP = command[5];
-        power = command[6];
-        modifier = command[7];
-        damage = sys.calcDamage(attack, defense, power, modifier);
-        percentage1 = Math.round(damage[0] / HP * 100);
-        percentage2 = Math.round(damage[1] / HP * 100);
-        message += "<img src='pokemon:" + poke1 + "'> Your " + pokemon1 + " deals <b>" + damage[0] +
-        " - " + damage[1] + "</b> damage to the opponent's " + pokemon2 + " (" + percentage1 + " - " + percentage2 + "%";
-        if (percentage1 >= 100) {
-            message += ", <b>OHKO</b>). <img src='pokemon:" + poke2 + "'>";
-        } else if (percentage2 >= 100) {
-            message += ", possible OHKO). <img src='pokemon:" + poke2 + "'>";
-        } else {
-            message += "). <img src='pokemon:" + poke2 + "'>";
-        }
-        sys.sendHtmlMessage(src, message, channel);
-    }
-    
-    ,
-    
     gradient: function (src, channel, command) {
         var gradient = command[1];
         if (!gradient) {
