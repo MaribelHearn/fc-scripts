@@ -179,11 +179,9 @@ funcommands = {
     ,
     
     dennis: function (src, channel, command) {
-        var name = sys.name(src), number;
-        number = sys.rand(0, 2);
-        number == 1 ? number = 269 : number = 250;
+        var name = sys.name(src), number = (sys.rand(0, 2) == 1 ? 269 : 250);
         sys.sendHtmlAll(helpers.bot(bots.fun) + "<b>" + helpers.user(helpers.escapehtml(name)) +
-        " has used the " + helpers.arg("Dennis") + " command.</b><br><b>DDDDDDDEEEEEEENNNNNNNNNNNNNNIIIIIIISSSSSSS!!!</b><img src='Themes/Classic/Trainer Sprites/" + number + ".png'>", channel);
+        " has used the " + helpers.arg("Dennis") + " command.</b><br><b>DDDDDDDEEEEEEENNNNNNNNNNNNNNIIIIIIISSSSSSS!!!</b><img src='trainer:" + number + "'>", channel);
     }
     
     ,
@@ -220,7 +218,7 @@ funcommands = {
         } else {
             message = "<font color='" + color + "'><timestamp/><b>" + name + ":</b></font> ";
         }
-        sys.sendHtmlAll(message + "<i><font color='royalblue'>*face" + text + "*</font></i>", channel);
+        sys.sendHtmlAll(message + "<i><font color='" + cmdcolors[0] + "'>*face" + text + "*</font></i>", channel);
     }
     
     ,
@@ -271,7 +269,7 @@ funcommands = {
         var name = sys.name(src), color = helpers.color(src);
         command.splice(0, 1);
         command = command.join(DELIMITER);
-        sys.sendHtmlAll("<font color='" + color + "'><timestamp/><b>*** " + name + " hugged " + helpers.escapehtml(command) + ". ?***</b></font>", channel);
+        sys.sendHtmlAll("<font color='" + color + "'><timestamp/><b>*** " + name + " hugged " + helpers.escapehtml(command) + ". ♥***</b></font>", channel);
     }
     
     ,
@@ -492,8 +490,8 @@ funcommands = {
     wtfboom: function (src, channel, command) {
         var name = sys.name(src);
         sys.sendHtmlAll(helpers.bot(bots.fun) + "<b>" + helpers.user(helpers.escapehtml(name)) +
-        " has used the " + helpers.arg("Wtfboom") + " command.</b><br><span style='font-size:24px;color:grey'>WHAT THE FU-" +
-        "BOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOM</span>", channel);
+        " has used the " + helpers.arg("Wtfboom") + " command.</b><br><span style='font-size: 24px;'><font color='#808080'>WHAT THE FU-" +
+        "BOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOM</font></span>", channel);
     }
     
     ,
@@ -515,8 +513,7 @@ funcommands = {
     ,
     
     dividebyzero: function (src, channel, command) {
-        var name = sys.name(src), number;
-        number = sys.rand(0, 1338);
+        var name = sys.name(src), number = sys.rand(0, 1338);
         sys.sendAll(name + ": " + number + " / 0 = ...", channel);
         sys.sendHtmlAll(helpers.bot(bots.kick) + name + " divided by zero! OH SHI-", channel);
         sys.kick(src);

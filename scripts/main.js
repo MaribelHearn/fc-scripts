@@ -1498,7 +1498,7 @@
             }
             return;
         }
-        sys.sendHtmlMain("<span style='color:orange'><timestamp/><b>~~Server~~:</b></span> " + message);
+        sys.sendHtmlMain("<font color='#FFA500'><timestamp/><b>~~Server~~:</b></font> " + message);
         return;
     }
     
