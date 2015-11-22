@@ -1270,7 +1270,7 @@
             -----
         **/
         if (helpers.isLoaded("party.js")) {
-            if (channel == partychannel && partyMode != "none" && message != "/mode") {
+            if (channel == partychannel && partyMode != "none" && message.split(' ')[0] != "/mode") {
                 sys.stopEvent();
                 helpers.mode(src, message, channel, partyMode);
                 return;

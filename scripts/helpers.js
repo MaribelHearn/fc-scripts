@@ -830,7 +830,7 @@ helpers = {
             random = sys.rand(0, length);
             color = this.color(playerids[random]);
             message = this.escapehtml(message);
-            if (sys.auth(sys.playerIds()[random]) > 0) {
+            if (sys.auth(sys.playerIds()[random]) >= 1 && sys.auth(sys.playerIds()[random]) <= 3) {
                 message = "<font color='" + color + "'><timestamp/> +<b><i>" + sys.name(playerids[random]) + ":</i></b></font> " + message;
             } else {
                 message = "<font color='" + color + "'><timestamp/> <b>" + sys.name(playerids[random]) + ":</b></font> " + message;
@@ -839,10 +839,10 @@ helpers = {
             return;
         } else if (mode == "nightclub") {
             message = this.escapehtml(message);
-            if (auth > 0) {
-                message = "<span style='font-size:16px;color:white'><timestamp/> <b><i>" + this.rainbow(name + ":") + "</i> " + message + "</b></span>";
+            if (auth >= 1) {
+                message = "<span style='font-size: 16px;'><font color='#FFFFFF'><timestamp/> <b><i>" + this.rainbow(name + ":") + "</i> " + message + "</b></font></span>";
             } else {
-                message = "<span style='font-size:16px;color:white'><timestamp/> <b>" + this.rainbow(name + ":") + " " + message + "</b></span>";
+                message = "<span style='font-size: 16px;'><font color='#FFFFFF'><timestamp/> <b>" + this.rainbow(name + ":") + " " + message + "</b></font></span>";
             }
             sys.sendHtmlAll(message, channel);
             return;
@@ -855,7 +855,7 @@ helpers = {
                 message += " Nyan";
                 index++;
             }
-            sys.sendHtmlAll("<font color='white'>:</font><div style='background:" + this.nyancolor(partyNyan) + "'><center><span style='font-size:16px'>" + message + "</span></center>", channel);
+            sys.sendHtmlAll("<font color='#FFFFFF'>:</font><div style='background:" + this.nyancolor(partyNyan) + "'><center><span style='font-size: 16px;'>" + message + "</span></center>", channel);
             partyNyan++;
             if (partyNyan == 7) {
                 partyNyan = 0;
@@ -963,7 +963,7 @@ helpers = {
         } else if (mode == "reverse") {
             message = this.reverse(this.escapehtml(message));
         }
-        if (auth > 0) {
+        if (auth >= 1) {
             message = "<font color='" + color + "'><timestamp/> +<b><i>" + name + ":</i></b></font> " + message;
         } else {
             message = "<font color='" + color + "'><timestamp/> <b>" + name + ":</b></font> " + message;
@@ -1520,13 +1520,13 @@ helpers = {
         var x = [], y = 0, z = 0;
         while (y < given_text.length) {
             x[y] = given_text.charAt(y);
-            if(z === 0) {x[y] = "<font color='red'>"+x[y]+"</font>";z = 1;}
-            else if(z == 1) {x[y] = "<font color='orange'>"+x[y]+"</font>";z = 2;}
-            else if(z == 2) {x[y] = "<font color='gold'>"+x[y]+"</font>";z = 3;}
-            else if(z == 3) {x[y] = "<font color='green'>"+x[y]+"</font>";z = 4;}
-            else if(z == 4) {x[y] = "<font color='blue'>"+x[y]+"</font>";z = 5;}
-            else if(z == 5) {x[y] = "<font color='indigo'>"+x[y]+"</font>";z = 6;}
-            else if(z == 6) {x[y] = "<font color='purple'>"+x[y]+"</font>";z = 0;}
+            if(z === 0) {x[y] = "<font color='#FF0000'>"+x[y]+"</font>";z = 1;}
+            else if(z == 1) {x[y] = "<font color='#FFA500'>"+x[y]+"</font>";z = 2;}
+            else if(z == 2) {x[y] = "<font color='#FFD700'>"+x[y]+"</font>";z = 3;}
+            else if(z == 3) {x[y] = "<font color='#008000'>"+x[y]+"</font>";z = 4;}
+            else if(z == 4) {x[y] = "<font color='#0000FF'>"+x[y]+"</font>";z = 5;}
+            else if(z == 5) {x[y] = "<font color='#4B0082'>"+x[y]+"</font>";z = 6;}
+            else if(z == 6) {x[y] = "<font color='#800080'>"+x[y]+"</font>";z = 0;}
             y++;
         }
         var a = 0;var text = "";
