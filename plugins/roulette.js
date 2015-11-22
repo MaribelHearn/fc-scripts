@@ -116,7 +116,7 @@ roulettecommands = {
         roulette[lower].previousPokemon = pokemon;
         helpers.saveDataFile("roulette");
         
-        rouletteMessage += "They obtained a" + (helpers.isVowel(nature.charAt(0)) ? "n " + nature : " " + nature) + " " + (shiny ? "<b><font color='orange'>Shiny</font></b> " : "") +
+        rouletteMessage += "They obtained a" + (helpers.isVowel(nature.charAt(0)) ? "n " + nature : " " + nature) + " " + (shiny ? "<b><font color='#FFA500'>Shiny</font></b> " : "") +
         "<b><font color='" + helpers.typecolor(pokemon) + "'>" + pokeName + "<font></b> holding a" + (helpers.isVowel(itemName.charAt(0)) || itemName.charAt(0) == 'X' ? "n " + itemName : " " + itemName) + "!" +
         "<br><img src='pokemon:" + pokemon + (shiny ? "&shiny=true" : "") + "'><img src='item:" + item + "'>";
         sys.sendHtmlAll(helpers.bot(bots.roulette) + rouletteMessage, channel);
