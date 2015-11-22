@@ -188,6 +188,7 @@ usercommands = {
             + "<h3>Modes</h3>"
             + "<b>Joke</b>: makes everyone post as a random user that is currently on the server.<br>"
             + "<b>Nightclub</b>: gives the chat a black background with white posts, and usernames rainbow colors.<br>"
+            + "However, this mode will not work on Android, nor on the web client.<br>"
             + "<b>Desu</b>: gives all posts desu colors, red and green, and they are bolded as well.<br>"
             + "<b>Rainbow</b>: the same as Desu, except posts will be rainbow colored.<br>"
             + "<b>Nyan</b>: every character in your post will be replaced by Nyan and will be posted on<br>"
