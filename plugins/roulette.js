@@ -114,7 +114,7 @@ roulettecommands = {
         itemName = sys.item(item);
         
         roulette[lower].previousPokemon = pokemon;
-        sys.write("data/roulette.txt", JSON.stringify(roulette));
+        helpers.saveDataFile("roulette");
         
         rouletteMessage += "They obtained a" + (helpers.isVowel(nature.charAt(0)) ? "n " + nature : " " + nature) + " " + (shiny ? "<b><font color='orange'>Shiny</font></b> " : "") +
         "<b><font color='" + helpers.typecolor(pokemon) + "'>" + pokeName + "<font></b> holding a" + (helpers.isVowel(itemName.charAt(0)) || itemName.charAt(0) == 'X' ? "n " + itemName : " " + itemName) + "!" +
@@ -134,7 +134,7 @@ roulettecommands = {
             roulette[lower].eventFlash = false;
             roulette[lower].shinyChance = 4096;
             roulette[lower].longestChain = [1, ""];
-            sys.write("data/roulette.txt", JSON.stringify(roulette));
+            helpers.saveDataFile("roulette");
             sys.sendHtmlMessage(src, helpers.bot(bots.roulette) + "You don't have any Shiny Pokémon. :(", channel);
             return;
         }
@@ -162,7 +162,7 @@ roulettecommands = {
             roulette[lower].eventFlash = false;
             roulette[lower].shinyChance = 4096;
             roulette[lower].longestChain = [1, ""];
-            sys.write("data/roulette.txt", JSON.stringify(roulette));
+            helpers.saveDataFile("roulette");
             sys.sendHtmlMessage(src, helpers.bot(bots.roulette) + "You haven't chained yet. :(", channel);
             return;
         }
@@ -185,12 +185,12 @@ roulettecommands = {
             roulette[lower].isChaining = false;
             roulette[lower].eventFlash = false;
             roulette[lower].shinyChance = 4096;
-            sys.write("data/roulette.txt", JSON.stringify(roulette));
+            helpers.saveDataFile("roulette");
             sys.sendHtmlMessage(src, helpers.bot(bots.roulette) + "You turned event flashing on!", channel);
             return;
         }
         roulette[lower].eventFlash = (roulette[lower].eventFlash ? false : true);
-        sys.write("data/roulette.txt", JSON.stringify(roulette));
+        helpers.saveDataFile("roulette");
         sys.sendHtmlMessage(src, helpers.bot(bots.roulette) + "You turned event flashing " + (roulette[lower].eventFlash ? "on" : "off") + "!", channel);
     }
 };
