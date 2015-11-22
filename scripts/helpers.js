@@ -1469,7 +1469,7 @@ helpers = {
     ,
     
     userg: function (string) {
-        return "<b><font color='gray'>" + this.escapehtml(string) + "</font></b>";
+        return "<b><font color='#808080'>" + this.escapehtml(string) + "</font></b>";
     }
     
     ,
@@ -1722,13 +1722,13 @@ helpers = {
     ,
     
     escapehtmluser: function (string) {
-        return "<font color='royalblue'>" + string.replace(/&/g, "&amp;").replace(/\>/g, "&gt;").replace(/</g, "&lt;") + "</font>";
+        return "<font color='" + cmdcolors[0] + "'>" + string.replace(/&/g, "&amp;").replace(/\>/g, "&gt;").replace(/</g, "&lt;") + "</font>";
     }
     
     ,
     
     escapehtmlarg: function (string) {
-        return "<font color='green'>" + string.replace(/&/g, "&amp;").replace(/\>/g, "&gt;").replace(/</g, "&lt;") + "</font>";
+        return "<font color='" + cmdcolors[1] + "'>" + string.replace(/&/g, "&amp;").replace(/\>/g, "&gt;").replace(/</g, "&lt;") + "</font>";
     }
     
     ,
@@ -1774,25 +1774,25 @@ helpers = {
     
     typecolor: function (pokeNum) {
         return ([
-            "olive",
-            "darkred",
-            "slateblue",
-            "purple",
-            "brown",
-            "saddlebrown",
-            "lime",
-            "indigo",
-            "grey",
-            "red",
-            "blue",
-            "green",
-            "gold",
-            "violet",
-            "cyan",
-            "darkblue",
-            "black",
-            "fuchsia",
-            "seagreen",
+            "#808000",
+            "#8B0000",
+            "#6A5ACD",
+            "#800080",
+            "#A52A2A",
+            "#8B4513",
+            "#00FF00",
+            "#4B0082",
+            "#808080",
+            "#FF0000",
+            "#0000FF",
+            "#008000",
+            "#FFD700",
+            "#EE82EE",
+            "#00FFFF",
+            "#00008B",
+            "#000000",
+            "#FF00FF",
+            "#2E8B57",
         ][sys.pokeType1(pokeNum)]);
     }
     
@@ -1842,7 +1842,7 @@ helpers = {
     
     color: function (src) {
         if (sys.getColor(src) == "#000000") {
-            var colorlist = ["#5811b1", "#399bcd", "#0474bb", "#f8760d", "#a00c9e", "#0d762b", "#5f4c00", "#9a4f6d", "#d0990f", "#1b1390", "#028678", "#0324b1"];
+            var colorlist = ["#5811B1", "#399BCD", "#0474BB", "#F8760D", "#A00C9E", "#0D762B", "#5F4C00", "#9A4F6D", "#D0990F", "#1B1390", "#028678", "#0324B1"];
             return colorlist[src % colorlist.length]; 
         }
         return sys.getColor(src);
