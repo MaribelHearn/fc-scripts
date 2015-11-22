@@ -226,8 +226,8 @@ modcommands = {
         mutelist[lower].mutedby = original;
         mutelist[lower].reason = reason;
         if (!command[3]) {
-            mutelist[lower].time = "5ever";
-            mutelist[lower].starttime = "5ever";
+            mutelist[lower].time = "-";
+            mutelist[lower].starttime = "-";
             time = "forever";
             unit = "";
         } else {
