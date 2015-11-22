@@ -609,7 +609,13 @@ helpers = {
     
     formatJusticeTime: function (justiceTime) { // justiceTime is in seconds
         var str = "", days = 0, hours = 0, minutes = 0, seconds = 0;
-        if (isNaN(justiceTime) || justiceTime === null) {
+        if (justiceTime == '-') {
+            return "indefinite";
+        }
+        if (isNaN(justiceTime)) {
+            return justiceTime;
+        }
+        if (justiceTime === null) {
             return "indefinite";
         }
         while (justiceTime >= 86400) {

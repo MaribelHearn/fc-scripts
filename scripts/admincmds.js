@@ -83,8 +83,8 @@ admincommands = {
         banlist[lower].bannedby = players[src].name;
         banlist[lower].reason = reason;
         if (!command[3]) {
-            banlist[lower].time = "5ever";
-            banlist[lower].starttime = "5ever";
+            banlist[lower].time = "-";
+            banlist[lower].starttime = "-";
             time = "forever";
             unit = "";
         } else {
@@ -209,8 +209,8 @@ admincommands = {
         banlist[trgtip].bannedby = players[src].name;
         banlist[trgtip].reason = reason;
         if (!command[3]) {
-            banlist[trgtip].time = "5ever";
-            banlist[trgtip].starttime = "5ever";
+            banlist[trgtip].time = "-";
+            banlist[trgtip].starttime = "-";
             time = "forever";
             unit = "";
         } else {
