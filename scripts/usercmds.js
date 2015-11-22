@@ -1438,8 +1438,7 @@ usercommands = {
     ,
     
     quote: function (src, channel, command) {
-        var name = sys.name(src), auth = sys.auth(src), quote = "<style type='text/css'>table {border-width:1px; border-style:solid; border-color:#000;}" +
-        "thead {font-weight:bold;}</style><table cellpadding=2 cellspacing=0><tr style='background-color:#b0b0b0;'><td>";
+        var name = sys.name(src), auth = sys.auth(src), quote;
         if (!command[1]) {
             helpers.starfox(src, channel, command, bots.command, "Error 404, text not found.");
             return;
@@ -1449,9 +1448,8 @@ usercommands = {
             return;
         }
         command[1] = helpers.escapehtml(command[1]);command[2] = helpers.escapehtml(command[2]);
-        quote += "<font size='8'>\"</font>" + command[1] + "<font size='8'>\"</font></td></tr></table><br>~" + command[2] + "<br>";
-        sys.sendHtmlAll(helpers.bot(bots.main) + name + " posted the following quote:", channel);
-        sys.sendHtmlAll(quote, channel);
+        quote = "<blockquote>\"" + command[1] + "\"</blockquote><br> - " + command[2] + "<br>";
+        sys.sendHtmlAll(helpers.bot(bots.main) + name + " posted the following quote:<br>" + quote, channel);
     }
     
     ,
