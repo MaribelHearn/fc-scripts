@@ -459,16 +459,16 @@ usercommands = {
     ,
     
     serverinfo: function (src, channel, command) {
-        var servermessage = border + "<h2>Server Info</h2><br>", ports = sys.serverPorts().length,
+        var servermessage = border + "<h2>Server Info</h2><br>", ports = sys.serverPorts().length, serveropen, time,
         DAYS = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
         MONTHS = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
         uptime = sys.profileDump().split('\n')[0].split(',')[0].split(':')[1].slice(1, -2),
-        serverprivate = sys.isServerPrivate(), d = new Date(), day = d.getDay();
+        serverprivate = sys.isServerPrivate(), d = new Date(), day = d.getDay(),
         date = d.getDate(), month = d.getMonth(), year = d.getFullYear();
         date = DAYS[day] + ", " + MONTHS[month] + " " + date + ", " + year;
-        var time = d.toTimeString().substr(0, 15).replace("+0", "+");
-        serverprivate === true ? serverprivate = "<font color='red'>No</font>" : serverprivate = "<b style='color:green'>Yes</b>";
-        open === false ? serveropen = "<font color='red'>No</font>" : serveropen = "<b style='color:green'>Yes</b>";
+        time = d.toTimeString().substr(0, 15).replace("+0", "+");
+        serverprivate === true ? serverprivate = "<font color='red'>No</font>" : serverprivate = "<b><font color='green'>Yes</font></b>";
+        open ? serveropen = "<b><font color='green'>Yes</font></b>" : serveropen = "<font color='red'>No</font>";
         servermessage += "<br><b>Name:</b> " + sys.getServerName() +
         "<br><b>Host OS:</b> " + helpers.os(sys.os()) +
         "<br><b>Version:</b> " + sys.serverVersion() +
