@@ -762,7 +762,7 @@ modcommands = {
     ,
     
     rangealts: function (src, channel, command) {
-        var altsmessage = border + "<h2>Alts for range " + command[1] + "</h2><br>", range = command[1], aliases = [], db;
+        var altsmessage = border + "<h2>Alts for range " + command[1] + "</h2><br>", range = command[1], alts = [], db;
         if (!range) {
             helpers.starfox(src, channel, command, bots.command, "Error 404, range not found.");
             return;
@@ -774,42 +774,48 @@ modcommands = {
         db = sys.dbAll();
         for (var index in db) {
             if (sys.dbRange(db[index]) == range) {
-                aliases.push(db[index]);
+                alts.push(db[index]);
             }
         }
-        if (aliases.length === 0) {
+        if (alts.length === 0) {
             sys.sendHtmlMessage(src, helpers.bot(bots.command) + "That range doesn't have any alts!", channel);
             return;
         }
-        altsmessage += aliases.join(", ") + "<br><br><b>Total Alts:</b> " + aliases.length + "<br><br><timestamp/><br>" + border2;
+        altsmessage += alts.join(", ") + "<br><br><b>Total Alts:</b> " + alts.length + "<br><br><timestamp/><br>" + border2;
         sys.sendHtmlMessage(src, altsmessage, channel);
     }
     
     ,
     
     lastmessages: function (src, channel, command) {
-        var message = border + "<style type='text/css'>table {border-width:1px; border-style:solid; border-color:#000;}" 
-        + "thead {font-weight:bold;}</style>"
-        + "<h2>Last Messages</h2><br />"
-        + "<table cellpadding=2 cellspacing=0><thead><tr style='background-color:#b0b0b0;'><td>Player Name</td><td>Messages</td></tr></thead>";
-        for (var id in players) {
-            var name = players[id].name;
-            if (sys.name(id) !== undefined) {
-                if (name != sys.name(id)) {
-                    name += "<br />(" + sys.name(id) + ")";
+        var message = border + "<h2>Last Messages</h2><br>";
+        if (helpers.isAndroid(src)) {
+            for (var i in players) {
+                if (players[i].lastmessages.length === 0) {
+                    continue;
                 }
-            }
-            var namemsg = "<b style='color:" + helpers.color(id) + "'>" + name + "</b>";
-            message += "<tr><td>" + namemsg + "</td><td>";
-            for (var y in players[id].lastmessages) {
-                message += helpers.timestampify(players[id].lastmessagetimes[y]) + ": " + helpers.escapehtml(players[id].lastmessages[y]);
-                if (y !== players[id].lastmessages.length) {
-                    message += "<br />";
+                message += "<b><font color='" + players[i].color + "'>" + players[i].name + ":</font></b><br>";
+                for (var j in players[i].lastmessages) {
+                    message += helpers.timestampify(players[i].lastmessagetimes[j]) + " " + players[i].lastmessages[j] + "<br>";
                 }
+                message += "<br>";
             }
-            message += "</td></tr>";
+        } else {
+            message += "<style>table {border-width: 1px; border-style: solid; border-color: #000000;}</style>"
+            + "<table cellpadding='2' cellspacing='0'><thead><tr style='background-color: #B0B0B0;'><th>Player Name</th><th>Messages</th></tr></thead><tbody>";
+            for (var k in players) {
+                if (players[k].lastmessages.length === 0) {
+                    continue;
+                }
+                message += "<tr><td><b><font color='" + players[k].color + "'>" + players[k].name + "</font></b></td><td>";
+                for (var l in players[k].lastmessages) {
+                    message += helpers.timestampify(players[k].lastmessagetimes[l]) + " " + players[k].lastmessages[l] + "<br>";
+                }
+                message += "</td></tr>";
+            }
+            message += "</tbody></table>";
         }
-        message += "</table><br><br><timestamp/><br>" + border2;
+        message += "<br><br><timestamp/><br>" + border2;
         sys.sendHtmlMessage(src, message, channel);
     }
     
@@ -1066,30 +1072,52 @@ modcommands = {
         ------------
     **/
     altsettings: function (src, channel, command) {
-        var commandsmessage = border + "<h2>Moderator Commands ~ Alt Settings</h2><br><style type='text/css'>table {border-width:1px; border-style:solid; border-color:#000;}"
-        + "thead {font-weight:bold;}</style>"
-        + "<table cellpadding=2 cellspacing=0><thead><tr style='background-color:#b0b0b0;'>"
-        + "<td>Icon</td><td>Auth</td><td>Title</td><td>Name</td><td>Registered</td><td>Last Online</td></tr></thead><tbody>", total = 0, alts = sys.aliases(sys.ip(src)), title = "", name, auth, registered, lastlogin;
-        for (var index in alts) {
-            name = alts[index];
-            auth = sys.dbAuth(name);
-            authtitles[name] ? title = authtitles[name] : title = "-";
-            sys.dbRegistered(name) ? registered = "<b style='color:green'>Yes</b>" : registered = "<font color='red'>No</font>";
-            lastlogin = helpers.formatLastOn(src, sys.dbLastOn(name));
-            if (members[alts[index]]) {
-                name = members[alts[index]];
+        var DISPLAY_USER = true, commandsmessage = border + "<h2>Moderator Commands ~ Alt Settings</h2><br>", alts = sys.aliases(sys.ip(src)), index = 0, lower;
+        var auths = [], titles = [], names = [], registered = [], lastLogins = [];
+        for (var i in alts) {
+            auths.push(sys.dbAuth(alts[i]));
+            names.push(alts[i]);
+            lower = names[index].toLowerCase();
+            titles.push(authtitles[lower] ? authtitles[lower] : '-');
+            lastLogins.push(helpers.formatLastOn(src, sys.dbLastOn(alts[i])));
+            if (sys.dbRegistered(alts[i])) {
+                registered.push(helpers.isAndroid(src) ? "<b><font color='green'>Registered</font></b>" : "<b><font color='green'>Yes</font></b>");
+            } else {
+                registered.push(helpers.isAndroid(src) ? "<font color='red'>Unregistered</font>" : "<font color='red'>No</font>");
             }
-            commandsmessage += "<tr><td>" + helpers.authimage(src, auth > 3 ? 0 : auth) + "</td><td>" + helpers.authname(auth, true) + "</td><td>" + title +
-            "</td><td>" + name + "</td><td>" + registered + "</td><td>" + lastlogin + "</td></tr>";
-            total++;
+            if (members[lower]) {
+                names[index] = members[lower];
+            }
+            index++;
         }
-        commandsmessage += "</tbody></table><br><br><b>Total Alts:</b> " + total + "<br><br>"
-        + "Use <b>" + helpers.user("/alts ") + helpers.arg("player/IP") + "</b> to display <b>player</b>'s alts or the alts of <b>IP</b> in a neat table.<br>"
+        if (helpers.isAndroid(src)) {
+            commandsmessage += "<tt>";
+            for (var i in auths) {
+                commandsmessage += titles[i] + " | " + names[i] + " | " + registered[i] + "<br>";
+            }
+            commandsmessage += "</tt><br><br>";
+        } else {
+            commandsmessage += "<style>table {border-width: 1px; border-style: solid; border-color: #000000;}</style>"
+            + "<table cellpadding='2' cellspacing='0'><thead><tr style='background-color: #B0B0B0;'>"
+            + "<th>Icon</th><th>Auth</th><th>Title</th><th>Name</th><th>Registered</th><th>Last Online</th></tr></thead><tbody>";
+            for (var i in auths) {
+                commandsmessage += "<tr>"
+                + "<td>" + helpers.authimage(src, auths[i] >= 4 ? 0 : auths[i]) + "</td>"
+                + "<td>" + helpers.authname(auths[i], DISPLAY_USER) + "</td>"
+                + "<td>" + titles[i] + "</td>"
+                + "<td>" + names[i] + "</td>"
+                + "<td>" + registered[i] + "</td>"
+                + "<td>" + lastLogins[i] + "</td>"
+                + "</tr>";
+            }
+            commandsmessage += "</tbody><tfoot><tr><td colspan='6'><b>Total Alts:</b> " + alts.length + "</td></tr></tfoot></table><br><br>";
+        }
+        commandsmessage += "Use <b>" + helpers.user("/alts ") + helpers.arg("player/IP") + "</b> to display <b>player</b>'s alts or the alts of <b>IP</b> in a neat table.<br>"
         + "Use <b>" + helpers.user("/passauth ") + helpers.arg("alt") + "</b> to pass your auth to <b>alt</b>. <b>alt</b> must have the same IP and must be registered.<br>"
         + "Use <b>" + helpers.user("/delete ") + helpers.arg("alt") + "</b> to remove <b>alt</b> from the database. <b>alt</b> must have the same IP.<br>"
-        + "Use <b>" + helpers.user("/title ") + helpers.arg("alt") + helpers.arg2("*text") + "</b>: to change <b>alt</b>'s auth title to <b>text</b>. If <b>alt</b> is not specified, changes your current alt's title. <b>alt</b> must have the same IP.<br>"
-        + "<br><timestamp/><br>"
-        + border2;
+        + "Use <b>" + helpers.user("/title ") + helpers.arg("alt") + helpers.arg2("*text") + "</b>: to change <b>alt</b>'s auth title to <b>text</b>. "
+        + "If <b>alt</b> is not specified, changes your current alt's title. <b>alt</b> must have the same IP.<br>"
+        + "<br><timestamp/><br>" + border2;
         sys.sendHtmlMessage(src, commandsmessage, channel);
     }
     
@@ -1168,7 +1196,7 @@ modcommands = {
     
     ,
     
-    'delete': function (src, channel, command) {
+    "delete": function (src, channel, command) {
         var name = helpers.escapehtml(sys.name(src)), auth = sys.auth(src), ip = sys.ip(src), player, id;
         if (!command[1]) {
             helpers.starfox(src, channel, command, bots.auth, "Error 404, player not found.", channel);

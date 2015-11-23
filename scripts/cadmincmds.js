@@ -47,7 +47,7 @@ cadmincommands = {
             regchannels[lower].banlist[name].reason = reason;
             var date = helpers.date(new Date());
             regchannels[lower].banlist[name].date = date;
-            sys.write("data/regchannels.txt", JSON.stringify(regchannels));
+            helpers.saveDataFile("regchannels");
         } else {
             helpers.starfox(src, channel, command, bots.channel, "Error 400, this channel isn't registered!", channel);
             return;
@@ -79,7 +79,7 @@ cadmincommands = {
         for (var index in regchannels[lower].banlist) {
             if (sys.dbIp(index) == sys.dbIp(trgtname)) {
                 delete regchannels[lower].banlist[index];
-                sys.write("data/regchannels.txt", JSON.stringify(regchannels));
+                helpers.saveDataFile("regchannels");
             }
         }
         sys.sendHtmlAll(helpers.bot(bots.channel) + trgtname + " has been unbanned from this channel by " + sys.name(src) + "!", channel);

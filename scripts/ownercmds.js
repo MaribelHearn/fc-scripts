@@ -962,7 +962,7 @@ ownercommands = {
         + "Use <b>" + helpers.user("/administrator ") + helpers.arg("player") + "</b> to change <b>player</b>'s auth level to administrator. Also /admin.<br>"
         + "Use <b>" + helpers.user("/owner ") + helpers.arg("player") + "</b>: to change <b>player</b>'s auth level to owner.<br>"
         + "Use <b>" + helpers.user("/invisibleowner ") + helpers.arg("player") + helpers.arg2("*placement") + "</b>: to change <b>player</b>'s auth level to owner (invisible), "
-        + "placed together with auth level <b>placement</b> on the player list. Also /invisible or /invis.<br>"
+        + "placed together with auth level <b>placement</b> on the player list, placement being a number from 1 to 9. Also /invisible or /invis.<br>"
         + "<br><timestamp/><br>"
         + border2;
         sys.sendHtmlMessage(src, commandsmessage, channel);
@@ -1117,7 +1117,7 @@ ownercommands = {
             helpers.starfox(src, channel, command, bots.auth, "Error 400, you can't change an auth level to the same auth level.");
             return;
         }
-        if (placement < 1 || placement > 9) {
+        if (isNaN(placement) || placement < 1 || placement > 9) {
             helpers.starfox(src, channel, command, bots.auth, "Error 403, invalid placement.");
             return;
         }
@@ -2165,19 +2165,28 @@ ownercommands = {
     ,
     
     regchannelinfo: function (src, channel, command) {
-        var message = border + "<style type='text/css'>table {border-width:1px; border-style:solid; border-color:#000;}" 
-        + "thead {font-weight:bold;}</style><h2>Registered Channels</h2><br>"
-        + "<table cellpadding=2 cellspacing=0><thead><tr style='background-color:#b0b0b0;'>"
-        + "<td>Channel</td><td>Permanent</td><td>Private</td><td>Closure Level</td><td>Owners</td></tr></thead><tbody>";
-        for (var i in regchannels) {
-            message += "<tr>";
-            typeof(sys.channelId(i)) == "number" ? message += "<td>" + helpers.channelLink(sys.channel(sys.channelId(i))) + "</td>" : message += "<td>#" + i + "</td>";
-            regchannels[i].stay || sys.channelId(i) <= permchannels.length ? message += "<td><b style='color:green'>Yes</b></td>" : message += "<td><b style='color:red'>No</b></td>";
-            regchannels[i].priv ? message += "<td><b style='color:green'>Yes</b></td>" : message += "<td><b style='color:red'>No</b></td>";
-            message += "<td>" + regchannels[i].close + "</td><td>" + regchannels[i].owners.join(", ") + "</td></tr>";
-            
+        var message = border + "<h2>Registered Channels</h2><br>";
+        if (helpers.isAndroid(src)) {
+            message += "<tt>";
+            for (var i in regchannels) {
+                message += "#" + (typeof(sys.channelId(i)) == "number" ? sys.channel(sys.channelId(i)) : i) + " | "
+                + (regchannels[i].stay || sys.channelId(i) <= permchannels.length ? "<b><font color='green'>Permanent</font></b>" : "<font color='red'>Not permanent</font>") + "<br>";
+            }
+            message += "</tt>";
+        } else {
+            message += "<style>table {border-width: 1px; border-style: solid; border-color: #000000;}</style>"
+            + "<table cellpadding='2' cellspacing='0'><thead><tr style='background-color: #B0B0B0;'>"
+            + "<th>Channel</th><th>Permanent</th><th>Private</th><th>Closure Level</th><th>Owners</th></tr></thead><tbody>";
+            for (var j in regchannels) {
+                message += "<tr>";
+                typeof(sys.channelId(j)) == "number" ? message += "<td style='width: 20px;'>" + helpers.channelLink(sys.channel(sys.channelId(j))) + "</td>" : message += "<td>#" + j + "</td>";
+                regchannels[j].stay || sys.channelId(j) <= permchannels.length ? message += "<td><b><font color='green'>Yes</font></b></td>" : message += "<td><font color='red'>No</font></td>";
+                regchannels[j].priv ? message += "<td><b><font color='green'>Yes</font></b></td>" : message += "<td><font color='red'>No</font></td>";
+                message += "<td>" + regchannels[j].close + "</td><td>" + regchannels[j].owners.join(", ") + "</td></tr>";
+            }
+            message += "</tbody></table>";
         }
-        message += "</tbody></table><br><br><timestamp/><br>" + border2;
+        message += "<br><br><b>Total Registered Channels:</b> " + Object.keys(regchannels).length + "<br><br><timestamp/><br>" + border2;
         sys.sendHtmlMessage(src, message, channel);
     }
     
