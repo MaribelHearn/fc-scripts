@@ -498,8 +498,6 @@ helpers = {
             return [true, "space characters"];
         } else if (DASH.test(string)) {
             return [true, "dash characters"];
-        } else if (LAGCHAR.test(string)) {
-            return [true, "lagging characters"];
         } else if (SPECIAL.test(string) || OTHER.test(string)) {
             return [true, "special characters"];
         } else {

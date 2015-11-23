@@ -27,7 +27,6 @@
     PLUGIN_URL = "https://raw.githubusercontent.com/MaribelHearn/fc-scripts/master/plugins/";
     REACTIVATE_REGISTER_BUTTON = 14;
     FAKEI = /\u00A1/;
-    LAGCHAR = /\u0E4F/;
     OTHER = /\u3061|\u65532/;
     THAI = /[\u0E00-\u0E7F]/;
     GREEK = /[\u0370-\u03FF]/;
