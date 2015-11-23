@@ -56,7 +56,7 @@ cusercommands = {
         regchannels[lower].rules = [];
         regchannels[lower].silence = 0;
         regchannels[lower].close = 0;
-        helpers.saveDataFile("regchannels");
+        helpers.saveData("regchannels");
         sys.sendHtmlAll(helpers.bot(bots.channel) + "The channel has been registered by " + name + "!", channel);
     }
     

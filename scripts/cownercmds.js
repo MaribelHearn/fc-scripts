@@ -39,7 +39,7 @@ cownercommands = {
         var name = sys.name(src), lower = sys.channel(channel).toLowerCase();
         if (regchannels[lower]) {
             delete regchannels[lower];
-            helpers.saveDataFile("regchannels");
+            helpers.saveData("regchannels");
         } else {
             helpers.starfox(src, channel, command, bots.channel, "Error 400, this channel isn't registered!", channel);
             return;
@@ -57,7 +57,7 @@ cownercommands = {
             } else {
                 regchannels[lower].stay = true;
             }
-            helpers.saveDataFile("regchannels");
+            helpers.saveData("regchannels");
         } else {
             helpers.starfox(src, channel, command, bots.channel, "Error 400, this channel isn't registered!", channel);
             return;
@@ -83,7 +83,7 @@ cownercommands = {
                 regchannels[lower].priv = true;
                 sys.sendHtmlAll(helpers.bot(bots.channel) + "<b>" + helpers.user(name) + " has made the channel private.</b>", channel);
             }
-            helpers.saveDataFile("regchannels");
+            helpers.saveData("regchannels");
         } else {
             helpers.starfox(src, channel, command, bots.channel, "Error 400, this channel isn't registered!", channel);
             return;
@@ -102,7 +102,7 @@ cownercommands = {
                 regchannels[lower].zalgo = true;
                 sys.sendHtmlAll(helpers.bot(bots.channel) + "<b>" + helpers.user(name) + " has allowed zalgo characters on the channel.</b>", channel);
             }
-            helpers.saveDataFile("regchannels");
+            helpers.saveData("regchannels");
         } else {
             helpers.starfox(src, channel, command, bots.channel, "Error 400, this channel isn't registered!", channel);
             return;
@@ -121,7 +121,7 @@ cownercommands = {
                 regchannels[lower].reverse = true;
                 sys.sendHtmlAll(helpers.bot(bots.channel) + "<b>" + helpers.user(name) + " has allowed reverse characters on the channel.</b>", channel);
             }
-            helpers.saveDataFile("regchannels");
+            helpers.saveData("regchannels");
         } else {
             helpers.starfox(src, channel, command, bots.channel, "Error 400, this channel isn't registered!", channel);
             return;
@@ -140,7 +140,7 @@ cownercommands = {
                 regchannels[lower].extending = true;
                 sys.sendHtmlAll(helpers.bot(bots.channel) + "<b>" + helpers.user(name) + " has allowed extending characters on the channel.</b>", channel);
             }
-            helpers.saveDataFile("regchannels");
+            helpers.saveData("regchannels");
         } else {
             helpers.starfox(src, channel, command, bots.channel, "Error 400, this channel isn't registered!", channel);
             return;
@@ -159,7 +159,7 @@ cownercommands = {
                 regchannels[lower].backward = true;
                 sys.sendHtmlAll(helpers.bot(bots.channel) + "<b>" + helpers.user(name) + " has allowed characters that push your text backward on the channel.</b>", channel);
             }
-            helpers.saveDataFile("regchannels");
+            helpers.saveData("regchannels");
         } else {
             helpers.starfox(src, channel, command, bots.channel, "Error 400, this channel isn't registered!", channel);
             return;
@@ -188,7 +188,7 @@ cownercommands = {
             if (regchannels[lower].owners.indexOf(command[1].toLowerCase()) != -1) {
                 regchannels[lower].owners.splice(regchannels[lower].owners.indexOf(command[1].toLowerCase()), 1);
             }
-            helpers.saveDataFile("regchannels");
+            helpers.saveData("regchannels");
         } else {
             helpers.starfox(src, channel, command, bots.channel, "Error 400, this channel isn't registered!");
             return;
@@ -216,7 +216,7 @@ cownercommands = {
                 regchannels[lower].owners.splice(regchannels[lower].owners.indexOf(command[1].toLowerCase()), 1);
             }
             regchannels[lower].mods.push(command[1].toLowerCase());
-            helpers.saveDataFile("regchannels");
+            helpers.saveData("regchannels");
         } else {
             helpers.starfox(src, channel, command, bots.channel, "Error 400, this channel isn't registered!");
             return;
@@ -244,7 +244,7 @@ cownercommands = {
                 regchannels[lower].owners.splice(regchannels[lower].owners.indexOf(command[1].toLowerCase()), 1);
             }
             regchannels[lower].admins.push(command[1].toLowerCase());
-            helpers.saveDataFile("regchannels");
+            helpers.saveData("regchannels");
         } else {
             helpers.starfox(src, channel, command, bots.channel, "Error 400, this channel isn't registered!");
             return;
@@ -272,7 +272,7 @@ cownercommands = {
                 regchannels[lower].admins.splice(regchannels[lower].admins.indexOf(command[1].toLowerCase()), 1);
             }
             regchannels[lower].owners.push(command[1].toLowerCase());
-            helpers.saveDataFile("regchannels");
+            helpers.saveData("regchannels");
         } else {
             helpers.starfox(src, channel, command, bots.channel, "Error 400, this channel isn't registered!");
             return;
@@ -303,7 +303,7 @@ cownercommands = {
             helpers.starfox(src, channel, command, bots.channel, "Error 400, this channel isn't registered!");
             return;
         }
-        helpers.saveDataFile("regchannels");
+        helpers.saveData("regchannels");
     }
     
     ,
@@ -337,7 +337,7 @@ cownercommands = {
             helpers.starfox(src, channel, command, bots.channel, "Error 400, this channel isn't registered!");
             return;
         }
-        helpers.saveDataFile("regchannels");
+        helpers.saveData("regchannels");
     }
     
     ,
@@ -367,7 +367,7 @@ cownercommands = {
             helpers.starfox(src, channel, command, bots.channel, "Error 400, this channel isn't registered!");
             return;
         }
-        helpers.saveDataFile("regchannels");
+        helpers.saveData("regchannels");
     }
     
     ,
@@ -380,6 +380,6 @@ cownercommands = {
         }
         regchannels[lower].rules = [];
         sys.sendHtmlAll(helpers.bot(bots.channel) + sys.name(src) + " has cleared the Channel Rules!", channel);
-        helpers.saveDataFile("regchannels");
+        helpers.saveData("regchannels");
     }
 };

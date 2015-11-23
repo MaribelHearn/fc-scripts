@@ -120,7 +120,7 @@ ownercommands = {
         megabanlist[lower].reason = reason;
         megabanlist[lower].date = helpers.date(new Date());
         sys.setCookie(trgt, "banned " + trgtname);
-        sys.write("data/megabanlist.txt", JSON.stringify(megabanlist));
+        helpers.saveData("megabanlist");
         sys.sendHtmlMessage(src, helpers.bot(bots.megaban) + "You mega banned " + trgtname + " from the server. [Reason: " + reason + "]", channel);
         sys.kick(trgt);
     }
@@ -143,8 +143,8 @@ ownercommands = {
         members[lower] ? trgtname = members[lower] : trgtname = command[1];
         namestounban.push(lower);
         delete megabanlist[lower];
-        sys.write("data/namestounban.txt", JSON.stringify(namestounban));
-        sys.write("data/megabanlist.txt", JSON.stringify(megabanlist));
+        helpers.saveData("namestounban");
+        helpers.saveData("megabanlist");
         sys.sendHtmlMessage(src, helpers.bot(bots.megaban) + "You mega unbanned " + trgtname + " from the server. It will take effect once they enter the server again.", channel);
     }
 
@@ -160,7 +160,7 @@ ownercommands = {
         lower = trgtname.toLowerCase();
         command[2] ? reason = command[2] : reason = "Unknown";
         megabanlist[lower].reason = reason;
-        sys.write("data/megabanlist.txt", JSON.stringify(megabanlist));
+        helpers.saveData("megabanlist");
         sys.sendHtmlMessage(src, helpers.bot(bots.megaban) + "You changed the mega ban reason of " + trgtname + " to '" + reason + "'.", channel);
     }
     
@@ -171,8 +171,8 @@ ownercommands = {
             namestounban.push(i);
         }
         megabanlist = {};
-        sys.write("data/megabanlist.txt", "{}");
-        sys.write("data/namestounban.txt", JSON.stringify(namestounban));
+        helpers.saveData("megabanlist");
+        helpers.saveData("namestounban");
         sys.sendHtmlMessage(src, helpers.bot(bots.megaban) + "You cleared the mega ban list.", channel);
     }
     
@@ -204,7 +204,7 @@ ownercommands = {
         gigabanlist[lower].reason = reason;
         gigabanlist[lower].pseudo = pseudo;
         gigabanlist[lower].date = helpers.date(new Date());
-        sys.write("data/gigabanlist.txt", JSON.stringify(gigabanlist));
+        helpers.saveData("gigabanlist");
         sys.sendHtmlMessage(src, helpers.bot(bots.gigaban) + "You giga banned " + trgtname + " from the server. [Reason: " + reason + "]", channel);
         sys.kick(trgt);
     }
@@ -232,7 +232,7 @@ ownercommands = {
             return;
         }
         delete gigabanlist[lower];
-        sys.write("data/gigabanlist.txt", JSON.stringify(gigabanlist));
+        helpers.saveData("gigabanlist");
         sys.sendHtmlMessage(src, helpers.bot(bots.gigaban) + "You giga unbanned " + trgtname + " from the server.", channel);
     }
     
@@ -255,7 +255,7 @@ ownercommands = {
         lower = trgtname.toLowerCase();
         command[2] ? reason = command[2] : reason = "Unknown";
         gigabanlist[lower].reason = reason;
-        sys.write("data/gigabanlist.txt", JSON.stringify(gigabanlist));
+        helpers.saveData("gigabanlist");
         sys.sendHtmlMessage(src, helpers.bot(bots.gigaban) + "You changed the giga ban reason of " + trgtname + " to '" + reason + "'.", channel);
     }
     
@@ -263,7 +263,7 @@ ownercommands = {
     
     cleargigabanlist: function (src, channel, command) {
         gigabanlist = {};
-        sys.write("data/gigabanlist.txt", "{}");
+        helpers.saveData("gigabanlist");
         sys.sendHtmlMessage(src, helpers.bot(bots.gigaban) + "You cleared the giga ban list.", channel);
     }
     
@@ -295,7 +295,7 @@ ownercommands = {
         rangebanlist[lower].reason = reason;
         var date = helpers.date(new Date()), trgt = sys.id(trgtname);
         rangebanlist[lower].date = date;
-        sys.write("data/rangebanlist.txt", JSON.stringify(rangebanlist));
+        helpers.saveData("rangebanlist");
         if (members[lower])trgtname = members[lower];
         if (rangebanmessages[name.toLowerCase()]) {
             msg = rangebanmessages[name.toLowerCase()].replace(/~Self~/gi, name).replace(/~Target~/gi, trgtname).replace(/~Server~/gi, sys.getServerName());
@@ -316,7 +316,7 @@ ownercommands = {
                 delete mutedips[mutelist[index].ip];
                 delete mutelist[index];
                 if (members[index])index = members[index];
-                sys.write("data/mutelist.txt", JSON.stringify(mutelist));
+                helpers.saveData("mutelist");
                 sys.sendHtmlMessage(src, helpers.bot(bots.mute) + index + " has been automatically unmuted.", channel);
             }
         }
@@ -330,7 +330,7 @@ ownercommands = {
             if (sys.dbRange(index) == rangebanlist[lower].range) {
                 delete banlist[index];
                 if (members[index])index = members[index];
-                sys.write("data/banlist.txt", JSON.stringify(banlist));
+                helpers.saveData("banlist");
                 sys.sendHtmlMessage(src, helpers.bot(bots.ban) + index + " has been automatically unbanned.", channel);
                 continue;
             }
@@ -364,7 +364,7 @@ ownercommands = {
             }
             if (sys.dbRange(index) == sys.dbRange(trgtname)) {
                 delete rangebanlist[index];
-                sys.write("data/rangebanlist.txt", JSON.stringify(rangebanlist));
+                helpers.saveData("rangebanlist");
             }
         }
         if (members[trgtname]) {
@@ -413,7 +413,7 @@ ownercommands = {
         rangebanlist[range].reason = reason;
         var date = helpers.date(new Date());
         rangebanlist[range].date = date;
-        sys.write("data/rangebanlist.txt", JSON.stringify(rangebanlist));
+        helpers.saveData("rangebanlist");
         if (rangebanmessages[name.toLowerCase()]) {
             msg = rangebanmessages[name.toLowerCase()].replace(/~Self~/gi, name).replace(/~Target~/gi, range).replace(/~Server~/gi, sys.getServerName());
             sys.sendHtmlMain(helpers.bot(bots.ban) + msg + " [Reason: " + reason + "]");
@@ -430,7 +430,7 @@ ownercommands = {
                 delete mutedips[mutelist[index].ip];
                 delete mutelist[index];
                 if (members[index])index = members[index];
-                sys.write("data/mutelist.txt", JSON.stringify(mutelist));
+                helpers.saveData("mutelist");
                 sys.sendHtmlMessage(src, helpers.bot(bots.mute) + index + " has been automatically unmuted.", channel);
                 continue;
             }
@@ -445,7 +445,7 @@ ownercommands = {
             if (sys.dbRange(index) == range) {
                 delete banlist[index];
                 if (members[index])index = members[index];
-                sys.write("data/banlist.txt", JSON.stringify(banlist));
+                helpers.saveData("banlist");
                 sys.sendHtmlMessage(src, helpers.bot(bots.ban) + index + " has been automatically unbanned.", channel);
                 continue;
             }
@@ -469,7 +469,7 @@ ownercommands = {
             return;
         }
         delete rangebanlist[range];
-        sys.write("data/rangebanlist.txt", JSON.stringify(rangebanlist));
+        helpers.saveData("rangebanlist");
         sys.sendHtmlMain(helpers.bot(bots.ban) + range + " has been range unbanned by " + name + "!");
     }
     
@@ -488,7 +488,7 @@ ownercommands = {
         }
         var banner = sys.name(src), banned = command[1], srcauth = sys.auth(src), lower = command[1].toLowerCase();
         rangebanlist[banned.toLowerCase()].reason = reason;
-        sys.write("data/rangebanlist.txt", JSON.stringify(rangebanlist));
+        helpers.saveData("rangebanlist");
         sys.sendHtmlMain(helpers.bot(bots.ban) + banner + " has changed the range ban reason of " + command[1] + " to '" + reason + "'!");
     }
     
@@ -497,7 +497,7 @@ ownercommands = {
     clearrangebanlist: function (src, channel, command) {
         var name = sys.name(src);
         rangebanlist = {};
-        sys.write("data/rangebanlist.txt", "{}");
+        helpers.saveData("rangebanlist");
         sys.sendHtmlMain(helpers.bot(bots.ban) + "The range ban list has been cleared by " + name + "!");
     }
     
@@ -511,7 +511,7 @@ ownercommands = {
             return;
         }
         rangebanmessages[lower] = message;
-        sys.write("data/rangebanmsg.txt", JSON.stringify(rangebanmessages));
+        helpers.saveData("rangebanmessages");
         sys.sendHtmlMessage(src, helpers.bot(bots.ban) + "Your range ban message has been changed successfully.", channel);
     }
     
@@ -759,22 +759,17 @@ ownercommands = {
     ,
     
     content: function (src, channel, command) {
-        var forbidden = ["=", ";", "+", "-", "*", "/", "add", "del", "sys.system", "remove", "erase", "write", "append", "change", "set"], allow = true, content = [], result;
+        var content = [], result;
         if (!command[1]) {
             helpers.starfox(src, channel, command, bots.main, "Error 404, object not found.");
             return;
         }
-        for (var i in forbidden) {
-            if (command[1].indexOf(forbidden[i]) != -1) {
-                allow = false;
-                break;
-            }
-        }
-        if (!allow) {
-            helpers.starfox(src, channel, command, bots.main, "Error 403, you are not allowed to use '" + forbidden[i] + "'!");
+        try {
+            result = eval(command[1]);
+        } catch (e) {
+            helpers.starfox(src, channel, command, bots.main, "Error 404, variable is undefined.");
             return;
         }
-        result = eval(command[1]);
         if (typeof(result) != "object") {
             helpers.starfox(src, channel, command, bots.main, "Error 404, object is undefined or is not an object.");
             return;
@@ -1175,7 +1170,7 @@ ownercommands = {
             return;
         }
         open = true;
-        sys.write("data/open.txt", "true");
+        helpers.saveData("open");
         sys.sendHtmlMain(helpers.bot(bots.priv) + "The server has been opened by " + name + ".");
     }
     
@@ -1188,7 +1183,7 @@ ownercommands = {
             return;
         }
         open = false;
-        sys.write("data/open.txt", "false");
+        helpers.saveData("open");
         sys.sendHtmlMain(helpers.bot(bots.priv) + "The server has been closed by " + name + ".");
     }
     
@@ -1210,7 +1205,7 @@ ownercommands = {
             return;
         }
         allowed.push(ip);
-        sys.write("data/allowed.txt", JSON.stringify(allowed));
+        helpers.saveData("allowed");
         sys.sendHtmlMessage(src, helpers.bot(bots.priv) + "You allowed the IP " + ip + " through server closure and bans.", channel);
     }
     
@@ -1232,7 +1227,7 @@ ownercommands = {
             return;
         }
         allowed.splice(allowed.indexOf(ip), 1);
-        sys.write("data/allowed.txt", JSON.stringify(allowed));
+        helpers.saveData("allowed");
         sys.sendHtmlMessage(src, helpers.bot(bots.priv) + "You disallowed the IP " + ip + " through server closure and bans.", channel);
     }
     
@@ -1254,7 +1249,7 @@ ownercommands = {
             return;
         }
         allowedrange.push(range);
-        sys.write("data/allowedrange.txt", JSON.stringify(allowedrange));
+        helpers.saveData("allowedrange");
         sys.sendHtmlMessage(src, helpers.bot(bots.priv) + "You allowed the range " + range + " through server closure and bans.", channel);
     }
     
@@ -1276,7 +1271,7 @@ ownercommands = {
             return;
         }
         allowedrange.splice(allowedrange.indexOf(range), 1);
-        sys.write("data/allowedrange.txt", JSON.stringify(allowedrange));
+        helpers.saveData("allowedrange");
         sys.sendHtmlMessage(src, helpers.bot(bots.priv) + "You disallowed the range " + range + " through server closure and bans.", channel);
     }
     
@@ -1407,7 +1402,7 @@ ownercommands = {
             return;
         }
         floodlevel = parseInt(command[1]);
-        sys.write("data/floodlevel.txt", floodlevel);
+        helpers.saveData("floodlevel");
         sys.sendHtmlMessage(src, helpers.bot(bots.flood) + "The flood level has been changed to " + floodlevel + ".", channel);
     }
     
@@ -1423,7 +1418,7 @@ ownercommands = {
             return;
         }
         floodtime = command[1];
-        sys.write("data/floodtime.txt", floodtime);
+        helpers.saveData("floodtime");
         sys.sendHtmlMessage(src, helpers.bot(bots.flood) + "The flood time has been changed to " + floodtime + " seconds.", channel);
     }
     
@@ -1439,7 +1434,7 @@ ownercommands = {
             return;
         }
         allowance = command[1];
-        sys.write("data/allowance.txt", allowance);
+        helpers.saveData("allowance");
         sys.sendHtmlMessage(src, helpers.bot(bots.flood) + "The message allowance has been changed to " + allowance + " messages.", channel);
     }
     
@@ -1634,7 +1629,7 @@ ownercommands = {
             return;
         }
         silentcommands.push(sc);
-        sys.write("data/silentcmds.txt", JSON.stringify(silentcommands));
+        helpers.saveData("silentcommands");
         sys.sendHtmlMessage(src, helpers.bot(bots.command) + "The command '/" + sc + "' is now a silent command.", channel);
     }
     
@@ -1657,7 +1652,7 @@ ownercommands = {
             return;
         }
         silentcommands.splice(silentcommands.indexOf(sc), 1);
-        sys.write("data/silentcmds.txt", JSON.stringify(silentcommands));
+        helpers.saveData("silentcommands");
         sys.sendHtmlMessage(src, helpers.bot(bots.command) + "The command '/" + sc + "' is no longer a silent command.", channel);
     }
     
@@ -1705,7 +1700,7 @@ ownercommands = {
         }
         word = command[1].toLowerCase();
         nameblocklist.push(word);
-        sys.write("data/nameblocklist.txt", JSON.stringify(nameblocklist));
+        helpers.saveData("nameblocklist");
         sys.sendHtmlMessage(src, helpers.bot(bots.command) + "The word '" + word + "' has been added to the filter list.", channel);
     }
     
@@ -1723,7 +1718,7 @@ ownercommands = {
             return;
         }
         nameblocklist.splice(nameblocklist.indexOf(word), 1);
-        sys.write("data/nameblocklist.txt", JSON.stringify(nameblocklist));
+        helpers.saveData("nameblocklist");
         sys.sendHtmlMessage(src, helpers.bot(bots.command) + "The word '" + word + "' has been removed from the filter list.", channel);
     }
     
@@ -1737,7 +1732,7 @@ ownercommands = {
         }
         name = command[1].toLowerCase();
         exceptions.push(name);
-        sys.write("data/exceptions.txt", JSON.stringify(exceptions));
+        helpers.saveData("exceptions");
         sys.sendHtmlMessage(src, helpers.bot(bots.command) + "The name '" + name + "' will now bypass filtering.", channel);
     }
     
@@ -1751,7 +1746,7 @@ ownercommands = {
         }
         name = command[1].toLowerCase();
         exceptions.splice(exceptions.indexOf(name), 1);
-        sys.write("data/exceptions.txt", JSON.stringify(exceptions));
+        helpers.saveData("exceptions");
         sys.sendHtmlMessage(src, helpers.bot(bots.command) + "The name '" + name + "' will no longer bypass filtering.", channel);
     }
     
@@ -1835,7 +1830,7 @@ ownercommands = {
             return;
         }
         borderColor = sys.hexColor(color);
-        sys.write("data/bordercolor.txt", sys.hexColor(borderColor));
+        helpers.saveData("bordercolor");
         border = "<font color='" + sys.hexColor(color) + "'><b>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>></b></font>";
         border2 = "<font color='" + sys.hexColor(color) + "'><b>&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;" +
         "&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;</b></font>";
@@ -1861,7 +1856,7 @@ ownercommands = {
             return;
         }
         serverTopicColor = sys.hexColor(color);
-        sys.write("data/servertopiccolor.txt", sys.hexColor(serverTopicColor));
+        helpers.saveData("servertopiccolor");
         sys.sendHtmlMessage(src, helpers.bot(bots.main) + "The server topic " + command[0].slice(11) + " has been changed to " + color + ".", channel);
     }
     
@@ -1884,7 +1879,7 @@ ownercommands = {
             return;
         }
         channelTopicColor = sys.hexColor(color);
-        sys.write("data/channeltopiccolor.txt", sys.hexColor(channelTopicColor));
+        helpers.saveData("channeltopiccolor");
         sys.sendHtmlMessage(src, helpers.bot(bots.main) + "The channel topic " + command[0].slice(12) + " has been changed to " + color + ".", channel);
     }
     
@@ -1914,7 +1909,7 @@ ownercommands = {
             return;
         }
         cmdcolors[command[1]] = sys.hexColor(command[2]);
-        sys.write("data/cmdcolors.txt", JSON.stringify(cmdcolors));
+        helpers.saveData("cmdcolors");
         sys.sendHtmlMessage(src, helpers.bot(bots.main) + "Command " + command[0].slice(7) + " " + command[1] + " has been changed to " + command[2] + ".", channel);
     }
     
@@ -1933,7 +1928,7 @@ ownercommands = {
             return;
         }
         welcomeMessage = message;
-        sys.write("data/welcomemsg.txt", welcomeMessage);
+        helpers.saveData("welcomemessage");
         sys.sendHtmlMessage(src, helpers.bot(bots.main) + "The welcome message has been changed successfully.", channel);
     }
     
@@ -1946,7 +1941,7 @@ ownercommands = {
             return;
         }
         channelWelcomeMessage = message;
-        sys.write("data/channelwelcomemsg.txt", channelWelcomeMessage);
+        helpers.saveData("channelwelcomemessage");
         sys.sendHtmlMessage(src, helpers.bot(bots.main) + "The channel welcome message has been changed successfully.", channel);
     }
     
@@ -1959,7 +1954,7 @@ ownercommands = {
             return;
         }
         nopermissionmsg = message;
-        sys.write("data/nopermissionmsg.txt", noPermissionMessage);
+        helpers.saveData("nopermissionmessage");
         sys.sendHtmlMessage(src, helpers.bot(bots.main) + "The no permission message has been changed successfully.", channel);
     }
     
@@ -2012,7 +2007,7 @@ ownercommands = {
         if (helpers.isLoaded("roulette.js")) {
             cownercommands.priv(src, sys.channelId(permchannels[5]), ["priv"]);
         }
-        helpers.saveDataFile("regchannels");
+        helpers.saveData("regchannels");
         sys.sendHtmlMessage(src, helpers.bot(bots.main) + "All permanent channels have been registered successfully and have been given their default settings.", channel);
     }
     
@@ -2036,10 +2031,10 @@ ownercommands = {
                 if (regchannels[lower]) {
                     regchannels[newName.toLowerCase()] = regchannels[lower];
                     delete regchannels[lower];
-                    helpers.saveDataFile("regchannels");
+                    helpers.saveData("regchannels");
                 }
                 permchannels[i] = newName;
-                helpers.saveDataFile("permchannels");
+                helpers.saveData("permchannels");
                 sys.sendHtmlMessage(src, helpers.bot(bots.main) + "The permanent channel '" + oldName + "' is now called '" + newName + "'. Will take effect upon the next server restart.", channel);
                 return;
             }
@@ -2058,7 +2053,7 @@ ownercommands = {
         var commandsmessage = border
         + "<h2>Owner Commands ~ Miscellaneous</h2>"
         + "<br>";
-        if (API === "") {
+        if (API_KEY === "") {
             commandsmessage += "<b>" + helpers.user("/setapi ") + helpers.arg("API") + "</b>: sets the IPinfoDB API key for country and time zone retrieval to <b>API</b>.<br>"
             + "<u>Be careful with this command!</u> Entering an invalid API key will break things!<br>";
         } else {
@@ -2080,7 +2075,7 @@ ownercommands = {
     ,
     
     setapi: function (src, channel, command) {
-        if (API !== "") {
+        if (API_KEY !== "") {
             helpers.starfox(src, channel, command, bots.command, "Error 400, you already have an API key set!");
             return;
         }
@@ -2089,7 +2084,7 @@ ownercommands = {
             helpers.starfox(src, channel, command, bots.command, "Error 404, API key not found.");
             return;
         }
-        API = api;
+        API_KEY = api;
         sys.write("data/API_KEY.txt", api);
         sys.webCall(IP_RETRIEVAL_URL, function (resp) {
             if (resp === "") {
@@ -2111,15 +2106,18 @@ ownercommands = {
     ,
     
     removeapi: function (src, channel, command) {
-        if (API === "") {
+        if (API_KEY === "") {
             helpers.starfox(src, channel, command, bots.command, "Error 400, you cannot remove an API key when you don't have one!");
             return;
         }
-        API = "";
-        sys.write("data/API_KEY.txt", "");
-        sys.write("data/countryname.txt", "{}");
-        sys.write("data/cityname.txt", "{}");
-        sys.write("data/timezone.txt", "{}");
+        API_KEY = "";
+        countryname = {};
+        cityname = {};
+        timezone = {};
+        helpers.saveData("API_KEY");
+        helpers.saveData("countryname");
+        helpers.saveData("cityname");
+        helpers.saveData("timezone");
         sys.sendHtmlMessage(src, helpers.bot(bots.main) + "Your API key has been removed.", channel);
     }
     
@@ -2158,7 +2156,7 @@ ownercommands = {
             return;
         }
         servertopic = command[1];
-        sys.write("data/servertopic.txt", servertopic);
+        helpers.saveData("servertopic");
         sys.sendHtmlMain(helpers.bot(bots.topic) + "<b>" + helpers.user(name) + " changed the server topic to " + helpers.arg(command[1]) + ".</b>");
     }
     

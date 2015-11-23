@@ -45,15 +45,15 @@ partycommands = {
             }
             sys.sendHtmlAll(border + "<br>" + helpers.bot(bots.party) + "<b>" + helpers.user(name) + " has turned " + helpers.arg(mode) + " off.</b><br>" + border2, channel);
             partyMode = "none";
-            sys.write("data/partymode.txt", partyMode);
+            helpers.saveData("partymode");
             regchannels[permchannels[3].toLowerCase()].topic = ["Welcome to " + permchannels[3] + "!"];
-            helpers.saveDataFile("regchannels");
+            helpers.saveData("regchannels");
             return;
         }
         for (var index in PARTY_MODES) {
             if (PARTY_MODES[index] == command[1].toLowerCase()) {
                 partyMode = PARTY_MODES[index];
-                sys.write("data/partymode.txt", partyMode);
+                helpers.saveData("partymode");
                 mode = helpers.cap(PARTY_MODES[index]) + " Mode";
                 if (oldmode == "nightclub") {
                     sys.sendHtmlAll(":<div>", channel);
@@ -62,10 +62,10 @@ partycommands = {
                 if (partyMode == "nightclub") {
                     sys.sendHtmlAll("<font color='#FFFFFF'>:</font><div style='background: #000000;'>", channel);
                     regchannels[permchannels[3].toLowerCase()].topic = ["This channel is currently in " + mode + ".<font color='#FFFFFF'>:</font><div style='background: #000000;'>"];
-                    helpers.saveDataFile("regchannels");
+                    helpers.saveData("regchannels");
                 } else {
                     regchannels[permchannels[3].toLowerCase()].topic = ["This channel is currently in " + mode + "."];
-                    helpers.saveDataFile("regchannels");
+                    helpers.saveData("regchannels");
                 }
                 return;
             }
