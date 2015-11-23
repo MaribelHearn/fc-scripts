@@ -36,7 +36,9 @@ helpers = {
         sys.write(DATA_FOLDER + "servertopiccolor.txt", "#FF0000");
         sys.write(DATA_FOLDER + "channeltopiccolor.txt", "#FFA500");
         sys.write(DATA_FOLDER + "welcomemessage.txt", "Please welcome ~Player~ to ~Server~!");
+        sys.write(DATA_FOLDER + "leavemessage.txt", "~Player~ has left ~Server~!");
         sys.write(DATA_FOLDER + "channelwelcomemessage.txt", "Please welcome ~Player~ to ~Channel~!");
+        sys.write(DATA_FOLDER + "channelleavemessage.txt", "~Player~ has left ~Channel~!");
         sys.write(DATA_FOLDER + "nopermissionmessage.txt", "Can't let you do that, Star ~Player~!");
         
         // Arrays
