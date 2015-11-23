@@ -181,7 +181,9 @@
     serverTopicColor = helpers.readData("servertopiccolor");
     channelTopicColor = helpers.readData("channeltopiccolor");
     welcomeMessage = helpers.readData("welcomemessage");
+    leaveMessage = helpers.readData("leavemessage");
     channelWelcomeMessage = helpers.readData("channelwelcomemessage");
+    channelLeaveMessage = helpers.readData("channelleavemessage");
     noPermissionMessage = helpers.readData("nopermissionmessage");
     allowed = helpers.readObject("allowed");
     cmdcolors = helpers.readObject("cmdcolors");
@@ -887,8 +889,7 @@
         }
         if (helpers.isLoaded("party.js")) {
             if (channel == partychannel && partyMode == "nightclub") {
-                sys.sendHtmlAuth(helpers.bot(bots.spy) + "[Server] <b><font color='" + helpers.color(src) + "'>" + sys.name(src) + "</b> has joined the channel <a href=\"po:join/" + sys.channel(channel) +
-                "\">#" + sys.channel(channel) + "</a>.");
+                sys.sendHtmlAuth(helpers.bot(bots.spy) + "[Server] <b><font color='" + helpers.color(src) + "'>" + sys.name(src) + "</b> has joined the channel " + helpers.channelLink(channelname) + ".");
                 return;
             }
         }
@@ -905,8 +906,7 @@
                 sys.sendHtmlAll("<timestamp/><b>~Please Welcome " + helpers.rainbow(name) + " to " + channelname + "~</b>", channel);
             }
         }
-        sys.sendHtmlAuth(helpers.bot(bots.spy) + "[Server] <b><font color='" + helpers.color(src) + "'>" + sys.name(src) + "</font></b> has joined the channel <a href=\"po:join/" + sys.channel(channel) +
-        "\">#" + sys.channel(channel) + "</a>.");
+        sys.sendHtmlAuth(helpers.bot(bots.spy) + "[Server] <b><font color='" + helpers.color(src) + "'>" + sys.name(src) + "</font></b> has joined the channel " + helpers.channelLink(channelname) + ".");
     }
 
     ,
@@ -925,8 +925,7 @@
         var cauth = helpers.cauthname(players[src].name.toLowerCase(), channel), channelname = sys.channel(channel), cookie = sys.cookie(src) ? sys.cookie(src) : "none", id = sys.uniqueId(src) ? sys.uniqueId(src).id : "none";
         if (helpers.isLoaded("party.js")) {
             if (channel == partychannel && partyMode == "nightclub") {
-                sys.sendHtmlAuth(helpers.bot(bots.spy) + "[Server] <b><font color='" + helpers.color(src) + "'>" + sys.name(src) + "</font></b> has left the channel <a href=\"po:join/" + sys.channel(channel) +
-                "\">#" + sys.channel(channel) + "</a>.");
+                sys.sendHtmlAuth(helpers.bot(bots.spy) + "[Server] <b><font color='" + helpers.color(src) + "'>" + sys.name(src) + "</font></b> has left the channel " + helpers.channelLink(channelname) + ".");
                 return;
             }
         }
@@ -935,16 +934,14 @@
         } else if (sys.isGigaBanned(id)) {
             gigabancheck = false;
         } else {
-            if (layout == "new") {
-                if (channel > 0) {
-                    sys.sendHtmlAll(helpers.bot(bots.channel) + cauth + " " + sys.name(src) + " has left " + channelname + "!", channel);
-                }
-            } else {
-                if (channel > 0) {
+            if (channel > 0) {
+                if (layout == "new") {
+                    sys.sendHtmlAll(helpers.bot(bots.channel) + channelLeaveMessage.replace(/~Player~/, cauth + name).replace(/~Channel~/, channelname), channel);
+                } else {
                     sys.sendHtmlAll("<timestamp/><b>~" + helpers.rainbow(name) + " has left " + channelname + "~</b>", channel);
                 }
             }
-            sys.sendHtmlAuth(helpers.bot(bots.spy) + "[Server] <b><font color='" + helpers.color(src) + "'>" + sys.name(src) + "</font></b> has left the channel <a href=\"po:join/" + channelname + "\">#" + channelname + "</a>.");
+            sys.sendHtmlAuth(helpers.bot(bots.spy) + "[Server] <b><font color='" + helpers.color(src) + "'>" + sys.name(src) + "</font></b> has left the channel " + helpers.channelLink(channelname) + ".");
         }
     }
 
@@ -986,17 +983,9 @@
             gigabancheck = false;
         } else {
             if (layout == "new") {
-                if (servername == "Fun Community") {
-                    sys.sendHtmlMain(helpers.bot(bots.welcome) + authtitle + " " + name + " has left the " + servername + "!");
-                } else {
-                    sys.sendHtmlMain(helpers.bot(bots.welcome) + authtitle + " " + name + " has left " + servername + "!");
-                }
+                sys.sendHtmlMain(helpers.bot(bots.welcome) + leaveMessage.replace(/~Player~/, authtitle + name).replace(/~Server~/, servername));
             } else {
-                if (servername == "Fun Community") {
-                    sys.sendHtmlMain("<timestamp/><b>~" + helpers.rainbow(name) + " has left the " + servername + "~</b>");
-                } else {
-                    sys.sendHtmlMain("<timestamp/><b>~" + helpers.rainbow(name) + " has left " + servername + "~</b>");
-                }
+                sys.sendHtmlMain("<timestamp/><b>~" + helpers.rainbow(name) + " has left " + servername + "~</b>");
             }
         }
         /**

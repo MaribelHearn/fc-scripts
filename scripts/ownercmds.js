@@ -1446,8 +1446,8 @@ ownercommands = {
         ---------------
     **/
     serversettings: function (src, channel, command) {
-        var commandsmessage = border, serverprivate = sys.isServerPrivate(), serveropen = open;
-        var ports = sys.serverPorts().length, proxies = sys.proxyServers().length, serverport;
+        var commandsmessage = border, serverprivate = sys.isServerPrivate(), serveropen;
+        var ports = sys.serverPorts().length, proxies = sys.proxyServers().length;
         var uptime = sys.profileDump().split('\n')[0].split(',')[0].split(':')[1].slice(1, -2);
         var DAYS = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
         var MONTHS = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
@@ -1459,8 +1459,8 @@ ownercommands = {
         time = time.replace("+02", "+2 (Central European Summer Time)");
         time = time.replace("-04", "-4 (Eastern Daylight Time)");
         time = time.replace("-05", "-5 (Eastern Standard Time)");
-        serverprivate = (serverprivate ? "<span style='color:red'>No</span>" : "<b style='color:green'>Yes</b>");
-        serveropen = (serveropen ? "<b style='color:green'>Yes</b>" : "<span style='color:red'>No</span>");
+        serverprivate = (serverprivate ? "<font color='red'>No</font>" : "<b><font color='green'>Yes</font></b>");
+        serveropen = (open ? "<b><font color='green'>Yes</font></b>" : "<font color='red'>No</font>");
         commandsmessage += "<h2>Owner Commands ~ Server Settings</h2>"
         + "<br>"
         + "<b>Name:</b> " + sys.getServerName() + "<br>"
@@ -1777,7 +1777,9 @@ ownercommands = {
         + "Your current messages:<br>"
         + "<br>"
         + "<b>Welcome message: </b>" + welcomeMessage + "<br>"
+        + "<b>Leave message: </b>" + leaveMessage + "<br>"
         + "<b>Channel welcome message: </b>" + channelWelcomeMessage + "<br>"
+        + "<b>Channel leave message: </b>" + channelLeaveMessage + "<br>"
         + "<b>No permission message: </b>" + noPermissionMessage + "<br>"
         + "<br>"
         + "Syntax for the messages:<br>"
@@ -1793,7 +1795,9 @@ ownercommands = {
         + "Use <b>" + helpers.user("/commandcolor ") + helpers.arg("number") + helpers.arg2("*color") + "</b> to change command color <b>number</b> to <b>color</b>.<br>"
         + "0 is the user, 1 is the first argument, 2 the second argument, and so on. Also /commandcolour.<br>"
         + "Use <b>" + helpers.user("/welcomemsg ") + helpers.arg("text") + "</b> to change the welcome message to <b>text</b>.<br>"
+        + "Use <b>" + helpers.user("/leavemsg ") + helpers.arg("text") + "</b> to change the leave message to <b>text</b>.<br>"
         + "Use <b>" + helpers.user("/channelwelcomemsg ") + helpers.arg("text") + "</b> to change the channel welcome message to <b>text</b>.<br>"
+        + "Use <b>" + helpers.user("/channelleavemsg ") + helpers.arg("text") + "</b> to change the channel leave message to <b>text</b>.<br>"
         + "Use <b>" + helpers.user("/nopermissionmsg ") + helpers.arg("text") + "</b> to change the message someone gets when trying to use a command for higher auth to <b>text</b>.<br>"
         + "<br><timestamp/><br>"
         + border2;
@@ -1934,15 +1938,41 @@ ownercommands = {
     
     ,
     
+    leavemsg: function (src, channel, command) {
+        var message = command[1];
+        if (!message) {
+            sys.sendHtmlMessage(src, helpers.bot(bots.main) + "The current leave message is: " + leaveMessage + ".", channel);
+            return;
+        }
+        leaveMessage = message;
+        helpers.saveData("leavemessage");
+        sys.sendHtmlMessage(src, helpers.bot(bots.main) + "The leave message has been changed successfully.", channel);
+    }
+    
+    ,
+    
     channelwelcomemsg: function (src, channel, command) {
         var message = command[1];
         if (!message) {
-            sys.sendHtmlMessage(src, helpers.bot(bots.main) + "The current channel welcome message is: " + welcomeMessage + ".", channel);
+            sys.sendHtmlMessage(src, helpers.bot(bots.main) + "The current channel welcome message is: " + channelWelcomeMessage + ".", channel);
             return;
         }
         channelWelcomeMessage = message;
         helpers.saveData("channelwelcomemessage");
         sys.sendHtmlMessage(src, helpers.bot(bots.main) + "The channel welcome message has been changed successfully.", channel);
+    }
+    
+    ,
+    
+    channelleavemsg: function (src, channel, command) {
+        var message = command[1];
+        if (!message) {
+            sys.sendHtmlMessage(src, helpers.bot(bots.main) + "The current channel leave message is: " + channelLeaveMessage + ".", channel);
+            return;
+        }
+        channelLeaveMessage = message;
+        helpers.saveData("channelleavemessage");
+        sys.sendHtmlMessage(src, helpers.bot(bots.main) + "The channel leave message has been changed successfully.", channel);
     }
     
     ,
