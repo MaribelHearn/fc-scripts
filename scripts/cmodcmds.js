@@ -23,7 +23,6 @@ cmodcommands = {
         + "<b>" + helpers.user("/cunmute ") + helpers.arg("player") + "</b>: unmutes <b>player</b> on the current channel.<br>"
         + "<b>" + helpers.user("/cmutelist") + "</b>: displays the current channel's mute list in a neat table.<br>"
         + "<b>" + helpers.user("/cbanlist") + "</b>: displays the current channel's ban list in a neat table.<br>"
-        + "<b>" + helpers.user("/crangebanlist") + "</b>: displays the current channel's range ban list in a neat table.<br>"
         + "<b>" + helpers.user("/cclose ") + helpers.arg("auth") + "</b>: closes the current channel for any player below level <b>auth</b>.<br>"
         + "<b>" + helpers.user("/copen") + "</b>: opens the current channel.<br>"
         + "<b>" + helpers.user("/silence ") + helpers.arg("level") + "</b>: sets the silence level of the current channel to <b>level</b>. <b>level</b> is 1, 2 or 3 and cannot exceed your channel auth level."
@@ -63,7 +62,7 @@ cmodcommands = {
         } else {
             regchannels[lower].topic.push(text);
         }
-        sys.write("data/regchannels.txt", JSON.stringify(regchannels));
+        helpers.saveDataFile("regchannels");
         sys.sendHtmlAll(helpers.bot(bots.channel) + sys.name(src) + " changed the channel topic to '" + helpers.escapehtml(((typeof(text)) == "string" ? text : text.join(TOPIC_DELIMITER))) + "'", channel);
     }
     
@@ -78,7 +77,7 @@ cmodcommands = {
         if (regchannels[lower]) {
             regchannels[lower].topic.push(text);
             regchannels[lower].topicmakers.push(name);
-            sys.write("data/regchannels.txt", JSON.stringify(regchannels));
+            helpers.saveDataFile("regchannels");
             sys.sendHtmlAll(helpers.bot(bots.channel) + sys.name(src) + " added '" + helpers.escapehtml(text) + "' to the channel topic!", channel);
         } else {
             helpers.starfox(src, channel, command, bots.channel, "Error 400, this channel isn't registered!", channel);
@@ -115,7 +114,7 @@ cmodcommands = {
             oldtext = regchannels[lower].topic[number];
             regchannels[lower].topic.splice(number, 1);
             regchannels[lower].topicmakers.splice(number, 1);
-            sys.write("data/regchannels.txt", JSON.stringify(regchannels));
+            helpers.saveDataFile("regchannels");
             sys.sendHtmlAll(helpers.bot(bots.channel) + sys.name(src) + " removed '" + helpers.escapehtml(oldtext) + "' from the channel topic!", channel);
         } else {
             helpers.starfox(src, channel, command, bots.channel, "Error 400, this channel isn't registered!", channel);
@@ -150,7 +149,7 @@ cmodcommands = {
             }
             oldtext = regchannels[lower].topic[number];
             regchannels[lower].topic[number] = text;
-            sys.write("data/regchannels.txt", JSON.stringify(regchannels));
+            helpers.saveDataFile("regchannels");
             sys.sendHtmlAll(helpers.bot(bots.channel) + sys.name(src) + " changed '" + helpers.escapehtml(oldtext) + "' to '" + helpers.escapehtml(text) + "' in the channel topic!", channel);
         } else {
             helpers.starfox(src, channel, command, bots.channel, "Error 400, this channel isn't registered!", channel);
@@ -192,6 +191,10 @@ cmodcommands = {
     
     cmute: function (src, channel, command) {
         var lower = sys.channel(channel).toLowerCase(), reason = command[2];
+        if (!regchannels[lower]) {
+            helpers.starfox(src, channel, command, bots.channel, "Error 400, this channel isn't registered!", channel);
+            return;
+        }
         if (!command[1]) {
             helpers.starfox(src, channel, command, bots.channel, "Error 404, player not found.");
             return;
@@ -204,20 +207,15 @@ cmodcommands = {
         if (!reason) {
             reason = "Unknown";
         }
-        if (regchannels[lower]) {
-            var name = trgtname.toLowerCase();
-            regchannels[lower].mutelist[name] = {};
-            regchannels[lower].mutelist[name].ip = trgtip;
-            regchannels[lower].mutedips[trgtip] = true;
-            regchannels[lower].mutelist[name].mutedby = players[src].name;
-            regchannels[lower].mutelist[name].reason = reason;
-            var date = helpers.date(new Date());
-            regchannels[lower].mutelist[name].date = date;
-            sys.write("data/regchannels.txt", JSON.stringify(regchannels));
-        } else {
-            helpers.starfox(src, channel, command, bots.channel, "Error 400, this channel isn't registered!", channel);
-            return;
-        }
+        var name = trgtname.toLowerCase();
+        regchannels[lower].mutelist[name] = {};
+        regchannels[lower].mutelist[name].ip = trgtip;
+        regchannels[lower].mutedips[trgtip] = true;
+        regchannels[lower].mutelist[name].mutedby = players[src].name;
+        regchannels[lower].mutelist[name].reason = reason;
+        var date = helpers.date(new Date());
+        regchannels[lower].mutelist[name].date = date;
+        helpers.saveDataFile("regchannels");
         var trgt = sys.id(trgtname);
         sys.sendHtmlAll(helpers.bot(bots.channel) + trgtname + " has been muted on this channel by " + sys.name(src) + "! [Reason: " + reason + "]", channel);
     }
@@ -226,6 +224,10 @@ cmodcommands = {
     
     cunmute: function (src, channel, command) {
         var name = sys.name(src), lower = sys.channel(channel).toLowerCase();
+        if (!regchannels[lower]) {
+            helpers.starfox(src, channel, command, bots.channel, "Error 400, this channel isn't registered!", channel);
+            return;
+        }
         if (!command[1]) {
             helpers.starfox(src, channel, command, bots.channel, "Error 404, player not found.", channel);
             return;
@@ -239,75 +241,94 @@ cmodcommands = {
             helpers.starfox(src, channel, command, bots.channel, "Error 400, you can't channel unmute " + command[1] + " because they aren't channel muted!");
             return;
         }
-        if (regchannels[lower]) {
-            delete regchannels[lower].mutelist[command[1].toLowerCase()];
-            delete regchannels[lower].mutedips[trgtip];
-            sys.write("data/regchannels.txt", JSON.stringify(regchannels));
-        } else {
-            helpers.starfox(src, channel, command, bots.channel, "Error 400, this channel isn't registered!", channel);
-            return;
-        }
+        delete regchannels[lower].mutelist[command[1].toLowerCase()];
+        delete regchannels[lower].mutedips[trgtip];
+        helpers.saveDataFile("regchannels");
         sys.sendHtmlAll(helpers.bot(bots.channel) + command[1] + " has been unmuted on this channel by " + name + "!", channel);
     }
     
     ,
     
     cmutelist: function (src, channel, command) {
-        var onlinemessage = border + "<style type='text/css'>table {border-width:1px; border-style:solid; border-color:#000;}" +
-        "thead {font-weight:bold;}</style><h2>Channel Mute List</h2><br><table cellpadding=2 cellspacing=0><thead><tr style='background-color:#b0b0b0;'>" +
-        "<td>Name</td><td>IP</td><td>Muter</td><td>Reason</td><td>Date</td></tr></thead>", id, lower = sys.channel(channel).toLowerCase();
+        var lower = sys.channel(channel).toLowerCase(), list, names = [], ips = [], muters = [], reasons = [], dates = [], mutelistmessage;
         if (!regchannels[lower]) {
-            helpers.starfox(src, channel, command, bots.channel, "Error 400, this channel isn't registered!", channel);
+            helpers.starfox(src, channel, command, bots.channel, "Error 400, this channel isn't registered!");
             return;
         }
-        var cmutelist = regchannels[lower].mutelist;
-        for (var index in cmutelist) {
-            id = cmutelist[index];
-            onlinemessage += "<tr><td>" + index + "</td><td>" + id.ip + "</td><td>" + id.mutedby + "</td><td>" + id.reason + "</td><td>" + id.date + "</td></tr>";
+        list = regchannels[lower].mutelist;
+        for (var i in list) {
+            names.push(members[i] ? members[i] : i);
+            ips.push(list[i].ip);
+            muters.push(list[i].mutedby);
+            reasons.push(list[i].reason);
+            dates.push(list[i].date);
         }
-        var playernum = Object.keys(cmutelist).length;
-        onlinemessage += "</table><br><br><b>Total Muted Players:</b> " + playernum + "<br><br><timestamp/><br>" + border2;
-        sys.sendHtmlMessage(src, onlinemessage, channel);
+        mutelistmessage = border + "<h2>" + sys.channel(channel) + " Mute List</h2><br>";
+        if (helpers.isAndroid(src)) {
+            mutelistmessage += "<tt>";
+            for (var i in names) {
+                mutelistmessage += names[i] + " | " + ips[i] + " | </tt>" + dates[i] + "<tt><br>";
+            }
+            mutelistmessage += "</tt>";
+        } else {
+            mutelistmessage += "<style>table {border-width: 1px; border-style: solid; border-color: #000000;}</style>"
+            + "<table cellpadding='2' cellspacing='0'><thead><tr style='background-color: #B0B0B0;'>"
+            + "<th>Name</th><th>IP Address</th><th>Muter</th><th>Reason</th><th>Date of muting</th></tr></thead><tbody>";
+            for (var i in names) {
+                mutelistmessage += "<tr>"
+                + "<td>" + names[i] + "</td>"
+                + "<td>" + ips[i] + "</td>"
+                + "<td>" + muters[i] + "</td>"
+                + "<td>" + reasons[i] + "</td>"
+                + "<td>" + dates[i] + "</td>"
+                + "</tr>";
+            }
+            mutelistmessage += "</tbody></table>"
+        }
+        mutelistmessage += "<br><br><b>Total Muted Players:</b> " + Object.keys(list).length + "<br><br><timestamp/><br>" + border2;
+        sys.sendHtmlMessage(src, mutelistmessage, channel);
     }
     
     ,
     
     cbanlist: function (src, channel, command) {
-        var onlinemessage = border + "<style type='text/css'>table {border-width:1px; border-style:solid; border-color:#000;}" +
-        "thead {font-weight:bold;}</style><h2>Channel Ban List</h2><br><table cellpadding=2 cellspacing=0><thead><tr style='background-color:#b0b0b0;'>" +
-        "<td>Name</td><td>IP</td><td>Banner</td><td>Reason</td><td>Date</td></tr></thead>", id, lower = sys.channel(channel).toLowerCase();
+        var lower = sys.channel(channel).toLowerCase(), list, names = [], ips = [], banners = [], reasons = [], dates = [], banlistmessage;
         if (!regchannels[lower]) {
-            helpers.starfox(src, channel, command, bots.channel, "Error 400, this channel isn't registered!", channel);
+            helpers.starfox(src, channel, command, bots.channel, "Error 400, this channel isn't registered!");
             return;
         }
-        var cbanlist = regchannels[lower].banlist;
-        for (var index in cbanlist) {
-            id = cbanlist[index];
-            onlinemessage += "<tr><td>" + index + "</td><td>" + id.ip + "</td><td>" + id.banner + "</td><td>" + id.reason + "</td><td>" + id.date + "</td></tr>";
+        list = regchannels[lower].banlist;
+        for (var i in list) {
+            names.push(members[i] ? members[i] : i);
+            ips.push(list[i].ip);
+            banners.push(list[i].banner);
+            reasons.push(list[i].reason);
+            dates.push(list[i].date);
         }
-        var playernum = Object.keys(cbanlist).length;
-        onlinemessage += "</table><br><br><b>Total Banned Players:</b> " + playernum + "<br><br><timestamp/><br>" + border2;
-        sys.sendHtmlMessage(src, onlinemessage, channel);
-    }
-    
-    ,
-    
-    crangebanlist: function (src, channel, command) {
-        var onlinemessage = border + "<style type='text/css'>table {border-width:1px; border-style:solid; border-color:#000;}" +
-        "thead {font-weight:bold;}</style><h2>Channel Range Ban List</h2><br><table cellpadding=2 cellspacing=0><thead><tr style='background-color:#b0b0b0;'>" +
-        "<td>Name</td><td>Range</td><td>Banner</td><td>Reason</td><td>Date</td></tr></thead>", id, lower = sys.channel(channel).toLowerCase();
-        if (!regchannels[lower]) {
-            helpers.starfox(src, channel, command, bots.channel, "Error 400, this channel isn't registered!", channel);
-            return;
+        banlistmessage = border + "<h2>Ban List</h2><br>";
+        if (helpers.isAndroid(src)) {
+            banlistmessage += "<tt>";
+            for (var i in names) {
+                banlistmessage += names[i] + " | " + ips[i] + " | </tt>" + dates[i] + "<tt><br>";
+            }
+            banlistmessage += "</tt>";
+        } else {
+            banlistmessage += "<style>table {border-width: 1px; border-style: solid; border-color: #000000;}</style>"
+            + "<table cellpadding='2' cellspacing='0'><thead><tr style='background-color: #B0B0B0;'>"
+            + "<th>Name</th><th>IP Address</th><th>Banner</th><th>Reason</th><th>Date of banning</th></tr></thead><tbody>";
+            for (var i in names) {
+                banlistmessage += "<tr>"
+                + "<td>" + names[i] + "</td>"
+                + "<td>" + ips[i] + "</td>"
+                + "<td>" + banners[i] + "</td>"
+                + "<td>" + reasons[i] + "</td>"
+                + "<td>" + dates[i] + "</td>"
+                + "</tr>";
+            }
+            banlistmessage += "</tbody></table>"
         }
-        var crangebanlist = regchannels[lower].rangebanlist;
-        for (var index in crangebanlist) {
-            id = crangebanlist[index];
-            onlinemessage += "<tr><td>" + index + "</td><td>" + id.range + "</td><td>" + id.banner + "</td><td>" + id.reason + "</td><td>" + id.date + "</td></tr>";
-        }
-        var playernum = Object.keys(crangebanlist).length;
-        onlinemessage += "</table><br><br><b>Total Range Banned Players:</b> " + playernum + "<br><br><timestamp/><br>" + border2;
-        sys.sendHtmlMessage(src, onlinemessage, channel);
+        banlistmessage += "<br><br><b>Total Banned Players:</b> " + Object.keys(list).length + "<br><br><timestamp/><br>" + border2;
+        sys.sendHtmlMessage(src, banlistmessage, channel);
     }
     
     ,
@@ -327,12 +348,14 @@ cmodcommands = {
             return;
         }
         var strength = command[1];
-        if (!command[1])strength = 1;
-        if (isNaN(strength))strength = 1;
-        if (strength > cauth)strength = cauth;
-        if (strength < 1)stength = 1;
+        if (!command[1] || isNaN(strength) || strength < 1) {
+            strength = 1;
+        }
+        if (strength > cauth) {
+            strength = cauth;
+        }
         regchannels[lower].close = strength;
-        sys.write("data/regchannels.txt", JSON.stringify(regchannels));
+        helpers.saveDataFile("regchannels");
         sys.sendHtmlAll(helpers.bot(bots.channel) + "This channel has been closed for any channel auth level lower than Channel " + AUTH_NAME[strength] + " by " + name + ".", channel);
     }
     
@@ -349,7 +372,7 @@ cmodcommands = {
             return;
         }
         regchannels[lower].close = 0;
-        sys.write("data/regchannels.txt", JSON.stringify(regchannels));
+        helpers.saveDataFile("regchannels");
         sys.sendHtmlAll(helpers.bot(bots.channel) + "This channel has been opened by " + name + ".", channel);
     }
     
@@ -386,7 +409,7 @@ cmodcommands = {
                 silencemessage += "SILENCE! I KILL YOU! ";
             }
             silencemessage += "This channel has been silenced by " + name + ". [Silence Level: " + strength + "]";
-            sys.write("data/regchannels.txt", JSON.stringify(regchannels));
+            helpers.saveDataFile("regchannels");
             sys.sendHtmlAll(silencemessage, channel);
         } else {
             helpers.starfox(src, channel, command, bots.silence, "Error 400, this channel isn't registered!");
@@ -413,7 +436,7 @@ cmodcommands = {
                     unsilencemessage += "UNSILENCE! I WON'T KILL YOU! ";
                 }
                 unsilencemessage += "This channel has been unsilenced by " + name + ".";
-                sys.write("data/regchannels.txt", JSON.stringify(regchannels));
+                helpers.saveDataFile("regchannels");
                 sys.sendHtmlAll(unsilencemessage, channel);
             }
         } else {
@@ -434,7 +457,7 @@ cmodcommands = {
                 regchannels[lower].caps = true;
                 sys.sendHtmlAll(helpers.bot(bots.channel) + "<b>" + helpers.user(sys.name(src)) + " has allowed excessive usage of caps on the channel.</b>", channel);
             }
-            sys.write("data/regchannels.txt", JSON.stringify(regchannels));
+            helpers.saveDataFile("regchannels");
         } else {
             helpers.starfox(src, channel, command, bots.channel, "Error 400, this channel isn't registered!", channel);
             return;
@@ -453,7 +476,7 @@ cmodcommands = {
                 regchannels[lower].flood = true;
                 sys.sendHtmlAll(helpers.bot(bots.channel) + "<b>" + helpers.user(sys.name(src)) + " has allowed flooding on the channel.</b>", channel);
             }
-            sys.write("data/regchannels.txt", JSON.stringify(regchannels));
+            helpers.saveDataFile("regchannels");
         } else {
             helpers.starfox(src, channel, command, bots.channel, "Error 400, this channel isn't registered!", channel);
             return;

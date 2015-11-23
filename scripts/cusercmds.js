@@ -53,11 +53,10 @@ cusercommands = {
         regchannels[lower].mutelist = {};
         regchannels[lower].mutedips = {};
         regchannels[lower].banlist = {};
-        regchannels[lower].rangebanlist = {};
         regchannels[lower].rules = [];
         regchannels[lower].silence = 0;
         regchannels[lower].close = 0;
-        sys.write("data/regchannels.txt", JSON.stringify(regchannels));
+        helpers.saveDataFile("regchannels");
         sys.sendHtmlAll(helpers.bot(bots.channel) + "The channel has been registered by " + name + "!", channel);
     }
     
@@ -97,15 +96,15 @@ cusercommands = {
             backward2 = regchannels[lower].backward;
             topic = regchannels[lower].topic;
         }
-        reg ? reg = "<b style='color:green'>Yes</b>" : reg = "<b style='color:red'>No</b>";
-        stay ? stay = "<b style='color:green'>Yes</b>" : stay = "<b style='color:red'>No</b>";
-        priv ? priv = "<b style='color:green'>Yes</b>" : priv = "<b style='color:red'>No</b>";
-        caps ? caps = "<b style='color:green'>Yes</b>" : caps = "<b style='color:red'>No</b>";
-        flood ? flood = "<b style='color:green'>Yes</b>" : flood = "<b style='color:red'>No</b>";
-        zalgo2 ? zalgo2 = "<b style='color:green'>Yes</b>" : zalgo2 = "<b style='color:red'>No</b>";
-        reverse2 ? reverse2 = "<b style='color:green'>Yes</b>" : reverse2 = "<b style='color:red'>No</b>";
-        extending2 ? extending2 = "<b style='color:green'>Yes</b>" : extending2 = "<b style='color:red'>No</b>";
-        backward2 ? backward2 = "<b style='color:green'>Yes</b>" : backward2 = "<b style='color:red'>No</b>";
+        reg ? reg = "<b><font color='green'>Yes</font></b>" : reg = "<b><font color='red'>No</font></b>";
+        stay ? stay = "<b><font color='green'>Yes</font></b>" : stay = "<b><font color='red'>No</font></b>";
+        priv ? priv = "<b><font color='green'>Yes</font></b>" : priv = "<b><font color='red'>No</font></b>";
+        caps ? caps = "<b><font color='green'>Yes</font></b>" : caps = "<b><font color='red'>No</font></b>";
+        flood ? flood = "<b><font color='green'>Yes</font></b>" : flood = "<b><font color='red'>No</font></b>";
+        zalgo2 ? zalgo2 = "<b><font color='green'>Yes</font></b>" : zalgo2 = "<b><font color='red'>No</font></b>";
+        reverse2 ? reverse2 = "<b><font color='green'>Yes</font></b>" : reverse2 = "<b><font color='red'>No</font></b>";
+        extending2 ? extending2 = "<b><font color='green'>Yes</font></b>" : extending2 = "<b><font color='red'>No</font></b>";
+        backward2 ? backward2 = "<b><font color='green'>Yes</font></b>" : backward2 = "<b><font color='red'>No</font></b>";
         topic ? topic = topic : topic = ["Welcome to " + channelname + "!"];
         channelmessage = border + "<h2>Channel Info" + (command[1] ? " ~ " + channelname : "") + "</h2><br>" +
         "<br><b>Name:</b> " + channelname +

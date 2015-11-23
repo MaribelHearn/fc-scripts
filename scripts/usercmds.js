@@ -123,7 +123,8 @@ usercommands = {
         + "<b>" + helpers.user("/future ") + helpers.arg("text") + helpers.arg2("*time") + "</b>: posts <b>message</b> into the future, to arrive in <b>time</b>. <b>message</b> can also be a command.<br>"
         + "<b>" + helpers.user("/listen ") + helpers.arg("youtube link") + "</b>: posts a message saying that you're listening to <b>youtube link</b>. The link will turn into the video's title.<br>"
         + "<b>" + helpers.user("/quote ") + helpers.arg("text") + helpers.arg2("*author") + "</b>: posts <b>text</b> as a quote, cited from <b>author</b>.<br>"
-        + "<b>" + helpers.user("/spoiler ") + helpers.arg("text") + helpers.arg2("*source") + "</b>: posts <b>text</b> as a spoiler of <b>source</b>. <b>source</b> is optional.<br>"
+        + "<b>" + helpers.user("/spoiler ") + helpers.arg("text") + helpers.arg2("*source") + "</b>: saves <b>text</b> as a spoiler of <b>source</b>. A link will be posted for users to read it (Android users will be told to use the /view command instead).<br>"
+        + "<b>" + helpers.user("/view ") + helpers.arg("number") + "</b>: view spoiler <b>number</b>. The number will roll back to 0 when the 100th spoiler is posted.<br>"
         + "<br><timestamp/><br>"
         + border2;
         sys.sendHtmlMessage(src, commandsmessage, channel);
@@ -1455,19 +1456,54 @@ usercommands = {
     ,
     
     spoiler: function (src, channel, command) {
-        var name = sys.name(src), auth = sys.auth(src), text = command[1], origin, firstchar;
+        var name = sys.name(src), auth = sys.auth(src), text = command[1], channelPlayers = sys.playersOfChannel(channel), origin;
         if (!text) {
             helpers.starfox(src, channel, command, bots.command, "Error 404, text not found.");
             return;
         }
-        text = text.replace(/\s{2,}/g, " ");
-        if (text.charAt(0) == ' ') {
+        if (text.length > 42 && auth <= 0) {
+            helpers.starfox(src, channel, command, bots.command, "Error 403, you may not post a spoiler longer than 42 characters.");
+            return;
+        }
+        text = text.replace(/\s{2,}/g, ' ');
+        if (text.charAt(0) === ' ') {
             text = text.slice(1);
         }
-        origin = (command[2] ? command[2] : ' ');
-        if (origin !== ' ') {
+        origin = (command[2] ? command[2] : "");
+        if (currentSpoiler == 100) {
+            currentSpoiler = 0;
+        }
+        spoilers[currentSpoiler] = {};
+        spoilers[currentSpoiler].text = helpers.escapehtml(text);
+        spoilers[currentSpoiler].origin = (origin === "" ? "Unknown" : origin);
+        spoilers[currentSpoiler].sender = name;
+        if (origin === "") {
+            origin = ' ';
+        } else {
             origin = (helpers.isVowel(origin.charAt(0)) ? "n " + origin : ' ' + origin) + ' ';
         }
-        sys.sendHtmlAll(helpers.bot(bots.warn) + "CAUTION! " + name + " posted a" + origin + "spoiler! <font style='background-color: black;'>" + helpers.escapehtml(text) + "</font>", channel);
+        for (var i in channelPlayers) {
+            if (helpers.isAndroid(channelPlayers[i])) {
+                sys.sendHtmlMessage(channelPlayers[i], helpers.bot(bots.main) + name + " posted a" + origin + "spoiler! Type '/view " + currentSpoiler + "' to read it!", channel);
+            } else {
+                sys.sendHtmlMessage(channelPlayers[i], helpers.bot(bots.main) + name + " posted a" + origin + "spoiler! <a href='po:send//view " + currentSpoiler + "'>Click here to read it!</a>", channel);
+            }
+        }
+        currentSpoiler++;
+    }
+    
+    ,
+    
+    view: function (src, channel, command) {
+        var spoiler = command[1];
+        if (!spoiler) {
+            helpers.starfox(src, channel, command, bots.command, "Error 404, number not found.");
+            return;
+        }
+        if (!spoilers[spoiler]) {
+            helpers.starfox(src, channel, command, bots.command, "Error 400, that spoiler doesn't exist.");
+            return;
+        }
+        sys.sendHtmlMessage(src, helpers.bot(bots.main) + spoilers[spoiler].text + " [Spoiler from: " + spoilers[spoiler].origin + "] [Sent by: " + spoilers[spoiler].sender + "]", channel);
     }
 };
