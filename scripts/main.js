@@ -254,7 +254,6 @@
     helpers.setVariable("berryPowerList", {});
     helpers.setVariable("berryTypeList", {});
     
-    // Special
     tour[0] = {};
     tour[0].tourmode = 0;
     bansites.splice(bansites.indexOf(""), 1);
@@ -264,12 +263,12 @@
     // Plugins
     if (helpers.isLoaded("party.js")) {
         PARTY_MODES = ["joke", "nightclub", "desu", "rainbow", "nyan", "dennis", "cirno", "sparta", "luigi", "roflcopter", "derp", "asdf", "leet", "morse", "reverse"];
-        partyMode = helpers.readData("partymode");
-        partyNyan = 0;
+        partyMode = sys.fileExists(DATA_FOLDER + "partymode.txt") ? helpers.readData("partymode") : "none";
+        helpers.setVariable("partyNyan", 0);
     }
     
     if (helpers.isLoaded("rr.js")) {
-        rr = helpers.readObject("rr");
+        rr = sys.fileExists(DATA_FOLDER + "rr.txt") ? helpers.readObject("rr") : {};
     }
     
     if (helpers.isLoaded("roulette.js")) {
@@ -279,10 +278,10 @@
         ROULETTE_EVENT_MAX = 135;
         ROULETTE_FEST_MIN = 22;
         ROULETTE_FEST_MAX = 45;
+        roulette = sys.fileExists(DATA_FOLDER + "roulette.txt") ? helpers.readObject("roulette") : {};
+        helpers.setVariable("rouletteTime", sys.rand(ROULETTE_WAIT_MIN, ROULETTE_WAIT_MAX));
         helpers.setVariable("rouletteEvent", "");
         helpers.setVariable("rouletteStep", 0);
-        helpers.setVariable("rouletteTime", sys.rand(ROULETTE_WAIT_MIN, ROULETTE_WAIT_MAX));
-        roulette = helpers.readObject("roulette");
     }
 }
 ).call(null);
