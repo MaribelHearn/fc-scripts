@@ -2,7 +2,10 @@
 /*
     ----------------------------------------------
     FUN COMMUNITY HELPER METHODS helpers.js
-     - by Maribel Hearn, 2012-2015
+     - by Maribel Hearn, 2012-2015,
+       with tournament methods by Lutra and
+       pokemon db methods from main server
+       scripts
     
     This script file contains utility
     methods that almost every other
