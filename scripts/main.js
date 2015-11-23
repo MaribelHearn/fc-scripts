@@ -16,7 +16,6 @@
         ----------------
     **/
     global = this;
-    
     DELIMITER = '*';
     COMMAND_SYMBOL = '/';
     TOPIC_DELIMITER = " || ";
@@ -94,7 +93,7 @@
     if (!helpers.isInArray("data", sys.dirsForDirectory(sys.cwd()))) {
         helpers.initData();
     }
-    API = sys.read(DATA_FOLDER + "API_KEY.txt");
+    API_KEY = sys.read(DATA_FOLDER + "API_KEY.txt");
     /**
         ----------------------
         Additional Sys Methods
@@ -169,63 +168,52 @@
         Global Variables
         ----------------
     **/
-    // Boolean from data file
-    helpers.setVariable("open", sys.read("data/open.txt") == "true" ? true : false);
-    
-    // Number from data file
-    allowance = parseInt(sys.read("data/allowance.txt"));
-    floodtime = parseInt(sys.read("data/floodtime.txt"));
-    floodlevel = parseInt(sys.read("data/floodlevel.txt"));
-    maxplayers = parseInt(sys.read("data/maxplayers.txt"));
-    
-    // String from data file
-    botcolor = sys.read("data/botcolor.txt");
-    botsymbol = sys.read("data/botsymbol.txt");
-    servertopic = sys.read("data/servertopic.txt");
-    botsymbolcolor = sys.read("data/botsymbolcolor.txt");
-    borderColor = sys.read("data/bordercolor.txt");
-    serverTopicColor = sys.read("data/servertopiccolor.txt");
-    channelTopicColor = sys.read("data/channeltopiccolor.txt");
-    welcomeMessage = sys.read("data/welcomemsg.txt");
-    channelWelcomeMessage = sys.read("data/channelwelcomemsg.txt");
-    noPermissionMessage = sys.read("data/nopermissionmsg.txt");
-    
-    // Array from data file
-    allowed = JSON.parse(sys.read("data/allowed.txt"));
-    cmdcolors = JSON.parse(sys.read("data/cmdcolors.txt"));
-    exceptions = JSON.parse(sys.read("data/exceptions.txt"));
-    permchannels = JSON.parse(sys.read("data/permchannels.txt"));
-    allowedrange = JSON.parse(sys.read("data/allowedrange.txt"));
-    namestounban = JSON.parse(sys.read("data/namestounban.txt"));
-    silentcommands = JSON.parse(sys.read("data/silentcmds.txt"));
-    nameblocklist = JSON.parse(sys.read("data/nameblocklist.txt"));
-    proxylist = sys.read("data/proxylist.txt").split('\n');
-    blocklist = sys.read("data/bansites.txt").replace(/\r/g, "").split('\n');
-    
-    // Object from data file
-    bots = JSON.parse(sys.read("data/bots.txt"));
-    iplist = JSON.parse(sys.read("data/iplist.txt"));
-    banlist = JSON.parse(sys.read("data/banlist.txt"));
-    mutelist = JSON.parse(sys.read("data/mutelist.txt"));
-    bigtexts = JSON.parse(sys.read("data/bigtexts.txt"));
-    timezone = JSON.parse(sys.read("data/timezone.txt"));
-    cityname = JSON.parse(sys.read("data/cityname.txt"));
-    versions = JSON.parse(sys.read("data/versions.txt"));
-    members = JSON.parse(sys.read("data/memberlist.txt"));
-    banmessages = JSON.parse(sys.read("data/banmsg.txt"));
-    operatingsystem = JSON.parse(sys.read("data/os.txt"));
-    kickmessages = JSON.parse(sys.read("data/kickmsg.txt"));
-    mutemessages = JSON.parse(sys.read("data/mutemsg.txt"));
-    authtitles = JSON.parse(sys.read("data/authtitles.txt"));
-    regchannels = JSON.parse(sys.read("data/regchannels.txt"));
-    megabanlist = JSON.parse(sys.read("data/megabanlist.txt"));
-    gigabanlist = JSON.parse(sys.read("data/gigabanlist.txt"));
-    countryname = JSON.parse(sys.read("data/countryname.txt"));
-    rangebanlist = JSON.parse(sys.read("data/rangebanlist.txt"));
-    selfkickmessages = JSON.parse(sys.read("data/selfkickmsg.txt"));
-    rangebanmessages = JSON.parse(sys.read("data/rangebanmsg.txt"));
-    
-    // Other globals
+    helpers.setVariable("open", helpers.readData("open") == "true" ? true : false);
+    allowance = helpers.readNumber("allowance");
+    floodtime = helpers.readNumber("floodtime");
+    floodlevel = helpers.readNumber("floodlevel");
+    maxplayers = helpers.readNumber("maxplayers");
+    botcolor = helpers.readData("botcolor");
+    botsymbol = helpers.readData("botsymbol");
+    servertopic = helpers.readData("servertopic");
+    botsymbolcolor = helpers.readData("botsymbolcolor");
+    borderColor = helpers.readData("bordercolor");
+    serverTopicColor = helpers.readData("servertopiccolor");
+    channelTopicColor = helpers.readData("channeltopiccolor");
+    welcomeMessage = helpers.readData("welcomemessage");
+    channelWelcomeMessage = helpers.readData("channelwelcomemessage");
+    noPermissionMessage = helpers.readData("nopermissionmessage");
+    allowed = helpers.readObject("allowed");
+    cmdcolors = helpers.readObject("cmdcolors");
+    exceptions = helpers.readObject("exceptions");
+    permchannels = helpers.readObject("permchannels");
+    allowedrange = helpers.readObject("allowedrange");
+    namestounban = helpers.readObject("namestounban");
+    silentcommands = helpers.readObject("silentcommands");
+    nameblocklist = helpers.readObject("nameblocklist");
+    proxylist = helpers.readData("proxylist").split('\n');
+    bansites = helpers.readData("bansites").replace(/\r/g, "").split('\n');
+    bots = helpers.readObject("bots");
+    iplist = helpers.readObject("iplist");
+    banlist = helpers.readObject("banlist");
+    mutelist = helpers.readObject("mutelist");
+    bigtexts = helpers.readObject("bigtexts");
+    timezone = helpers.readObject("timezone");
+    cityname = helpers.readObject("cityname");
+    versions = helpers.readObject("versions");
+    members = helpers.readObject("members");
+    banmessages = helpers.readObject("banmessages");
+    operatingsystem = helpers.readObject("operatingsystem");
+    kickmessages = helpers.readObject("kickmessages");
+    mutemessages = helpers.readObject("mutemessages");
+    authtitles = helpers.readObject("authtitles");
+    regchannels = helpers.readObject("regchannels");
+    megabanlist = helpers.readObject("megabanlist");
+    gigabanlist = helpers.readObject("gigabanlist");
+    countryname = helpers.readObject("countryname");
+    rangebanlist = helpers.readObject("rangebanlist");
+    selfkickmessages = helpers.readObject("selfkickmessages");
+    rangebanmessages = helpers.readObject("rangebanmessages");
     helpers.setVariable("tor", false);
     helpers.setVariable("stopbattles", false);
     helpers.setVariable("megabancheck", false);
@@ -268,19 +256,19 @@
     // Special
     tour[0] = {};
     tour[0].tourmode = 0;
-    blocklist.splice(blocklist.indexOf(""), 1);
-    blocklist.splice(blocklist.lastIndexOf(""), 1);
+    bansites.splice(bansites.indexOf(""), 1);
+    bansites.splice(bansites.lastIndexOf(""), 1);
     allcommands = helpers.allCommands();
     
     // Plugins
     if (helpers.isLoaded("party.js")) {
         PARTY_MODES = ["joke", "nightclub", "desu", "rainbow", "nyan", "dennis", "cirno", "sparta", "luigi", "roflcopter", "derp", "asdf", "leet", "morse", "reverse"];
-        partyMode = sys.read(DATA_FOLDER + "partymode.txt");
+        partyMode = helpers.readData("partymode");
         partyNyan = 0;
     }
     
     if (helpers.isLoaded("rr.js")) {
-        rr = JSON.parse(sys.read("data/rr.txt"));
+        rr = helpers.readObject("rr");
     }
     
     if (helpers.isLoaded("roulette.js")) {
@@ -293,7 +281,7 @@
         helpers.setVariable("rouletteEvent", "");
         helpers.setVariable("rouletteStep", 0);
         helpers.setVariable("rouletteTime", sys.rand(ROULETTE_WAIT_MIN, ROULETTE_WAIT_MAX));
-        roulette = JSON.parse(sys.read(DATA_FOLDER + "roulette.txt"));
+        roulette = helpers.readObject("roulette");
     }
 }
 ).call(null);
@@ -392,7 +380,7 @@
                 return;
             }
             hostIp = resp;
-            if (API !== "") {
+            if (API_KEY !== "") {
                 sys.webCall(helpers.countryRetrievalUrl(hostIp), function (resp) {
                     resp = JSON.parse(resp);
                     hostTimeZone = helpers.timezonedata(resp.countryName, resp.timeZone);
@@ -417,15 +405,15 @@
         for (var index in countryname) {
             if (sys.dbAuth(index) <= 0) {
                 delete countryname[index];
-                sys.write("data/countryname.txt", JSON.stringify(countryname));
                 delete cityname[index];
-                sys.write("data/cityname.txt", JSON.stringify(cityname));
                 delete timezone[index];
-                sys.write("data/timezone.txt", JSON.stringify(timezone));
                 delete operatingsystem[index];
-                sys.write("data/os.txt", JSON.stringify(operatingsystem));
                 delete versions[index];
-                sys.write("data/versions.txt", JSON.stringify(versions));
+                helpers.saveData("countryname");
+                helpers.saveData("cityname");
+                helpers.saveData("timezone");
+                helpers.saveData("operatingsystem");
+                helpers.saveData("versions");
             }
         }
     }
@@ -465,7 +453,7 @@
                     members[index] ? name = members[index] : name = index;
                     sys.sendHtmlMain(helpers.bot(bots.ban) + name + "'s ban has expired!");
                 }
-                sys.write("data/banlist.txt", JSON.stringify(banlist));
+                helpers.saveData("banlist");
             }
         }
         /**
@@ -481,7 +469,7 @@
                     members[index] ? name = members[index] : name = index;
                     sys.sendHtmlMain(helpers.bot(bots.mute) + name + "'s mute has expired!");
                 }
-                sys.write("data/mutelist.txt", JSON.stringify(mutelist));
+                helpers.saveData("mutelist");
             }
         }
         /**
@@ -713,7 +701,7 @@
         if (helpers.isInArray(lower, namestounban)) {
             sys.removeCookie(src);
             namestounban.splice(namestounban.indexOf(name), 1);
-            sys.write("data/namestounban.txt", JSON.stringify(namestounban));
+            helpers.saveData("namestounban");
         } else {
             if (sys.isMegaBanned(cookie)) {
                 sys.sendMessage(src, "You are banned!");
@@ -732,7 +720,7 @@
             authtitles[lower] = AUTH_NAME[auth];
         }
         members[name.toLowerCase()] = name;
-        sys.write("data/memberlist.txt", JSON.stringify(members));
+        helpers.saveData("members");
         if (!iplist[lower]) {
             iplist[lower] = [];
             iplist[lower].push(ip);
@@ -746,7 +734,7 @@
                 iplist[lower].push(ip);
             }
         }
-        sys.write("data/iplist.txt", JSON.stringify(iplist));
+        helpers.saveData("iplist");
         /**
             -----------
             Max Players
@@ -754,7 +742,7 @@
         **/
         if (sys.numPlayers() > maxplayers) {
             maxplayers++;
-            sys.write("data/maxplayers.txt", maxplayers);
+            helpers.saveData("maxplayers");
         }
         /**
             --------------
@@ -791,10 +779,10 @@
             -----------------------------------
         **/
         operatingsystem[lower] = os;
-        sys.write("data/os.txt", JSON.stringify(operatingsystem));
+        helpers.saveData("operatingsystem");
         os = helpers.os(operatingsystem[lower]);
         versions[lower] = helpers.version(version);
-        sys.write("data/versions.txt", JSON.stringify(versions));
+        helpers.saveData("versions");
         version = versions[lower];
         sys.sendHtmlAuth(helpers.bot(bots.spy) + "[Server] <b><font color='" + color + "'>" + name + "</font></b> is using " + os + (version === "" ? "" : ", " + version) + ".");
         /**
@@ -817,7 +805,7 @@
             Time Zone and Country
             ---------------------
         **/
-        if (API !== "") {
+        if (API_KEY !== "") {
             if (countryname[lower]) {
                 country = helpers.toFlagKey(helpers.removespaces(countryname[lower].toUpperCase()));
                 sys.sendHtmlAuth(helpers.bot(bots.spy) + "[Server] <b><font color='" + color + "'>" + name + "</font></b> is from " + FLAGS[country] + " " + countryname[lower] + ".");
@@ -827,9 +815,9 @@
                     timezone[lower] = helpers.timezonedata(resp.countryName, resp.timeZone);
                     countryname[lower] = helpers.countrydata(resp.countryName);
                     cityname[lower] = helpers.citydata(resp.cityName);
-                    sys.write("data/timezone.txt", JSON.stringify(timezone));
-                    sys.write("data/countryname.txt", JSON.stringify(countryname));
-                    sys.write("data/cityname.txt", JSON.stringify(cityname));
+                    helpers.saveData("timezone");
+                    helpers.saveData("countryname");
+                    helpers.saveData("cityname");
                     country = helpers.toFlagKey(helpers.removespaces(countryname[lower].toUpperCase()));
                     sys.sendHtmlAuth(helpers.bot(bots.spy) + "[Server] <b><font color='" + color + "'>" + name + "</font></b> is from " + FLAGS[country] + " " + countryname[lower] + ".");
                 });
@@ -1051,7 +1039,7 @@
             -----------------------
         **/
         members[name.toLowerCase()] = name;
-        sys.write("data/memberlist.txt", JSON.stringify(members));
+        helpers.saveData("members");
         sys.sendHtmlAuth(helpers.bot(bots.spy) + "[Player] <b><font color='" + players[src].color + "'>" + players[src].name + "</font></b> changed their team, and their name to <b><font color='" + color +
         "'>" + name + "</font></b>.");
         players[src].name = name;
@@ -1062,21 +1050,21 @@
             -----------------------------------
         **/
         operatingsystem[lower] = sys.os(src);
-        sys.write("data/os.txt", JSON.stringify(operatingsystem));
         versions[lower] = helpers.version(sys.version(src));
-        sys.write("data/versions.txt", JSON.stringify(versions));
+        helpers.saveData("operatingsystem");
+        helpers.saveData("versions");
         /**
             ---------------------
             Time Zone and Country
             ---------------------
         **/
-        if (API !== "") {
+        if (API_KEY !== "") {
             timezone[lower] = timezone[oldName];
             countryname[lower] = countryname[oldName];
             cityname[lower] = cityname[oldName];
-            helpers.saveDataFile("timezone");
-            helpers.saveDataFile("countryname");
-            helpers.saveDataFile("cityname");
+            helpers.saveData("timezone");
+            helpers.saveData("countryname");
+            helpers.saveData("cityname");
         }
     }
 

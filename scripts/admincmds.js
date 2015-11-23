@@ -121,7 +121,7 @@ admincommands = {
         }
         var date = helpers.date(new Date());
         banlist[lower].date = date;
-        sys.write("data/banlist.txt", JSON.stringify(banlist));
+        helpers.saveData("banlist");
         if (members[lower]) {
             trgtname = members[lower];
         }
@@ -147,8 +147,10 @@ admincommands = {
             if (mutelist[index].ip == banlist[lower].ip) {
                 delete mutedips[mutelist[index].ip];
                 delete mutelist[index];
-                if (members[index])index = members[index];
-                sys.write("data/mutelist.txt", JSON.stringify(mutelist));
+                if (members[index]) {
+                    index = members[index];
+                }
+                helpers.saveData("mutelist");
                 sys.sendHtmlMessage(src, helpers.bot(bots.mute) + index + " has been automatically unmuted.", channel);
                 continue;
             }
@@ -248,7 +250,7 @@ admincommands = {
         }
         var date = helpers.date(new Date());
         banlist[trgtip].date = date;
-        sys.write("data/banlist.txt", JSON.stringify(banlist));
+        helpers.saveData("banlist");
         if (banmessages[name.toLowerCase()]) {
             msg = banmessages[name.toLowerCase()].replace(/~Self~/gi, name).replace(/~Target~/gi, trgtip).replace(/~Time~/gi, time + unit).replace(/~Server~/gi, sys.getServerName());
             sys.sendHtmlAll(helpers.bot(bots.ban) + msg + " [Reason: " + reason + "]", channel);
@@ -265,7 +267,7 @@ admincommands = {
                 delete mutedips[mutelist[index].ip];
                 delete mutelist[index];
                 if (members[index])index = members[index];
-                sys.write("data/mutelist.txt", JSON.stringify(mutelist));
+                helpers.saveData("mutelist");
                 sys.sendHtmlMessage(src, helpers.bot(bots.mute) + index + " has been automatically unmuted.", channel);
                 continue;
             }
@@ -298,7 +300,7 @@ admincommands = {
             }
             if (sys.dbIp(index) == sys.dbIp(trgtname)) {
                 delete banlist[index];
-                sys.write("data/banlist.txt", JSON.stringify(banlist));
+                helpers.saveData("banlist");
             }
         }
         if (members[lower]) {
@@ -326,7 +328,7 @@ admincommands = {
             return;
         }
         delete banlist[trgtip];
-        sys.write("data/banlist.txt", JSON.stringify(banlist));
+        helpers.saveData("banlist");
         sys.sendHtmlAll(helpers.bot(bots.ban) + trgtip + " has been IP unbanned by " + name + "!", channel);
     }
     
@@ -335,7 +337,7 @@ admincommands = {
     clearbanlist: function (src, channel, command) {
         var name = sys.name(src);
         banlist = {};
-        sys.write("data/banlist.txt", "{}");
+        helpers.saveData("banlist");
         sys.sendHtmlAll(helpers.bot(bots.ban) + "The ban list has been cleared by " + name + "!", channel);
     }
     
@@ -354,7 +356,7 @@ admincommands = {
         }
         var banner = sys.name(src), banned = command[1], srcauth = sys.auth(src), lower = command[1].toLowerCase();
         banlist[banned.toLowerCase()].reason = reason;
-        sys.write("data/banlist.txt", JSON.stringify(banlist));
+        helpers.saveData("banlist");
         sys.sendHtmlAll(helpers.bot(bots.ban) + banner + " has changed the ban reason of " + command[1] + " to '" + reason + "'!", channel);
     }
     
@@ -368,7 +370,7 @@ admincommands = {
             return;
         }
         banmessages[lower] = message;
-        sys.write("data/banmsg.txt", JSON.stringify(banmessages));
+        helpers.saveData("banmessages");
         sys.sendHtmlMessage(src, helpers.bot(bots.ban) + "Your ban message has been changed successfully.", channel);
     }
     
@@ -498,7 +500,7 @@ admincommands = {
             command[2] = "undefined";
         }
         bots[bot] = command[2];
-        sys.write("data/bots.txt", JSON.stringify(bots));
+        helpers.saveData("bots");
         sys.sendHtmlMain(helpers.bot(bots.main) + "<b>" + helpers.user(name) + " changed the " + bot + " bot's name to " + helpers.arg(command[2]) + "!</b>");
     }
     
@@ -511,7 +513,7 @@ admincommands = {
             return;
         }
         botcolor = command[1];
-        sys.write("data/botcolor.txt", botcolor);
+        helpers.saveData("botcolor");
         sys.sendHtmlMain(helpers.bot(bots.main) + "<b>" + helpers.user(name) + " changed the bot " + command[0].slice(3) + " to " + command[1] + "!</b>");
     }
     
@@ -534,7 +536,7 @@ admincommands = {
             return;
         }
         botsymbol = command[1];
-        sys.write("data/botsymbol.txt", botsymbol);
+        helpers.saveData("botsymbol");
         sys.sendHtmlMain(helpers.bot(bots.main) + "<b>" + helpers.user(name) + " changed the bot symbol to " + helpers.escapehtml(command[1]) + "!</b>");
     }
     
@@ -547,7 +549,7 @@ admincommands = {
             return;
         }
         botsymbolcolor = command[1];
-        sys.write("data/botsymbolcolor.txt", botsymbolcolor);
+        helpers.saveData("botsymbolcolor");
         sys.sendHtmlMain(helpers.bot(bots.main) + "<b>" + helpers.user(name) + " changed the bot symbol " + command[0].slice(6) + " to " + helpers.escapehtml(command[1]) + "!</b>");
     }
     

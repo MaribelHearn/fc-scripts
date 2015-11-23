@@ -32,22 +32,20 @@ helpers = {
         sys.write(DATA_FOLDER + "bordercolor.txt", "#00008B");
         sys.write(DATA_FOLDER + "servertopiccolor.txt", "#FF0000");
         sys.write(DATA_FOLDER + "channeltopiccolor.txt", "#FFA500");
-        sys.write(DATA_FOLDER + "welcomemsg.txt", "Please welcome ~Player~ to ~Server~!");
-        sys.write(DATA_FOLDER + "channelwelcomemsg.txt", "Please welcome ~Player~ to ~Channel~!");
-        sys.write(DATA_FOLDER + "nopermissionmsg.txt", "Can't let you do that, Star ~Player~!");
+        sys.write(DATA_FOLDER + "welcomemessage.txt", "Please welcome ~Player~ to ~Server~!");
+        sys.write(DATA_FOLDER + "channelwelcomemessage.txt", "Please welcome ~Player~ to ~Channel~!");
+        sys.write(DATA_FOLDER + "nopermissionmessage.txt", "Can't let you do that, Star ~Player~!");
         
         // Arrays
         sys.write(DATA_FOLDER + "allowed.txt", '["127.0.0.1"]');
         sys.write(DATA_FOLDER + "cmdcolors.txt", '["#4169E1","#008000","#FF0000","#FFA500","#FFD700","#0000FF"]');
-        sys.write(DATA_FOLDER + "exceptions.txt", '["cofagrigus"]');
+        sys.write(DATA_FOLDER + "exceptions.txt", "[]");
         sys.write(DATA_FOLDER + "permchannels.txt", '["Watch","Auth Channel","Owner Channel"]');
         sys.write(DATA_FOLDER + "allowedrange.txt", '["192.168"]');
         sys.write(DATA_FOLDER + "namestounban.txt", "[]");
-        sys.write(DATA_FOLDER + "silentcmds.txt", '["future","spoiler","seval","sseval","skick",' +
+        sys.write(DATA_FOLDER + "silentcommands.txt", '["future","spoiler","seval","sseval","skick",' +
         '"invisibleowner","invisible","invis","silentupdate","silenteval","secretsilenteval","silentkick","supdate","silentupdateplugin", "supdateplugin"]');
-        sys.write(DATA_FOLDER + "nameblocklist.txt", '["fuck","bitch","gay","fag","sex","condom",' +
-        '"vagina","dildo","vibrator","orgasm","cunt","cock","dick","asshole","blow","slut","pussy","rape","penis",' +
-        '"horny","intercourse","nigger","nigga","shit","cum","bastard","anus","porn","fap","hitler",":","masturbat","rapist"]');
+        sys.write(DATA_FOLDER + "nameblocklist.txt", "[]");
         sys.write(DATA_FOLDER + "proxylist.txt", sys.read("proxy_list.txt"));
         sys.write(DATA_FOLDER + "bansites.txt", sys.read("bansites.txt"));
         sys.rm("proxy_list.txt");
@@ -68,18 +66,18 @@ helpers = {
         sys.write(DATA_FOLDER + "timezone.txt", "{}");
         sys.write(DATA_FOLDER + "cityname.txt", "{}");
         sys.write(DATA_FOLDER + "versions.txt", "{}");
-        sys.write(DATA_FOLDER + "memberlist.txt", "{}");
-        sys.write(DATA_FOLDER + "banmsg.txt", "{}");
-        sys.write(DATA_FOLDER + "os.txt", "{}");
-        sys.write(DATA_FOLDER + "kickmsg.txt", "{}");
-        sys.write(DATA_FOLDER + "mutemsg.txt", "{}");
+        sys.write(DATA_FOLDER + "members.txt", "{}");
+        sys.write(DATA_FOLDER + "banmessages.txt", "{}");
+        sys.write(DATA_FOLDER + "operatingsystem.txt", "{}");
+        sys.write(DATA_FOLDER + "kickmessages.txt", "{}");
+        sys.write(DATA_FOLDER + "mutemessages.txt", "{}");
         sys.write(DATA_FOLDER + "authtitles.txt", "{}");
         sys.write(DATA_FOLDER + "megabanlist.txt", "{}");
         sys.write(DATA_FOLDER + "gigabanlist.txt", "{}");
         sys.write(DATA_FOLDER + "countryname.txt", "{}");
         sys.write(DATA_FOLDER + "rangebanlist.txt", "{}");
-        sys.write(DATA_FOLDER + "selfkickmsg.txt", "{}");
-        sys.write(DATA_FOLDER + "rangebanmsg.txt", "{}");
+        sys.write(DATA_FOLDER + "selfkickmessages.txt", "{}");
+        sys.write(DATA_FOLDER + "rangebanmessages.txt", "{}");
         
         // Plugins
         var permchannels = JSON.parse(sys.read(DATA_FOLDER + "permchannels.txt"));
@@ -105,8 +103,28 @@ helpers = {
     
     ,
     
-    saveDataFile: function (dataFile) {
-        var data = (typeof(global[dataFile]) == "object" ? JSON.stringify(global[dataFile]) : global[dataFile]);
+    readData: function (dataFile) {
+        return sys.read(DATA_FOLDER + dataFile + ".txt");
+    }
+    
+    ,
+    
+    readNumber: function (dataFile) {
+        return parseInt(this.readData(dataFile));
+    }
+    
+    ,
+    
+    readObject: function (dataFile) {
+        return JSON.parse(this.readData(dataFile));
+    }
+    
+    ,
+    
+    saveData: function (dataFile) {
+        var data;
+        dataFile = dataFile.toLowerCase();
+        data = (typeof(global[dataFile]) == "object" ? JSON.stringify(global[dataFile]) : global[dataFile]);
         sys.write(DATA_FOLDER + dataFile + ".txt", data);
     }
     
@@ -492,7 +510,7 @@ helpers = {
     ,
     
     countryRetrievalUrl: function (ip) {
-        return "http://api.ipinfodb.com/v3/ip-city/?key=" + API + "&ip=" + ip + "&format=json";
+        return "http://api.ipinfodb.com/v3/ip-city/?key=" + API_KEY + "&ip=" + ip + "&format=json";
     }
     
     ,
@@ -777,8 +795,8 @@ helpers = {
     ,
     
     bannedcharacters: function (message, lower) {
-        for (var i in blocklist) {
-            if (message.indexOf(blocklist[i]) != -1) {
+        for (var i in bansites) {
+            if (message.indexOf(bansites[i]) != -1) {
                 return true;
             }
         }

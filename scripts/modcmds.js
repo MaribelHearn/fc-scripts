@@ -265,7 +265,7 @@ modcommands = {
         mutelist[lower].starttime = time + " " + unit;
         var date = helpers.date(new Date());
         mutelist[lower].date = date;
-        sys.write("data/mutelist.txt", JSON.stringify(mutelist));
+        helpers.saveData("mutelist");
         if (members[lower]) {
             trgtname = members[lower];
         }
@@ -307,7 +307,7 @@ modcommands = {
             }
             if (sys.dbIp(index) == trgtip) {
                 delete mutelist[index];
-                sys.write("data/mutelist.txt", JSON.stringify(mutelist));
+            helpers.saveData("mutelist");
             }
         }
         if (members[trgtname]) {
@@ -329,7 +329,7 @@ modcommands = {
             reason = "Unknown";
         }
         mutelist[lower].reason = reason;
-        sys.write("data/mutelist.txt", JSON.stringify(mutelist));
+        helpers.saveData("mutelist");
         if (members[lower])lower = members[lower];
         sys.sendHtmlMain(helpers.bot(bots.mute) + name + " has changed the mute reason of " + lower + " to '" + reason + "'!");
     }
@@ -379,7 +379,7 @@ modcommands = {
     
     clearmutelist: function (src, channel, command) {
         mutelist = {};
-        sys.write("data/mutelist.txt", "{}");
+        helpers.saveData("mutelist");
         sys.sendHtmlMain(helpers.bot(bots.mute) + "The mute list has been cleared by " + sys.name(src) + "!");
     }
     
@@ -705,7 +705,7 @@ modcommands = {
             helpers.starfox(src, channel, command, bots.command, "Error 400, you can't recall " + player + "'s data because they don't exist in the database!");
             return;
         }
-        if (API === "") {
+        if (API_KEY === "") {
             helpers.starfox(src, channel, command, bots.command, "Error 404, API key not found. See the readme file for help.");
             return;
         }
@@ -715,9 +715,9 @@ modcommands = {
             countryname[player] = helpers.countrydata(resp.countryName);
             cityname[player] = helpers.citydata(resp.cityName);
             timezone[player] = helpers.timezonedata(resp.countryName, resp.timeZone);
-            sys.write("data/countryname.txt", JSON.stringify(countryname));
-            sys.write("data/cityname.txt", JSON.stringify(cityname));
-            sys.write("data/timezone.txt", JSON.stringify(timezone));
+            helpers.saveData("countryname");
+            helpers.saveData("cityname");
+            helpers.saveData("timezone");
             if (members[player]) {
                 player = members[player];
             }
@@ -727,9 +727,9 @@ modcommands = {
                     delete countryname[player.toLowerCase()];
                     delete cityname[player.toLowerCase()];
                     delete timezone[player.toLowerCase()];
-                    sys.write("data/countryname.txt", JSON.stringify(countryname));
-                    sys.write("data/cityname.txt", JSON.stringify(cityname));
-                    sys.write("data/timezone.txt", JSON.stringify(timezone));
+                    helpers.saveData("countryname");
+                    helpers.saveData("cityname");
+                    helpers.saveData("timezone");
                     sys.sendHtmlMessage(src, helpers.bot(bots.command) + player + "'s country and time zone data has been deleted.", channel);
                 }, 60000, 0);
             }
@@ -1174,19 +1174,19 @@ modcommands = {
                 if (helpers.isInArray(lower, regchannels[index].mods)) {
                     regchannels[index].mods.splice(regchannels[index].mods.indexOf(lower), 1);
                     regchannels[index].mods.push(player);
-                    sys.write("data/regchannels.txt", JSON.stringify(regchannels));
+                    helpers.saveData("regchannels");
                 }
             } else if (auth == 2) {
                 if (helpers.isInArray(lower, regchannels[index].admins)) {
                     regchannels[index].admins.splice(regchannels[index].admins.indexOf(lower), 1);
                     regchannels[index].admins.push(player);
-                    sys.write("data/regchannels.txt", JSON.stringify(regchannels));
+                    helpers.saveData("regchannels");
                 }
             } else {
                 if (helpers.isInArray(lower, regchannels[index].owners)) {
                     regchannels[index].owners.splice(regchannels[index].owners.indexOf(lower), 1);
                     regchannels[index].owners.push(player);
-                    sys.write("data/regchannels.txt", JSON.stringify(regchannels));
+                    helpers.saveData("regchannels");
                 }
             }
         }
@@ -1230,7 +1230,7 @@ modcommands = {
                 return;
             }
             authtitles[players[src].name.toLowerCase()] = command[1];
-            sys.write("data/authtitles.txt", JSON.stringify(authtitles));
+            helpers.saveData("authtitles");
             sys.sendHtmlAll(helpers.bot(bots.command) + "<b>" + helpers.user(sys.name(src)) + " changed their auth title to " + helpers.arg(command[1]) + ".</b>", channel);
         } else {
             player = command[1].toLowerCase();
@@ -1243,7 +1243,7 @@ modcommands = {
                 return;
             }
             authtitles[player] = command[2];
-            sys.write("data/authtitles.txt", JSON.stringify(authtitles));
+            helpers.saveData("authtitles");
             if (members[player])player = members[player];
             sys.sendHtmlAll(helpers.bot(bots.command) + "<b>" + helpers.user(sys.name(src)) + " changed " + helpers.arg(player) + "'s auth title to " + helpers.arg2(command[2]) + ".</b>", channel);
         }
@@ -1321,7 +1321,7 @@ modcommands = {
             return;
         }
         bigtexts[helpers.removespaces(lower)] = ["bigtext", text, title, bot, color, size];
-        sys.write("data/bigtexts.txt", JSON.stringify(bigtexts));
+        helpers.saveData("bigtexts");
         sys.sendHtmlAll(helpers.bot(bots.command) + name + " has added a custom bigtext command called '" + title + "'!", channel);
     }
     
@@ -1341,7 +1341,7 @@ modcommands = {
         title = bigtexts[lower][2];
         sys.sendHtmlAll(helpers.bot(bots.command) + name + " has removed the custom bigtext command '" + title + "'!", channel);
         delete bigtexts[lower];
-        sys.write("data/bigtexts.txt", JSON.stringify(bigtexts));
+        helpers.saveData("bigtexts");
     }
     
     ,
@@ -1403,7 +1403,7 @@ modcommands = {
             return;
         }
         selfkickmessages[lower] = message;
-        sys.write("data/selfkickmsg.txt", JSON.stringify(selfkickmessages));
+        helpers.saveData("selfkickmessages");
         sys.sendHtmlMessage(src, helpers.bot(bots.kick) + "Your self kick message has been changed successfully.", channel);
     }
     
@@ -1417,7 +1417,7 @@ modcommands = {
             return;
         }
         kickmessages[lower] = message;
-        sys.write("data/kickmsg.txt", JSON.stringify(kickmessages));
+        helpers.saveData("kickmessages");
         sys.sendHtmlMessage(src, helpers.bot(bots.kick) + "Your kick message has been changed successfully.", channel);
     }
     
@@ -1431,7 +1431,7 @@ modcommands = {
             return;
         }
         mutemessages[lower] = message;
-        sys.write("data/mutemsg.txt", JSON.stringify(mutemessages));
+        helpers.saveData("mutemessages");
         sys.sendHtmlMessage(src, helpers.bot(bots.mute) + "Your mute message has been changed successfully.", channel);
     }
     
@@ -1445,19 +1445,19 @@ modcommands = {
         }
         if (message == "selfkick") {
             delete selfkickmessages[lower];
-            sys.write("data/selfkickmsg.txt", JSON.stringify(kickmessages));
+            helpers.saveData("selfkickmessages");
         } else if (message == "kick") {
             delete kickmessages[lower];
-            sys.write("data/kickmsg.txt", JSON.stringify(kickmessages));
+            helpers.saveData("kickmessages");
         } else if (message == "mute") {
             delete mutemessages[lower];
-            sys.write("data/mutemsg.txt", JSON.stringify(mutemessages));
+            helpers.saveData("mutemessages");
         } else if (message == "ban") {
             delete banmessages[lower];
-            sys.write("data/banmsg.txt", JSON.stringify(banmessages));
+            helpers.saveData("banmessages");
         } else if (message == "rangeban") {
             delete rangebanmessages[lower];
-            sys.write("data/rangebanmsg.txt", JSON.stringify(rangebanmessages));
+            helpers.saveData("rangebanmessages");
         } else {
             helpers.starfox(src, channel, command, bots.command, "Error 403, invalid message.");
             return;
@@ -1474,11 +1474,11 @@ modcommands = {
         delete mutemessages[lower];
         delete banmessages[lower];
         delete rangebanmessages[lower];
-        sys.write("data/selfkickmsg.txt", JSON.stringify(kickmessages));
-        sys.write("data/kickmsg.txt", JSON.stringify(kickmessages));
-        sys.write("data/mutemsg.txt", JSON.stringify(mutemessages));
-        sys.write("data/banmsg.txt", JSON.stringify(banmessages));
-        sys.write("data/rangebanmsg.txt", JSON.stringify(rangebanmessages));
+        helpers.saveData("selfkickmessages");
+        helpers.saveData("kickmessages");
+        helpers.saveData("mutemessages");
+        helpers.saveData("banmessages");
+        helpers.saveData("rangebanmessages");
         sys.sendHtmlMessage(src, helpers.bot(bots.main) + "Your messages have been reset.", channel);
     }
 };

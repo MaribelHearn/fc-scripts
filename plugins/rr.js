@@ -45,7 +45,7 @@ rrcommands = {
             return;
         }
         rr[lower].bullets++;
-        helpers.saveDataFile("rr");
+        helpers.saveData("rr");
         sys.sendHtmlAll(helpers.bot(bots.rr) + name + " has loaded a bullet into their revolver!", rrchannel);
     }
     
@@ -62,7 +62,7 @@ rrcommands = {
             return;
         }
         rr[lower].bullets--;
-        helpers.saveDataFile("rr");
+        helpers.saveData("rr");
         sys.sendHtmlAll(helpers.bot(bots.rr) + name + " has unloaded a bullet from their revolver!", rrchannel);
     }
     
@@ -93,7 +93,7 @@ rrcommands = {
             }
             sys.sendHtmlAll(helpers.bot(bots.rr) + name + " has spun the cylinder and pulled the trigger... nothing happened! Whew!", rrchannel);
         }
-        helpers.saveDataFile("rr");
+        helpers.saveData("rr");
     }
     
     ,
@@ -137,7 +137,7 @@ rrcommands = {
             return;
         }
         delete rr[lower];
-        helpers.saveDataFile("rr");
+        helpers.saveData("rr");
         sys.sendHtmlMessage(src, helpers.bot(bots.rr) + "Your Russian Roulette data has been reset.", rrchannel);
     }
 };
