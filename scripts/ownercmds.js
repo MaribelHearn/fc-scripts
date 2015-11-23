@@ -560,6 +560,8 @@ ownercommands = {
                     }
                 }
             }
+            sys.exec(SCRIPTS_FOLDER + "main.js");
+            print("Script Check: OK");
             sys.sendHtmlMessage(src, helpers.bot(bots.script) + "The server scripts have been reloaded successfully.", channel);
         } catch (e) {
             sys.sendHtmlMessage(src, helpers.bot(bots.script) + "An error occurred while reloading the scripts: " + e, channel);
@@ -1784,9 +1786,9 @@ ownercommands = {
         + "<br>"
         + "Syntax for the messages:<br>"
         + "<br>"
-        + "<b>~Player~</b> will be replaced by someone's username. (for all messages)<br>"
-        + "<b>~Server~</b> will be replaced by the server name. (welcome message only)<br>"
-        + "<b>~Channel~</b> will be replaced by the channel name. (channel welcome message only)<br>"
+        + "<b>~Player~</b> will be replaced by someone's username.<br>"
+        + "<b>~Server~</b> will be replaced by the server name.<br>"
+        + "<b>~Channel~</b> will be replaced by the channel name.<br>"
         + "<br>"
         + "Use <b>" + helpers.user("/layout") + "</b> to toggle the layout of certain messages between the old one and the new one.<br>"
         + "Use <b>" + helpers.user("/bordercolor ") + helpers.arg("color") + "</b> to change the border color to <b>color</b>. Also /bordercolour.<br>"
