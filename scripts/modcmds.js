@@ -356,10 +356,10 @@ modcommands = {
             mutelistmessage += "</tt>";
         } else {
             mutelistmessage += "<style>table {border-width: 1px; border-style: solid; border-color: #000000;}</style>"
-            + "<table cellpadding='2' cellspacing='0'><thead><tr style='background-color: #1E90FF;'>"
+            + "<table cellpadding='2' cellspacing='0'><thead><tr style='background-color: " + listcolors.mute + ";'>"
             + "<th>Name</th><th>IP Address</th><th>Muter</th><th>Reason</th><th>Muted for</th><th>Time left</th><th>Date of muting</th></tr></thead><tbody>";
             for (var i in names) {
-                mutelistmessage += "<tr style='background-color: #ADD8E6;'>"
+                mutelistmessage += "<tr style='background-color: " + Qt.lighter(listcolors.mute, 1.55) + ";'>"
                 + "<td>" + names[i] + "</td>"
                 + "<td>" + ips[i] + "</td>"
                 + "<td>" + muters[i] + "</td>"
@@ -405,10 +405,10 @@ modcommands = {
             banlistmessage += "</tt>";
         } else {
             banlistmessage += "<style>table {border-width: 1px; border-style: solid; border-color: #000000;}</style>"
-            + "<table cellpadding='2' cellspacing='0'><thead><tr style='background-color: #FF6900;'>"
+            + "<table cellpadding='2' cellspacing='0'><thead><tr style='background-color: " + listcolors.ban + ";'>"
             + "<th>Name</th><th>IP Address</th><th>Banner</th><th>Reason</th><th>Banned for</th><th>Time left</th><th>Date of banning</th></tr></thead><tbody>";
             for (var i in names) {
-                banlistmessage += "<tr style='background-color: #FFA500;'>"
+                banlistmessage += "<tr style='background-color: " + Qt.lighter(listcolors.ban, 1.55) + ";'>"
                 + "<td>" + names[i] + "</td>"
                 + "<td>" + ips[i] + "</td>"
                 + "<td>" + banners[i] + "</td>"
@@ -444,10 +444,10 @@ modcommands = {
             rangebanlistmessage += "</tt>";
         } else {
             rangebanlistmessage += "<style>table {border-width: 1px; border-style: solid; border-color: #000000;}</style>"
-            + "<table cellpadding='2' cellspacing='0'><thead><tr style='background-color: #008000;'>"
+            + "<table cellpadding='2' cellspacing='0'><thead><tr style='background-color: " + listcolors.rangeban + ";'>"
             + "<th>Name</th><th>IP Range</th><th>Banner</th><th>Reason</th><th>Date of banning</th></tr></thead><tbody>";
             for (var i in names) {
-                rangebanlistmessage += "<tr style='background-color: #7FFF00;'>"
+                rangebanlistmessage += "<tr style='background-color: " + Qt.lighter(listcolors.rangeban, 1.55) + ";'>"
                 + "<td>" + names[i] + "</td>"
                 + "<td>" + ranges[i] + "</td>"
                 + "<td>" + banners[i] + "</td>"
@@ -480,10 +480,10 @@ modcommands = {
             megabanlistmessage += "</tt>";
         } else {
             megabanlistmessage += "<style>table {border-width: 1px; border-style: solid; border-color: #000000;}</style>"
-            + "<table cellpadding='2' cellspacing='0'><thead><tr style='background-color: #800080;'>"
+            + "<table cellpadding='2' cellspacing='0'><thead><tr style='background-color: " + listcolors.megaban + ";'>"
             + "<th>Name</th><th>Banner</th><th>Reason</th><th>Date of banning</th></tr></thead><tbody>";
             for (var i in names) {
-                megabanlistmessage += "<tr style='background-color: #FF00FF;'>"
+                megabanlistmessage += "<tr style='background-color: " + Qt.lighter(listcolors.megaban, 1.55) + ";'>"
                 + "<td>" + names[i] + "</td>"
                 + "<td>" + banners[i] + "</td>"
                 + "<td>" + reasons[i] + "</td>"
@@ -516,10 +516,10 @@ modcommands = {
             gigabanlistmessage += "</tt>";
         } else {
             gigabanlistmessage += "<style>table {border-width: 1px; border-style: solid; border-color: #000000;}</style>"
-            + "<table cellpadding='2' cellspacing='0'><thead><tr style='background-color: #AA0000;'>"
+            + "<table cellpadding='2' cellspacing='0'><thead><tr style='background-color: " + listcolors.gigaban + ";'>"
             + "<th>Name</th><th>Banner</th><th>Reason</th><th>Pseudo</th><th>Date of banning</th></tr></thead><tbody>";
             for (var i in names) {
-                gigabanlistmessage += "<tr style='background-color: #FF0000;'>"
+                gigabanlistmessage += "<tr style='background-color: " + Qt.lighter(listcolors.gigaban, 1.55) + ";'>"
                 + "<td>" + names[i] + "</td>"
                 + "<td>" + banners[i] + "</td>"
                 + "<td>" + reasons[i] + "</td>"
