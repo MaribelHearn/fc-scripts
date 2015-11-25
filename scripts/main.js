@@ -970,7 +970,7 @@
             if (authtitles[lower] === undefined) {
                 authtitles[lower] = AUTH_NAME[sys.auth(src)];
             }
-            authtitle = authtitles[lower];
+            authtitle = authtitles[lower] + ' ';
         }
         /**
             -------------
