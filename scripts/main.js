@@ -203,6 +203,7 @@
     cityname = helpers.readObject("cityname");
     versions = helpers.readObject("versions");
     members = helpers.readObject("members");
+    listcolors = helpers.readObject("listcolors");
     banmessages = helpers.readObject("banmessages");
     operatingsystem = helpers.readObject("operatingsystem");
     kickmessages = helpers.readObject("kickmessages");
@@ -920,10 +921,11 @@
             Leave Message
             -------------
         **/
-        var cauth = helpers.cauthname(players[src].name.toLowerCase(), channel), channelname = sys.channel(channel), cookie = sys.cookie(src) ? sys.cookie(src) : "none", id = sys.uniqueId(src) ? sys.uniqueId(src).id : "none";
+        var name = sys.name(src), cauth = helpers.cauthname(players[src].name.toLowerCase(), channel), channelname = sys.channel(channel);
+        var cookie = sys.cookie(src) ? sys.cookie(src) : "none", id = sys.uniqueId(src) ? sys.uniqueId(src).id : "none";
         if (helpers.isLoaded("party.js")) {
             if (channel == partychannel && partyMode == "nightclub") {
-                sys.sendHtmlAuth(helpers.bot(bots.spy) + "[Server] <b><font color='" + helpers.color(src) + "'>" + sys.name(src) + "</font></b> has left the channel " + helpers.channelLink(channelname) + ".");
+                sys.sendHtmlAuth(helpers.bot(bots.spy) + "[Server] <b><font color='" + helpers.color(src) + "'>" + name + "</font></b> has left the channel " + helpers.channelLink(channelname) + ".");
                 return;
             }
         }
@@ -939,7 +941,7 @@
                     sys.sendHtmlAll("<timestamp/><b>~" + helpers.rainbow(name) + " has left " + channelname + "~</b>", channel);
                 }
             }
-            sys.sendHtmlAuth(helpers.bot(bots.spy) + "[Server] <b><font color='" + helpers.color(src) + "'>" + sys.name(src) + "</font></b> has left the channel " + helpers.channelLink(channelname) + ".");
+            sys.sendHtmlAuth(helpers.bot(bots.spy) + "[Server] <b><font color='" + helpers.color(src) + "'>" + name + "</font></b> has left the channel " + helpers.channelLink(channelname) + ".");
         }
     }
 
@@ -1005,14 +1007,13 @@
             Moody Check
             -----------
         **/
-        var i = 0, moody = 141;
-        while (i < 6) {
+        var moody = 141;
+        for (var i = 0; i < 6; i++) {
             if (sys.teamPokeAbility(src, team, i) == moody) {
                 helpers.starfox(src, 0, undefined, bots.tour, "Error 403, you may not use the Moody ability!", team);
                 sys.changeTier(src, team, "Challenge Cup");
                 break;
             }
-            i++;
         }
     }
 
@@ -1068,15 +1069,14 @@
             Moody Check
             -----------
         **/
-        var i = 0, moody = 141;
-        while (i < 6) {
+        var moody = 141;
+        for (var i = 0; i < 6; i++) {
             if (sys.teamPokeAbility(src, team, i) == moody) {
                 helpers.starfox(src, 0, undefined, bots.tour, "Error 403, you may not use the Moody ability!", team);
                 sys.changeTier(src, team, "Challenge Cup");
                 sys.stopEvent();
                 break;
             }
-            i++;
         }
         /**
             -----------------

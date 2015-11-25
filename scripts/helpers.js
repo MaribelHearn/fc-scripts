@@ -63,6 +63,7 @@ helpers = {
         '"priv":"PrivacyBot","reverse":"ReverseBot","rr":"RussiaBot","russia":"RussiaBot","script":"ScriptBot","silence":"SilenceBot",' +
         '"spy":"WatchBot","starfox":"Wolf","status":"StatusBot","tour":"TourBot","topic":"TopicBot","warn":"WarnBot","welcome":"WelcomeBot",' +
         '"roulette": "RouletteBot"}');
+        sys.write(DATA_FOLDER + "listcolors.txt", '{"mute":"#1E90FF","ban":"#FF6900","rangeban":"#008000","megaban":"#800080","gigaban":"#AA0000"}');
         sys.write(DATA_FOLDER + "regchannels.txt", "{}");
         sys.write(DATA_FOLDER + "iplist.txt", "{}");
         sys.write(DATA_FOLDER + "banlist.txt", "{}");

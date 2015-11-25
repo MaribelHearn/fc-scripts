@@ -24,6 +24,7 @@ ownercommands = {
         + "<b>" + helpers.userl("/silentsettings") + "</b>: displays silent settings.<br>"
         + "<b>" + helpers.userl("/filtersettings") + "</b>: displays name filtering settings.<br>"
         + "<b>" + helpers.userl("/customsettings") + "</b>: displays customisation settings.<br>"
+        + "<b>" + helpers.userl("/listsettings") + "</b>: displays mute and banlist customisation settings.<br>"
         + "<b>" + helpers.userl("/channelsettings") + "</b>: displays channel settings.<br>"
         + "<b>" + helpers.userl("/miscellaneous") + "</b>: displays other commands.<br>"
         + "<br><timestamp/><br>"
@@ -1988,6 +1989,58 @@ ownercommands = {
         nopermissionmsg = message;
         helpers.saveData("nopermissionmessage");
         sys.sendHtmlMessage(src, helpers.bot(bots.main) + "The no permission message has been changed successfully.", channel);
+    }
+    
+    ,
+    
+    /**
+        -------------
+        List Settings
+        -------------
+    **/
+    listsettings: function (src, channel, command) {
+        var commandsmessage = border
+        + "<h2>Owner Commands ~ List Settings</h2>"
+        + "<br>"
+        + "Your current list colorings:<br>"
+        + "<br>"
+        + "<b>Mute list:</b> " + listcolors.mute + "<br>"
+        + "<b>Ban list:</b> " + listcolors.ban + "<br>"
+        + "<b>Range ban list:</b> " + listcolors.rangeban + "<br>"
+        + "<b>Mega ban list:</b> " + listcolors.megaban + "<br>"
+        + "<b>Giga ban list:</b> " + listcolors.gigaban + "<br>"
+        + "<br>"
+        + "Use <b>" + helpers.user("/listcolor ") + helpers.arg("list") + helpers.arg2("*color") + "</b> to change the table header color of <b>list</b> to <b>color</b>.<br>"
+        + "The list name is without 'list'; e.g. mute, ban. The background color will be a color that is about 1.5 times as light. Also /listcolour.<br>"
+        + "<br><timestamp/><br>"
+        + border2;
+        sys.sendHtmlMessage(src, commandsmessage, channel);
+    }
+    
+    ,
+    
+    listcolor: function (src, channel, command) {
+        var list = command[1], color;
+        if (!list) {
+            helpers.starfox(src, channel, command, bots.command, "Error 404, list not found.");
+            return;
+        }
+        if (!helpers.isInArray(list, Object.keys(listcolors))) {
+            helpers.starfox(src, channel, command, bots.command, "Error 403, invalid list.");
+            return;
+        }
+        color = command[2];
+        if (!color) {
+            helpers.starfox(src, channel, command, bots.command, "Error 404, " + command[0].slice(4) + " not found.");
+            return;
+        }
+        if (!sys.validColor(color)) {
+            helpers.starfox(src, channel, command, bots.command, "Error 403, invalid " + command[0].slice(4) + ".");
+            return;
+        }
+        listcolors[list] = sys.hexColor(color);
+        helpers.saveData("listcolors");
+        sys.sendHtmlMessage(src, helpers.bot(bots.main) + "The " + command[0].slice(4) + " of the " + list + " list has been changed to " + color + ".", channel);
     }
     
     ,
