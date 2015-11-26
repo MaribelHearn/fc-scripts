@@ -484,7 +484,7 @@ usercommands = {
     ,
     
     scriptinfo: function (src, channel, command) {
-        var scriptmessage = border + "<h2>Script Info</h2>", scriptcontent = [], length;
+        var scriptmessage = border + "<h2>Script Info</h2><br>", scriptcontent = [], length;
         scriptcontent.push(sys.read("scripts.js"));
         scriptcontent.push(sys.read(SCRIPTS_FOLDER + "main.js"));
         scriptcontent.push(sys.read(SCRIPTS_FOLDER + "base64.js"));
@@ -517,8 +517,11 @@ usercommands = {
         "<b>Characters:</b> " + scriptcontent.length + "<br>" +
         "<b>Lines:</b> " + scriptcontent.split(/\u000A/g).length + "<br>" +
         "<h3>Contribution</h3><br>" +
-        "Contributed to by: General Thor<br>";
-        scriptmessage += "<br><timestamp/><br>" + border2;
+        "Contributed to by: General Thor<br>" +
+        "<h3>Credit to</h3><br>" +
+        "Lutra (main inspiration and base behind the scripts, tournaments)<br>" +
+        "Pokémon Online server scripts (pokemon database methods, idea of safari)<br>" +
+        "<br><timestamp/><br>" + border2;
         sys.sendHtmlMessage(src, scriptmessage, channel);
     }
     
