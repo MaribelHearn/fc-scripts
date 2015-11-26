@@ -57,6 +57,19 @@ userCommand = function (src, channel, command, lower, name, auth) {
     }
 };
 
+safariCommand = function (src, channel, command, lower, name, auth) {
+    if (helpers.isLoaded("safari.js") && safaricommands[lower] !== undefined) {
+        if (channel != safarichannel) {
+            helpers.starfox(src, channel, command, bots.roulette, "Error 403, this command is meant to be used in the " + helpers.channelLink(permchannels[6]) + " channel.");
+            return;
+        }
+        if (helpers.isMutable(safaricommands[lower]) && mutedOrSilenced(src, channel, command, name, auth)) {
+            return;
+        }
+        safaricommands[lower](src, channel, command);
+    }
+};
+
 rouletteCommand = function (src, channel, command, lower, name, auth) {
     if (helpers.isLoaded("roulette.js") && roulettecommands[lower] !== undefined) {
         if (channel != roulettechannel) {
@@ -195,6 +208,7 @@ ownerCommand = function (src, channel, command, lower, name, auth) {
 executeCommand = function (src, channel, command, name, lower, auth, cauth) {
     userCommand(src, channel, command, lower, name, auth);
     bigtextCommand(src, channel, command, lower, name, auth);
+    safariCommand(src, channel, command, lower, name, auth);
     rouletteCommand(src, channel, command, lower, name, auth);
     russianRouletteCommand(src, channel, command, lower, name, auth);
     partyCommand(src, channel, command, lower, name, auth);

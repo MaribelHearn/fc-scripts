@@ -312,7 +312,7 @@ usercommands = {
     ,
     
     channels: function (src, channel, command) {
-        var channelList = sys.channelIds().sort(), total = channelList.length, names = [], ids = [], descriptions = [], channelmessage;
+        var channelList = sys.channelIds().sort(function(a, b){return a - b;}), total = channelList.length, names = [], ids = [], descriptions = [], channelmessage;
         for (var i in channelList) {
             names.push(sys.channel(channelList[i]));
             ids.push(sys.channelId(names[i]));
@@ -330,6 +330,8 @@ usercommands = {
                 descriptions.push("To play Russian Roulette.");
             } else if (names[i] == permchannels[5]) {
                 descriptions.push("To play Roulette.");
+            } else if (names[i] == permchannels[6]) {
+                descriptions.push("To play Safari.");
             } else {
                 descriptions.push("A user-created channel.");
             }

@@ -53,7 +53,7 @@
     EXPL5 = "Taking the rules too literally is no use when you know you are supposed to be punished anyway. Don't try to find loopholes in the rules, it will result in even more punishment.<br>";
     AUTH_NAME = ["User", "Moderator", "Administrator", "Owner"];
     SCRIPT_MODULES = ["usercmds.js", "modcmds.js", "admincmds.js", "ownercmds.js", "cusercmds.js", "cmodcmds.js", "cadmincmds.js", "cownercmds.js", "helpers.js", "handler.js", "tierchecks.js", "base64.js"];
-    SCRIPT_PLUGINS = ["funcmds.js", "party.js", "roulette.js", "rr.js"];
+    SCRIPT_PLUGINS = ["funcmds.js", "party.js", "roulette.js", "rr.js", "safari.js"];
     SCRIPTS_FOLDER = "scripts/";
     PLUGINS_FOLDER = "plugins/";
     DATA_FOLDER = "data/";
@@ -133,8 +133,8 @@
     };
     sys.printStackTrace = function (message) {
         try {
-            var table = "<style type='text/css'>table {border-width: 1px; border-style: solid; border-color: #000;}</style>" +
-            "<table cellpadding=2 cellspacing=0><tr style='background-color: #b0b0b0;'><th>File</th><th>At line</th><th>Variables</th>";
+            var table = "<style>table {border-width: 1px; border-style: solid; border-color: #000000;}</style>" +
+            "<table cellpadding='2' cellspacing='0'><tr style='background-color: #B0B0B0;'><th>File</th><th>At line</th><th>Variables</th></tr>";
             var stackTrace = message.split("<global>")[0].replace(/at scripts/g, "<br>at scripts").split("<br>");
             var errorMessage = stackTrace[0], tmp, file, line, vars;
             stackTrace.splice(0, 1);
@@ -260,6 +260,47 @@
     bansites.splice(bansites.indexOf(""), 1);
     bansites.splice(bansites.lastIndexOf(""), 1);
     allcommands = helpers.allCommands();
+    if (permchannels.length == 7) {
+        if (!helpers.isLoaded("safari.js")) {
+            permchannels.splice(6, 1);
+        }
+    }
+    if (permchannels.length == 6) {
+        if (!helpers.isLoaded("roulette.js")) {
+            permchannels.splice(5, 1);
+        }
+    }
+    if (permchannels.length == 5) {
+        if (!helpers.isLoaded("rr.js")) {
+            permchannels.splice(4, 1);
+        }
+    }
+    if (permchannels.length == 4) {
+        if (!helpers.isLoaded("party.js")) {
+            permchannels.splice(3, 1);
+        }
+    }
+    if (permchannels.length == 3) {
+        if (helpers.isLoaded("party.js")) {
+            permchannels.push("Party");
+        }
+    }
+    if (permchannels.length == 4) {
+        if (helpers.isLoaded("rr.js")) {
+            permchannels.push("Russian Roulette");
+        }
+    }
+    if (permchannels.length == 5) {
+        if (helpers.isLoaded("roulette.js")) {
+            permchannels.push("Roulette");
+        }
+    }
+    if (permchannels.length == 6) {
+        if (helpers.isLoaded("safari.js")) {
+            permchannels.push("Safari");
+        }
+    }
+    helpers.saveData("permchannels");
     
     // Plugins
     if (helpers.isLoaded("party.js")) {
@@ -283,6 +324,14 @@
         helpers.setVariable("rouletteTime", sys.rand(ROULETTE_WAIT_MIN, ROULETTE_WAIT_MAX));
         helpers.setVariable("rouletteEvent", "");
         helpers.setVariable("rouletteStep", 0);
+    }
+    
+    if (helpers.isLoaded("safari.js")) {
+        STARTER_POKEMON = ["Bulbasaur", "Charmander", "Squirtle", "Chikorita", "Cyndaquil", "Totodile", "Treecko", "Torchic", "Mudkip",
+        "Turtwig", "Chimchar", "Piplup", "Snivy", "Tepig", "Oshawott", "Chespin", "Fennekin", "Froakie", "Pikachu", "Eevee"];
+        safari = sys.fileExists(DATA_FOLDER + "safari.txt") ? helpers.readObject("safari") : {};
+        helpers.setVariable("currentWild", "none");
+        helpers.setVariable("currentWildShiny", false);
     }
 }
 ).call(null);
@@ -353,6 +402,12 @@
                 sys.createChannel(permchannels[5]);
             }, time, 0);
         }
+        if (helpers.isLoaded("safari.js")) {
+            time += 500;
+            sys.setTimer(function () {
+                sys.createChannel(permchannels[6]);
+            }, time, 0);
+        }
         time += 500;
         sys.setTimer(function () {
             watch = sys.channelId(permchannels[0]);
@@ -366,6 +421,9 @@
             }
             if (helpers.isLoaded("roulette.js")) {
                 roulettechannel = sys.channelId(permchannels[5]);
+            }
+            if (helpers.isLoaded("safari.js")) {
+                safarichannel = sys.channelId(permchannels[6]);
             }
             print("The default channels have been created.");
             serverStarting = false;
@@ -966,11 +1024,9 @@
             Auth Title Check
             ----------------
         **/
-        if (auth >= 1 && auth <= 3) {
-            if (authtitles[lower] === undefined) {
-                authtitles[lower] = AUTH_NAME[sys.auth(src)];
-            }
-            authtitle = authtitles[lower] + ' ';
+        authtitle = (authtitles[lower] ? authtitles[lower] : AUTH_NAME[auth]) + " ";
+        if (auth === 0 || auth >= 4) {
+            authtitle = "";
         }
         /**
             -------------
