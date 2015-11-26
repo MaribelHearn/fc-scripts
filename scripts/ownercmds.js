@@ -2092,6 +2092,9 @@ ownercommands = {
         if (helpers.isLoaded("roulette.js")) {
             cownercommands.priv(src, sys.channelId(permchannels[5]), ["priv"]);
         }
+        if (helpers.isLoaded("safari.js")) {
+            cownercommands.priv(src, sys.channelId(permchannels[6]), ["priv"]);
+        }
         helpers.saveData("regchannels");
         sys.sendHtmlMessage(src, helpers.bot(bots.main) + "All permanent channels have been registered successfully and have been given their default settings.", channel);
     }

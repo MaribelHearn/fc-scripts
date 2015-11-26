@@ -60,7 +60,7 @@ helpers = {
         sys.write(DATA_FOLDER + "bots.txt", '{"attack":"AttackBot","armyof":"ArmyBot","auth":"AuthBot","ban":"BanBot","caps":"CapsBot","channel":"ChannelBot",' +
         '"clear":"ClearBot","command":"CommandBot","flood":"FloodBot","fun":"FunBot","gigaban":"GigabanBot","idle":"IdleBot","kick":"KickBot",' +
         '"main":"Bot","megaban":"MegabanBot","mute":"MuteBot","name":"NameBot","party":"PartyBot","pass":"PassBot",' +
-        '"priv":"PrivacyBot","reverse":"ReverseBot","rr":"RussiaBot","russia":"RussiaBot","script":"ScriptBot","silence":"SilenceBot",' +
+        '"priv":"PrivacyBot","reverse":"ReverseBot","rr":"RussiaBot","russia":"RussiaBot","safari":"SafariBot","script":"ScriptBot","silence":"SilenceBot",' +
         '"spy":"WatchBot","starfox":"Wolf","status":"StatusBot","tour":"TourBot","topic":"TopicBot","warn":"WarnBot","welcome":"WelcomeBot",' +
         '"roulette": "RouletteBot"}');
         sys.write(DATA_FOLDER + "listcolors.txt", '{"mute":"#1E90FF","ban":"#FF6900","rangeban":"#008000","megaban":"#800080","gigaban":"#AA0000"}');
@@ -103,6 +103,12 @@ helpers = {
         if (helpers.isLoaded("roulette.js")) {
             permchannels.push("Roulette");
             sys.write(DATA_FOLDER + "roulette.txt", "{}");
+            sys.write(DATA_FOLDER + "permchannels.txt", JSON.stringify(permchannels));
+        }
+        
+        if (helpers.isLoaded("safari.js")) {
+            permchannels.push("Safari");
+            sys.write(DATA_FOLDER + "safari.txt", "{}");
             sys.write(DATA_FOLDER + "permchannels.txt", JSON.stringify(permchannels));
         }
     }
@@ -1182,6 +1188,11 @@ helpers = {
         for (var i in cownercommands) {
             array.push(i);
         }
+        if (helpers.isLoaded("safari.js")) {
+            for (var i in safaricommands) {
+                array.push(i);
+            }
+        }
         if (helpers.isLoaded("roulette.js")) {
             for (var i in roulettecommands) {
                 array.push(i);
@@ -1826,8 +1837,14 @@ helpers = {
     
     ,
     
-    pokeImage: function (pokeNum) {
-        return "<img src='pokemon:" + pokeNum + "'>";
+    pokeImage: function (pokeNum, shine) {
+        return (shine ? "<img src='pokemon:" + pokeNum + "&shiny=true'>" : "<img src='pokemon:" + pokeNum + "'>");
+    }
+    
+    ,
+    
+    pokeIcon: function (pokeNum) {
+        return "<img src='icon:" + pokeNum + "'>";
     }
     
     ,
