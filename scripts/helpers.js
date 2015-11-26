@@ -1826,11 +1826,11 @@ helpers = {
             "#0000FF",
             "#008000",
             "#FFD700",
-            "#EE82EE",
+            "#FF00FF",
             "#00FFFF",
             "#00008B",
             "#000000",
-            "#FF00FF",
+            "#EE82EE",
             "#2E8B57",
         ][sys.pokeType1(pokeNum)]);
     }
