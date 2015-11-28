@@ -16,7 +16,7 @@ ownercommands = {
         + "<b>" + helpers.userl("/ownerjusticeoptions") + "</b>: displays owner justice options.<br>"
         + "<b>" + helpers.userl("/scriptoptions") + "</b>: displays script options.<br>"
         + "<b>" + helpers.userl("/banneroptions") + "</b>: displays banner and description options.<br>"
-        + "<b>" + helpers.userl("/authsettings") + "</b>: displays auth settings.<br>"
+        + "<b>" + helpers.userl("/authoptions") + "</b>: displays auth settings.<br>"
         + "<b>" + helpers.userl("/floodsettings") + "</b>: displays flooding settings.<br>"
         + "<b>" + helpers.userl("/whitelistsettings") + "</b>: displays whitelist settings.<br>"
         + "<b>" + helpers.userl("/antidossettings") + "</b>: displays anti DoS settings.<br>"
@@ -943,24 +943,21 @@ ownercommands = {
     ,
     
     /**
-        -------------
-        Auth Settings
-        -------------
+        ------------
+        Auth Options
+        ------------
     **/
-    authsettings: function (src, channel, command) {
+    authoptions: function (src, channel, command) {
         var commandsmessage = border
-        + "<h2>Owner Commands ~ Auth Settings</h2>"
+        + "<h2>Owner Commands ~ Auth Options</h2>"
         + "<br>"
-        + "The following players have auth:<br>"
-        + "<br>"
-        + sys.dbAuths().join(", ") + "<br>"
-        + "<br>"
-        + "Use <b>" + helpers.user("/user ") + helpers.arg("player") + "</b> to change <b>player</b>'s auth level to user.<br>"
-        + "Use <b>" + helpers.user("/moderator ") + helpers.arg("player") + "</b> to change <b>player</b>'s auth level to moderator. Also /mod.<br>"
-        + "Use <b>" + helpers.user("/administrator ") + helpers.arg("player") + "</b> to change <b>player</b>'s auth level to administrator. Also /admin.<br>"
-        + "Use <b>" + helpers.user("/owner ") + helpers.arg("player") + "</b>: to change <b>player</b>'s auth level to owner.<br>"
-        + "Use <b>" + helpers.user("/invisibleowner ") + helpers.arg("player") + helpers.arg2("*placement") + "</b>: to change <b>player</b>'s auth level to owner (invisible), "
+        + "<b>" + helpers.user("/user ") + helpers.arg("player") + "</b>: changes <b>player</b>'s auth level to user.<br>"
+        + "<b>" + helpers.user("/moderator ") + helpers.arg("player") + "</b>: changes <b>player</b>'s auth level to moderator. Also /mod.<br>"
+        + "<b>" + helpers.user("/administrator ") + helpers.arg("player") + "</b>: changes <b>player</b>'s auth level to administrator. Also /admin.<br>"
+        + "<b>" + helpers.user("/owner ") + helpers.arg("player") + "</b>: changes <b>player</b>'s auth level to owner.<br>"
+        + "<b>" + helpers.user("/invisibleowner ") + helpers.arg("player") + helpers.arg2("*placement") + "</b>: changes <b>player</b>'s auth level to owner (invisible), "
         + "placed together with auth level <b>placement</b> on the player list, placement being a number from 1 to 9. Also /invisible or /invis.<br>"
+        + "<b>" + helpers.user("/authlevels") + "</b>: displays all auth members with their auth levels in a neat table. Useful to check on invisible owners.<br>"
         + "<br><timestamp/><br>"
         + border2;
         sys.sendHtmlMessage(src, commandsmessage, channel);
@@ -1137,6 +1134,48 @@ ownercommands = {
     
     invis: function (src, channel, command) {
         this.invisibleowner(src, channel, command);
+    }
+    
+    ,
+    
+    authlevels: function (src, channel, command) {
+        var DISPLAY_USER = true, authmessage = border + "<h2>Auth Levels</h2><br>", auths = sys.dbAuths().sort(), index = 0, lower;
+        var authLevels = [], titles = [], names = [], lastLogins = [];
+        for (var i in auths) {
+            authLevels.push(sys.dbAuth(auths[i]));
+            names.push(auths[i]);
+            lower = names[index].toLowerCase();
+            titles.push(authtitles[lower] ? authtitles[lower] : '-');
+            lastLogins.push(helpers.formatLastOn(src, sys.dbLastOn(auths[i])));
+            if (members[lower]) {
+                names[index] = members[lower];
+            }
+            index++;
+        }
+        if (helpers.isAndroid(src)) {
+            authmessage += "<tt>";
+            for (var i in auths) {
+                authmessage += names[i] + ": " + authLevels[i] + "<br>";
+            }
+            authmessage += "</tt>";
+        } else {
+            authmessage += "<style>table {border-width: 1px; border-style: solid; border-color: #000000;}</style>"
+            + "<table cellpadding='2' cellspacing='0'><thead><tr style='background-color: #B0B0B0;'>"
+            + "<th>Icon</th><th>Auth</th><th>Level</th><th>Title</th><th>Name</th><th>Last Online</th></tr></thead><tbody>";
+            for (var i in auths) {
+                authmessage += "<tr>"
+                + "<td>" + helpers.authimage(src, authLevels[i] >= 4 ? 0 : authLevels[i]) + "</td>"
+                + "<td>" + helpers.authname(authLevels[i], DISPLAY_USER) + "</td>"
+                + "<td>" + authLevels[i] + "</td>"
+                + "<td>" + titles[i] + "</td>"
+                + "<td>" + names[i] + "</td>"
+                + "<td>" + lastLogins[i] + "</td>"
+                + "</tr>";
+            }
+            authmessage += "</tbody><tfoot><tr><td colspan='6'><b>Total Auth Members:</b> " + auths.length + "</td></tr></tfoot></table>";
+        }
+        authmessage += "<br><br><timestamp/><br>" + border2;
+        sys.sendHtmlMessage(src, authmessage, channel);
     }
     
     ,
