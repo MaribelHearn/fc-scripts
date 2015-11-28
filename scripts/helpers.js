@@ -1849,6 +1849,12 @@ helpers = {
     
     ,
     
+    itemImage: function (itemNum) {
+        return "<img src='item:" + itemNum + "'>";
+    }
+    
+    ,
+    
     typeImage: function (src, type) {
         if (this.isAndroidOrWeb(src)) {
             return sys.type(type);
