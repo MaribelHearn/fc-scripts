@@ -37,7 +37,10 @@ usercommands = {
             commandsmessage += "<b>" + helpers.userl("/roulettecommands") + "</b>: displays Roulette commands. Only for the " + helpers.channelLink(permchannels[5]) + " channel.<br>";
         }
         if (helpers.isLoaded("rr.js")) {
-            commandsmessage += "<b>" + helpers.userl("/rrcommands") + "</b>: displays Russian Roulette options. Only for the " + helpers.channelLink(permchannels[4]) + " channel.<br>";
+            commandsmessage += "<b>" + helpers.userl("/rrcommands") + "</b>: displays Russian Roulette commands. Only for the " + helpers.channelLink(permchannels[4]) + " channel.<br>";
+        }
+        if (helpers.isLoaded("safari.js")) {
+            commandsmessage += "<b>" + helpers.userl("/safaricommands") + "</b>: displays Safari commands. Only for the " + helpers.channelLink(permchannels[6]) + " channel.<br>";
         }
         commandsmessage += "<br><timestamp/><br>" + border2;
         sys.sendHtmlMessage(src, commandsmessage, channel);
@@ -689,11 +692,11 @@ usercommands = {
             helpers.starfox(src, channel, command, bots.command, "Error 404, Pokémon not found.");
             return;
         }
-        if (!sys.pokeNum(pokemon)) {
-            helpers.starfox(src, channel, command, bots.command, "Error 403, invalid Pokémon name.");
+        if ((!isNaN(pokemon) && sys.pokemon(pokemon)) == "Missingno" || (isNaN(pokemon) && !sys.pokeNum(pokemon))) {
+            helpers.starfox(src, channel, command, bots.command, "Error 403, invalid Pokémon.");
             return;
         }
-        pokeNum = sys.pokeNum(pokemon);
+        pokeNum = (isNaN(pokemon) ? sys.pokeNum(pokemon) : pokemon);
         pokemon = sys.pokemon(pokeNum);
         type1 = sys.pokeType1(pokeNum);
         type2 = sys.pokeType2(pokeNum);
