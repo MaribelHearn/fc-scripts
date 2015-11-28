@@ -301,38 +301,6 @@
         }
     }
     helpers.saveData("permchannels");
-    
-    // Plugins
-    if (helpers.isLoaded("party.js")) {
-        PARTY_MODES = ["joke", "nightclub", "desu", "rainbow", "nyan", "dennis", "cirno", "sparta", "luigi", "roflcopter", "derp", "asdf", "leet", "morse", "reverse"];
-        partyMode = sys.fileExists(DATA_FOLDER + "partymode.txt") ? helpers.readData("partymode") : "none";
-        helpers.setVariable("partyNyan", 0);
-    }
-    
-    if (helpers.isLoaded("rr.js")) {
-        rr = sys.fileExists(DATA_FOLDER + "rr.txt") ? helpers.readObject("rr") : {};
-    }
-    
-    if (helpers.isLoaded("roulette.js")) {
-        ROULETTE_WAIT_MIN = 90;
-        ROULETTE_WAIT_MAX = 271;
-        ROULETTE_EVENT_MIN = 66;
-        ROULETTE_EVENT_MAX = 135;
-        ROULETTE_FEST_MIN = 22;
-        ROULETTE_FEST_MAX = 45;
-        roulette = sys.fileExists(DATA_FOLDER + "roulette.txt") ? helpers.readObject("roulette") : {};
-        helpers.setVariable("rouletteTime", sys.rand(ROULETTE_WAIT_MIN, ROULETTE_WAIT_MAX));
-        helpers.setVariable("rouletteEvent", "");
-        helpers.setVariable("rouletteStep", 0);
-    }
-    
-    if (helpers.isLoaded("safari.js")) {
-        STARTER_POKEMON = ["Bulbasaur", "Charmander", "Squirtle", "Chikorita", "Cyndaquil", "Totodile", "Treecko", "Torchic", "Mudkip",
-        "Turtwig", "Chimchar", "Piplup", "Snivy", "Tepig", "Oshawott", "Chespin", "Fennekin", "Froakie", "Pikachu", "Eevee"];
-        safari = sys.fileExists(DATA_FOLDER + "safari.txt") ? helpers.readObject("safari") : {};
-        helpers.setVariable("currentWild", "none");
-        helpers.setVariable("currentWildShiny", false);
-    }
 }
 ).call(null);
 
@@ -979,7 +947,7 @@
             Leave Message
             -------------
         **/
-        var name = sys.name(src), cauth = helpers.cauthname(players[src].name.toLowerCase(), channel), channelname = sys.channel(channel);
+        var name = sys.name(src), lower = players[src].name.toLowerCase(), cauth = (helpers.cauthname(lower, channel) === "" ? "" : helpers.cauthname(lower, channel) + " "), channelname = sys.channel(channel);
         var cookie = sys.cookie(src) ? sys.cookie(src) : "none", id = sys.uniqueId(src) ? sys.uniqueId(src).id : "none";
         if (helpers.isLoaded("party.js")) {
             if (channel == partychannel && partyMode == "nightclub") {

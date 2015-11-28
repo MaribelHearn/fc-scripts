@@ -10,6 +10,17 @@
     in the Roulette channel.
     ----------------------------------------------
 */
+ROULETTE_WAIT_MIN = 90;
+ROULETTE_WAIT_MAX = 271;
+ROULETTE_EVENT_MIN = 66;
+ROULETTE_EVENT_MAX = 135;
+ROULETTE_FEST_MIN = 22;
+ROULETTE_FEST_MAX = 45;
+roulette = sys.fileExists(DATA_FOLDER + "roulette.txt") ? helpers.readObject("roulette") : {};
+helpers.setVariable("rouletteTime", sys.rand(ROULETTE_WAIT_MIN, ROULETTE_WAIT_MAX));
+helpers.setVariable("rouletteEvent", "");
+helpers.setVariable("rouletteStep", 0);
+
 roulettecommands = {
     roulettecommands: function (src, channel, command) {
         var commandsmessage = border;
