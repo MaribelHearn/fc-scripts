@@ -11,6 +11,8 @@
     in the Russian Roulette channel.
     ----------------------------------------------
 */
+rr = sys.fileExists(DATA_FOLDER + "rr.txt") ? helpers.readObject("rr") : {};
+        
 rrcommands = {
     rrcommands: function (src, channel, command) {
         var commandsMessage = border;
