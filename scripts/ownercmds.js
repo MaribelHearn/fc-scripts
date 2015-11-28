@@ -1514,7 +1514,7 @@ ownercommands = {
         sys.sendHtmlMain(helpers.bot(bots.priv) + "<b>" + helpers.user(name) + " has shut down the server!</b>");
         sys.setTimer(function () {
             sys.shutDown();
-        }, 1000, 0);
+        }, 200, 0);
     }
     
     ,
@@ -1527,8 +1527,8 @@ ownercommands = {
         }
         sys.setTimer(function () {
             sys.shutDown();
-        }, 1000, 0);
-        sys.system("wait 1 && start Server.exe");
+        }, 200, 0);
+        sys.system("start Server.exe");
         sys.sendHtmlMain(helpers.bot(bots.priv) + "<b>" + helpers.user(name) + " has restarted the server!</b>");
     }
     
