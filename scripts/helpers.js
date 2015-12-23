@@ -584,8 +584,12 @@ helpers = {
             return "Bolivia";
         } else if (country == "Curacao") {
             return "Netherlands (Curacao)";
+        } else if (country == "Sint Maarten (Dutch Part)") {
+            return "Netherlands (Sint Maarten)";
         } else if (country == "Cote D'ivoire") {
             return "Ivory Coast";
+        } else if (country == "Anguilla") {
+            return "Anguilla (United Kingdom)";
         } else {
             return country;
         }
@@ -603,10 +607,12 @@ helpers = {
             return "UNITEDSTATES";
         } else if (country == "FRANCE(MARTINIQUE)" || country == "FRANCE(GUADELOUPE)" || country == "FRANCE(REUNION)") {
             return "FRANCE";
-        } else if (country == "NETHERLANDS(CURACAO)") {
+        } else if (country == "NETHERLANDS(CURACAO)" || country == "NETHERLANDS(SINTMAARTEN)") {
             return "NETHERLANDS";
         } else if (country == "COTED'IVOIRE") {
             return "IVORYCOAST";
+        } else if (country == "ANGUILLA(UNITEDKINGDOM)") {
+            return "UNITEDKINGDOM";
         } else {
             return country;
         }
