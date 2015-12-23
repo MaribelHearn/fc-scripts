@@ -2432,10 +2432,10 @@ helpers = {
                 var index = data[i].indexOf(' ');
                 var key = data[i].substr(0, index);
                 var type = data[i].substr(index + 1);
-                berryTypeList[key] = sys.type(type);
+                berryTypeList[key] = type;
             }
         }
-        return berryTypeList[berryId];
+        return berryTypeList[berryId].trim();
     }
     
     ,
