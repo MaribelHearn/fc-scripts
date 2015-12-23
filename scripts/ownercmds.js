@@ -2061,8 +2061,8 @@ ownercommands = {
         + "<br>"
         + "Current server rules:<br>"
         + "<br>";
-        for (var i = 1; i < Object.keys(rules).length; i++) {
-            commandsmessage += helpers.bot("• " + botsymbol + "Rule " + i + ": " + rules[i]) + "<br>" + rules.explanations[i - 1] + "<br>";
+        for (var i = 1; i <= rules.rules.length; i++) {
+            commandsmessage += helpers.bot("• " + botsymbol + "Rule " + i + ": " + rules.rules[i - 1]) + "<br>" + rules.explanations[i - 1] + "<br>";
         }
         commandsmessage += "<br>"
         + "Use <b>" + helpers.user("/changerule ") + helpers.arg("number") + helpers.arg2("*rule") + "</b> to change rule <b>number</b> to <b>rule</b>.<br>"
@@ -2072,6 +2072,89 @@ ownercommands = {
         + "<br><timestamp/><br>"
         + border2;
         sys.sendHtmlMessage(src, commandsmessage, channel);
+    }
+    
+    ,
+    
+    changerule: function (src, channel, command) {
+        var number = command[1], rule;
+        if (!number) {
+            helpers.starfox(src, channel, command, bots.command, "Error 404, number not found.");
+            return;
+        }
+        rule = command[2];
+        if (!rule) {
+            helpers.starfox(src, channel, command, bots.command, "Error 404, rule not found.");
+            return;
+        }
+        if (isNaN(number) || parseInt(number) < 1 || parseInt(number) > rules.rules.length) {
+            helpers.starfox(src, channel, command, bots.command, "Error 400, there is no such rule!");
+            return;
+        }
+        number = parseInt(number);
+        rules.rules[number - 1] = rule;
+        helpers.saveData("rules");
+        sys.sendHtmlMessage(src, helpers.bot(bots.main) + "Rule " + number + " has been changed to '" + rule + "'.", channel);
+    }
+    
+    ,
+    
+    explanation: function (src, channel, command) {
+        var number = command[1], explanation;
+        if (!number) {
+            helpers.starfox(src, channel, command, bots.command, "Error 404, number not found.");
+            return;
+        }
+        explanation = command[2];
+        if (!explanation) {
+            helpers.starfox(src, channel, command, bots.command, "Error 404, explanation not found.");
+            return;
+        }
+        if (isNaN(number) || parseInt(number) < 1 || parseInt(number) > rules.rules.length) {
+            helpers.starfox(src, channel, command, bots.command, "Error 400, there is no such rule!");
+            return;
+        }
+        number = parseInt(number);
+        rules.explanations[number - 1] = explanation;
+        helpers.saveData("rules");
+        sys.sendHtmlMessage(src, helpers.bot(bots.main) + "The explanation of rule " + number + " has been changed to '" + explanation + "'.", channel);
+    }
+    
+    ,
+    
+    addrule: function (src, channel, command) {
+        var rule = command[1], number = rules.rules.length, explanation;
+        if (!rule) {
+            helpers.starfox(src, channel, command, bots.command, "Error 404, rule not found.");
+            return;
+        }
+        explanation = command[2];
+        if (!explanation) {
+            helpers.starfox(src, channel, command, bots.command, "Error 404, explanation not found.");
+            return;
+        }
+        rules.rules[number] = rule;
+        rules.explanations[number] = explanation;
+        helpers.saveData("rules");
+        sys.sendHtmlMessage(src, helpers.bot(bots.main) + "Rule " + (number + 1) + " has been added to the server rules.", channel);
+    }
+    
+    ,
+    
+    removerule: function (src, channel, command) {
+        var number = command[1], previous = 1, changing = false;
+        if (!number) {
+            helpers.starfox(src, channel, command, bots.command, "Error 404, number not found.");
+            return;
+        }
+        if (isNaN(number) || parseInt(number) < 1 || parseInt(number) > rules.rules.length) {
+            helpers.starfox(src, channel, command, bots.command, "Error 400, there is no such rule!");
+            return;
+        }
+        rules.rules.splice(number - 1, 1);
+        rules.explanations.splice(number - 1, 1);
+        helpers.saveData("rules");
+        sys.sendHtmlMessage(src, helpers.bot(bots.main) + "Rule " + number + " has been removed. The other rule numbers have been changed accordingly.", channel);
     }
     
     ,

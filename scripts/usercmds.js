@@ -190,8 +190,8 @@ usercommands = {
         var rulesmessage = border
         + "<h2>Rules</h2>"
         + "<br>";
-        for (var i = 1; i < Object.keys(rules).length; i++) {
-            rulesmessage += helpers.bot("• " + botsymbol + "Rule " + i + ": " + rules[i]) + "<br>" + rules.explanations[i - 1] + "<br>";
+        for (var i = 1; i <= rules.rules.length; i++) {
+            rulesmessage += helpers.bot("• " + botsymbol + "Rule " + i + ": " + rules.rules[i - 1]) + "<br>" + rules.explanations[i - 1] + "<br>";
         }
         rulesmessage += "<br><timestamp/><br>" + border2;
         sys.sendHtmlMessage(src, rulesmessage, channel);
@@ -205,12 +205,12 @@ usercommands = {
             helpers.starfox(src, channel, command, bots.command, "Error 404, number not found.");
             return;
         }
-        if (isNaN(number) || parseInt(number) < 1 || parseInt(number) >= Object.keys(rules).length) {
+        if (isNaN(number) || parseInt(number) < 1 || parseInt(number) > rules.rules.length) {
             helpers.starfox(src, channel, command, bots.command, "Error 400, there is no such rule!");
             return;
         }
         number = parseInt(number);
-        rulemessage += "<h2>Rules ~ Rule " + number + "</h2><br>" + helpers.bot("• " + botsymbol + "Rule " + number + ": " + rules[number]) + "<br>" + rules.explanations[number - 1] + "<br><br><timestamp/><br>" + border2;
+        rulemessage += "<h2>Rules ~ Rule " + number + "</h2><br>" + helpers.bot("• " + botsymbol + "Rule " + number + ": " + rules.rules[number - 1]) + "<br>" + rules.explanations[number - 1] + "<br><br><timestamp/><br>" + border2;
         sys.sendHtmlMessage(src, rulemessage, channel);
     }
     
