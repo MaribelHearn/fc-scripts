@@ -85,6 +85,7 @@ usercommands = {
         + "<b>" + helpers.user("/pokedex ") + helpers.arg("Pokémon") + "</b>: displays <b>Pokémon</b>'s data in a neat table. Also /pokemon.<br>"
         + "<b>" + helpers.user("/movedex ") + helpers.arg("move") + "</b>: displays data for <b>move</b> in a neat table. Also /move.<br>"
         + "<b>" + helpers.user("/abilitydex ") + helpers.arg("ability") + "</b>: displays data for <b>ability</b> in a neat table. Also /ability.<br>"
+        + "<b>" + helpers.user("/itemdex ") + helpers.arg("item") + "</b>: displays data for <b>item</b> in a neat table. Also /item.<br>"
         + "<b>" + helpers.user("/movepool ") + helpers.arg("Pokémon") + helpers.arg2("*move") + "</b>: displays if <b>move</b> is in <b>Pokémon</b>'s movepool. If <b>move</b> is not specified, displays <b>Pokémon</b>'s movepool. Also /canlearn.<br>"
         + "<b>" + helpers.user("/gradient ") + helpers.arg("gradient") + "</b>: tests <b>gradient</b>. Useful for trainer info.<br>"
         + "<br><timestamp/><br>"
@@ -885,13 +886,17 @@ usercommands = {
             return;
         }
         itemNum = sys.itemNum(item);
-        item = sys.item(id);
-        isBerry = item.indexOf("Berry") != -1;
+        item = sys.item(itemNum);
+        isBerry = item.indexOf("Berry") != -1 && item != "Berry Juice";
         itemmessage = border + "<h2>#" + itemNum + " " + item + "</h2>"
-        + "<br><b>Description:</b> " + (isBerry ? helpers.getBerry(itemNum) : helpers.getItem(itemNum))
+        + "<br>" + helpers.itemImage(itemNum) + "<br>";
+        if (isBerry) {
+            itemNum -= 8000;
+        }
+        itemmessage += "<br><b>Description:</b> " + (isBerry ? helpers.getBerry(itemNum) : helpers.getItem(itemNum))
         + "<br><b>Fling Power:</b> " + helpers.getFlingPower(itemNum);
         if (isBerry) {
-            itemmessage += "<br><b>Natural Gift Type:</b> " + helpers.typeImage(src, helpers.getBerryType(itemNum));
+            itemmessage += "<br><b>Natural Gift Type:</b> " + helpers.typeImage(src, helpers.getBerryType(itemNum))
             + "<br><b>Natural Gift Power:</b> " + helpers.getBerryPower(itemNum);
         }
         itemmessage += "<br><br><timestamp/><br>" + border2;
