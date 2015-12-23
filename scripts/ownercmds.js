@@ -24,6 +24,7 @@ ownercommands = {
         + "<b>" + helpers.userl("/silentsettings") + "</b>: displays silent settings.<br>"
         + "<b>" + helpers.userl("/filtersettings") + "</b>: displays name filtering settings.<br>"
         + "<b>" + helpers.userl("/customsettings") + "</b>: displays customisation settings.<br>"
+        + "<b>" + helpers.userl("/rulesettings") + "</b>: displays rule settings.<br>"
         + "<b>" + helpers.userl("/listsettings") + "</b>: displays mute and banlist customisation settings.<br>"
         + "<b>" + helpers.userl("/channelsettings") + "</b>: displays channel settings.<br>"
         + "<b>" + helpers.userl("/miscellaneous") + "</b>: displays other commands.<br>"
@@ -1809,14 +1810,14 @@ ownercommands = {
         var commandsmessage = border
         + "<h2>Owner Commands ~ Custom Settings</h2>"
         + "<br>"
-        + "Your current colorings:<br>"
+        + "Current colorings:<br>"
         + "<br>"
         + "<b>Border color:</b> " + borderColor + "<br>"
         + "<b>Server topic color:</b> " + serverTopicColor + "<br>"
         + "<b>Channel topic color:</b> " + channelTopicColor + "<br>"
         + "<b>Command colors:</b> " + cmdcolors.join(", ") + "<br>"
         + "<br>"
-        + "Your current messages:<br>"
+        + "Current messages:<br>"
         + "<br>"
         + "<b>Welcome message: </b>" + welcomeMessage + "<br>"
         + "<b>Leave message: </b>" + leaveMessage + "<br>"
@@ -2034,6 +2035,32 @@ ownercommands = {
     
     /**
         -------------
+        Rule Settings
+        -------------
+    **/
+    rulesettings: function (src, channel, command) {
+        var commandsmessage = border
+        + "<h2>Owner Commands ~ Rule Settings</h2>"
+        + "<br>"
+        + "Current server rules:<br>"
+        + "<br>";
+        for (var i = 1; i < Object.keys(rules).length; i++) {
+            commandsmessage += helpers.bot("• " + botsymbol + "Rule " + i + ": " + rules[i]) + "<br>" + rules.explanations[i - 1] + "<br>";
+        }
+        commandsmessage += "<br>"
+        + "Use <b>" + helpers.user("/changerule ") + helpers.arg("number") + helpers.arg2("*rule") + "</b> to change rule <b>number</b> to <b>rule</b>.<br>"
+        + "Use <b>" + helpers.user("/explanation ") + helpers.arg("number") + helpers.arg2("*explanation") + "</b> to change rule explanation <b>number</b> to <b>explanation</b>.<br>"
+        + "Use <b>" + helpers.user("/addrule ") + helpers.arg("rule") + helpers.arg2("*explanation") + "</b> to add <b>rule</b> with <b>explanation</b> to the list of rules.<br>"
+        + "Use <b>" + helpers.user("/removerule ") + helpers.arg("number") + "</b> to remove rule <b>number</b> from the list of rules.<br>"
+        + "<br><timestamp/><br>"
+        + border2;
+        sys.sendHtmlMessage(src, commandsmessage, channel);
+    }
+    
+    ,
+    
+    /**
+        -------------
         List Settings
         -------------
     **/
@@ -2041,7 +2068,7 @@ ownercommands = {
         var commandsmessage = border
         + "<h2>Owner Commands ~ List Settings</h2>"
         + "<br>"
-        + "Your current list colorings:<br>"
+        + "Current list colorings:<br>"
         + "<br>"
         + "<b>Mute list:</b> " + listcolors.mute + "<br>"
         + "<b>Ban list:</b> " + listcolors.ban + "<br>"
@@ -2348,6 +2375,9 @@ ownercommands = {
         }
         if (helpers.isLoaded("roulette.js")) {
             scriptmessage += "<br><b>Total Roulette Commands:</b> " + Object.keys(roulettecommands).length;
+        }
+        if (helpers.isLoaded("safari.js")) {
+            scriptmessage += "<br><b>Total Safari Commands:</b> " + Object.keys(safaricommands).length;
         }
         scriptmessage += "<br><b>Total Helpers:</b> " + Object.keys(helpers).length + "<br>" +
         "<b><u>Total Commands:</u></b> " + allcommands.length + "<br><br><timestamp/><br>" + border2;
