@@ -413,6 +413,7 @@ usercommands = {
         sys.webCall(REGISTRY_URL, function (resp) {
             if (resp === "") {
                 sys.sendHtmlMessage(src, helpers.bot(bots.command) + "An error occurred while fetching the registry.", channel);
+                return;
             }
             tmp1 = helpers.strip(resp.slice(resp.indexOf("<ul class=\"list-group\">") + 23, resp.indexOf("</ul>"))).replace(/: /g, ',').replace(/[\n\r]/g, ' ').replace(/players/g, "players,").split(',');
             for (var i in tmp1) {
@@ -847,7 +848,7 @@ usercommands = {
     ,
     
     abilitydex: function (src, channel, command) {
-        var ability = command[1], abilityNum, description, pokemonList, abilitymessage;
+        var ability = command[1], abilityNum, abilitymessage;
         if (!ability) {
             helpers.starfox(src, channel, command, bots.command, "Error 404, ability not found.");
             return;
@@ -869,6 +870,38 @@ usercommands = {
     
     ability: function (src, channel, command) {
         this.abilitydex(src, channel, command);
+    }
+    
+    ,
+    
+    itemdex: function (src, channel, command) {
+        var item = command[1], itemNum, itemmessage, isBerry;
+        if (!item) {
+            helpers.starfox(src, channel, command, bots.command, "Error 404, item not found.");
+            return;
+        }
+        if (!sys.itemNum(item)) {
+            helpers.starfox(src, channel, command, bots.command, "Error 403, invalid item.");
+            return;
+        }
+        itemNum = sys.itemNum(item);
+        item = sys.item(id);
+        isBerry = item.indexOf("Berry") != -1;
+        itemmessage = border + "<h2>#" + itemNum + " " + item + "</h2>"
+        + "<br><b>Description:</b> " + (isBerry ? helpers.getBerry(itemNum) : helpers.getItem(itemNum))
+        + "<br><b>Fling Power:</b> " + helpers.getFlingPower(itemNum);
+        if (isBerry) {
+            itemmessage += "<br><b>Natural Gift Type:</b> " + helpers.typeImage(src, helpers.getBerryType(itemNum));
+            + "<br><b>Natural Gift Power:</b> " + helpers.getBerryPower(itemNum);
+        }
+        itemmessage += "<br><br><timestamp/><br>" + border2;
+        sys.sendHtmlMessage(src, itemmessage, channel);
+    }
+    
+    ,
+    
+    item: function (src, channel, command) {
+        this.itemdex(src, channel, command);
     }
     
     ,
@@ -1326,7 +1359,7 @@ usercommands = {
     ,
     
     poke: function (src, channel, command) {
-        var name = sys.name(src), auth = sys.auth(src), color = helpers.color(src), trgtt;
+        var name = sys.name(src), auth = sys.auth(src), color = helpers.color(src), trgt;
         command.splice(0, 1);
         command = command.join(DELIMITER);
         trgt = sys.id(command);

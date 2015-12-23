@@ -18,7 +18,7 @@ cmodcommands = {
         + "<b>" + helpers.user("/addpart ") + helpers.arg("text") + "</b>: adds <b>text</b> to the current channel topic. Also /topicadd.<br>"
         + "<b>" + helpers.user("/removepart ") + helpers.arg("number") + "</b>: removes part <b>number</b> from the current channel topic. Part <b>number</b> must be yours.<br>"
         + "<b>" + helpers.user("/changepart ") + helpers.arg("text") + "</b>: changes part <b>number</b> to <b>text</b> in the current channel topic. Part <b>number</b> must be yours. Also /updatepart.<br>"
-        + "<b>" + helpers.user("/ckick ") + helpers.arg("player") + helpers.arg2("*reason") + "</b>: kicks <b>player</b> from the current channel for <b>reason</b>.<br>"
+        + "<b>" + helpers.user("/ckick ") + helpers.arg("player") + helpers.arg2("*reason") + "</b>: kicks <b>player</b> from the current channel for <b>reason</b>. Also /ck.<br>"
         + "<b>" + helpers.user("/cmute ") + helpers.arg("player") + helpers.arg2("*reason") + "</b>: mutes <b>player</b> on the current channel for <b>reason</b>.<br>"
         + "<b>" + helpers.user("/cunmute ") + helpers.arg("player") + "</b>: unmutes <b>player</b> on the current channel.<br>"
         + "<b>" + helpers.user("/cmutelist") + "</b>: displays the current channel's mute list in a neat table.<br>"
@@ -185,6 +185,12 @@ cmodcommands = {
             reason = "Unknown";
         }
         sys.sendHtmlAll(helpers.bot(bots.channel) + command[1] + " has been kicked from this channel by " + sys.name(src) + "! [Reason: " + reason + "]", channel);
+    }
+    
+    ,
+    
+    ck: function (src, channel, command) {
+        this.ckick(src, channel, command);
     }
     
     ,
