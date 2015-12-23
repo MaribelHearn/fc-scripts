@@ -63,6 +63,14 @@ helpers = {
         '"priv":"PrivacyBot","reverse":"ReverseBot","rr":"RussiaBot","russia":"RussiaBot","safari":"SafariBot","script":"ScriptBot","silence":"SilenceBot",' +
         '"spy":"WatchBot","starfox":"Wolf","status":"StatusBot","tour":"TourBot","topic":"TopicBot","warn":"WarnBot","welcome":"WelcomeBot",' +
         '"roulette": "RouletteBot"}');
+        sys.write(DATA_FOLDER + "rules.txt", '{"1":"No spamming (including challenge spamming), trolling, flaming, bashing or advertising.",' +
+        '"2":"No abusing commands or auth powers.","3":"Do not talk about inappropriate or obscene subjects, nor mention words that refer to such.",' +
+        '"4":"No asking for auth.","5":"Do not attempt to circumvent the rules.",' +
+        '"explanations":["These things cause disorder in the chat. You can get kicked, muted or banned depending on how severely you are breaking this rule.",' +
+        '"This should make sense without any explanation. Commands exist to be used for what they are meant for, not for mistakes to be exploited. The same goes for auths; do what you should do and not beyond that.",' +
+        '"Anything inappropriate or obscene will result in a mute, or ban after multiple occasions.",' +
+        '"You may get auth when recognized for coming on a lot, chat activity, good behaviour and maybe even contribution. Asking for it will not get you any further.",' +
+        '"Taking the rules too literally is no use when you know you are supposed to be punished anyway. Do not try to find loopholes in the rules, it will result in even more punishment."]}');
         sys.write(DATA_FOLDER + "listcolors.txt", '{"mute":"#1E90FF","ban":"#FF6900","rangeban":"#008000","megaban":"#800080","gigaban":"#AA0000"}');
         sys.write(DATA_FOLDER + "regchannels.txt", "{}");
         sys.write(DATA_FOLDER + "iplist.txt", "{}");

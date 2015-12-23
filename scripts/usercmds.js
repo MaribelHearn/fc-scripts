@@ -244,14 +244,11 @@ usercommands = {
     rules: function (src, channel, command) {
         var rulesmessage = border
         + "<h2>Rules</h2>"
-        + "<br>"
-        + helpers.bot("• " + botsymbol + RULE1) + EXPL1
-        + helpers.bot("• " + botsymbol + RULE2) + EXPL2
-        + helpers.bot("• " + botsymbol + RULE3) + EXPL3
-        + helpers.bot("• " + botsymbol + RULE4) + EXPL4
-        + helpers.bot("• " + botsymbol + RULE5) + EXPL5
-        + "<br><timestamp/><br>"
-        + border2;
+        + "<br>";
+        for (var i = 1; i < Object.keys(rules).length; i++) {
+            rulesmessage += helpers.bot("• " + botsymbol + "Rule " + i + ": " + rules[i]) + "<br>" + rules.explanations[i - 1] + "<br>";
+        }
+        rulesmessage += "<br><timestamp/><br>" + border2;
         sys.sendHtmlMessage(src, rulesmessage, channel);
     }
     
