@@ -859,7 +859,7 @@ usercommands = {
             return;
         }
         abilityNum = sys.abilityNum(ability);
-        ability = sys.ability(id);
+        ability = sys.ability(abilityNum);
         abilitymessage = border + "<h2>#" + abilityNum + " " + ability + "</h2>"
         + "<br><b>Description:</b> " + helpers.ability(abilityNum)
         + "<br><b>Pokémon with this ability:</b> " + helpers.pokemonWithAbility(abilityNum).join(", ")
