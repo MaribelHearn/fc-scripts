@@ -875,25 +875,26 @@ modcommands = {
     ,
     
     ify: function (src, channel, command) {
-        var name = sys.name(src), auth = sys.auth(src), playerids = sys.playerIds(), n = 0, option, text, self;
+        var name = sys.name(src), auth = sys.auth(src), playerids = sys.playerIds(), n = 0, option = command[1], text, self;
         if (helpers.muteCheck(name)) {
             helpers.muteMessage(src, channel);
             return;
         }
-        if (!command[1]) {
+        if (!option) {
             helpers.starfox(src, channel, command, bots.command, "Error 404, option not found.");
             return;
         }
-        option = command[1].toLowerCase();
+        option = option.toLowerCase();
         if (option != "front" && option != "behind" && option != "replace") {
             helpers.starfox(src, channel, command, bots.command, "Error 403, invalid option.");
             return;
         }
-        if (!command[2]) {
+        text = command[2];
+        if (!text) {
             helpers.starfox(src, channel, command, bots.command, "Error 404, text not found.");
             return;
         }
-        text = helpers.escapehtml(command[2]);
+        text = helpers.escapehtml(text);
         !command[3] ? self = false : self = true;
         for (var i in playerids) {
             if (playerids[i] == src && !self) {
@@ -904,7 +905,7 @@ modcommands = {
             } else if (option == "behind") {
                 sys.changeName(playerids[i], sys.name(playerids[i]) + " " + text);
             } else {
-                sys.changeName(playerids[i], text + " " + n);
+                sys.changeName(playerids[i], text + " " + (n + 1));
                 n++;
             }
         }
