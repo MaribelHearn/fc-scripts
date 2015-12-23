@@ -41,16 +41,6 @@
     SPACE = /\u0009-\u000D|\u0085|\u00A0|\u1680|\u180E|\u2000-\u200A|\u2028|\u2029|\u2029|\u202F|\u205F|\u3000/;
     DASH = /\u058A|\u05BE|\u1400|\u1806|\u2010-\u2015|\u2053|\u207B|\u208B|\u2212|\u2E17|\u2E1A|\u301C|\u3030|\u30A0|[\uFE31-\uFE32]|\uFE58|\uFE63|\uFF0D/;
     CYRILLIC = /\u0408|\u03a1|\u0430|\u0410|\u0412|\u0435|\u0415|\u041c|\u041d|\u043e|\u041e|\u0440|\u0420|\u0441|\u0421|\u0422|\u0443|\u0445|\u0425|\u0456|\u0406/;
-    RULE1 = "Rule 1: No spamming (including challenge spamming), trolling, flaming, bashing or advertising.<br>";
-    EXPL1 = "These things cause disorder in the chat. You can get kicked, muted or banned depending on how severely you are breaking this rule.<br>";
-    RULE2 = "Rule 2: No abusing commands or auth powers.<br>";
-    EXPL2 = "This should make sense without any explanation. Commands exist to be used for what they are meant for, not for mistakes to be exploited. The same goes for auths; do what you should do and not beyond that.<br>";
-    RULE3 = "Rule 3: Don't talk about inappropriate or obscene subjects, nor mention words that refer to such.<br>";
-    EXPL3 = "Anything inappropriate or obscene will result in a mute, or ban after multiple occasions.<br>";
-    RULE4 = "Rule 4: No asking for auth.<br>";
-    EXPL4 = "You may get auth when recognized for coming on a lot, chat activity, good behaviour and maybe even contribution. Asking for it will not get you any further.<br>";
-    RULE5 = "Rule 5: Do not attempt to circumvent the rules.<br>";
-    EXPL5 = "Taking the rules too literally is no use when you know you are supposed to be punished anyway. Don't try to find loopholes in the rules, it will result in even more punishment.<br>";
     AUTH_NAME = ["User", "Moderator", "Administrator", "Owner"];
     SCRIPT_MODULES = ["usercmds.js", "modcmds.js", "admincmds.js", "ownercmds.js", "cusercmds.js", "cmodcmds.js", "cadmincmds.js", "cownercmds.js", "helpers.js", "handler.js", "tierchecks.js", "base64.js"];
     SCRIPT_PLUGINS = ["funcmds.js", "party.js", "roulette.js", "rr.js", "safari.js"];
@@ -195,6 +185,7 @@
     proxylist = helpers.readData("proxylist").split('\n');
     bansites = helpers.readData("bansites").replace(/\r/g, "").split('\n');
     bots = helpers.readObject("bots");
+    rules = helpers.readObject("rules");
     iplist = helpers.readObject("iplist");
     banlist = helpers.readObject("banlist");
     mutelist = helpers.readObject("mutelist");

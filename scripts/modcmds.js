@@ -74,14 +74,11 @@ modcommands = {
         }
         var rulesmessage = border
         + "<h2>Rules</h2>"
-        + "<br>"
-        + helpers.bot("• " + botsymbol + RULE1) + EXPL1
-        + helpers.bot("• " + botsymbol + RULE2) + EXPL2
-        + helpers.bot("• " + botsymbol + RULE3) + EXPL3
-        + helpers.bot("• " + botsymbol + RULE4) + EXPL4
-        + helpers.bot("• " + botsymbol + RULE5) + EXPL5
-        + "<br><timestamp/><br>"
-        + border2;
+        + "<br>";
+        for (var i = 0; i < Object.keys(rules).length - 1; i++) {
+            rulesmessage += helpers.bot("• " + botsymbol + "Rule " + i + ": " + rules[i]) + "<br>" + rules.explanations[i - 1] + "<br>";
+        }
+        rulesmessage += "<br><timestamp/><br>" + border2;
         sys.sendHtmlMessage(trgt, rulesmessage, channel);
         sys.sendHtmlMessage(trgt, helpers.bot(bots.command) + "The server rules were forced on you by " + name + "!", channel);
         sys.sendHtmlMessage(src, helpers.bot(bots.command) + "You forced the Server Rules on " + command[1] + "!", channel);
@@ -106,7 +103,6 @@ modcommands = {
             return;
         }
         command[2] = parseInt(command[2]);
-        command[2]--;
         var trgt = sys.id(command[1]);
         if (!trgt) {
             helpers.starfox(src, channel, command, bots.command, "Error 400, " + command[1] + " is not currently on the server!", channel);
@@ -117,14 +113,8 @@ modcommands = {
             helpers.starfox(src, channel, command, bots.command, "Error 403, you can't force rules on " + command[1] + " because their auth level is higher or equal to yours.");
             return;
         }
-        var rules = [];
-        rules.push(helpers.bot("• " + botsymbol + RULE1) + EXPL1);
-        rules.push(helpers.bot("• " + botsymbol + RULE2) + EXPL2);
-        rules.push(helpers.bot("• " + botsymbol + RULE3) + EXPL3);
-        rules.push(helpers.bot("• " + botsymbol + RULE4) + EXPL4);
-        rules.push(helpers.bot("• " + botsymbol + RULE5) + EXPL5);
-        sys.sendHtmlMessage(trgt, border + "<h2>Rules ~ Rule " + (eval(command[2]) + 1 * 1) + "</h2><br>" + rules[command[2]] + "<br><timestamp/><br>" + border2, channel);
-        command[2]++;
+        sys.sendHtmlMessage(trgt, border + "<h2>Rules ~ Rule " + command[2] + "</h2><br>" + helpers.bot("• " + botsymbol + "Rule " + command[2] + ": " + rules[command[2]]) +
+        "<br>" + rules.explanations[command[2] - 1] + "<br><br><timestamp/><br>" + border2, channel);
         sys.sendHtmlMessage(trgt, helpers.bot(bots.command) + "Rule " + command[2] + " was forced on you by " + name + "!", channel);
         sys.sendHtmlMessage(src, helpers.bot(bots.command) + "You forced Rule " + command[2] + " on " + command[1] + "!", channel);
     }
