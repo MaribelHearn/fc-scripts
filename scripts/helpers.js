@@ -1763,7 +1763,16 @@ helpers = {
     ,
 
     breakinghtml: function (string) {
-        return string.split("<").length > string.split(">").length || this.removespaces(string).indexOf("<center>") >= 0 || this.removespaces(string).indexOf("dir=rtl") >= 0;
+        if (string.split("<").length > string.split(">").length) {
+            return true;
+        } else if (this.removespaces(string).indexOf("><") >= 0) {
+            return true;
+        } else if (this.removespaces(string).indexOf("<center>") >= 0) {
+            return true;
+        } else if (this.removespaces(string).replace(/'|"/g, "").indexOf("dir=rtl") >= 0) {
+            return true;
+        }
+        return false;
     }
 
     ,

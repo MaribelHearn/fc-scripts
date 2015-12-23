@@ -75,8 +75,8 @@ modcommands = {
         var rulesmessage = border
         + "<h2>Rules</h2>"
         + "<br>";
-        for (var i = 0; i < Object.keys(rules).length - 1; i++) {
-            rulesmessage += helpers.bot("• " + botsymbol + "Rule " + i + ": " + rules[i]) + "<br>" + rules.explanations[i - 1] + "<br>";
+        for (var i = 1; i <= rules.rules.length; i++) {
+            rulesmessage += helpers.bot("• " + botsymbol + "Rule " + i + ": " + rules.rules[i - 1]) + "<br>" + rules.explanations[i - 1] + "<br>";
         }
         rulesmessage += "<br><timestamp/><br>" + border2;
         sys.sendHtmlMessage(trgt, rulesmessage, channel);
@@ -93,16 +93,17 @@ modcommands = {
     ,
     
     forcerule: function (src, channel, command) {
-        var name = sys.name(src), auth = sys.auth(src);
+        var name = sys.name(src), auth = sys.auth(src), number;
         if (!command[1]) {
             helpers.starfox(src, channel, command, bots.command, "Error 404, player not found.");
             return;
         }
-        if (!command[2] || command[2] >= Object.keys(rules).length || command[2] < 1 || isNaN(command[2])) {
+        number = command[2];
+        if (!number || number > rules.rules.length || number < 1 || isNaN(number)) {
             helpers.starfox(src, channel, command, bots.command, "Error 404, rule not found.");
             return;
         }
-        command[2] = parseInt(command[2]);
+        number = parseInt(number);
         var trgt = sys.id(command[1]);
         if (!trgt) {
             helpers.starfox(src, channel, command, bots.command, "Error 400, " + command[1] + " is not currently on the server!", channel);
@@ -113,10 +114,10 @@ modcommands = {
             helpers.starfox(src, channel, command, bots.command, "Error 403, you can't force rules on " + command[1] + " because their auth level is higher or equal to yours.");
             return;
         }
-        sys.sendHtmlMessage(trgt, border + "<h2>Rules ~ Rule " + command[2] + "</h2><br>" + helpers.bot("• " + botsymbol + "Rule " + command[2] + ": " + rules[command[2]]) +
-        "<br>" + rules.explanations[command[2] - 1] + "<br><br><timestamp/><br>" + border2, channel);
-        sys.sendHtmlMessage(trgt, helpers.bot(bots.command) + "Rule " + command[2] + " was forced on you by " + name + "!", channel);
-        sys.sendHtmlMessage(src, helpers.bot(bots.command) + "You forced Rule " + command[2] + " on " + command[1] + "!", channel);
+        sys.sendHtmlMessage(trgt, border + "<h2>Rules ~ Rule " + number + "</h2><br>" + helpers.bot("• " + botsymbol + "Rule " + number + ": " + rules.rules[number - 1]) +
+        "<br>" + rules.explanations[number - 1] + "<br><br><timestamp/><br>" + border2, channel);
+        sys.sendHtmlMessage(trgt, helpers.bot(bots.command) + "Rule " + number + " was forced on you by " + name + "!", channel);
+        sys.sendHtmlMessage(src, helpers.bot(bots.command) + "You forced Rule " + number + " on " + command[1] + "!", channel);
     }
     
     ,
