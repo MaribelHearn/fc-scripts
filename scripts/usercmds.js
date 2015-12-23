@@ -63,11 +63,17 @@ usercommands = {
     
     ,
     
+    /**
+        ------------
+        Info Options
+        ------------
+    **/
     infooptions: function (src, channel, command) {
         var commandsmessage = border
         + "<h2>User Commands ~ Info Options</h2>"
         + "<br>"
-        + "<b>" + helpers.user("/rules") + "</b>: displays the server's rules.<br>"
+        + "<b>" + helpers.user("/rules") + "</b>: displays the server rules.<br>"
+        + "<b>" + helpers.user("/rule ") + helpers.arg("number") + "</b>: displays server rule <b>number</b>.<br>"
         + "<b>" + helpers.user("/online") + "</b>: shows the users who are currently online in a neat table.<br>"
         + "<b>" + helpers.user("/auth") + "</b>: shows the server authority in a neat table. Also /auths or /authlist.<br>"
         + "<b>" + helpers.user("/channels") + "</b>: shows the channels that are currently online in a neat table.<br>"
@@ -88,62 +94,6 @@ usercommands = {
         + "<b>" + helpers.user("/itemdex ") + helpers.arg("item") + "</b>: displays data for <b>item</b> in a neat table. Also /item.<br>"
         + "<b>" + helpers.user("/movepool ") + helpers.arg("Pokémon") + helpers.arg2("*move") + "</b>: displays if <b>move</b> is in <b>Pokémon</b>'s movepool. If <b>move</b> is not specified, displays <b>Pokémon</b>'s movepool. Also /canlearn.<br>"
         + "<b>" + helpers.user("/gradient ") + helpers.arg("gradient") + "</b>: tests <b>gradient</b>. Useful for trainer info.<br>"
-        + "<br><timestamp/><br>"
-        + border2;
-        sys.sendHtmlMessage(src, commandsmessage, channel);
-    }
-    
-    ,
-    
-    interactoptions: function (src, channel, command) {
-        var commandsmessage = border
-        + "<h2>User Commands ~ Interact Options</h2>"
-        + "<br>"
-        + "<b>" + helpers.user("/color ") + helpers.arg("color") + "</b>: changes your color to <b>color</b>. <b>color</b> must be valid. Also /colour.<br>"
-        + "<b>" + helpers.user("/idle") + "</b>: changes your status to idle. Also /afk or /away.<br>"
-        + "<b>" + helpers.user("/unidle") + "</b>: changes your status to available. Also /(go)back.<br>"
-        + "<b>" + helpers.user("/unregister") + "</b>: clears your password.<br>"
-        + "<b>" + helpers.user("/name ") + helpers.arg("text") + "</b>: changes your username to <b>text</b>.<br>"
-        + "<b>" + helpers.user("/reset") + "</b>: sets your username and color back to their original states.<br>"
-        + "<b>" + helpers.user("/resetname") + "</b>: sets your username back to its original state.<br>"
-        + "<b>" + helpers.user("/resetcolor") + "</b>: sets your color back to its original state. Also /resetcolour.<br>"
-        + "<b>" + helpers.user("/reverse") + "</b>: reverses your username.<br>"
-        + "<b>" + helpers.user("/selfkick") + "</b>: kicks yourself from the server.<br>"
-        + "<br><timestamp/><br>"
-        + border2;
-        sys.sendHtmlMessage(src, commandsmessage, channel);
-    }
-    
-    ,
-    
-    messageoptions: function (src, channel, command) {
-        var commandsmessage = border
-        + "<h2>User Commands ~ Message Options</h2>"
-        + "<br>"
-        + "<b>" + helpers.user("/me ") + helpers.arg("message") + "</b>: posts <b>message</b> between asterisks, in bold and your name color.<br>"
-        + "<b>" + helpers.user("/poke ") + helpers.arg("text/player") + "</b>: pokes <b>text</b> or <b>player</b>. If <b>player</b> is specified over <b>text</b>, they are online and you have auth, they get flashed.<br>"
-        + "<b>" + helpers.user("/imp ") + helpers.arg("text") + helpers.arg2("*message") + "</b>: posts <b>message</b> as <b>text</b>.<br>"
-        + "<b>" + helpers.user("/impme ") + helpers.arg("text") + helpers.arg2("*message") + "</b>: posts <b>message</b> between asterisks and in bold in your name color as <b>text</b>.<br>"
-        + "<b>" + helpers.user("/future ") + helpers.arg("text") + helpers.arg2("*time") + "</b>: posts <b>message</b> into the future, to arrive in <b>time</b>. <b>message</b> can also be a command.<br>"
-        + "<b>" + helpers.user("/listen ") + helpers.arg("youtube link") + "</b>: posts a message saying that you're listening to <b>youtube link</b>. The link will turn into the video's title.<br>"
-        + "<b>" + helpers.user("/quote ") + helpers.arg("text") + helpers.arg2("*author") + "</b>: posts <b>text</b> as a quote, cited from <b>author</b>.<br>"
-        + "<b>" + helpers.user("/spoiler ") + helpers.arg("text") + helpers.arg2("*source") + "</b>: saves <b>text</b> as a spoiler of <b>source</b>. A link will be posted for users to read it (Android users will be told to use the /view command instead).<br>"
-        + "<b>" + helpers.user("/view ") + helpers.arg("number") + "</b>: view spoiler <b>number</b>. The number will roll back to 0 when the 100th spoiler is posted.<br>"
-        + "<br><timestamp/><br>"
-        + border2;
-        sys.sendHtmlMessage(src, commandsmessage, channel);
-    }
-    
-    ,
-    
-    touroptions: function (src, channel, command) {
-        var commandsmessage = border
-        + "<h2>User Commands ~ Tour Options</h2>"
-        + "<br>"
-        + "<b>" + helpers.user("/join") + "</b>: join the current tour.<br>"
-        + "<b>" + helpers.user("/leave") + "</b>: leave the current tour.<br>"
-        + "<b>" + helpers.user("/viewtour") + "</b>: display the current tour.<br>"
-        + "<b>" + helpers.user("/viewround") + "</b>: view the current round.<br>"
         + "<br><timestamp/><br>"
         + border2;
         sys.sendHtmlMessage(src, commandsmessage, channel);
@@ -235,12 +185,7 @@ usercommands = {
     }
     
     ,
-
-    /**
-        ------------
-        Info Options
-        ------------
-    **/
+    
     rules: function (src, channel, command) {
         var rulesmessage = border
         + "<h2>Rules</h2>"
@@ -250,6 +195,23 @@ usercommands = {
         }
         rulesmessage += "<br><timestamp/><br>" + border2;
         sys.sendHtmlMessage(src, rulesmessage, channel);
+    }
+    
+    ,
+    
+    rule: function (src, channel, command) {
+        var number = command[1], rulemessage = border;
+        if (!number) {
+            helpers.starfox(src, channel, command, bots.command, "Error 404, number not found.");
+            return;
+        }
+        if (isNaN(number) || parseInt(number) < 1 || parseInt(number) >= Object.keys(rules).length) {
+            helpers.starfox(src, channel, command, bots.command, "Error 400, there is no such rule!");
+            return;
+        }
+        number = parseInt(number);
+        rulemessage += "<h2>Rules ~ Rule " + number + "</h2><br>" + helpers.bot("• " + botsymbol + "Rule " + number + ": " + rules[number]) + "<br>" + rules.explanations[number - 1] + "<br><br><timestamp/><br>" + border2;
+        sys.sendHtmlMessage(src, rulemessage, channel);
     }
     
     ,
@@ -1019,6 +981,27 @@ usercommands = {
         Interact Options
         ----------------
     **/
+    interactoptions: function (src, channel, command) {
+        var commandsmessage = border
+        + "<h2>User Commands ~ Interact Options</h2>"
+        + "<br>"
+        + "<b>" + helpers.user("/color ") + helpers.arg("color") + "</b>: changes your color to <b>color</b>. <b>color</b> must be valid. Also /colour.<br>"
+        + "<b>" + helpers.user("/idle") + "</b>: changes your status to idle. Also /afk or /away.<br>"
+        + "<b>" + helpers.user("/unidle") + "</b>: changes your status to available. Also /(go)back.<br>"
+        + "<b>" + helpers.user("/unregister") + "</b>: clears your password.<br>"
+        + "<b>" + helpers.user("/name ") + helpers.arg("text") + "</b>: changes your username to <b>text</b>.<br>"
+        + "<b>" + helpers.user("/reset") + "</b>: sets your username and color back to their original states.<br>"
+        + "<b>" + helpers.user("/resetname") + "</b>: sets your username back to its original state.<br>"
+        + "<b>" + helpers.user("/resetcolor") + "</b>: sets your color back to its original state. Also /resetcolour.<br>"
+        + "<b>" + helpers.user("/reverse") + "</b>: reverses your username.<br>"
+        + "<b>" + helpers.user("/selfkick") + "</b>: kicks yourself from the server.<br>"
+        + "<br><timestamp/><br>"
+        + border2;
+        sys.sendHtmlMessage(src, commandsmessage, channel);
+    }
+    
+    ,
+    
     idle: function (src, channel, command) {
         if (sys.away(src)) {
             helpers.starfox(src, channel, command, bots.idle, "Error 400, you are already idling!");
@@ -1111,6 +1094,21 @@ usercommands = {
         Tour Options
         ------------
     **/
+    touroptions: function (src, channel, command) {
+        var commandsmessage = border
+        + "<h2>User Commands ~ Tour Options</h2>"
+        + "<br>"
+        + "<b>" + helpers.user("/join") + "</b>: join the current tour.<br>"
+        + "<b>" + helpers.user("/leave") + "</b>: leave the current tour.<br>"
+        + "<b>" + helpers.user("/viewtour") + "</b>: display the current tour.<br>"
+        + "<b>" + helpers.user("/viewround") + "</b>: view the current round.<br>"
+        + "<br><timestamp/><br>"
+        + border2;
+        sys.sendHtmlMessage(src, commandsmessage, channel);
+    }
+    
+    ,
+    
     viewtour: function (src, channel, command) {
         if (tour[channel].tourmode === 0) {
             helpers.starfox(src, channel, command, bots.tour, "Error 400, there is no tour running!");
@@ -1351,6 +1349,26 @@ usercommands = {
         Message Options
         ---------------
     **/
+    messageoptions: function (src, channel, command) {
+        var commandsmessage = border
+        + "<h2>User Commands ~ Message Options</h2>"
+        + "<br>"
+        + "<b>" + helpers.user("/me ") + helpers.arg("message") + "</b>: posts <b>message</b> between asterisks, in bold and your name color.<br>"
+        + "<b>" + helpers.user("/poke ") + helpers.arg("text/player") + "</b>: pokes <b>text</b> or <b>player</b>. If <b>player</b> is specified over <b>text</b>, they are online and you have auth, they get flashed.<br>"
+        + "<b>" + helpers.user("/imp ") + helpers.arg("text") + helpers.arg2("*message") + "</b>: posts <b>message</b> as <b>text</b>.<br>"
+        + "<b>" + helpers.user("/impme ") + helpers.arg("text") + helpers.arg2("*message") + "</b>: posts <b>message</b> between asterisks and in bold in your name color as <b>text</b>.<br>"
+        + "<b>" + helpers.user("/future ") + helpers.arg("text") + helpers.arg2("*time") + "</b>: posts <b>message</b> into the future, to arrive in <b>time</b>. <b>message</b> can also be a command.<br>"
+        + "<b>" + helpers.user("/listen ") + helpers.arg("youtube link") + "</b>: posts a message saying that you're listening to <b>youtube link</b>. The link will turn into the video's title.<br>"
+        + "<b>" + helpers.user("/quote ") + helpers.arg("text") + helpers.arg2("*author") + "</b>: posts <b>text</b> as a quote, cited from <b>author</b>.<br>"
+        + "<b>" + helpers.user("/spoiler ") + helpers.arg("text") + helpers.arg2("*source") + "</b>: saves <b>text</b> as a spoiler of <b>source</b>. A link will be posted for users to read it (Android users will be told to use the /view command instead).<br>"
+        + "<b>" + helpers.user("/view ") + helpers.arg("number") + "</b>: view spoiler <b>number</b>. The number will roll back to 0 when the 100th spoiler is posted.<br>"
+        + "<br><timestamp/><br>"
+        + border2;
+        sys.sendHtmlMessage(src, commandsmessage, channel);
+    }
+    
+    ,
+    
     me: function (src, channel, command) {
         var name = sys.name(src), color = helpers.color(src);
         command.splice(0, 1);
