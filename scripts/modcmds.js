@@ -98,7 +98,7 @@ modcommands = {
             helpers.starfox(src, channel, command, bots.command, "Error 404, player not found.");
             return;
         }
-        if (!command[2] || command[2] > 5 || command[2] < 1 || isNaN(command[2])) {
+        if (!command[2] || command[2] >= Object.keys(rules).length || command[2] < 1 || isNaN(command[2])) {
             helpers.starfox(src, channel, command, bots.command, "Error 404, rule not found.");
             return;
         }
