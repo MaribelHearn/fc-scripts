@@ -23,7 +23,8 @@ ownercommands = {
         + "<b>" + helpers.userl("/serversettings") + "</b>: displays server settings.<br>"
         + "<b>" + helpers.userl("/silentsettings") + "</b>: displays silent settings.<br>"
         + "<b>" + helpers.userl("/filtersettings") + "</b>: displays name filtering settings.<br>"
-        + "<b>" + helpers.userl("/customsettings") + "</b>: displays customisation settings.<br>"
+        + "<b>" + helpers.userl("/messagesettings") + "</b>: displays message settings.<br>"
+        + "<b>" + helpers.userl("/colorsettings") + "</b>: displays color settings. Also /coloursettings.<br>"
         + "<b>" + helpers.userl("/rulesettings") + "</b>: displays rule settings.<br>"
         + "<b>" + helpers.userl("/listsettings") + "</b>: displays mute and banlist customisation settings.<br>"
         + "<b>" + helpers.userl("/channelsettings") + "</b>: displays channel settings.<br>"
@@ -1802,20 +1803,13 @@ ownercommands = {
     ,
     
     /**
-        ---------------
-        Custom Settings
-        ---------------
+        ----------------
+        Message Settings
+        ----------------
     **/
-    customsettings: function (src, channel, command) {
+    messagesettings: function (src, channel, command) {
         var commandsmessage = border
-        + "<h2>Owner Commands ~ Custom Settings</h2>"
-        + "<br>"
-        + "Current colorings:<br>"
-        + "<br>"
-        + "<b>Border color:</b> " + borderColor + "<br>"
-        + "<b>Server topic color:</b> " + serverTopicColor + "<br>"
-        + "<b>Channel topic color:</b> " + channelTopicColor + "<br>"
-        + "<b>Command colors:</b> " + cmdcolors.join(", ") + "<br>"
+        + "<h2>Owner Commands ~ Message Settings</h2>"
         + "<br>"
         + "Current messages:<br>"
         + "<br>"
@@ -1832,11 +1826,6 @@ ownercommands = {
         + "<b>~Channel~</b> will be replaced by the channel name.<br>"
         + "<br>"
         + "Use <b>" + helpers.user("/layout") + "</b> to toggle the layout of certain messages between the old one and the new one.<br>"
-        + "Use <b>" + helpers.user("/bordercolor ") + helpers.arg("color") + "</b> to change the border color to <b>color</b>. Also /bordercolour.<br>"
-        + "Use <b>" + helpers.user("/servertopiccolor ") + helpers.arg("color") + "</b> to change the color of 'Server Topic' in the server topic message to to <b>color</b>. Also /servertopiccolour.<br>"
-        + "Use <b>" + helpers.user("/channeltopiccolor ") + helpers.arg("color") + "</b> to change the color of 'Channel Topic' in the channel topic message to to <b>color</b>. Also /channeltopiccolour.<br>"
-        + "Use <b>" + helpers.user("/commandcolor ") + helpers.arg("number") + helpers.arg2("*color") + "</b> to change command color <b>number</b> to <b>color</b>.<br>"
-        + "0 is the user, 1 is the first argument, 2 the second argument, and so on. Also /commandcolour.<br>"
         + "Use <b>" + helpers.user("/welcomemsg ") + helpers.arg("text") + "</b> to change the welcome message to <b>text</b>.<br>"
         + "Use <b>" + helpers.user("/leavemsg ") + helpers.arg("text") + "</b> to change the leave message to <b>text</b>.<br>"
         + "Use <b>" + helpers.user("/channelwelcomemsg ") + helpers.arg("text") + "</b> to change the channel welcome message to <b>text</b>.<br>"
@@ -1862,6 +1851,99 @@ ownercommands = {
             layout = "old";
             sys.sendHtmlMain(helpers.bot(bots.main) + "<b>" + helpers.user(name) + " changed certain messages to the old, nostalgic layout!</b>");
         }
+    }
+    
+    ,
+    
+    welcomemsg: function (src, channel, command) {
+        var message = command[1];
+        if (!message) {
+            sys.sendHtmlMessage(src, helpers.bot(bots.main) + "The current welcome message is: " + welcomeMessage + ".", channel);
+            return;
+        }
+        welcomeMessage = message;
+        helpers.saveData("welcomemessage");
+        sys.sendHtmlMessage(src, helpers.bot(bots.main) + "The welcome message has been changed successfully.", channel);
+    }
+    
+    ,
+    
+    leavemsg: function (src, channel, command) {
+        var message = command[1];
+        if (!message) {
+            sys.sendHtmlMessage(src, helpers.bot(bots.main) + "The current leave message is: " + leaveMessage + ".", channel);
+            return;
+        }
+        leaveMessage = message;
+        helpers.saveData("leavemessage");
+        sys.sendHtmlMessage(src, helpers.bot(bots.main) + "The leave message has been changed successfully.", channel);
+    }
+    
+    ,
+    
+    channelwelcomemsg: function (src, channel, command) {
+        var message = command[1];
+        if (!message) {
+            sys.sendHtmlMessage(src, helpers.bot(bots.main) + "The current channel welcome message is: " + channelWelcomeMessage + ".", channel);
+            return;
+        }
+        channelWelcomeMessage = message;
+        helpers.saveData("channelwelcomemessage");
+        sys.sendHtmlMessage(src, helpers.bot(bots.main) + "The channel welcome message has been changed successfully.", channel);
+    }
+    
+    ,
+    
+    channelleavemsg: function (src, channel, command) {
+        var message = command[1];
+        if (!message) {
+            sys.sendHtmlMessage(src, helpers.bot(bots.main) + "The current channel leave message is: " + channelLeaveMessage + ".", channel);
+            return;
+        }
+        channelLeaveMessage = message;
+        helpers.saveData("channelleavemessage");
+        sys.sendHtmlMessage(src, helpers.bot(bots.main) + "The channel leave message has been changed successfully.", channel);
+    }
+    
+    ,
+    
+    nopermissionmsg: function (src, channel, command) {
+        var message = command[1];
+        if (!message) {
+            sys.sendHtmlMessage(src, helpers.bot(bots.main) + "The current no permission message is: " + noPermissionMessage + ".", channel);
+            return;
+        }
+        nopermissionmsg = message;
+        helpers.saveData("nopermissionmessage");
+        sys.sendHtmlMessage(src, helpers.bot(bots.main) + "The no permission message has been changed successfully.", channel);
+    }
+    
+    ,
+    
+    /**
+        --------------
+        Color Settings
+        --------------
+    **/
+    colorsettings: function (src, channel, command) {
+        var commandsmessage = border
+        + "<h2>Owner Commands ~ " + helpers.cap(command[0].slice(0, -8)) + " Settings</h2>"
+        + "<br>"
+        + "Current colorings:<br>"
+        + "<br>"
+        + "<b>Border " + command[0].slice(0, -8) + ":</b> " + borderColor + "<br>"
+        + "<b>Server topic " + command[0].slice(0, -8) + ":</b> " + serverTopicColor + "<br>"
+        + "<b>Channel topic " + command[0].slice(0, -8) + ":</b> " + channelTopicColor + "<br>"
+        + "<b>Command " + command[0].slice(0, -8) + "s:</b> " + cmdcolors.join(", ") + "<br>"
+        + "<br>"
+        + "Use <b>" + helpers.user("/bordercolor ") + helpers.arg("color") + "</b> to change the border color to <b>color</b>. Also /bordercolour.<br>"
+        + "Use <b>" + helpers.user("/servertopiccolor ") + helpers.arg("color") + "</b> to change the color of 'Server Topic' in the server topic message to to <b>color</b>. Also /servertopiccolour.<br>"
+        + "Use <b>" + helpers.user("/channeltopiccolor ") + helpers.arg("color") + "</b> to change the color of 'Channel Topic' in the channel topic message to to <b>color</b>. Also /channeltopiccolour.<br>"
+        + "Use <b>" + helpers.user("/commandcolor ") + helpers.arg("number") + helpers.arg2("*color") + "</b> to change command color <b>number</b> to <b>color</b>.<br>"
+        + "0 is the user, 1 is the first argument, 2 the second argument, and so on. Also /commandcolour.<br>"
+        + "<br><timestamp/><br>"
+        + border2;
+        sys.sendHtmlMessage(src, commandsmessage, channel);
     }
     
     ,
@@ -1964,71 +2046,6 @@ ownercommands = {
     
     commandcolour: function (src, channel, command) {
         this.commandcolor(src, channel, command);
-    }
-    
-    ,
-    
-    welcomemsg: function (src, channel, command) {
-        var message = command[1];
-        if (!message) {
-            sys.sendHtmlMessage(src, helpers.bot(bots.main) + "The current welcome message is: " + welcomeMessage + ".", channel);
-            return;
-        }
-        welcomeMessage = message;
-        helpers.saveData("welcomemessage");
-        sys.sendHtmlMessage(src, helpers.bot(bots.main) + "The welcome message has been changed successfully.", channel);
-    }
-    
-    ,
-    
-    leavemsg: function (src, channel, command) {
-        var message = command[1];
-        if (!message) {
-            sys.sendHtmlMessage(src, helpers.bot(bots.main) + "The current leave message is: " + leaveMessage + ".", channel);
-            return;
-        }
-        leaveMessage = message;
-        helpers.saveData("leavemessage");
-        sys.sendHtmlMessage(src, helpers.bot(bots.main) + "The leave message has been changed successfully.", channel);
-    }
-    
-    ,
-    
-    channelwelcomemsg: function (src, channel, command) {
-        var message = command[1];
-        if (!message) {
-            sys.sendHtmlMessage(src, helpers.bot(bots.main) + "The current channel welcome message is: " + channelWelcomeMessage + ".", channel);
-            return;
-        }
-        channelWelcomeMessage = message;
-        helpers.saveData("channelwelcomemessage");
-        sys.sendHtmlMessage(src, helpers.bot(bots.main) + "The channel welcome message has been changed successfully.", channel);
-    }
-    
-    ,
-    
-    channelleavemsg: function (src, channel, command) {
-        var message = command[1];
-        if (!message) {
-            sys.sendHtmlMessage(src, helpers.bot(bots.main) + "The current channel leave message is: " + channelLeaveMessage + ".", channel);
-            return;
-        }
-        channelLeaveMessage = message;
-        helpers.saveData("channelleavemessage");
-        sys.sendHtmlMessage(src, helpers.bot(bots.main) + "The channel leave message has been changed successfully.", channel);
-    }
-    
-    ,
-    
-    nopermissionmsg: function (src, channel, command) {
-        var message = command[1];
-        if (!message) {
-            sys.sendHtmlMessage(src, helpers.bot(bots.main) + "The current no permission message is: " + noPermissionMessage + ".", channel);
-            return;
-        }
-        nopermissionmsg = message;
-        helpers.saveData("nopermissionmessage");
-        sys.sendHtmlMessage(src, helpers.bot(bots.main) + "The no permission message has been changed successfully.", channel);
     }
     
     ,
