@@ -236,7 +236,7 @@ usercommands = {
         if (helpers.isAndroid(src)) {
             onlinemessage += "<tt>";
             for (var i in ids) {
-                onlinemessage += helpers.authname(auths[i], true) + " | " + "<b><font color='" + colors[i] + "'>" + names[i] + "</font></b> | " + ids[i];
+                onlinemessage += helpers.authName(auths[i], true) + " | " + "<b><font color='" + colors[i] + "'>" + names[i] + "</font></b> | " + ids[i];
                 if (srcauth >= 1) {
                     onlinemessage += " | " + ips[i] + " | " + helpers.osName(clients[i]);
                 }
@@ -254,7 +254,7 @@ usercommands = {
             for (var i in ids) {
                 onlinemessage += "<tr>"
                 + "<td>" + helpers.authimage(src, helpers.imageIndex(ids[i])) + "</td>"
-                + "<td>" + helpers.authname(auths[i], DISPLAY_USER, HIDE_INVIS) + "</td>"
+                + "<td>" + helpers.authName(auths[i], DISPLAY_USER, HIDE_INVIS) + "</td>"
                 + "<td><b><font color='" + colors[i] + "'>" + names[i] + "</font></b></td>"
                 + "<td>" + ids[i] + "</td>";
                 if (srcauth >= 1) {
@@ -510,14 +510,14 @@ usercommands = {
             imageindex = helpers.imageIndex(trgt);
             status = "<font color='green'><b>Online</b></font>";
             infomessage += helpers.authimage(src, imageindex) + " " + player + " " + status +
-            "<br><b>Auth:</b> " + helpers.authname(sys.dbAuth(player), true, true) +
+            "<br><b>Auth:</b> " + helpers.authName(sys.dbAuth(player), true, true) +
             "<br><b>Avatar:</b> <img src='trainer:" + sys.avatar(trgt) + "'>" +
             "<br><b>Trainer Info:</b> " + sys.info(trgt) + "";
         } else {
             auth = (sys.dbAuth(player) >= 4 ? 4 : sys.dbAuth(player) + 4);
             status = "<font color='red'>Offline</font>";
             infomessage += helpers.authimage(src, imageindex) + " " + player + " " + status +
-            "<br><b>Auth:</b> " + helpers.authname(sys.dbAuth(player), true, true);
+            "<br><b>Auth:</b> " + helpers.authName(sys.dbAuth(player), true, true);
         }
         infomessage += "<br><b>Last Online:</b> " + lastlogin +
         "<br><br><timestamp/><br>" + border2;
@@ -547,7 +547,7 @@ usercommands = {
         if (helpers.isAndroid(src)) {
             authmessage += "<tt>";
             for (var i in auths) {
-                authmessage += helpers.authname(auths[i]) + " | " + names[i] + " | " + statuses[i] + "<br>";
+                authmessage += helpers.authName(auths[i]) + " | " + names[i] + " | " + statuses[i] + "<br>";
             }
             authmessage += "</tt><br><br><b>Total Auth Members:</b> " + authList.length;
         } else {
@@ -561,7 +561,7 @@ usercommands = {
             for (var i in auths) {
                 authmessage += "<tr>"
                 + "<td>" + helpers.authimage(src, auths[i]) + "</td>"
-                + "<td>" + helpers.authname(auths[i]) + "</td>"
+                + "<td>" + helpers.authName(auths[i]) + "</td>"
                 + "<td>" + titles[i] + "</td>"
                 + "<td>" + names[i] + "</td>";
                 if (srcauth >= 1) {
@@ -631,7 +631,7 @@ usercommands = {
             for (var i in auths) {
                 altsmessage += "<tr>"
                 + "<td>" + helpers.authimage(src, auths[i] >= 4 ? 0 : auths[i]) + "</td>"
-                + "<td>" + helpers.authname(auths[i], DISPLAY_USER) + "</td>"
+                + "<td>" + helpers.authName(auths[i], DISPLAY_USER) + "</td>"
                 + "<td>" + titles[i] + "</td>"
                 + "<td>" + names[i] + "</td>"
                 + "<td>" + registered[i] + "</td>"

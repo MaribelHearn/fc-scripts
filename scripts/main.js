@@ -41,7 +41,7 @@
     SPACE = /\u0009-\u000D|\u0085|\u00A0|\u1680|\u180E|\u2000-\u200A|\u2028|\u2029|\u2029|\u202F|\u205F|\u3000/;
     DASH = /\u058A|\u05BE|\u1400|\u1806|\u2010-\u2015|\u2053|\u207B|\u208B|\u2212|\u2E17|\u2E1A|\u301C|\u3030|\u30A0|[\uFE31-\uFE32]|\uFE58|\uFE63|\uFF0D/;
     CYRILLIC = /\u0408|\u03a1|\u0430|\u0410|\u0412|\u0435|\u0415|\u041c|\u041d|\u043e|\u041e|\u0440|\u0420|\u0441|\u0421|\u0422|\u0443|\u0445|\u0425|\u0456|\u0406/;
-    AUTH_NAME = ["User", "Moderator", "Administrator", "Owner"];
+    AUTH_NAMES = ["User", "Moderator", "Administrator", "Owner", "Invisible Owner"];
     SCRIPT_MODULES = ["usercmds.js", "modcmds.js", "admincmds.js", "ownercmds.js", "cusercmds.js", "cmodcmds.js", "cadmincmds.js", "cownercmds.js", "helpers.js", "handler.js", "tierchecks.js", "base64.js"];
     SCRIPT_PLUGINS = ["funcmds.js", "party.js", "roulette.js", "rr.js", "safari.js"];
     SCRIPTS_FOLDER = "scripts/";
@@ -735,7 +735,7 @@
             ---------------------------------
         **/
         if (authtitles[lower] === undefined) {
-            authtitles[lower] = AUTH_NAME[auth];
+            authtitles[lower] = AUTH_NAMES[auth];
         }
         members[name.toLowerCase()] = name;
         helpers.saveData("members");
@@ -782,14 +782,14 @@
             Welcome Message
             ---------------
         **/
-        authtitle = (authtitles[lower] ? authtitles[lower] : AUTH_NAME[auth]) + " ";
+        authtitle = (authtitles[lower] ? authtitles[lower] : AUTH_NAMES[auth]) + " ";
         if (auth === 0 || auth >= 4) {
             authtitle = "";
         }
         if (layout == "new") {
             sys.sendHtmlMain(helpers.bot(bots.welcome) + welcomeMessage.replace(/~Player~/, authtitle + name).replace(/~Server~/, servername));
         } else {
-            sys.sendHtmlMain("<timestamp/><b>~Please Welcome " + (auth >= 1 ? AUTH_NAME[auth] + " " : "") + helpers.rainbow(name) + "~</b>");
+            sys.sendHtmlMain("<timestamp/><b>~Please Welcome " + (auth >= 1 ? AUTH_NAMES[auth] + " " : "") + helpers.rainbow(name) + "~</b>");
         }
         /**
             -----------------------------------
@@ -983,7 +983,7 @@
             Auth Title Check
             ----------------
         **/
-        authtitle = (authtitles[lower] ? authtitles[lower] : AUTH_NAME[auth]) + " ";
+        authtitle = (authtitles[lower] ? authtitles[lower] : AUTH_NAMES[auth]) + " ";
         if (auth === 0 || auth >= 4) {
             authtitle = "";
         }

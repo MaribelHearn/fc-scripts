@@ -658,7 +658,7 @@ modcommands = {
         }
         !cityname[player.toLowerCase()] ? city = "[no data]" : city = cityname[player.toLowerCase()];
         cpmessage += (!helpers.isAndroid(src) ? helpers.authimage(src, imageindex) + " " : "") + player + " " + status +
-        "<br><b>Auth:</b> " + helpers.authname(sys.dbAuth(player), DISPLAY_USER);
+        "<br><b>Auth:</b> " + helpers.authName(sys.dbAuth(player), DISPLAY_USER);
         if (city == "[no data]") {
             cpmessage += "<br><b>IP:</b> " + ip;
         } else {
@@ -1095,7 +1095,7 @@ modcommands = {
             for (var i in auths) {
                 commandsmessage += "<tr>"
                 + "<td>" + helpers.authimage(src, auths[i] >= 4 ? 0 : auths[i]) + "</td>"
-                + "<td>" + helpers.authname(auths[i], DISPLAY_USER) + "</td>"
+                + "<td>" + helpers.authName(auths[i], DISPLAY_USER) + "</td>"
                 + "<td>" + titles[i] + "</td>"
                 + "<td>" + names[i] + "</td>"
                 + "<td>" + registered[i] + "</td>"
@@ -1212,8 +1212,8 @@ modcommands = {
     title: function (src, channel, command) {
         var name = sys.name(src), auth = sys.auth(src), ip = sys.ip(src), player;
         if (!command[1]) {
-            authtitles[sys.name(src).toLowerCase()] = helpers.authname(sys.auth(src));
-            sys.sendHtmlAll(helpers.bot(bots.command) + "<b>" + helpers.user(sys.name(src)) + " changed their auth title to " + helpers.arg(helpers.authname(sys.auth(src))) + ".</b>", channel);
+            authtitles[sys.name(src).toLowerCase()] = helpers.authName(sys.auth(src));
+            sys.sendHtmlAll(helpers.bot(bots.command) + "<b>" + helpers.user(sys.name(src)) + " changed their auth title to " + helpers.arg(helpers.authName(sys.auth(src))) + ".</b>", channel);
             return;
         }
         if (!command[2]) {
