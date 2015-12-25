@@ -236,7 +236,7 @@ usercommands = {
         if (helpers.isAndroid(src)) {
             onlinemessage += "<tt>";
             for (var i in ids) {
-                onlinemessage += helpers.authName(auths[i], true) + " | " + "<b><font color='" + colors[i] + "'>" + names[i] + "</font></b> | " + ids[i];
+                onlinemessage += helpers.authName(auths[i], DISPLAY_USER, HIDE_INVIS) + " | " + "<b><font color='" + colors[i] + "'>" + names[i] + "</font></b> | " + ids[i];
                 if (srcauth >= 1) {
                     onlinemessage += " | " + ips[i] + " | " + helpers.osName(clients[i]);
                 }
