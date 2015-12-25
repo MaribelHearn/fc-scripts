@@ -985,7 +985,7 @@ ownercommands = {
             return;
         }
         trgt ? sys.changeAuth(trgt, 0) : sys.changeDbAuth(trgtname, 0);
-        sys.sendHtmlMain(helpers.bot(bots.auth) + "<b>" + helpers.arg(trgtname) + " has been made " + helpers.arg2("User") + " by " + helpers.user(name) + "!</font></b>");
+        sys.sendHtmlMain(helpers.bot(bots.auth) + "<b>" + helpers.arg(trgtname) + " has been made " + helpers.arg2(authNames[0]) + " by " + helpers.user(name) + "!</font></b>");
     }
 
     ,
@@ -1015,7 +1015,7 @@ ownercommands = {
             sys.changeAuth(trgt, 1);
         }
         sys.changeDbAuth(trgtname, 1);
-        sys.sendHtmlMain(helpers.bot(bots.auth) + "<b>" + helpers.arg(trgtname) + " has been made " + helpers.arg2("Moderator") + " by " + helpers.user(name) + "!</font></b>");
+        sys.sendHtmlMain(helpers.bot(bots.auth) + "<b>" + helpers.arg(trgtname) + " has been made " + helpers.arg2(authNames[1]) + " by " + helpers.user(name) + "!</font></b>");
     }
 
     ,
@@ -1051,7 +1051,7 @@ ownercommands = {
             sys.changeAuth(trgt, 2);
         }
         sys.changeDbAuth(trgtname, 2);
-        sys.sendHtmlMain(helpers.bot(bots.auth) + "<b>" + helpers.arg(trgtname) + " has been made " + helpers.arg2("Administrator") + " by " + helpers.user(name) + "!</font></b>");
+        sys.sendHtmlMain(helpers.bot(bots.auth) + "<b>" + helpers.arg(trgtname) + " has been made " + helpers.arg2(authNames[2]) + " by " + helpers.user(name) + "!</font></b>");
     }
 
     ,
@@ -1087,7 +1087,7 @@ ownercommands = {
             sys.changeAuth(trgt, 3);
         }
         sys.changeDbAuth(trgtname, 3);
-        sys.sendHtmlMain(helpers.bot(bots.auth) + "<b>" + helpers.arg(trgtname) + " has been made " + helpers.arg2("Owner") + " by " + helpers.user(name) + "!</font></b>");
+        sys.sendHtmlMain(helpers.bot(bots.auth) + "<b>" + helpers.arg(trgtname) + " has been made " + helpers.arg2(authNames[3]) + " by " + helpers.user(name) + "!</font></b>");
     }
     
     ,
@@ -1123,7 +1123,7 @@ ownercommands = {
             sys.changeAuth(trgt, auth);
         }
         sys.changeDbAuth(trgtname, auth);
-        sys.sendHtmlMessage(src, helpers.bot(bots.auth) + "You made " + trgtname + " Invisible Owner (placement " + placement + ").", channel);
+        sys.sendHtmlMessage(src, helpers.bot(bots.auth) + "You made " + trgtname + " " + authNames[4] + " (placement " + placement + ").", channel);
     }
     
     ,
