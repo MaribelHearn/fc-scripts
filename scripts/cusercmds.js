@@ -151,7 +151,7 @@ cusercommands = {
         if (helpers.isAndroid(src)) {
             onlinemessage += "<tt>";
             for (var i in ids) {
-                onlinemessage += helpers.authname(auths[i], true) + " | " + "<b><font color='" + colors[i] + "'>" + names[i] + "</font></b> | " + ids[i];
+                onlinemessage += helpers.authName(auths[i], true) + " | " + "<b><font color='" + colors[i] + "'>" + names[i] + "</font></b> | " + ids[i];
                 if (srcauth >= 1) {
                     onlinemessage += " | " + ips[i] + " | " + helpers.osName(clients[i]);
                 }
@@ -169,7 +169,7 @@ cusercommands = {
             for (var i in ids) {
                 onlinemessage += "<tr>"
                 + "<td>" + helpers.authimage(src, helpers.imageIndex(ids[i])) + "</td>"
-                + "<td>" + helpers.authname(auths[i], DISPLAY_USER, HIDE_INVIS) + "</td>"
+                + "<td>" + helpers.authName(auths[i], DISPLAY_USER, HIDE_INVIS) + "</td>"
                 + "<td><b><font color='" + colors[i] + "'>" + names[i] + "</font></b></td>"
                 + "<td>" + ids[i] + "</td>";
                 if (srcauth >= 1) {

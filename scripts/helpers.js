@@ -1940,17 +1940,13 @@ helpers = {
     
     ,
     
-    authname: function (auth, displayuser, hideinvis) {
+    authName: function (auth, displayuser, hideinvis) {
         if (auth === 0) {
-            return displayuser ? "User" : "";
-        } else if (auth == 1) {
-            return "Moderator";
-        } else if (auth == 2) {
-            return "Administrator";
-        } else if (auth == 3) {
-            return "Owner";
+            return displayuser ? authNames[auth] : "";
+        } else if (auth == 1 || auth == 2 || auth == 3) {
+            return authNames[auth];
         } else if (auth >= 4) {
-            return hideinvis ? "User" : "Invisible Owner";
+            return hideinvis ? authNames[0] : authNames[4];
         }
     }
     

@@ -1167,7 +1167,7 @@ ownercommands = {
             for (var i in auths) {
                 authmessage += "<tr>"
                 + "<td>" + helpers.authimage(src, authLevels[i] >= 4 ? 0 : authLevels[i]) + "</td>"
-                + "<td>" + helpers.authname(authLevels[i], DISPLAY_USER) + "</td>"
+                + "<td>" + helpers.authName(authLevels[i], DISPLAY_USER) + "</td>"
                 + "<td>" + authLevels[i] + "</td>"
                 + "<td>" + titles[i] + "</td>"
                 + "<td>" + names[i] + "</td>"
@@ -1419,7 +1419,7 @@ ownercommands = {
         if (floodlevel >= 4) {
             commandsmessage += " regardless of their auth level.<br>";
         } else {
-            commandsmessage += " if their auth level is lower than " + AUTH_NAME[floodlevel] + ".<br>";
+            commandsmessage += " if their auth level is lower than " + authNames[floodlevel] + ".<br>";
         }
         commandsmessage += "<br>"
         + "Use <b>" + helpers.user("/floodlevel ") + helpers.arg("number") + "</b> to change the flood level into <b>number</b>.<br>"
