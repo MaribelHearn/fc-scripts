@@ -1942,11 +1942,11 @@ helpers = {
     
     authName: function (auth, displayuser, hideinvis) {
         if (auth === 0) {
-            return displayuser ? authNames[auth] : "";
+            return displayuser ? AUTH_NAMES[auth] : "";
         } else if (auth == 1 || auth == 2 || auth == 3) {
-            return authNames[auth];
+            return AUTH_NAMES[auth];
         } else if (auth >= 4) {
-            return hideinvis ? authNames[0] : authNames[4];
+            return hideinvis ? AUTH_NAMES[0] : AUTH_NAMES[4];
         }
     }
     
