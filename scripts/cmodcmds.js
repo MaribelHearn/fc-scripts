@@ -363,7 +363,7 @@ cmodcommands = {
         }
         regchannels[lower].close = strength;
         helpers.saveData("regchannels");
-        sys.sendHtmlAll(helpers.bot(bots.channel) + "This channel has been closed for any channel auth level lower than Channel " + authNames[strength] + " by " + name + ".", channel);
+        sys.sendHtmlAll(helpers.bot(bots.channel) + "This channel has been closed for any channel auth level lower than Channel " + AUTH_NAMES[strength] + " by " + name + ".", channel);
     }
     
     ,
