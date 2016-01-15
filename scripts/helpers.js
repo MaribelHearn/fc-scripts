@@ -1765,7 +1765,7 @@ helpers = {
     breakinghtml: function (string) {
         if (string.split("<").length > string.split(">").length) {
             return true;
-        } else if (this.removespaces(string).indexOf("><") >= 0) {
+        } else if (this.removespaces(string) == "><") {
             return true;
         } else if (this.removespaces(string).indexOf("<center>") >= 0) {
             return true;
