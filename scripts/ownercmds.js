@@ -425,12 +425,10 @@ ownercommands = {
         }
         for (var index in mutelist) {
             if (!sys.dbIp(index)) {
-                delete mutedips[mutelist[index].ip];
                 delete mutelist[index];
                 continue;
             }
             if (sys.dbRange(index) == range) {
-                delete mutedips[mutelist[index].ip];
                 delete mutelist[index];
                 if (members[index])index = members[index];
                 helpers.saveData("mutelist");
