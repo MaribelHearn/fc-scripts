@@ -127,7 +127,7 @@ admincommands = {
         }
         if (banmessages[name.toLowerCase()]) {
             if (time == "forever") {
-                msg = banmessages[name.toLowerCase()].replace(/~Self~/gi, name).replace(/~Target~/gi, trgtname).replace(/~Time~/gi, "forever").replace(/~Server~/gi, sys.getServerName());
+                msg = banmessages[name.toLowerCase()].replace(/~Self~/gi, name).replace(/~Target~/gi, trgtname).replace(/~Time~/g, "Forever").replace(/~time~/g, "forever").replace(/~Server~/gi, sys.getServerName());
             } else {
                 msg = banmessages[name.toLowerCase()].replace(/~Self~/gi, name).replace(/~Target~/gi, trgtname).replace(/~Time~/gi, time + " " + unit).replace(/~Server~/gi, sys.getServerName());
             }
@@ -140,12 +140,10 @@ admincommands = {
         }
         for (var index in mutelist) {
             if (!sys.dbIp(index)) {
-                delete mutedips[mutelist[index].ip];
                 delete mutelist[index];
                 continue;
             }
             if (mutelist[index].ip == banlist[lower].ip) {
-                delete mutedips[mutelist[index].ip];
                 delete mutelist[index];
                 if (members[index]) {
                     index = members[index];
@@ -259,12 +257,10 @@ admincommands = {
         }
         for (var index in mutelist) {
             if (!sys.dbIp(index)) {
-                delete mutedips[mutelist[index].ip];
                 delete mutelist[index];
                 continue;
             }
             if (mutelist[index].ip == trgtip) {
-                delete mutedips[mutelist[index].ip];
                 delete mutelist[index];
                 if (members[index])index = members[index];
                 helpers.saveData("mutelist");
