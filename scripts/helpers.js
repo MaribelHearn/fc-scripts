@@ -30,6 +30,7 @@ helpers = {
         
         // Strings
         sys.write(DATA_FOLDER + "API_KEY.txt", "");
+        sys.write(DATA_FOLDER + "UPDATE_KEY.txt", "");
         sys.write(DATA_FOLDER + "latestshahash.txt", "");
         sys.write(DATA_FOLDER + "botcolor.txt", "#318739");
         sys.write(DATA_FOLDER + "botsymbol.txt", "±");

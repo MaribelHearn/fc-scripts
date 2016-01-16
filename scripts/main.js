@@ -25,6 +25,7 @@
     BETA_TIERS_URL = "https://raw.githubusercontent.com/po-devs/po-server-goodies/master/tiers.xml";
     SCRIPT_URL = "https://raw.githubusercontent.com/MaribelHearn/fc-scripts/master/scripts/";
     PLUGIN_URL = "https://raw.githubusercontent.com/MaribelHearn/fc-scripts/master/plugins/";
+    AUTO_UPDATE_URL = "https://api.github.com/repos/MaribelHearn/fc-scripts/commits";
     REACTIVATE_REGISTER_BUTTON = 14;
     FAKEI = /\u00A1/;
     OTHER = /\u3061|\u65532/;
@@ -75,14 +76,15 @@
         }
     }
     /**
-        -----------------------------------------------
-        Initialize data for first time use, set API key
-        -----------------------------------------------
+        ------------------------------------------------
+        Initialize data for first time use, set API keys
+        ------------------------------------------------
     **/
     if (!helpers.isInArray("data", sys.dirsForDirectory(sys.cwd()))) {
         helpers.initData();
     }
     API_KEY = sys.read(DATA_FOLDER + "API_KEY.txt");
+    UPDATE_KEY = sys.read(DATA_FOLDER + "UPDATE_KEY.txt");
     /**
         ----------------------
         Additional Sys Methods
@@ -157,11 +159,9 @@
         Global Variables
         ----------------
     **/
-    helpers.setVariable("open", helpers.readData("open") == "true" ? true : false);
-    allowance = helpers.readNumber("allowance");
-    floodtime = helpers.readNumber("floodtime");
-    floodlevel = helpers.readNumber("floodlevel");
-    maxplayers = helpers.readNumber("maxplayers");
+    open = helpers.readBoolean("open");
+    autoUpdating = helpers.readBoolean("autoupdating");
+    latestShaHash = helpers.readData("latestshahash");
     botcolor = helpers.readData("botcolor");
     botsymbol = helpers.readData("botsymbol");
     servertopic = helpers.readData("servertopic");
@@ -174,6 +174,11 @@
     channelWelcomeMessage = helpers.readData("channelwelcomemessage");
     channelLeaveMessage = helpers.readData("channelleavemessage");
     noPermissionMessage = helpers.readData("nopermissionmessage");
+    updateFrequency = helpers.readNumber("updatefrequency");
+    allowance = helpers.readNumber("allowance");
+    floodtime = helpers.readNumber("floodtime");
+    floodlevel = helpers.readNumber("floodlevel");
+    maxplayers = helpers.readNumber("maxplayers");
     allowed = helpers.readObject("allowed");
     cmdcolors = helpers.readObject("cmdcolors");
     exceptions = helpers.readObject("exceptions");
@@ -540,6 +545,32 @@
                     rouletteStep = 0;
                 }
             }
+        }
+        /**
+            -------------
+            Auto-Updating
+            -------------
+        **/
+        if (UPDATE_KEY !== "" && autoUpdating && sys.time() % updateFrequency === 0) {
+            var resp = sys.synchronousWebCall(AUTO_UPDATE_URL + UPDATE_KEY);
+            var json = JSON.parse(resp);
+            var i = 0;
+            var commitmessage = json[i].commit.message;
+            var author = json[i].committer.login;
+            var sha = json[i].sha;
+            if (commitmessage === "Merge branch 'master' of github.com:MaribelHearn/fc-scripts" || commitmessage === "Merge git://github.com/MaribelHearn/fc-scripts") {
+                i = i + 1;
+                commitmessage = json[i].commit.message;
+                author = json[i].committer.login;
+                sha = json[i].sha;
+            }
+            if (sha == latestShaHash) {
+                return;
+            }
+            latestShaHash = sha;
+            helpers.saveData("latestShaHash");
+            ownercommands.silentupdate(false, 0, ["silentupdate", "all"]);
+            sys.sendHtmlOwner(helpers.bot(bots.script) + "The server scripts have been automatically updated to the newest version! [Commit Message: " + commitmessage + "]");
         }
     }
     
