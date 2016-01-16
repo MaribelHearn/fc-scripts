@@ -111,7 +111,7 @@ funcommands = {
         var name = sys.name(src), text, title, bot, color, size;
         !command[1] ? text = "Some text." : text = helpers.escapehtml(command[1]);
         !command[2] ? title = "Big Text" : title = helpers.escapehtml(command[2]);
-        !command[3] ? bot = bots.fun : bot = helpers.escapehtml(command[3]);
+        !command[3] || command[3] == "default" ? bot = bots.fun : bot = helpers.escapehtml(command[3]);
         !command[4] || !sys.validColor(command[4]) ? color = "#000000" : color = sys.hexColor(command[4]);
         !command[5] ? size = 32 : size = command[5];
         if (isNaN(size)) {
