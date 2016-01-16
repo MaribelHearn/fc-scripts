@@ -19,15 +19,18 @@ helpers = {
         
         // Booleans
         sys.write(DATA_FOLDER + "open.txt", "true");
+        sys.write(DATA_FOLDER + "autoupdating.txt", "false");
         
         // Numbers
         sys.write(DATA_FOLDER + "allowance.txt", 8);
         sys.write(DATA_FOLDER + "floodtime.txt", 10);
         sys.write(DATA_FOLDER + "floodlevel.txt", 1);
         sys.write(DATA_FOLDER + "maxplayers.txt", 0);
+        sys.write(DATA_FOLDER + "updatefrequency.txt", 3600);
         
         // Strings
         sys.write(DATA_FOLDER + "API_KEY.txt", "");
+        sys.write(DATA_FOLDER + "latestshahash.txt", "");
         sys.write(DATA_FOLDER + "botcolor.txt", "#318739");
         sys.write(DATA_FOLDER + "botsymbol.txt", "±");
         sys.write(DATA_FOLDER + "servertopic.txt", "Welcome to " + sys.getServerName() + "!");
@@ -135,6 +138,12 @@ helpers = {
     
     ,
     
+    readBoolean: function (dataFile) {
+        return this.readData(dataFile) == "true" ? true : false;
+    }
+    
+    ,
+    
     readObject: function (dataFile) {
         return JSON.parse(this.readData(dataFile));
     }
@@ -142,10 +151,8 @@ helpers = {
     ,
     
     saveData: function (dataFile) {
-        var data;
-        dataFile = dataFile.toLowerCase();
-        data = (typeof(global[dataFile]) == "object" ? JSON.stringify(global[dataFile]) : global[dataFile]);
-        sys.write(DATA_FOLDER + dataFile + ".txt", data);
+        var data = (typeof(global[dataFile]) == "object" ? JSON.stringify(global[dataFile]) : global[dataFile]);
+        sys.write(DATA_FOLDER + dataFile.toLowerCase() + ".txt", data);
     }
     
     ,
