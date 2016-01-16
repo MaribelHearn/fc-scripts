@@ -262,7 +262,7 @@ modcommands = {
         }
         if (mutemessages[name.toLowerCase()]) {
             if (time == "forever") {
-                msg = mutemessages[name.toLowerCase()].replace(/~Self~/gi, name).replace(/~Target~/gi, trgtname).replace(/~Time~/gi, "forever").replace(/~Server~/gi, sys.getServerName());
+                msg = mutemessages[name.toLowerCase()].replace(/~Self~/gi, name).replace(/~Target~/gi, trgtname).replace(/~Time~/g, "Forever").replace(/~time~/g, "forever").replace(/~Server~/gi, sys.getServerName());
             } else {
                 msg = mutemessages[name.toLowerCase()].replace(/~Self~/gi, name).replace(/~Target~/gi, trgtname).replace(/~Time~/gi, time + " " + unit).replace(/~Server~/gi, sys.getServerName());
             }
@@ -989,7 +989,7 @@ modcommands = {
         }
         var starttime = new Date();
         for (var index = 0; index < 2998; index++) {
-            sys.sendAll("", channel);
+            sys.sendHtmlAll("", channel);
         }
         sys.sendHtmlAll("<font color='white'>:</font><div>", channel);
         var runtime = new Date() - starttime;
@@ -1264,7 +1264,7 @@ modcommands = {
         + Object.keys(bigtextstemp).join(", ") + "<br>"
         + "<br>"
         + "Use <b>" + helpers.user("/addcommand ") + helpers.arg("name") + helpers.arg2("*text") + helpers.arg3("*bot") + helpers.arg4("*color") + helpers.arg5("*size") +
-        "</b>: to add a custom bigtext. If <b>bot</b> is 'default', it will become the default fun command bot.<br>"
+        "</b>: to add a custom bigtext. If <b>bot</b> is 'default', it will be the fun command bot.<br>"
         + "Use <b>" + helpers.user("/removecommand ") + helpers.arg("name") + "</b>: to remove a custom bigtext.<br>"
         + "<br><timestamp/><br>" + border2;
         sys.sendHtmlMessage(src, commandsmessage, channel);
