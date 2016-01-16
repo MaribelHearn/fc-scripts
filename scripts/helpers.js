@@ -735,6 +735,10 @@ helpers = {
     
     version: function (version) {
         switch (version) {
+            case 2621:
+                return "2.6.2.1";
+            case 2602:
+                return "2.6.2";
             case 2601:
                 return "2.6.1";
             case 2600:
