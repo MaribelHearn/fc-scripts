@@ -1860,7 +1860,7 @@ ownercommands = {
             return;
         }
         welcomeMessage = message;
-        helpers.saveData("welcomemessage");
+        helpers.saveData("welcomeMessage");
         sys.sendHtmlMessage(src, helpers.bot(bots.main) + "The welcome message has been changed successfully.", channel);
     }
     
@@ -1873,7 +1873,7 @@ ownercommands = {
             return;
         }
         leaveMessage = message;
-        helpers.saveData("leavemessage");
+        helpers.saveData("leaveMessage");
         sys.sendHtmlMessage(src, helpers.bot(bots.main) + "The leave message has been changed successfully.", channel);
     }
     
@@ -1886,7 +1886,7 @@ ownercommands = {
             return;
         }
         channelWelcomeMessage = message;
-        helpers.saveData("channelwelcomemessage");
+        helpers.saveData("channelWelcomeMessage");
         sys.sendHtmlMessage(src, helpers.bot(bots.main) + "The channel welcome message has been changed successfully.", channel);
     }
     
@@ -1899,7 +1899,7 @@ ownercommands = {
             return;
         }
         channelLeaveMessage = message;
-        helpers.saveData("channelleavemessage");
+        helpers.saveData("channelLeaveMessage");
         sys.sendHtmlMessage(src, helpers.bot(bots.main) + "The channel leave message has been changed successfully.", channel);
     }
     
@@ -1912,7 +1912,7 @@ ownercommands = {
             return;
         }
         nopermissionmsg = message;
-        helpers.saveData("nopermissionmessage");
+        helpers.saveData("noPermissionMessage");
         sys.sendHtmlMessage(src, helpers.bot(bots.main) + "The no permission message has been changed successfully.", channel);
     }
     
@@ -1957,7 +1957,7 @@ ownercommands = {
             return;
         }
         borderColor = sys.hexColor(color);
-        helpers.saveData("bordercolor");
+        helpers.saveData("borderColor");
         border = "<font color='" + sys.hexColor(color) + "'><b>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>></b></font>";
         border2 = "<font color='" + sys.hexColor(color) + "'><b>&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;" +
         "&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;</b></font>";
@@ -1983,7 +1983,7 @@ ownercommands = {
             return;
         }
         serverTopicColor = sys.hexColor(color);
-        helpers.saveData("servertopiccolor");
+        helpers.saveData("serverTopicColor");
         sys.sendHtmlMessage(src, helpers.bot(bots.main) + "The server topic " + command[0].slice(11) + " has been changed to " + color + ".", channel);
     }
     
@@ -2006,7 +2006,7 @@ ownercommands = {
             return;
         }
         channelTopicColor = sys.hexColor(color);
-        helpers.saveData("channeltopiccolor");
+        helpers.saveData("channelTopicColor");
         sys.sendHtmlMessage(src, helpers.bot(bots.main) + "The channel topic " + command[0].slice(12) + " has been changed to " + color + ".", channel);
     }
     
