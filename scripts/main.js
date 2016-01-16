@@ -558,7 +558,7 @@
             var commitmessage = json[i].commit.message;
             var author = json[i].committer.login;
             var sha = json[i].sha;
-            if (commitmessage === "Merge branch 'master' of github.com:MaribelHearn/fc-scripts" || commitmessage === "Merge git://github.com/MaribelHearn/fc-scripts") {
+            if (commitmessage == "Merge branch 'master' of github.com:MaribelHearn/fc-scripts" || commitmessage == "Merge git://github.com/MaribelHearn/fc-scripts") {
                 i = i + 1;
                 commitmessage = json[i].commit.message;
                 author = json[i].committer.login;
