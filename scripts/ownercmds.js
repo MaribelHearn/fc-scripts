@@ -831,9 +831,11 @@ ownercommands = {
         var commandsmessage = border
         + "<h2>Owner Commands ~ Script Settings</h2>"
         + "<br>"
-        + "Automatic updating is currently turned <b>" + (autoUpdating ? "on" : "off") + "</b>.<br>"
-        + "The frequency of automatic updates is set to once per " + helpers.secondsToWording(updateFrequency) + "."
-        + "<br>"
+        + "Automatic updating is currently turned <b>" + (autoUpdating ? "on" : "off") + "</b>.<br>";
+        if (autoUpdating) {
+            commandsmessage += "Update frequency: " + helpers.secondsToWording(updateFrequency) + ".<br>"
+        }
+        commandsmessage += "<br>"
         + "<b>" + helpers.user("/reload") + "</b>: reloads the scripts from the local files.<br>"
         + "<b>" + helpers.user("/update ") + helpers.arg("module") + "</b>: updates the <b>module</b> module. Updates the main script file by default.<br>"
         + "<b>" + helpers.user("/silentupdate ") + helpers.arg("module") + "</b>: silently updates the <b>module</b> module. Updates the main script file by default. Also /supdate.<br>"
