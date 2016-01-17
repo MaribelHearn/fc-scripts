@@ -14,9 +14,9 @@ ownercommands = {
         + "<h2>Owner Commands</h2>"
         + "<br>"
         + "<b>" + helpers.userl("/ownerjusticeoptions") + "</b>: displays owner justice options.<br>"
-        + "<b>" + helpers.userl("/scriptoptions") + "</b>: displays script options.<br>"
         + "<b>" + helpers.userl("/banneroptions") + "</b>: displays banner and description options.<br>"
         + "<b>" + helpers.userl("/authoptions") + "</b>: displays auth settings.<br>"
+        + "<b>" + helpers.userl("/scriptsettings") + "</b>: displays script options.<br>"
         + "<b>" + helpers.userl("/floodsettings") + "</b>: displays flooding settings.<br>"
         + "<b>" + helpers.userl("/whitelistsettings") + "</b>: displays whitelist settings.<br>"
         + "<b>" + helpers.userl("/antidossettings") + "</b>: displays anti DoS settings.<br>"
@@ -519,19 +519,328 @@ ownercommands = {
     ,
     
     /**
-        --------------
-        Script Options
-        --------------
+        ------------------------------
+        Banner and Description Options
+        ------------------------------
     **/
-    scriptoptions: function (src, channel, command) {
+    banneroptions: function (src, channel, command) {
         var commandsmessage = border
-        + "<h2>Owner Commands ~ Script Options</h2>"
+        + "<h2>Owner Commands ~ Banner and Description Options</h2>"
+        + "<br>"
+        + "<b>" + helpers.user("/banner ") + helpers.arg("html") + "</b>: changes the banner to <b>html</b>.<br>"
+        + "<b>" + helpers.user("/description ") + helpers.arg("html") + "</b>: changes the server description to <b>html</b>.<br>"
+        + "<b>" + helpers.user("/testbanner ") + helpers.arg("html") + "</b>: changes the banner to <b>html</b>, but only for yourself. If <b>html</b> is not specified, resets the banner.<br>"
+        + "<b>" + helpers.user("/testdescription ") + helpers.arg("html") + "</b>: posts <b>html</b> to yourself, to test a server description with.<br>"
+        + "<br><timestamp/><br>"
+        + border2;
+        sys.sendHtmlMessage(src, commandsmessage, channel);
+    }
+    
+    ,
+    
+    banner: function (src, channel, command) {
+        var banner = command[1];
+        if (!banner) {
+            sys.sendHtmlMessage(src, helpers.bot(bots.main) + "The banner is currently: " + helpers.escapehtml(sys.getAnnouncement()) + ".");
+            return;
+        }
+        sys.changeAnnouncement(banner);
+        sys.sendHtmlAuths(helpers.bot(bots.main) + sys.name(src) + " has changed the banner!");
+    }
+    
+    ,
+    
+    description: function (src, channel, command) {
+        var description = command[1];
+        if (!description) {
+            sys.sendHtmlMessage(src, helpers.bot(bots.main) + "The description is currently: " + helpers.escapehtml(sys.getDescription()) + ".");
+            return;
+        }
+        sys.changeDescription(banner);
+        sys.sendHtmlAuths(helpers.bot(bots.main) + sys.name(src) + " has changed the description!");
+    }
+    
+    ,
+    
+    testbanner: function (src, channel, command) {
+        var banner = command[1];
+        if (!banner) {
+            sys.setAnnouncement(sys.getAnnouncement(), src);
+            return;
+        }
+        sys.setAnnouncement(banner, src);
+    }
+    
+    ,
+    
+    testdescription: function (src, channel, command) {
+        var description = command[1];
+        if (!description) {
+            helpers.starfox(src, channel, command, bots.main, "Error 404, description not found.");
+            return;
+        }
+        sys.sendHtmlMessage(src, helpers.bot(bots.main) + "Your description will be shown below.<br>" + description, channel);
+    }
+    
+    ,
+    
+    /**
+        ------------
+        Auth Options
+        ------------
+    **/
+    authoptions: function (src, channel, command) {
+        var commandsmessage = border
+        + "<h2>Owner Commands ~ Auth Options</h2>"
+        + "<br>"
+        + "<b>" + helpers.user("/user ") + helpers.arg("player") + "</b>: changes <b>player</b>'s auth level to user.<br>"
+        + "<b>" + helpers.user("/moderator ") + helpers.arg("player") + "</b>: changes <b>player</b>'s auth level to moderator. Also /mod.<br>"
+        + "<b>" + helpers.user("/administrator ") + helpers.arg("player") + "</b>: changes <b>player</b>'s auth level to administrator. Also /admin.<br>"
+        + "<b>" + helpers.user("/owner ") + helpers.arg("player") + "</b>: changes <b>player</b>'s auth level to owner.<br>"
+        + "<b>" + helpers.user("/invisibleowner ") + helpers.arg("player") + helpers.arg2("*placement") + "</b>: changes <b>player</b>'s auth level to owner (invisible), "
+        + "placed together with auth level <b>placement</b> on the player list, placement being a number from 1 to 9. Also /invisible or /invis.<br>"
+        + "<b>" + helpers.user("/authlevels") + "</b>: displays all auth members with their auth levels in a neat table. Useful to check on invisible owners.<br>"
+        + "<br><timestamp/><br>"
+        + border2;
+        sys.sendHtmlMessage(src, commandsmessage, channel);
+    }
+    
+    ,
+    
+    user: function (src, channel, command) {
+        var name = sys.name(src), trgtauth;
+        if (!command[1]) {
+            helpers.starfox(src, channel, command, bots.auth, "Error 404, player not found.");
+            return;
+        }
+        var trgtname = command[1];
+        if (!sys.dbIp(trgtname)) {
+            helpers.starfox(src, channel, command, bots.auth, "Error 400, you can't user " + trgtname + " because they don't exist in the database.");
+            return;
+        }
+        var trgt = sys.id(trgtname);
+        trgt ? trgtauth = sys.auth(trgt) : trgtauth = sys.dbAuth(trgtname);
+        if (trgtauth === 0) {
+            helpers.starfox(src, channel, command, bots.auth, "Error 400, you can't change a user's auth to user.");
+            return;
+        }
+        trgt ? sys.changeAuth(trgt, 0) : sys.changeDbAuth(trgtname, 0);
+        sys.sendHtmlMain(helpers.bot(bots.auth) + "<b>" + helpers.arg(trgtname) + " has been made " + helpers.arg2(AUTH_NAMES[0]) + " by " + helpers.user(name) + "!</font></b>");
+    }
+
+    ,
+
+    moderator: function (src, channel, command) {
+        var name = sys.name(src), ttrgtauth, newauth = 1;
+        if (!command[1]) {
+            helpers.starfox(src, channel, command, bots.auth, "Error 404, player not found.");
+            return;
+        }
+        var trgtname = command[1];
+        if (!sys.dbIp(trgtname)) {
+            helpers.starfox(src, channel, command, bots.auth, "Error 400, you can't moderator " + trgtname + " because they don't exist in the database.");
+            return;
+        }
+        if (!sys.dbRegistered(trgtname)) {
+            helpers.starfox(src, channel, command, bots.auth, "Error 403, you may not moderator " + trgtname + " because they haven't registered. Authority must be secure!");
+            return;
+        }
+        var trgt = sys.id(trgtname);
+        trgt ? trgtauth = sys.auth(trgt) : trgtauth = sys.dbAuth(trgtname);
+        if (trgtauth == 1) {
+            helpers.starfox(src, channel, command, bots.auth, "Error 400, you can't change a moderator's auth to moderator.");
+            return;
+        }
+        if (trgt) {
+            sys.changeAuth(trgt, 1);
+        }
+        sys.changeDbAuth(trgtname, 1);
+        sys.sendHtmlMain(helpers.bot(bots.auth) + "<b>" + helpers.arg(trgtname) + " has been made " + helpers.arg2(AUTH_NAMES[1]) + " by " + helpers.user(name) + "!</font></b>");
+    }
+
+    ,
+    
+    mod: function (src, channel, command) {
+        this.moderator(src, channel, command);
+    }
+    
+    ,
+
+    administrator: function (src, channel, command) {
+        var name = sys.name(src), trgtauth;
+        if (!command[1]) {
+            helpers.starfox(src, channel, command, bots.auth, "Error 404, player not found.");
+            return;
+        }
+        var trgtname = command[1];
+        if (!sys.dbIp(trgtname)) {
+            helpers.starfox(src, channel, command, bots.auth, "Error 400, you can't administrator " + trgtname + " because they don't exist in the database.");
+            return;
+        }
+        if (!sys.dbRegistered(trgtname)) {
+            helpers.starfox(src, channel, command, bots.auth, "Error 403, you may not administrator " + trgtname + " because they haven't registered. Authority must be secure!");
+            return;
+        }
+        var trgt = sys.id(trgtname);
+        trgt ? trgtauth = sys.auth(trgt) : trgtauth = sys.dbAuth(trgtname);
+        if (trgtauth == 2) {
+            helpers.starfox(src, channel, command, bots.auth, "Error 400, you can't change an administrator's auth to administrator.");
+            return;
+        }
+        if (trgt) {
+            sys.changeAuth(trgt, 2);
+        }
+        sys.changeDbAuth(trgtname, 2);
+        sys.sendHtmlMain(helpers.bot(bots.auth) + "<b>" + helpers.arg(trgtname) + " has been made " + helpers.arg2(AUTH_NAMES[2]) + " by " + helpers.user(name) + "!</font></b>");
+    }
+
+    ,
+    
+    admin: function (src, channel, command) {
+        this.administrator(src, channel, command);
+    }
+    
+    ,
+
+    owner: function (src, channel, command) {
+        var name = sys.name(src), trgtauth;
+        if (!command[1]) {
+            helpers.starfox(src, channel, command, bots.auth, "Error 404, player not found.");
+            return;
+        }
+        var trgtname = command[1];
+        if (!sys.dbIp(trgtname)) {
+            helpers.starfox(src, channel, command, bots.auth, "Error 400, you can't owner " + trgtname + " because they don't exist in the database.");
+            return;
+        }
+        if (!sys.dbRegistered(trgtname)) {
+            helpers.starfox(src, channel, command, bots.auth, "Error 403, you may not owner " + trgtname + " because they haven't registered. Authority must be secure!");
+            return;
+        }
+        var trgt = sys.id(trgtname);
+        trgt ? trgtauth = sys.auth(trgt) : trgtauth = sys.dbAuth(trgtname);
+        if (trgtauth == 3) {
+            helpers.starfox(src, channel, command, bots.auth, "Error 400, you can't change an owner's auth to owner.");
+            return;
+        }
+        if (trgt) {
+            sys.changeAuth(trgt, 3);
+        }
+        sys.changeDbAuth(trgtname, 3);
+        sys.sendHtmlMain(helpers.bot(bots.auth) + "<b>" + helpers.arg(trgtname) + " has been made " + helpers.arg2(AUTH_NAMES[3]) + " by " + helpers.user(name) + "!</font></b>");
+    }
+    
+    ,
+
+    invisibleowner: function (src, channel, command) {
+        var name = sys.name(src), trgt, trgtname, trgtauth, placement;
+        if (!command[1]) {
+            helpers.starfox(src, channel, command, bots.auth, "Error 404, player not found.");
+            return;
+        }
+        trgtname = command[1];
+        command[2] ? placement = command[2] : placement = 4;
+        if (!sys.dbIp(trgtname)) {
+            helpers.starfox(src, channel, command, bots.auth, "Error 400, you can't invisible owner " + trgtname + " because they don't exist in the database.");
+            return;
+        }
+        if (!sys.dbRegistered(trgtname)) {
+            helpers.starfox(src, channel, command, bots.auth, "Error 403, you may not invisible owner " + trgtname + " because they haven't registered. Authority must be secure!");
+            return;
+        }
+        trgt = sys.id(trgtname);
+        trgt ? trgtauth = sys.auth(trgt) : trgtauth = sys.dbAuth(trgtname);
+        if (trgtauth == placement) {
+            helpers.starfox(src, channel, command, bots.auth, "Error 400, you can't change an auth level to the same auth level.");
+            return;
+        }
+        if (isNaN(placement) || placement < 1 || placement > 9) {
+            helpers.starfox(src, channel, command, bots.auth, "Error 403, invalid placement.");
+            return;
+        }
+        placement < 4 ? auth = placement * 10 : auth = placement;
+        if (trgt) {
+            sys.changeAuth(trgt, auth);
+        }
+        sys.changeDbAuth(trgtname, auth);
+        sys.sendHtmlMessage(src, helpers.bot(bots.auth) + "You made " + trgtname + " " + AUTH_NAMES[4] + " (placement " + placement + ").", channel);
+    }
+    
+    ,
+    
+    invisible: function (src, channel, command) {
+        this.invisibleowner(src, channel, command);
+    }
+    
+    ,
+    
+    invis: function (src, channel, command) {
+        this.invisibleowner(src, channel, command);
+    }
+    
+    ,
+    
+    authlevels: function (src, channel, command) {
+        var DISPLAY_USER = true, authmessage = border + "<h2>Auth Levels</h2><br>", auths = sys.dbAuths().sort(), index = 0, lower;
+        var authLevels = [], titles = [], names = [], lastLogins = [];
+        for (var i in auths) {
+            authLevels.push(sys.dbAuth(auths[i]));
+            names.push(auths[i]);
+            lower = names[index].toLowerCase();
+            titles.push(authtitles[lower] ? authtitles[lower] : '-');
+            lastLogins.push(helpers.formatLastOn(src, sys.dbLastOn(auths[i])));
+            if (members[lower]) {
+                names[index] = members[lower];
+            }
+            index++;
+        }
+        if (helpers.isAndroid(src)) {
+            authmessage += "<tt>";
+            for (var i in auths) {
+                authmessage += names[i] + ": " + authLevels[i] + "<br>";
+            }
+            authmessage += "</tt>";
+        } else {
+            authmessage += "<style>table {border-width: 1px; border-style: solid; border-color: #000000;}</style>"
+            + "<table cellpadding='2' cellspacing='0'><thead><tr style='background-color: #B0B0B0;'>"
+            + "<th>Icon</th><th>Auth</th><th>Level</th><th>Title</th><th>Name</th><th>Last Online</th></tr></thead><tbody>";
+            for (var i in auths) {
+                authmessage += "<tr>"
+                + "<td>" + helpers.authimage(src, authLevels[i] >= 4 ? 0 : authLevels[i]) + "</td>"
+                + "<td>" + helpers.authName(authLevels[i], DISPLAY_USER) + "</td>"
+                + "<td>" + authLevels[i] + "</td>"
+                + "<td>" + titles[i] + "</td>"
+                + "<td>" + names[i] + "</td>"
+                + "<td>" + lastLogins[i] + "</td>"
+                + "</tr>";
+            }
+            authmessage += "</tbody><tfoot><tr><td colspan='6'><b>Total Auth Members:</b> " + auths.length + "</td></tr></tfoot></table>";
+        }
+        authmessage += "<br><br><timestamp/><br>" + border2;
+        sys.sendHtmlMessage(src, authmessage, channel);
+    }
+    
+    ,
+    
+    /**
+        ---------------
+        Script Settings
+        ---------------
+    **/
+    scriptsettings: function (src, channel, command) {
+        var commandsmessage = border
+        + "<h2>Owner Commands ~ Script Settings</h2>"
+        + "<br>"
+        + "Automatic updating is currently turned <b>" + (autoUpdating ? "on" : "off") + "</b>.<br>"
+        + "The frequency of automatic updates is set to once per " + helpers.secondsToWording(updateFrequency) + "."
         + "<br>"
         + "<b>" + helpers.user("/reload") + "</b>: reloads the scripts from the local files.<br>"
         + "<b>" + helpers.user("/update ") + helpers.arg("module") + "</b>: updates the <b>module</b> module. Updates the main script file by default.<br>"
         + "<b>" + helpers.user("/silentupdate ") + helpers.arg("module") + "</b>: silently updates the <b>module</b> module. Updates the main script file by default. Also /supdate.<br>"
         + "<b>" + helpers.user("/updateplugin ") + helpers.arg("plugin") + "</b>: updates the <b>plugin</b> plugin. Updates the main script file by default.<br>"
         + "<b>" + helpers.user("/silentupdateplugin ") + helpers.arg("plugin") + "</b>: silently updates the <b>plugin</b> plugin. Updates the main script file by default. Also /supdateplugin.<br>"
+        + "<b>" + helpers.userg("/toggleautoupdate") + "</b>: toggles whether automatic updating is turned on or off.<br>"
+        + "<b>" + helpers.userg("/updatefrequency") + "</b>: changes the frequency of automatic updating.<br>"
         + "<b>" + helpers.user("/var ") + helpers.arg("variable") + helpers.arg2("*html") + "</b>: displays the value of <b>variable</b>. If <b>html</b> is specified, enables HTML.<br>"
         + "<b>" + helpers.user("/content ") + helpers.arg("object") + "</b>: displays only the content of <b>object</b>, so no keys. HTML always enabled.<br>"
         + "<b>" + helpers.user("/time ") + helpers.arg("command") + "</b>: runs <b>command</b> and prints its runtime. An indefinite number of arguments can be passed to this command.<br>"
@@ -880,310 +1189,6 @@ ownercommands = {
     
     sseval: function (src, channel, command) {
         this.secretsilenteval(src, channel, command);
-    }
-    
-    ,
-    
-    /**
-        ------------------------------
-        Banner and Description Options
-        ------------------------------
-    **/
-    banneroptions: function (src, channel, command) {
-        var commandsmessage = border
-        + "<h2>Owner Commands ~ Banner and Description Options</h2>"
-        + "<br>"
-        + "<b>" + helpers.user("/banner ") + helpers.arg("html") + "</b>: changes the banner to <b>html</b>.<br>"
-        + "<b>" + helpers.user("/description ") + helpers.arg("html") + "</b>: changes the server description to <b>html</b>.<br>"
-        + "<b>" + helpers.user("/testbanner ") + helpers.arg("html") + "</b>: changes the banner to <b>html</b>, but only for yourself. If <b>html</b> is not specified, resets the banner.<br>"
-        + "<b>" + helpers.user("/testdescription ") + helpers.arg("html") + "</b>: posts <b>html</b> to yourself, to test a server description with.<br>"
-        + "<br><timestamp/><br>"
-        + border2;
-        sys.sendHtmlMessage(src, commandsmessage, channel);
-    }
-    
-    ,
-    
-    banner: function (src, channel, command) {
-        var banner = command[1];
-        if (!banner) {
-            sys.sendHtmlMessage(src, helpers.bot(bots.main) + "The banner is currently: " + helpers.escapehtml(sys.getAnnouncement()) + ".");
-            return;
-        }
-        sys.changeAnnouncement(banner);
-        sys.sendHtmlAuths(helpers.bot(bots.main) + sys.name(src) + " has changed the banner!");
-    }
-    
-    ,
-    
-    description: function (src, channel, command) {
-        var description = command[1];
-        if (!description) {
-            sys.sendHtmlMessage(src, helpers.bot(bots.main) + "The description is currently: " + helpers.escapehtml(sys.getDescription()) + ".");
-            return;
-        }
-        sys.changeDescription(banner);
-        sys.sendHtmlAuths(helpers.bot(bots.main) + sys.name(src) + " has changed the description!");
-    }
-    
-    ,
-    
-    testbanner: function (src, channel, command) {
-        var banner = command[1];
-        if (!banner) {
-            sys.setAnnouncement(sys.getAnnouncement(), src);
-            return;
-        }
-        sys.setAnnouncement(banner, src);
-    }
-    
-    ,
-    
-    testdescription: function (src, channel, command) {
-        var description = command[1];
-        if (!description) {
-            helpers.starfox(src, channel, command, bots.main, "Error 404, description not found.");
-            return;
-        }
-        sys.sendHtmlMessage(src, helpers.bot(bots.main) + "Your description will be shown below.<br>" + description, channel);
-    }
-    
-    ,
-    
-    /**
-        ------------
-        Auth Options
-        ------------
-    **/
-    authoptions: function (src, channel, command) {
-        var commandsmessage = border
-        + "<h2>Owner Commands ~ Auth Options</h2>"
-        + "<br>"
-        + "<b>" + helpers.user("/user ") + helpers.arg("player") + "</b>: changes <b>player</b>'s auth level to user.<br>"
-        + "<b>" + helpers.user("/moderator ") + helpers.arg("player") + "</b>: changes <b>player</b>'s auth level to moderator. Also /mod.<br>"
-        + "<b>" + helpers.user("/administrator ") + helpers.arg("player") + "</b>: changes <b>player</b>'s auth level to administrator. Also /admin.<br>"
-        + "<b>" + helpers.user("/owner ") + helpers.arg("player") + "</b>: changes <b>player</b>'s auth level to owner.<br>"
-        + "<b>" + helpers.user("/invisibleowner ") + helpers.arg("player") + helpers.arg2("*placement") + "</b>: changes <b>player</b>'s auth level to owner (invisible), "
-        + "placed together with auth level <b>placement</b> on the player list, placement being a number from 1 to 9. Also /invisible or /invis.<br>"
-        + "<b>" + helpers.user("/authlevels") + "</b>: displays all auth members with their auth levels in a neat table. Useful to check on invisible owners.<br>"
-        + "<br><timestamp/><br>"
-        + border2;
-        sys.sendHtmlMessage(src, commandsmessage, channel);
-    }
-    
-    ,
-    
-    user: function (src, channel, command) {
-        var name = sys.name(src), trgtauth;
-        if (!command[1]) {
-            helpers.starfox(src, channel, command, bots.auth, "Error 404, player not found.");
-            return;
-        }
-        var trgtname = command[1];
-        if (!sys.dbIp(trgtname)) {
-            helpers.starfox(src, channel, command, bots.auth, "Error 400, you can't user " + trgtname + " because they don't exist in the database.");
-            return;
-        }
-        var trgt = sys.id(trgtname);
-        trgt ? trgtauth = sys.auth(trgt) : trgtauth = sys.dbAuth(trgtname);
-        if (trgtauth === 0) {
-            helpers.starfox(src, channel, command, bots.auth, "Error 400, you can't change a user's auth to user.");
-            return;
-        }
-        trgt ? sys.changeAuth(trgt, 0) : sys.changeDbAuth(trgtname, 0);
-        sys.sendHtmlMain(helpers.bot(bots.auth) + "<b>" + helpers.arg(trgtname) + " has been made " + helpers.arg2(AUTH_NAMES[0]) + " by " + helpers.user(name) + "!</font></b>");
-    }
-
-    ,
-
-    moderator: function (src, channel, command) {
-        var name = sys.name(src), ttrgtauth, newauth = 1;
-        if (!command[1]) {
-            helpers.starfox(src, channel, command, bots.auth, "Error 404, player not found.");
-            return;
-        }
-        var trgtname = command[1];
-        if (!sys.dbIp(trgtname)) {
-            helpers.starfox(src, channel, command, bots.auth, "Error 400, you can't moderator " + trgtname + " because they don't exist in the database.");
-            return;
-        }
-        if (!sys.dbRegistered(trgtname)) {
-            helpers.starfox(src, channel, command, bots.auth, "Error 403, you may not moderator " + trgtname + " because they haven't registered. Authority must be secure!");
-            return;
-        }
-        var trgt = sys.id(trgtname);
-        trgt ? trgtauth = sys.auth(trgt) : trgtauth = sys.dbAuth(trgtname);
-        if (trgtauth == 1) {
-            helpers.starfox(src, channel, command, bots.auth, "Error 400, you can't change a moderator's auth to moderator.");
-            return;
-        }
-        if (trgt) {
-            sys.changeAuth(trgt, 1);
-        }
-        sys.changeDbAuth(trgtname, 1);
-        sys.sendHtmlMain(helpers.bot(bots.auth) + "<b>" + helpers.arg(trgtname) + " has been made " + helpers.arg2(AUTH_NAMES[1]) + " by " + helpers.user(name) + "!</font></b>");
-    }
-
-    ,
-    
-    mod: function (src, channel, command) {
-        this.moderator(src, channel, command);
-    }
-    
-    ,
-
-    administrator: function (src, channel, command) {
-        var name = sys.name(src), trgtauth;
-        if (!command[1]) {
-            helpers.starfox(src, channel, command, bots.auth, "Error 404, player not found.");
-            return;
-        }
-        var trgtname = command[1];
-        if (!sys.dbIp(trgtname)) {
-            helpers.starfox(src, channel, command, bots.auth, "Error 400, you can't administrator " + trgtname + " because they don't exist in the database.");
-            return;
-        }
-        if (!sys.dbRegistered(trgtname)) {
-            helpers.starfox(src, channel, command, bots.auth, "Error 403, you may not administrator " + trgtname + " because they haven't registered. Authority must be secure!");
-            return;
-        }
-        var trgt = sys.id(trgtname);
-        trgt ? trgtauth = sys.auth(trgt) : trgtauth = sys.dbAuth(trgtname);
-        if (trgtauth == 2) {
-            helpers.starfox(src, channel, command, bots.auth, "Error 400, you can't change an administrator's auth to administrator.");
-            return;
-        }
-        if (trgt) {
-            sys.changeAuth(trgt, 2);
-        }
-        sys.changeDbAuth(trgtname, 2);
-        sys.sendHtmlMain(helpers.bot(bots.auth) + "<b>" + helpers.arg(trgtname) + " has been made " + helpers.arg2(AUTH_NAMES[2]) + " by " + helpers.user(name) + "!</font></b>");
-    }
-
-    ,
-    
-    admin: function (src, channel, command) {
-        this.administrator(src, channel, command);
-    }
-    
-    ,
-
-    owner: function (src, channel, command) {
-        var name = sys.name(src), trgtauth;
-        if (!command[1]) {
-            helpers.starfox(src, channel, command, bots.auth, "Error 404, player not found.");
-            return;
-        }
-        var trgtname = command[1];
-        if (!sys.dbIp(trgtname)) {
-            helpers.starfox(src, channel, command, bots.auth, "Error 400, you can't owner " + trgtname + " because they don't exist in the database.");
-            return;
-        }
-        if (!sys.dbRegistered(trgtname)) {
-            helpers.starfox(src, channel, command, bots.auth, "Error 403, you may not owner " + trgtname + " because they haven't registered. Authority must be secure!");
-            return;
-        }
-        var trgt = sys.id(trgtname);
-        trgt ? trgtauth = sys.auth(trgt) : trgtauth = sys.dbAuth(trgtname);
-        if (trgtauth == 3) {
-            helpers.starfox(src, channel, command, bots.auth, "Error 400, you can't change an owner's auth to owner.");
-            return;
-        }
-        if (trgt) {
-            sys.changeAuth(trgt, 3);
-        }
-        sys.changeDbAuth(trgtname, 3);
-        sys.sendHtmlMain(helpers.bot(bots.auth) + "<b>" + helpers.arg(trgtname) + " has been made " + helpers.arg2(AUTH_NAMES[3]) + " by " + helpers.user(name) + "!</font></b>");
-    }
-    
-    ,
-
-    invisibleowner: function (src, channel, command) {
-        var name = sys.name(src), trgt, trgtname, trgtauth, placement;
-        if (!command[1]) {
-            helpers.starfox(src, channel, command, bots.auth, "Error 404, player not found.");
-            return;
-        }
-        trgtname = command[1];
-        command[2] ? placement = command[2] : placement = 4;
-        if (!sys.dbIp(trgtname)) {
-            helpers.starfox(src, channel, command, bots.auth, "Error 400, you can't invisible owner " + trgtname + " because they don't exist in the database.");
-            return;
-        }
-        if (!sys.dbRegistered(trgtname)) {
-            helpers.starfox(src, channel, command, bots.auth, "Error 403, you may not invisible owner " + trgtname + " because they haven't registered. Authority must be secure!");
-            return;
-        }
-        trgt = sys.id(trgtname);
-        trgt ? trgtauth = sys.auth(trgt) : trgtauth = sys.dbAuth(trgtname);
-        if (trgtauth == placement) {
-            helpers.starfox(src, channel, command, bots.auth, "Error 400, you can't change an auth level to the same auth level.");
-            return;
-        }
-        if (isNaN(placement) || placement < 1 || placement > 9) {
-            helpers.starfox(src, channel, command, bots.auth, "Error 403, invalid placement.");
-            return;
-        }
-        placement < 4 ? auth = placement * 10 : auth = placement;
-        if (trgt) {
-            sys.changeAuth(trgt, auth);
-        }
-        sys.changeDbAuth(trgtname, auth);
-        sys.sendHtmlMessage(src, helpers.bot(bots.auth) + "You made " + trgtname + " " + AUTH_NAMES[4] + " (placement " + placement + ").", channel);
-    }
-    
-    ,
-    
-    invisible: function (src, channel, command) {
-        this.invisibleowner(src, channel, command);
-    }
-    
-    ,
-    
-    invis: function (src, channel, command) {
-        this.invisibleowner(src, channel, command);
-    }
-    
-    ,
-    
-    authlevels: function (src, channel, command) {
-        var DISPLAY_USER = true, authmessage = border + "<h2>Auth Levels</h2><br>", auths = sys.dbAuths().sort(), index = 0, lower;
-        var authLevels = [], titles = [], names = [], lastLogins = [];
-        for (var i in auths) {
-            authLevels.push(sys.dbAuth(auths[i]));
-            names.push(auths[i]);
-            lower = names[index].toLowerCase();
-            titles.push(authtitles[lower] ? authtitles[lower] : '-');
-            lastLogins.push(helpers.formatLastOn(src, sys.dbLastOn(auths[i])));
-            if (members[lower]) {
-                names[index] = members[lower];
-            }
-            index++;
-        }
-        if (helpers.isAndroid(src)) {
-            authmessage += "<tt>";
-            for (var i in auths) {
-                authmessage += names[i] + ": " + authLevels[i] + "<br>";
-            }
-            authmessage += "</tt>";
-        } else {
-            authmessage += "<style>table {border-width: 1px; border-style: solid; border-color: #000000;}</style>"
-            + "<table cellpadding='2' cellspacing='0'><thead><tr style='background-color: #B0B0B0;'>"
-            + "<th>Icon</th><th>Auth</th><th>Level</th><th>Title</th><th>Name</th><th>Last Online</th></tr></thead><tbody>";
-            for (var i in auths) {
-                authmessage += "<tr>"
-                + "<td>" + helpers.authimage(src, authLevels[i] >= 4 ? 0 : authLevels[i]) + "</td>"
-                + "<td>" + helpers.authName(authLevels[i], DISPLAY_USER) + "</td>"
-                + "<td>" + authLevels[i] + "</td>"
-                + "<td>" + titles[i] + "</td>"
-                + "<td>" + names[i] + "</td>"
-                + "<td>" + lastLogins[i] + "</td>"
-                + "</tr>";
-            }
-            authmessage += "</tbody><tfoot><tr><td colspan='6'><b>Total Auth Members:</b> " + auths.length + "</td></tr></tfoot></table>";
-        }
-        authmessage += "<br><br><timestamp/><br>" + border2;
-        sys.sendHtmlMessage(src, authmessage, channel);
     }
     
     ,
