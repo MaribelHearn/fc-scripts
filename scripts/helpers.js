@@ -733,6 +733,40 @@ helpers = {
     
     ,
     
+    secondsToWording: function (seconds) {
+        var result = [], days = 0, hours = 0, minutes = 0;
+        
+        while (seconds >= 86400) {
+            days += 1;
+            seconds -= 86400;
+        }
+        while (seconds >= 3600) {
+            hours += 1;
+            seconds -= 3600;
+        }
+        while (seconds >= 60) {
+            minutes += 1;
+            seconds -= 60;
+        }
+        
+        if (days >= 1) {
+            result.push(days + " day" + (days != 1 ? "s" : ""));
+        }
+        if (hours >= 1) {
+            result.push(hours + " hour" + (hours != 1 ? "s" : ""));
+        }
+        if (minutes >= 1) {
+            result.push(minutes + " minute" + (minutes != 1 ? "s" : ""));
+        }
+        if (seconds >= 1) {
+            result.push(seconds + " second" + (seconds != 1 ? "s" : ""));
+        }
+        
+        return result.join(", ");
+    }
+    
+    ,
+    
     version: function (version) {
         switch (version) {
             case 2621:
