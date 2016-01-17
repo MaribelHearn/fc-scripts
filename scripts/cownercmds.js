@@ -8,6 +8,7 @@
     run by channel owners.
     ----------------------------------------------
 */
+
 cownercommands = {
     cownercommands: function (src, channel, command) {
         var commandsmessage = border

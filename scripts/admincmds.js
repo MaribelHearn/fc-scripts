@@ -8,6 +8,7 @@
     run by administrators.
     ----------------------------------------------
 */
+
 admincommands = {
     admincommands: function (src, channel, command) {
         var commandsmessage = border

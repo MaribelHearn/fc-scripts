@@ -8,6 +8,7 @@
     run by owners.
     ----------------------------------------------
 */
+
 ownercommands = {
     ownercommands: function (src, channel, command) {
         var commandsmessage = border

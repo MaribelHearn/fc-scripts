@@ -8,6 +8,7 @@
     run by channel administrators.
     ----------------------------------------------
 */
+
 cadmincommands = {    
     cadmincommands: function (src, channel, command) {
         var commandsmessage = border
