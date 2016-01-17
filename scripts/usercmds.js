@@ -426,8 +426,6 @@ usercommands = {
     
     serverinfo: function (src, channel, command) {
         var servermessage = border + "<h2>Server Info</h2><br>", ports = sys.serverPorts().length, serveropen, time,
-        DAYS = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
-        MONTHS = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
         uptime = sys.profileDump().split('\n')[0].split(',')[0].split(':')[1].slice(1, -2),
         serverprivate = sys.isServerPrivate(), d = new Date(), day = d.getDay(),
         date = d.getDate(), month = d.getMonth(), year = d.getFullYear();
