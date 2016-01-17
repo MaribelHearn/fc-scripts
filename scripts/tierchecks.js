@@ -8,6 +8,7 @@
     tiers.
     ----------------------------------------------
 */
+
 weatherlesscheck = function (src, team) {
     var tier = sys.tier(src, team),  hasweather = false, drizzle = sys.abilityNum("Drizzle"), drought = sys.abilityNum("Drought"), sandstorm = sys.abilityNum("Sand Stream"), hail = sys.abilityNum("Snow Warning");
     if (["Clear Skies", "Rain Dance", "Sunny Day", "Hail", "Sandstorm"].indexOf(tier) == -1) {

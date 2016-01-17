@@ -8,6 +8,7 @@
     run by moderators.
     ----------------------------------------------
 */
+
 modcommands = {
     modcommands: function (src, channel, command) {
         var commandsmessage = border
