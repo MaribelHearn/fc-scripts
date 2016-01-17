@@ -1499,8 +1499,6 @@ ownercommands = {
         var commandsmessage = border, serverprivate = sys.isServerPrivate(), serveropen;
         var ports = sys.serverPorts().length, proxies = sys.proxyServers().length;
         var uptime = sys.profileDump().split('\n')[0].split(',')[0].split(':')[1].slice(1, -2);
-        var DAYS = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
-        var MONTHS = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
         var d = new Date(), day = d.getDay(), date, time;
         date = d.getDate(), month = d.getMonth(), year = d.getFullYear();
         date = DAYS[day] + ", " + MONTHS[month] + " " + date + ", " + year;
