@@ -1,5 +1,5 @@
 # fc-scripts
-The Fun Community server scripts. Currently still quite a mixture of old code and new code, though everything does work and the old code has mostly been updated to my current standards. I never intended to release the scripts to the public, and as a result, many things had to be adapted to that. Recently, however, I became active in the main server community, started using GitHub for once, and decided to ready my scripts for release . I have been spending time doing that, and now, here they are!
+The Fun Community server scripts. Currently still quite a mixture of old code and new code, though everything does work and the old code has mostly been updated to my current standards. I never intended to release the scripts to the public, and as a result, many things had to be adapted to that. Recently, however, I became active in the main server community, started using GitHub for once, and decided to ready my scripts for release. I have been spending time doing that, and now, here they are!
 
 Server version **2.6.2** or newer is required to run the scripts.
 
