@@ -1,5 +1,5 @@
 # fc-scripts
-The Fun Community server scripts. Currently still quite a mixture of old code and new code, though everything does work and the old code has mostly been updated to my current standards. The scripts were never intended to be released to the public, and as a result, many things had to be adapted to that.
+The Fun Community server scripts. Currently still quite a mixture of old code and new code, though everything does work and the old code has mostly been updated to my current standards. I never intended to release the scripts to the public, and as a result, many things had to be adapted to that. Recently, however, I became active in the main server community, and decided to ready my scripts for release for once. I have been spending time getting my scripts ready for release, and now, here they are!
 
 Server version **2.6.2** or newer is required to run the scripts.
 
@@ -16,3 +16,7 @@ You will also need to put the `bansites.txt` and `proxy_list.txt` files from the
 By default, the permanent channels are not registered. You should run the `/registerall` command (assuming you are Owner) to register them and give them their default settings. For this reason you should, if your server is new, decide your main channel name before running the command; since, if you change your main channel name, you will have to register it again.
 
 The scripts offer country and time zone retrieval functionality, for which it uses the [IPinfoDB](http://ipinfodb.com/) API service. If you want this functionality, you will need to register at IPinfoDB and get a free API key. Add it with the `/setapi <API key>` command, assuming `<API key>` is a valid API key. If you want to remove the functionality again, use the `/removeapi` command. This will also erase all country and time zone data.
+
+### Plugins
+
+There are optional script files in the zip as well; those are within a folder called `plugins`; the main files are in the folder called `scripts`. If you do not want the plugins, simply do not extract them from the zip. The plugins consist of fun commands and a few small game channel scripts, including a very unfinished (and therefore not yet playable) own version of Safari.
