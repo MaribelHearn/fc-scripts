@@ -482,7 +482,7 @@ usercommands = {
         "<h3>Contribution</h3><br>" +
         "Contributed to by: General Thor<br>" +
         "<h3>Credit to</h3><br>" +
-        "Lutra (main inspiration and base behind the scripts, tournaments)<br>" +
+        "Lutra (main inspiration and base behind the scripts tournament code and several utility methods)<br>" +
         "Pokémon Online server scripts (pokemon database methods, idea of safari)<br>" +
         "<br><timestamp/><br>" + border2;
         sys.sendHtmlMessage(src, scriptmessage, channel);
