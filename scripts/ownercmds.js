@@ -832,7 +832,7 @@ ownercommands = {
         var commandsmessage = border
         + "<h2>Owner Commands ~ Script Settings</h2>"
         + "<br>"
-        + "Automatic updating is currently an <b>experimental</b> feature and cannot be used yet."
+        + "Automatic updating is currently an <b>experimental</b> feature and cannot be used yet.<br>"
         /*+ "Automatic updating is currently turned <b>" + (autoUpdating ? "on" : "off") + "</b>.<br>";
         if (autoUpdating) {
             commandsmessage += "Update frequency: " + helpers.secondsToWording(updateFrequency) + ".<br>"
