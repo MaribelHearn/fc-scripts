@@ -1,5 +1,5 @@
 # fc-scripts
-The Fun Community Pokémon Online server scripts. Currently still quite a mixture of old code and new code, though everything does work and the old code has mostly been updated to my current standards. The scripts were never intended to be released to the public, and as a result, many things had to be adapted to that.
+The Fun Community server scripts. Currently still quite a mixture of old code and new code, though everything does work and the old code has mostly been updated to my current standards. The scripts were never intended to be released to the public, and as a result, many things had to be adapted to that.
 
 Server version **2.6.2** or newer is required to run the scripts.
 
