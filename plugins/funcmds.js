@@ -322,7 +322,7 @@ funcommands = {
             text[i] = morse[charset.indexOf(text[i])];
         }
         text = text.join(" ");
-        message = "<font color='" + color + "'><timestamp/>+<b><i>" + name + " MORSE:</i></b></font> " + text;
+        message = "<font color='" + color + "'><timestamp/>" + (sys.auth(src) >= 1 ? "+<b><i>" + name + " MORSE:</i></b></font> " : "<b>" + name + " MORSE:</b></font> ") + text;
         sys.sendHtmlAll(message, channel);
     }
     
