@@ -19,4 +19,4 @@ The scripts offer country and time zone retrieval functionality, for which it us
 
 ### Plugins
 
-There are optional script files in the zip as well; those are within a folder called `plugins`; the main files are in the folder called `scripts`. If you do not want the plugins, simply do not extract them from the zip. The plugins consist of fun commands and a few small game channel scripts, including a very unfinished (and therefore not yet playable) own version of Safari.
+There are optional script files as well; those are within a folder called `plugins`; the main files are in the folder called `scripts`. If you do not want the plugins, simply do not extract them from the zip once you have downloaded the scripts. The plugins consist of fun commands and a few small game channel scripts, including a very unfinished (and therefore not yet playable) own version of Safari.
