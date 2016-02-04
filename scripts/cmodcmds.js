@@ -49,6 +49,10 @@ cmodcommands = {
             }
             return;
         }
+        if (!regchannels[lower]) {
+            helpers.starfox(src, channel, command, bots.channel, "Error 400, this channel isn't registered!", channel);
+            return;
+        }
         for (var i in regchannels[lower].topicmakers) {
             if (helpers.cauth(regchannels[lower].topicmakers[i], channel) > helpers.cauth(name, channel)) {
                 helpers.starfox(src, channel, command, bots.channel, "Error 403, you may not change topic parts that are not yours and were made by higher channel auth.", channel);
