@@ -82,6 +82,7 @@ safaricommands = {
         for (var i in STARTER_POKEMON) {
             startermessage += "<a href='po:send//choose " + STARTER_POKEMON[i] + "'>" + helpers.pokeIcon(sys.pokeNum(STARTER_POKEMON[i])) + "</a> ";
         }
+        safari[lower] = {};
         sys.sendHtmlMessage(src, startermessage, channel);
     }
     
@@ -105,7 +106,6 @@ safaricommands = {
             helpers.starfox(src, channel, command, bots.safari, "Error 403, invalid starter.");
             return;
         }
-        safari[lower] = {};
         safari[lower].starter = starter;
         safari[lower].items = {};
         safari[lower].money = 0;
@@ -114,7 +114,7 @@ safaricommands = {
         safari[lower].mercy = 0;
         safari[lower].pokemon = [];
         safari[lower].pokemon.push(sys.pokeNum(starter));
-        for (var i in items) {
+        for (var i in ITEMS) {
             safari[lower].items[i] = 0;
         }
         helpers.saveData("safari");
