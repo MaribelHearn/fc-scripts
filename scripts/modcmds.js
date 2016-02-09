@@ -267,7 +267,7 @@ modcommands = {
             } else {
                 msg = mutemessages[name.toLowerCase()].replace(/~Self~/gi, name).replace(/~Target~/gi, trgtname).replace(/~Time~/gi, time + " " + unit).replace(/~Server~/gi, sys.getServerName());
             }
-            sys.sendHtmlMain(helpers.bot(bots.mute) + msg + " [Reason: " + reason + "]");
+            sys.sendHtmlAll(helpers.bot(bots.mute) + msg + " [Reason: " + reason + "]", channel);
         } else {
             sys.sendHtmlAll(helpers.bot(bots.mute) + name + " has muted " + trgtname + (time == "forever" ? "" : " for " + time + " ") + unit + "! [Reason: " + reason + "]", channel);
         }
@@ -305,7 +305,7 @@ modcommands = {
         if (members[trgtname]) {
             trgtname = members[trgtname];
         }
-        sys.sendHtmlMain(helpers.bot(bots.mute) + trgtname + " has been unmuted by " + name + "!");
+        sys.sendHtmlAll(helpers.bot(bots.mute) + trgtname + " has been unmuted by " + name + "!", channel);
     }
     
     ,
@@ -323,7 +323,7 @@ modcommands = {
         mutelist[lower].reason = reason;
         helpers.saveData("mutelist");
         if (members[lower])lower = members[lower];
-        sys.sendHtmlMain(helpers.bot(bots.mute) + name + " has changed the mute reason of " + lower + " to '" + reason + "'!");
+        sys.sendHtmlAll(helpers.bot(bots.mute) + name + " has changed the mute reason of " + lower + " to '" + reason + "'!", channel);
     }
     
     ,
@@ -372,7 +372,7 @@ modcommands = {
     clearmutelist: function (src, channel, command) {
         mutelist = {};
         helpers.saveData("mutelist");
-        sys.sendHtmlMain(helpers.bot(bots.mute) + "The mute list has been cleared by " + sys.name(src) + "!");
+        sys.sendHtmlAll(helpers.bot(bots.mute) + "The mute list has been cleared by " + sys.name(src) + "!", channel);
     }
     
     ,

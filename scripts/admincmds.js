@@ -498,7 +498,7 @@ admincommands = {
         }
         bots[bot] = command[2];
         helpers.saveData("bots");
-        sys.sendHtmlMain(helpers.bot(bots.main) + "<b>" + helpers.user(name) + " changed the " + bot + " bot's name to " + helpers.arg(command[2]) + "!</b>");
+        sys.sendHtmlAll(helpers.bot(bots.main) + "<b>" + helpers.user(name) + " changed the " + bot + " bot's name to " + helpers.arg(command[2]) + "!</b>", channel);
     }
     
     ,
@@ -511,7 +511,7 @@ admincommands = {
         }
         botcolor = command[1];
         helpers.saveData("botcolor");
-        sys.sendHtmlMain(helpers.bot(bots.main) + "<b>" + helpers.user(name) + " changed the bot " + command[0].slice(3) + " to " + command[1] + "!</b>");
+        sys.sendHtmlAll(helpers.bot(bots.main) + "<b>" + helpers.user(name) + " changed the bot " + command[0].slice(3) + " to " + command[1] + "!</b>", channel);
     }
     
     ,
@@ -534,7 +534,7 @@ admincommands = {
         }
         botsymbol = command[1];
         helpers.saveData("botsymbol");
-        sys.sendHtmlMain(helpers.bot(bots.main) + "<b>" + helpers.user(name) + " changed the bot symbol to " + helpers.escapehtml(command[1]) + "!</b>");
+        sys.sendHtmlAll(helpers.bot(bots.main) + "<b>" + helpers.user(name) + " changed the bot symbol to " + helpers.escapehtml(command[1]) + "!</b>", channel);
     }
     
     ,
@@ -547,7 +547,7 @@ admincommands = {
         }
         botsymbolcolor = command[1];
         helpers.saveData("botsymbolcolor");
-        sys.sendHtmlMain(helpers.bot(bots.main) + "<b>" + helpers.user(name) + " changed the bot symbol " + command[0].slice(6) + " to " + helpers.escapehtml(command[1]) + "!</b>");
+        sys.sendHtmlAll(helpers.bot(bots.main) + "<b>" + helpers.user(name) + " changed the bot symbol " + command[0].slice(6) + " to " + helpers.escapehtml(command[1]) + "!</b>", channel);
     }
     
     ,
