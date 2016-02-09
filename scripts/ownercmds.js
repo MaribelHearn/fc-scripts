@@ -2242,6 +2242,7 @@ ownercommands = {
         + "<br>"
         + "Use <b>" + helpers.user("/registerall") + "</b> to register all of the permanent channels and give them their default settings. Make sure you have chosen a main channel name before doing this,<br>"
         + "or it will have to be reregistered when you change its name.<br>"
+        + "Use <b>" + helpers.user("/unregisterall") + "</b> to unregister all of the permanent channels. Will ask for confirmation before doing so.<br>"
         + "Use <b>" + helpers.user("/renamechannel ") + helpers.arg("name") + helpers.arg2("*new name") + "</b> to change the name of a perm channel from <b>name</b> to <b>new name</b>.<br>"
         + "<br><timestamp/><br>"
         + border2;
@@ -2280,6 +2281,36 @@ ownercommands = {
     
     ,
     
+    unregisterall: function (src, channel, command) {
+        var confirmation = command[1], message;
+        if (!confirmation || confirmation != "confirm") {
+            message = helpers.bot(bots.main) + "Are you sure you want to unregister all permanent channels? ";
+            message += (helpers.isAndroid(src) ? "Type '/unregisterall confirm' if you are sure." : "<a href='po:send//unregisterall confirm'>Click here if you are sure.</a>");
+            sys.sendHtmlMessage(src, message, channel);
+            return;
+        }
+        cownercommands.registerthis(src, 0, ["unregisterthis"]);
+        for (var i in permchannels) {
+            cownercommands.unregisterthis(src, sys.channelId(permchannels[i]), ["unregisterthis"]);
+        }
+        if (helpers.isLoaded("party.js")) {
+            cownercommands.unregisterthis(src, sys.channelId(permchannels[3]), ["unregisterthis"]);
+        }
+        if (helpers.isLoaded("rr.js")) {
+            cownercommands.unregisterthis(src, sys.channelId(permchannels[4]), ["unregisterthis"]);
+        }
+        if (helpers.isLoaded("roulette.js")) {
+            cownercommands.unregisterthis(src, sys.channelId(permchannels[5]), ["unregisterthis"]);
+        }
+        if (helpers.isLoaded("safari.js")) {
+            cownercommands.unregisterthis(src, sys.channelId(permchannels[6]), ["unregisterthis"]);
+        }
+        helpers.saveData("regchannels");
+        sys.sendHtmlMessage(src, helpers.bot(bots.main) + "All permanent channels have been unregistered successfully.", channel);
+    }
+    
+    ,
+    
     renamechannel: function (src, channel, command) {
         var oldName = command[1], newName, oldName, lower;
         if (!oldName) {
@@ -2297,6 +2328,9 @@ ownercommands = {
                 lower = oldName.toLowerCase();
                 if (regchannels[lower]) {
                     regchannels[newName.toLowerCase()] = regchannels[lower];
+                    if (regchannels[newName.toLowerCase()].topic == "Welcome to " + oldName + "!") {
+                        regchannels[newName.toLowerCase()].topic = "Welcome to " + newName + "!";
+                    }
                     delete regchannels[lower];
                     helpers.saveData("regchannels");
                 }
