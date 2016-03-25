@@ -42,9 +42,13 @@ cadmincommands = {
                 helpers.starfox(src, channel, command, bots.channel, "Error 400, you can't channel ban " + trgtname + " because they already are!");
                 return;
             }
+            if (helpers.cauth(trgtname, channel) >= helpers.cauth(sys.name(src), channel)) {
+                helpers.starfox(src, channel, command, bots.channel, "Error 403, you may not channel ban " + trgtname + " because their auth level is higher or equal to yours!", channel);
+                return;
+            }
             regchannels[lower].banlist[name] = {};
             regchannels[lower].banlist[name].ip = trgtip;
-            regchannels[lower].banlist[name].banner = sys.name(src);
+            regchannels[lower].banlist[name].banner = players[src].name;
             regchannels[lower].banlist[name].reason = reason;
             var date = helpers.date(new Date());
             regchannels[lower].banlist[name].date = date;
