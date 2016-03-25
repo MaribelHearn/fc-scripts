@@ -196,12 +196,13 @@ cusercommands = {
     ,
     
     channelauth: function (src, channel, command) {
-        var authmessage = border + "<h2>Channel Authority of " + sys.channel(channel) + "</h2><br>", authList = helpers.cauthSort(channel), srcauth = sys.auth(src), index = 0;
+        var authmessage = border + "<h2>Channel Authority of " + sys.channel(channel) + "</h2><br>", srcauth = sys.auth(src), index = 0, authList;
         var lower = sys.channel(channel).toLowerCase(), auths = [], names = [], lastLogins = [], statuses = [];
         if (!regchannels[lower]) {
             helpers.starfox(src, channel, command, bots.channel, "Error 400, this channel isn't registered!");
             return;
         }
+        authList = helpers.cauthSort(channel);
         for (var i in authList) {
             names.push(authList[i]);
             auths.push(helpers.cauthname(names[i], channel));
