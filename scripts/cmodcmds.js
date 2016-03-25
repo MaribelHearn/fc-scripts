@@ -172,25 +172,30 @@ cmodcommands = {
     ,
     
     ckick: function (src, channel, command) {
-        var lower = sys.channel(channel).toLowerCase(), reason = command[2];
-        if (!command[1]) {
+        var name = sys.name(src), trgtname = command[1], lower = sys.channel(channel).toLowerCase(), reason = command[2], trgt;
+        if (!trgtname) {
             helpers.starfox(src, channel, command, bots.channel, "Error 404, player not found.", channel);
             return;
         }
-        if (!sys.id(command[1])) {
+        if (!sys.id(trgtname)) {
             helpers.starfox(src, channel, command, bots.channel, "Error 400, that player is not currently on the server!", channel);
             return;
         }
-        var trgt = sys.id(command[1]);
+        trgt = sys.id(trgtname);
         if (!sys.isInChannel(trgt, channel)) {
             helpers.starfox(src, channel, command, bots.channel, "Error 400, that player is not currently on this channel!", channel);
+            return;
+        }
+        trgtname = sys.name(trgt);
+        if (helpers.cauth(trgtname, channel) >= helpers.cauth(name, channel)) {
+            helpers.starfox(src, channel, command, bots.channel, "Error 403, you may not channel kick " + trgtname + " because their auth level is higher or equal to yours!", channel);
             return;
         }
         sys.kick(trgt, channel);
         if (!reason) {
             reason = "Unknown";
         }
-        sys.sendHtmlAll(helpers.bot(bots.channel) + command[1] + " has been kicked from this channel by " + sys.name(src) + "! [Reason: " + reason + "]", channel);
+        sys.sendHtmlAll(helpers.bot(bots.channel) + trgtname + " has been kicked from this channel by " + name + "! [Reason: " + reason + "]", channel);
     }
     
     ,
@@ -202,7 +207,7 @@ cmodcommands = {
     ,
     
     cmute: function (src, channel, command) {
-        var lower = sys.channel(channel).toLowerCase(), reason = command[2];
+        var name = sys.name(src), trgtname = command[1], lower = sys.channel(channel).toLowerCase(), reason = command[2], trgtip;
         if (!regchannels[lower]) {
             helpers.starfox(src, channel, command, bots.channel, "Error 400, this channel isn't registered!", channel);
             return;
@@ -215,21 +220,23 @@ cmodcommands = {
             helpers.starfox(src, channel, command, bots.mute, "You can't channel mute " + trgtname + " because they do not exist in the database.");
             return;
         }
-        var trgtip = sys.dbIp(command[1]), trgtname = command[1];
+        trgtip = sys.dbIp(command[1]);
+        if (helpers.cauth(trgtname, channel) >= helpers.cauth(name, channel)) {
+            helpers.starfox(src, channel, command, bots.channel, "Error 403, you may not channel mute " + trgtname + " because their auth level is higher or equal to yours!", channel);
+            return;
+        }
         if (!reason) {
             reason = "Unknown";
         }
-        var name = trgtname.toLowerCase();
-        regchannels[lower].mutelist[name] = {};
-        regchannels[lower].mutelist[name].ip = trgtip;
+        trgtname = trgtname.toLowerCase();
+        regchannels[lower].mutelist[trgtname] = {};
+        regchannels[lower].mutelist[trgtname].ip = trgtip;
         regchannels[lower].mutedips[trgtip] = true;
-        regchannels[lower].mutelist[name].mutedby = players[src].name;
-        regchannels[lower].mutelist[name].reason = reason;
-        var date = helpers.date(new Date());
-        regchannels[lower].mutelist[name].date = date;
+        regchannels[lower].mutelist[trgtname].mutedby = players[src].name;
+        regchannels[lower].mutelist[trgtname].reason = reason;
+        regchannels[lower].mutelist[trgtname].date = helpers.date(new Date());
         helpers.saveData("regchannels");
-        var trgt = sys.id(trgtname);
-        sys.sendHtmlAll(helpers.bot(bots.channel) + trgtname + " has been muted on this channel by " + sys.name(src) + "! [Reason: " + reason + "]", channel);
+        sys.sendHtmlAll(helpers.bot(bots.channel) + trgtname + " has been muted on this channel by " + name + "! [Reason: " + reason + "]", channel);
     }
     
     ,
