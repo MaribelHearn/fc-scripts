@@ -1368,7 +1368,6 @@
         if (regchannels[lower]) {
             if (regchannels[sys.channel(channel).toLowerCase()].priv && channel !== 0) {
                 sys.clearChat();
-            
             }
             if (!regchannels[lower].caps) {
                 if (helpers.isLetter(message) && message == message.toUpperCase()) {
@@ -1396,6 +1395,33 @@
         **/
         if (ZALGO.test(message) || THAI.test(message)) {
             sys.clearChat();
+        }
+        /**
+            -----------
+            YouTube Bot
+            -----------
+        **/
+        var link = helpers.strip(message).substring(helpers.strip(message).indexOf(": ") + 2, helpers.strip(message).length);
+        var regex = /.*(?:youtu.be\/|youtube.*v=|youtube.*\/embed\/|youtube.*\/v\/|youtube.*videos\/)([^#\&\?]*).*/;
+            
+        
+        if (link.match(regex)) {
+            try {
+                var data = helpers.htmlLinks(link, "object");
+            } catch (error) {
+                sys.sendHtmlAuths(helpers.bot(bots.main) + "An error occurred: " + error, channel);
+                return;
+            }
+            
+            var title = data.items[0].snippet.title;
+            var username = data.items[0].snippet.channelTitle;
+            var views = helpers.sep(data.items[0].statistics.viewCount);
+            var likes = helpers.sep(data.items[0].statistics.likeCount);
+            var dislikes = helpers.sep(data.items[0].statistics.dislikeCount);
+            var publishedDate = helpers.correctDateNotation(data.items[0].snippet.publishedAt);
+            
+            sys.sendHtmlAll(helpers.bot(bots.main) + title + ", Uploader: " + username + ", Views: <b>" + views + "</b>, Likes: <b><font color='green'>" + likes + "</font></b>, " +
+            "Dislikes: <b><font color='red'>" + dislikes + "</font></b>, Published: " + publishedDate + " UTC.", channel);
         }
     }
 
