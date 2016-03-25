@@ -576,6 +576,8 @@ helpers = {
             return "Russia";
         } else if (country == "Hong Kong") {
             return "China (Hong Kong)";
+        } else if (country == "Macao") {
+            return "China (Macao)";
         } else if (country == "Moldova, Republic") {
             return "Moldova";
         } else if (country == "Macedonia, The") {
@@ -598,6 +600,8 @@ helpers = {
             return "Ivory Coast";
         } else if (country == "Anguilla") {
             return "Anguilla (United Kingdom)";
+        } else if (country == "Cabo Verde") {
+            return "Cape Verde";
         } else {
             return country;
         }
@@ -609,7 +613,7 @@ helpers = {
         country = this.removespaces(country).toUpperCase();
         if (country == "U.A.E.") {
             return "UAE";
-        } else if (country == "CHINA(TAIWAN)" || country == "CHINA(HONGKONG)") {
+        } else if (country == "CHINA(TAIWAN)" || country == "CHINA(HONGKONG)" || country == "CHINA(MACAO)") {
             return "CHINA";
         } else if (country == "UNITEDSTATES(PUERTORICO)" || country == "UNITEDSTATES(VIRGINISLANDS)") {
             return "UNITEDSTATES";
@@ -1476,7 +1480,7 @@ helpers = {
     
     ,
     
-    htmlLinks:  function (text) {
+    htmlLinks:  function (text, type) {
         var exp = /([a-zA-Z]+:\/\/|www\.)[^\s]+/ig;
         var found = text.match(exp);
         var newtext;
@@ -1505,7 +1509,7 @@ helpers = {
                 text = text.replace(found[x], newtext);
             }
         }
-        return link;
+        return type ? resp : link;
     }
     
     ,
@@ -1781,6 +1785,34 @@ helpers = {
     }
     
     ,
+    
+    
+    sep: function (num) {
+        if (isNaN(num)) {
+            return '-';
+        }
+        return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    }
+    
+    ,
+    
+    correctDateNotation: function (date) {
+        var tmp, time, year, month, day;
+        tmp = date.split('T')[0].split('-');
+        time = date.split('T')[1].replace(".000Z", "");
+        year = tmp[0];
+        month = tmp[1];
+        day = tmp[2];
+        if (day.charAt(0) == '0') {
+            day = day.slice(1);
+        }
+        if (month.charAt(0) == '0') {
+            month = month.slice(1);
+        }
+        return day + '-' + month + '-' + year + ", " + time;
+    }
+    
+    ,
 
     removespaces: function (string) {
         return string.split(" ").join("");
@@ -2000,6 +2032,7 @@ helpers = {
     
     cauth: function (name, channel) {
         var lower = sys.channel(channel).toLowerCase();
+        name = name.toLowerCase();
         if (regchannels[lower]) {
             for (var ownerindex in regchannels[lower].owners) {
                 if (regchannels[lower].owners[ownerindex] == name || sys.dbAuth(name) >= 3) {
