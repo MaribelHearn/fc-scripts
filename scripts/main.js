@@ -472,7 +472,7 @@
             --------
         **/
         for (var index in banlist) {
-            if (banlist[index].time) {
+            if (banlist[index].time !== "-") {
                 banlist[index].time--;
                 if (banlist[index].time === 0) {
                     delete banlist[index];
@@ -488,7 +488,7 @@
             ---------
         **/
         for (var index in mutelist) {
-            if (mutelist[index].time) {
+            if (mutelist[index].time !== "-") {
                 mutelist[index].time--;
                 if (mutelist[index].time === 0) {
                     delete mutelist[index];

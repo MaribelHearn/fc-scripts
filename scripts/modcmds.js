@@ -254,7 +254,6 @@ modcommands = {
             }
             mutelist[lower].starttime = time + " " + unit;
         }
-        mutelist[lower].starttime = time + " " + unit;
         var date = helpers.date(new Date());
         mutelist[lower].date = date;
         helpers.saveData("mutelist");
