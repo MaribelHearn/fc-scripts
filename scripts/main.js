@@ -333,7 +333,9 @@
     
     serverStartUp: function () {
         serverStarting = true;
-        sys.system("start RelayStation");
+        if (sys.fexists("RelayStation.exe") && sys.os() == "windows") {
+            sys.system("start RelayStation");
+        }
         /**
             ----------------
             Channel Creation
@@ -422,25 +424,13 @@
 
     serverShutDown: function () {
         /**
-            ---------------------------------------------------------------------
-            Close Battle Server, Relay Station and delete some data to save space
-            ---------------------------------------------------------------------
+            -------------------------------------
+            Close Battle Server and Relay Station
+            -------------------------------------
         **/
         sys.killBattleServer();
-        sys.system("taskkill /f /im RelayStation.exe");
-        for (var index in countryname) {
-            if (sys.dbAuth(index) <= 0) {
-                delete countryname[index];
-                delete cityname[index];
-                delete timezone[index];
-                delete operatingsystem[index];
-                delete versions[index];
-                helpers.saveData("countryname");
-                helpers.saveData("cityname");
-                helpers.saveData("timezone");
-                helpers.saveData("operatingsystem");
-                helpers.saveData("versions");
-            }
+        if (sys.fexists("RelayStation.exe") && sys.os() == "windows") {
+            sys.system("taskkill /f /im RelayStation.exe");
         }
     }
 
@@ -1044,6 +1034,18 @@
         **/
         if (floodplayers.indexOf(src) != -1) {
             floodplayers.splice(floodplayers.indexOf(src), 1);
+        }
+        if (sys.auth(src) <= 0) {
+            delete countryname[lower];
+            delete cityname[lower];
+            delete timezone[lower];
+            delete operatingsystem[lower];
+            delete versions[lower];
+            helpers.saveData("countryname");
+            helpers.saveData("cityname");
+            helpers.saveData("timezone");
+            helpers.saveData("operatingsystem");
+            helpers.saveData("versions");
         }
         delete players[src];
     }
