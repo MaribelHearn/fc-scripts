@@ -874,7 +874,6 @@
         var name, auth = sys.auth(src), ip = sys.ip(src), range = sys.range(src);
         if (regchannels[lower]) {
             var cbanlist = regchannels[lower].banlist;
-            var crangebanlist = regchannels[lower].rangebanlist;
         }
         players[src] ? name = players[src].name : name = sys.name(src);
         /**
@@ -892,13 +891,6 @@
                 if (ip == cbanlist[index].ip && auth < 3) {
                     sys.stopEvent();
                     sys.sendHtmlMessage(src, helpers.bot(bots.channel) + "You are banned from this channel.");
-                    return;
-                }
-            }
-            for (var index in crangebanlist) {
-                if (range == crangebanlist[index].range && auth < 3) {
-                    sys.stopEvent();
-                    sys.sendHtmlMessage(src, helpers.bot(bots.channel) + "You are range banned from this channel.");
                     return;
                 }
             }
