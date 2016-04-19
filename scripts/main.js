@@ -87,6 +87,7 @@
         helpers.initData();
     }
     API_KEY = sys.read(DATA_FOLDER + "API_KEY.txt");
+    GOOGLE_KEY = sys.read(DATA_FOLDER + "GOOGLE_KEY.txt");
     UPDATE_KEY = sys.read(DATA_FOLDER + "UPDATE_KEY.txt");
     /**
         ----------------------

@@ -2360,6 +2360,12 @@ ownercommands = {
         } else {
             commandsmessage += "<b>" + helpers.user("/removeapi") + "</b>: removes your IPinfoDB API key. This will disable country and time zone retrieval and reset all corresponding data.<br>";
         }
+        if (GOOGLE_KEY === "") {
+            commandsmessage += "<b>" + helpers.user("/setgoogleapi ") + helpers.arg("API") + "</b>: sets the Google API key for youtube links <b>API</b>.<br>"
+            + "<u>Be careful with this command!</u> Entering an invalid API key will break things!<br>";
+        } else {
+            commandsmessage += "<b>" + helpers.user("/removegoogleapi") + "</b>: removes your Google API key. This will disable youtube link information and the /listen command.<br>";
+        }
         commandsmessage += "<b>" + helpers.user("/clearpass ") + helpers.arg("player") + "</b>: clears <b>player</b>'s password.<br>"
         + "<b>" + helpers.user("/servertopic ") + helpers.arg("text") + "</b>: changes the server topic to <b>text</b>.<br>"
         + "<b>" + helpers.user("/regchannelinfo") + "</b>: lists all registered channels and their info.<br>"
@@ -2420,6 +2426,35 @@ ownercommands = {
         helpers.saveData("cityname");
         helpers.saveData("timezone");
         sys.sendHtmlMessage(src, helpers.bot(bots.main) + "Your API key has been removed.", channel);
+    }
+    
+    ,
+    
+    setgoogleapi: function (src, channel, command) {
+        if (GOOGLE_KEY !== "") {
+            helpers.starfox(src, channel, command, bots.command, "Error 400, you already have a Google API key set!");
+            return;
+        }
+        var api = command[1];
+        if (!api) {
+            helpers.starfox(src, channel, command, bots.command, "Error 404, API key not found.");
+            return;
+        }
+        GOOGLE_KEY = api;
+        sys.write("data/GOOGLE_KEY.txt", api);
+        sys.sendHtmlMessage(src, helpers.bot(bots.main) + "Your Google API key has been set.", channel);
+    }
+    
+    ,
+    
+    removegoogleapi: function (src, channel, command) {
+        if (GOOGLE_KEY === "") {
+            helpers.starfox(src, channel, command, bots.command, "Error 400, you cannot remove a Google API key when you don't have one!");
+            return;
+        }
+        GOOGLE_KEY = "";
+        helpers.saveData("GOOGLE_KEY");
+        sys.sendHtmlMessage(src, helpers.bot(bots.main) + "Your Google API key has been removed.", channel);
     }
     
     ,
