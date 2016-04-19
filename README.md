@@ -13,7 +13,7 @@ Click 'Download ZIP' to download this repository, then extract the content of th
 
 By default, the official channels are not registered. You should run the `/registerall` command (assuming you are Owner) to register them and give them their default settings. For this reason you should, if your server is new, decide your main channel name before running the command; since, if you change your main channel name, you will have to register it again.
 
-The scripts offer country and time zone retrieval functionality, for which it uses the [IPinfoDB](http://ipinfodb.com/) API service. If you want this functionality, you will need to register at IPinfoDB and get a free API key. Add it with the `/setapi <API key>` command, assuming `<API key>` is a valid API key. If you want to remove the functionality again, use the `/removeapi` command. This will also erase all country and time zone data.
+The scripts offer country and time zone retrieval functionality, for which it uses the [IPinfoDB](http://ipinfodb.com/) API service. If you want this functionality, you will need to register at IPinfoDB and get a free API key. Add it with the `/setapi <API key>` command, assuming `<API key>` is a valid API key. If you want to remove the functionality again, use the `/removeapi` command. This will also erase all country and time zone data. There is also Google API functionality, which is used for YouTube link information and the `/listen` command. Similarly to the IPinfoDB API system, you can use `/setgoogleapi <API key>` to enable it and `/removegoogleapi` to disable it again.
 
 ### Plugins
 
