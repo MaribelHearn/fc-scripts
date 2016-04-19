@@ -548,7 +548,10 @@ helpers = {
     ,
     
     youtubeDataUrl: function (video) {
-        return "http://crystal.moe/youtube?id=" + video;
+        if (GOOGLE_KEY === "") {
+            return false;
+        }
+        return "https://www.googleapis.com/youtube/v3/videos?id=" + video + "&key=" + GOOGLE_KEY + "&part=snippet,contentDetails,statistics,status";
     }
     
     ,

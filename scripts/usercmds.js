@@ -1357,8 +1357,10 @@ usercommands = {
         + "<b>" + helpers.user("/imp ") + helpers.arg("text") + helpers.arg2("*message") + "</b>: posts <b>message</b> as <b>text</b>.<br>"
         + "<b>" + helpers.user("/impme ") + helpers.arg("text") + helpers.arg2("*message") + "</b>: posts <b>message</b> between asterisks and in bold in your name color as <b>text</b>.<br>"
         + "<b>" + helpers.user("/future ") + helpers.arg("text") + helpers.arg2("*time") + "</b>: posts <b>message</b> into the future, to arrive in <b>time</b>. <b>message</b> can also be a command.<br>"
-        + "<b>" + helpers.user("/listen ") + helpers.arg("youtube link") + "</b>: posts a message saying that you're listening to <b>youtube link</b>. The link will turn into the video's title.<br>"
-        + "<b>" + helpers.user("/quote ") + helpers.arg("text") + helpers.arg2("*author") + "</b>: posts <b>text</b> as a quote, cited from <b>author</b>.<br>"
+        if (GOOGLE_KEY !== "") {
+            commandsmessage += "<b>" + helpers.user("/listen ") + helpers.arg("youtube link") + "</b>: posts a message saying that you're listening to <b>youtube link</b>. The link will turn into the video's title.<br>"
+        }
+        commandsmessage += "<b>" + helpers.user("/quote ") + helpers.arg("text") + helpers.arg2("*author") + "</b>: posts <b>text</b> as a quote, cited from <b>author</b>.<br>"
         + "<b>" + helpers.user("/spoiler ") + helpers.arg("text") + helpers.arg2("*source") + "</b>: saves <b>text</b> as a spoiler of <b>source</b>. A link will be posted for users to read it (Android users will be told to use the /view command instead).<br>"
         + "<b>" + helpers.user("/view ") + helpers.arg("number") + "</b>: view spoiler <b>number</b>. The number will roll back to 0 when the 100th spoiler is posted.<br>"
         + "<br><timestamp/><br>"
@@ -1391,6 +1393,10 @@ usercommands = {
     ,
     
     listen: function (src, channel, command) {
+        if (GOOGLE_KEY === "") {
+            helpers.starfox(src, channel, command, bots.command, "Error 400, this command is currently disabled.");
+            return;
+        }
         var name = helpers.escapehtml(sys.name(src)), color = helpers.color(src), link;
         command.splice(0, 1);
         command = command.join(DELIMITER);
