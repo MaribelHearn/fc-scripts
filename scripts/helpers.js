@@ -311,12 +311,21 @@ helpers = {
     
     ,
     
-    muteMessage: function (src, channel) {
+    muteMessage: function (src, channel, message) {
         var alts = sys.aliases(sys.ip(src)), lower;
         for (var i in alts) {
             if (mutelist[alts[i]]) {
                 lower = alts[i];
             }
+        }
+        if (mutelist[lower].silent) {
+            var name = (members[lower] ? members[lower] : lower);
+            if (message.charAt(0) == '/' && message.length > 1) {
+                helpers.starfox(src, channel, command, bots.starfox, noPermissionMessage.replace(/~Player~/, name));
+                return;
+            }
+            sys.sendMessage(src, name + ": " + message, channel);
+            return;
         }
         sys.sendHtmlMessage(src, this.bot(bots.mute) + "Sorry, you are muted on the server. [Time until expiration: " + this.formatJusticeTime(mutelist[lower].time) +
         "] [Reason: " + mutelist[lower].reason + "]", channel);
@@ -605,6 +614,10 @@ helpers = {
             return "Anguilla (United Kingdom)";
         } else if (country == "Cabo Verde") {
             return "Cape Verde";
+        } else if (country == "Palestine, State of") {
+            return "Palestine";
+        } else if (country == "Syrian Arab Republic") {
+            return "Syria";
         } else {
             return country;
         }
