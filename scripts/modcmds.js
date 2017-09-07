@@ -204,7 +204,7 @@ modcommands = {
             return;
         }
         if (helpers.muteCheck(trgtname)) {
-            helpers.starfox(src, channel, command, bots.mute, "Error 400, you can't mute " + trgtname + " because they already are muted!");
+            helpers.starfox(src, channel, command, bots.mute, "Error 400, you can't mute " + trgtname + " because they are already muted!");
             return;
         }
         if (!reason) {
@@ -254,6 +254,7 @@ modcommands = {
             }
             mutelist[lower].starttime = time + " " + unit;
         }
+        mutelist[lower].silent = (!command[4] ? false : true);
         var date = helpers.date(new Date());
         mutelist[lower].date = date;
         helpers.saveData("mutelist");
@@ -328,7 +329,7 @@ modcommands = {
     ,
     
     mutelist: function (src, channel, command) {
-        var names = [], ips = [], muters = [], reasons = [], times = [], timesLeft = [], dates = [], mutelistmessage;
+        var names = [], ips = [], muters = [], reasons = [], times = [], timesLeft = [], dates = [], silences = [], mutelistmessage;
         for (var i in mutelist) {
             names.push(members[i] ? members[i] : i);
             ips.push(mutelist[i].ip);
@@ -337,6 +338,7 @@ modcommands = {
             times.push(helpers.formatJusticeTime(mutelist[i].starttime));
             timesLeft.push(helpers.formatJusticeTime(mutelist[i].time));
             dates.push(mutelist[i].date);
+            silences.push(mutelist[i].silent)
         }
         mutelistmessage = border + "<h2>Mute List</h2><br>";
         if (helpers.isAndroid(src)) {
@@ -348,7 +350,7 @@ modcommands = {
         } else {
             mutelistmessage += "<style>table {border-width: 1px; border-style: solid; border-color: #000000;}</style>"
             + "<table cellpadding='2' cellspacing='0'><thead><tr style='background-color: " + listcolors.mute + ";'>"
-            + "<th>Name</th><th>IP Address</th><th>Muter</th><th>Reason</th><th>Muted for</th><th>Time left</th><th>Date of muting</th></tr></thead><tbody>";
+            + "<th>Name</th><th>IP Address</th><th>Muter</th><th>Reason</th><th>Muted for</th><th>Time left</th><th>Date of muting</th><th>Silent</th></tr></thead><tbody>";
             for (var i in names) {
                 mutelistmessage += "<tr style='background-color: " + Qt.lighter(listcolors.mute, 1.55) + ";'>"
                 + "<td>" + names[i] + "</td>"
@@ -358,6 +360,7 @@ modcommands = {
                 + "<td>" + times[i] + "</td>"
                 + "<td>" + timesLeft[i] + "</td>"
                 + "<td>" + dates[i] + "</td>"
+                + "<td>" + (silences[i] ? "Yes" : "No") + "</td>"
                 + "</tr>";
             }
             mutelistmessage += "</tbody></table>"

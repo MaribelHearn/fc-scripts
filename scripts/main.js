@@ -1142,6 +1142,19 @@
     ,
     
     beforeNewPM: function (src) {
+        /**
+            --------------------------------------
+            Prevent Silent Muted People From PMing
+            --------------------------------------
+        **/
+        sys.sendHtmlOwner("<timestamp/> [Debug] PM is being sent by " + players[src].name + ".");
+        var lower = players[src].name.toLowerCase();
+        if (helpers.muteCheck(players[src].name)) {
+            if (mutelist[lower].silent) {
+                sys.stopEvent();
+                return;
+            }
+        }
     }
     
     ,
@@ -1313,7 +1326,7 @@
         **/
         if (helpers.muteCheck(players[src].name) && auth < 3) {
             sys.stopEvent();
-            helpers.muteMessage(src, channel);
+            helpers.muteMessage(src, channel, message);
             return;
         }
         /**

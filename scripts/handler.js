@@ -19,12 +19,12 @@ filterLastMessage = function (src, message, channel) {
     }
 };
 
-mutedOrSilenced = function (src, channel, command, name, auth) {
+mutedOrSilenced = function (src, channel, command, name, auth, message) {
     if (auth >= 3) {
         return false;
     }
     if (helpers.muteCheck(name)) {
-        helpers.muteMessage(src, channel);
+        helpers.muteMessage(src, channel, message);
         return true;
     }
     if (helpers.cmuteCheck(players[src].name, sys.channel(channel).toLowerCase())) {
@@ -39,7 +39,7 @@ mutedOrSilenced = function (src, channel, command, name, auth) {
     }
 };
 
-bigtextCommand = function (src, channel, command, lower, name, auth) {
+bigtextCommand = function (src, channel, command, lower, name, auth, message) {
     if (bigtexts[lower] !== undefined) {
         if (mutedOrSilenced(src, channel, command, name, auth)) {
             return;
@@ -48,91 +48,91 @@ bigtextCommand = function (src, channel, command, lower, name, auth) {
     }
 };
 
-userCommand = function (src, channel, command, lower, name, auth) {
+userCommand = function (src, channel, command, lower, name, auth, message) {
     if (usercommands[lower] !== undefined) {
-        if (helpers.isMutable(usercommands[lower]) && mutedOrSilenced(src, channel, command, name, auth)) {
+        if (helpers.isMutable(usercommands[lower]) && mutedOrSilenced(src, channel, command, name, auth, message)) {
             return;
         }
         usercommands[lower](src, channel, command);
     }
 };
 
-safariCommand = function (src, channel, command, lower, name, auth) {
+safariCommand = function (src, channel, command, lower, name, auth, message) {
     if (helpers.isLoaded("safari.js") && safaricommands[lower] !== undefined) {
         if (channel != safarichannel) {
             helpers.starfox(src, channel, command, bots.roulette, "Error 403, this command is meant to be used in the " + helpers.channelLink(permchannels[6]) + " channel.");
             return;
         }
-        if (helpers.isMutable(safaricommands[lower]) && mutedOrSilenced(src, channel, command, name, auth)) {
+        if (helpers.isMutable(safaricommands[lower]) && mutedOrSilenced(src, channel, command, name, auth, message)) {
             return;
         }
         safaricommands[lower](src, channel, command);
     }
 };
 
-rouletteCommand = function (src, channel, command, lower, name, auth) {
+rouletteCommand = function (src, channel, command, lower, name, auth, message) {
     if (helpers.isLoaded("roulette.js") && roulettecommands[lower] !== undefined) {
         if (channel != roulettechannel) {
             helpers.starfox(src, channel, command, bots.roulette, "Error 403, this command is meant to be used in the " + helpers.channelLink(permchannels[5]) + " channel.");
             return;
         }
-        if (helpers.isMutable(roulettecommands[lower]) && mutedOrSilenced(src, channel, command, name, auth)) {
+        if (helpers.isMutable(roulettecommands[lower]) && mutedOrSilenced(src, channel, command, name, auth, message)) {
             return;
         }
         roulettecommands[lower](src, channel, command);
     }
 };
 
-russianRouletteCommand = function (src, channel, command, lower, name, auth) {
+russianRouletteCommand = function (src, channel, command, lower, name, auth, message) {
     if (helpers.isLoaded("rr.js") && rrcommands[lower] !== undefined) {
         if (channel != rrchannel) {
             helpers.starfox(src, channel, command, bots.rr, "Error 403, this command is meant to be used in the the " + helpers.channelLink(permchannels[4]) + " channel.");
             return;
         }
-        if (helpers.isMutable(rrcommands[lower]) && mutedOrSilenced(src, channel, command, name, auth)) {
+        if (helpers.isMutable(rrcommands[lower]) && mutedOrSilenced(src, channel, command, name, auth, message)) {
             return;
         }
         rrcommands[lower](src, channel, command);
     }
 };
 
-partyCommand = function (src, channel, command, lower, name, auth) {
+partyCommand = function (src, channel, command, lower, name, auth, message) {
     if (helpers.isLoaded("party.js") && partycommands[lower] !== undefined) {
         if (channel != partychannel) {
             helpers.starfox(src, channel, command, bots.party, "Error 403, this command is meant to be used in the " + helpers.channelLink(permchannels[3]) + " channel.");
             return;
         }
-        if (helpers.isMutable(partycommands[lower]) && mutedOrSilenced(src, channel, command, name, auth)) {
+        if (helpers.isMutable(partycommands[lower]) && mutedOrSilenced(src, channel, command, name, auth, message)) {
             return;
         }
         partycommands[lower](src, channel, command);
     }
 };
 
-funCommand = function (src, channel, command, lower, name, auth) {
+funCommand = function (src, channel, command, lower, name, auth, message) {
     if (helpers.isLoaded("funcmds.js") && funcommands[lower] !== undefined) {
-        if (helpers.isMutable(funcommands[lower]) && mutedOrSilenced(src, channel, command, name, auth)) {
+        if (helpers.isMutable(funcommands[lower]) && mutedOrSilenced(src, channel, command, name, auth, message)) {
             return;
         }
         funcommands[lower](src, channel, command);
     }
 };
 
-channelUserCommand = function (src, channel, command, lower, name, auth) {
+channelUserCommand = function (src, channel, command, lower, name, auth, message) {
     if (cusercommands[lower] !== undefined) {
-        if (helpers.isMutable(cusercommands[lower]) && mutedOrSilenced(src, channel, command, name, auth)) {
+        if (helpers.isMutable(cusercommands[lower]) && mutedOrSilenced(src, channel, command, name, auth, message)) {
             return;
         }
         cusercommands[lower](src, channel, command);
     }
 };
 
-channelModCommand = function (src, channel, command, lower, name, auth, cauth) {
+channelModCommand = function (src, channel, command, lower, name, auth, cauth, message) {
     if (cmodcommands[lower] !== undefined) {
         if (cauth < 1 && auth < 1) {
             helpers.starfox(src, channel, command, bots.starfox, noPermissionMessage.replace(/~Player~/, name));
             return;
-        } else if (helpers.isMutable(cmodcommands[lower]) && mutedOrSilenced(src, channel, command, name, auth)) {
+        } else if (helpers.isMutable(cmodcommands[lower]) && mutedOrSilenced(src, channel, command, name, auth, message)) {
             return;
         } else {
             cmodcommands[lower](src, channel, command);
@@ -140,12 +140,12 @@ channelModCommand = function (src, channel, command, lower, name, auth, cauth) {
     }
 };
 
-channelAdminCommand = function (src, channel, command, lower, name, auth, cauth) {
+channelAdminCommand = function (src, channel, command, lower, name, auth, cauth, message) {
     if (cadmincommands[lower] !== undefined) {
         if (cauth < 2 && auth < 2) {
             helpers.starfox(src, channel, command, bots.starfox, noPermissionMessage.replace(/~Player~/, name));
             return;
-        } else if (helpers.isMutable(cadmincommands[lower]) && mutedOrSilenced(src, channel, command, name, auth)) {
+        } else if (helpers.isMutable(cadmincommands[lower]) && mutedOrSilenced(src, channel, command, name, auth, message)) {
             return;
         } else {
             cadmincommands[lower](src, channel, command);
@@ -153,12 +153,12 @@ channelAdminCommand = function (src, channel, command, lower, name, auth, cauth)
     }
 };
 
-channelOwnerCommand = function (src, channel, command, lower, name, auth, cauth) {
+channelOwnerCommand = function (src, channel, command, lower, name, auth, cauth, message) {
     if (cownercommands[lower] !== undefined) {
         if (cauth < 3 && auth < 3) {
             helpers.starfox(src, channel, command, bots.starfox, noPermissionMessage.replace(/~Player~/, name));
             return;
-        } else if (helpers.isMutable(cownercommands[lower]) && mutedOrSilenced(src, channel, command, name, auth)) {
+        } else if (helpers.isMutable(cownercommands[lower]) && mutedOrSilenced(src, channel, command, name, auth, message)) {
             return;
         } else {
             cownercommands[lower](src, channel, command);
@@ -166,12 +166,12 @@ channelOwnerCommand = function (src, channel, command, lower, name, auth, cauth)
     }
 };
 
-modCommand = function (src, channel, command, lower, name, auth) {
+modCommand = function (src, channel, command, lower, name, auth, message) {
     if (modcommands[lower] !== undefined) {
         if (auth < 1) {
             helpers.starfox(src, channel, command, bots.starfox, noPermissionMessage.replace(/~Player~/, name));
             return;
-        } else if (helpers.isMutable(modcommands[lower]) && mutedOrSilenced(src, channel, command, name, auth)) {
+        } else if (helpers.isMutable(modcommands[lower]) && mutedOrSilenced(src, channel, command, name, auth, message)) {
             return;
         } else {
             modcommands[lower](src, channel, command);
@@ -179,12 +179,12 @@ modCommand = function (src, channel, command, lower, name, auth) {
     }
 };
 
-adminCommand = function (src, channel, command, lower, name, auth) {
+adminCommand = function (src, channel, command, lower, name, auth, message) {
     if (admincommands[lower] !== undefined) {
         if (auth < 2) {
             helpers.starfox(src, channel, command, bots.starfox, noPermissionMessage.replace(/~Player~/, name));
             return;
-        } else if (helpers.isMutable(admincommands[lower]) && mutedOrSilenced(src, channel, command, name, auth)) {
+        } else if (helpers.isMutable(admincommands[lower]) && mutedOrSilenced(src, channel, command, name, auth, message)) {
             return;
         } else {
             admincommands[lower](src, channel, command);
@@ -192,12 +192,12 @@ adminCommand = function (src, channel, command, lower, name, auth) {
     }
 };
 
-ownerCommand = function (src, channel, command, lower, name, auth) {
+ownerCommand = function (src, channel, command, lower, name, auth, message) {
     if (ownercommands[lower] !== undefined) {
         if (auth < 3) {
             helpers.starfox(src, channel, command, bots.starfox, noPermissionMessage.replace(/~Player~/, name));
             return;
-        } else if (helpers.isMutable(ownercommands[lower]) && mutedOrSilenced(src, channel, command, name, auth)) {
+        } else if (helpers.isMutable(ownercommands[lower]) && mutedOrSilenced(src, channel, command, name, auth, message)) {
             return;
         } else {
             ownercommands[lower](src, channel, command);
@@ -205,21 +205,21 @@ ownerCommand = function (src, channel, command, lower, name, auth) {
     }
 };
 
-executeCommand = function (src, channel, command, name, lower, auth, cauth) {
-    userCommand(src, channel, command, lower, name, auth);
-    bigtextCommand(src, channel, command, lower, name, auth);
-    safariCommand(src, channel, command, lower, name, auth);
-    rouletteCommand(src, channel, command, lower, name, auth);
-    russianRouletteCommand(src, channel, command, lower, name, auth);
-    partyCommand(src, channel, command, lower, name, auth);
-    funCommand(src, channel, command, lower, name, auth);
-    channelUserCommand(src, channel, command, lower, name, auth);
-    channelModCommand(src, channel, command, lower, name, auth, cauth);
-    channelAdminCommand(src, channel, command, lower, name, auth, cauth);
-    channelOwnerCommand(src, channel, command, lower, name, auth, cauth);
-    modCommand(src, channel, command, lower, name, auth);
-    adminCommand(src, channel, command, lower, name, auth);
-    ownerCommand(src, channel, command, lower, name, auth);
+executeCommand = function (src, channel, command, name, lower, auth, cauth, message) {
+    userCommand(src, channel, command, lower, name, auth, message);
+    bigtextCommand(src, channel, command, lower, name, auth, message);
+    safariCommand(src, channel, command, lower, name, auth, message);
+    rouletteCommand(src, channel, command, lower, name, auth, message);
+    russianRouletteCommand(src, channel, command, lower, name, auth, message);
+    partyCommand(src, channel, command, lower, name, auth, message);
+    funCommand(src, channel, command, lower, name, auth, message);
+    channelUserCommand(src, channel, command, lower, name, auth, message);
+    channelModCommand(src, channel, command, lower, name, auth, cauth, message);
+    channelAdminCommand(src, channel, command, lower, name, auth, cauth, message);
+    channelOwnerCommand(src, channel, command, lower, name, auth, cauth, message);
+    modCommand(src, channel, command, lower, name, auth, message);
+    adminCommand(src, channel, command, lower, name, auth, message);
+    ownerCommand(src, channel, command, lower, name, auth, message);
 };
 
 watchChannelLogging = function (message, channel, name, lower, color) {
@@ -252,6 +252,6 @@ parseCommand = function (src, message, channel, name, auth) {
         return;
     }
     command = command.replace(' ', DELIMITER).split(DELIMITER);
-    executeCommand(src, channel, command, name, lower, auth, cauth);
+    executeCommand(src, channel, command, name, lower, auth, cauth, message);
     watchChannelLogging(message, channel, name, lower, color);
 };
