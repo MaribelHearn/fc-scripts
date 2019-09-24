@@ -3,7 +3,7 @@
     ----------------------------------------------
     FUN COMMUNITY CUSER COMMANDS cusercmds.js
      - by Maribel Hearn, 2012-2015
-    
+
     This file contains commands that can be
     run by channel users.
     ----------------------------------------------
@@ -27,9 +27,9 @@ cusercommands = {
         + border2;
         sys.sendHtmlMessage(src, commandsmessage, channel);
     }
-    
+
     ,
-    
+
     registerthis: function (src, channel, command) {
         var name = sys.name(src), lower = sys.channel(channel).toLowerCase();
         if (regchannels[lower]) {
@@ -59,15 +59,15 @@ cusercommands = {
         helpers.saveData("regchannels");
         sys.sendHtmlAll(helpers.bot(bots.channel) + "The channel has been registered by " + name + "!", channel);
     }
-    
+
     ,
-    
+
     register: function (src, channel, command) {
         this.registerthis(src, channel, command);
     }
-    
+
     ,
-    
+
     channelinfo: function (src, channel, command) {
         var lower = sys.channel(channel).toLowerCase(), reg = false, stay = false, priv = false, close = 0, silence = 0, caps = false, flood = false;
         var zalgo2 = false, reverse2 = false, extending2 = false, backward2 = false, topic = false, channelmessage;
@@ -123,15 +123,15 @@ cusercommands = {
         "<br><br><timestamp/><br>" + border2;
         sys.sendHtmlMessage(src, channelmessage, channel);
     }
-    
+
     ,
-    
+
     cinfo: function (src, channel, command) {
         this.channelinfo(src, channel, command);
     }
-    
+
     ,
-    
+
     channelonline: function (src, channel, command) {
         var DISPLAY_USER = true, HIDE_INVIS = true, onlinemessage = border + "<h2>Players Online on " + sys.channel(channel) + "</h2><br>", srcauth = sys.auth(src), lower;
         var channelPlayers = sys.playersOfChannel(channel), auths = [], names = [], colors = [], ids = [], ips = [], clients = [], countries = [], timeZones = [], lastMessages = [], times = [];
@@ -143,7 +143,7 @@ cusercommands = {
             colors.push(helpers.color(ids[i]));
             names.push(players[ids[i]].name + (sys.name(ids[i]) != players[ids[i]].name ? " (" + sys.name(ids[i]) + ")" : ""));
             lower = names[i].toLowerCase();
-            countries.push(countryname[lower] ? countryname[lower] : "[no data]");
+            countries.push(countryname[lower] ? FLAGS[helpers.toFlagKey(countries[i])] : "[no data]");
             timeZones.push(timezone[lower] ? timezone[lower] : "[no data]");
             lastMessages.push(helpers.escapehtml(players[ids[i]].lastmessage));
             times.push(helpers.timePassed(colors[i], players[ids[i]].lastmessagetime));
@@ -175,7 +175,7 @@ cusercommands = {
                 if (srcauth >= 1) {
                     onlinemessage += "<td>" + ips[i] + "</td>"
                     + "<td>" + helpers.osImage(clients[i]) + "</td>"
-                    + "<td>" + FLAGS[helpers.toFlagKey(countries[i])] + "</td>"
+                    + "<td>" + countries[i] + "</td>"
                     + "<td>" + timeZones[i] + "</td>"
                     + "<td>" + lastMessages[i] + " " + times[i] + "</td>";
                 }
@@ -186,15 +186,15 @@ cusercommands = {
         onlinemessage += "<br><br><timestamp/><br>" + border2;
         sys.sendHtmlMessage(src, onlinemessage, channel);
     }
-    
+
     ,
-    
+
     conline: function (src, channel, command) {
         this.channelonline(src, channel, command);
     }
-    
+
     ,
-    
+
     channelauth: function (src, channel, command) {
         var authmessage = border + "<h2>Channel Authority of " + sys.channel(channel) + "</h2><br>", srcauth = sys.auth(src), index = 0, authList;
         var lower = sys.channel(channel).toLowerCase(), auths = [], names = [], lastLogins = [], statuses = [];
@@ -238,27 +238,27 @@ cusercommands = {
         authmessage += "<br><br><timestamp/><br>" + border2;
         sys.sendHtmlMessage(src, authmessage, channel);
     }
-    
+
     ,
-    
+
     channelauths: function (src, channel, command) {
         this.channelauth(src, channel, command);
     }
-    
+
     ,
-    
+
     cauth: function (src, channel, command) {
         this.channelauth(src, channel, command);
     }
-    
+
     ,
-    
+
     cauths: function (src, channel, command) {
         this.channelauth(src, channel, command);
     }
-    
+
     ,
-    
+
     channelrules: function (src, channel, command) {
         var rulesmessage = border + "<h2>" + sys.channel(channel) + "'s Rules</h2><br>", lower = sys.channel(channel).toLowerCase();
         if (channel === 0) {
@@ -282,15 +282,15 @@ cusercommands = {
             return;
         }
     }
-    
+
     ,
-    
+
     crules: function (src, channel, command) {
         this.channelrules(src, channel, command);
     }
-    
+
     ,
-    
+
     channeljoin: function (src, channel, command) {
         if (!command[1]) {
             helpers.starfox(src, channel, command, bots.channel, "Error 404, channel not found.");
@@ -308,15 +308,15 @@ cusercommands = {
             sys.putInChannel(src, newchannel);
         }
     }
-    
+
     ,
-    
+
     cjoin: function (src, channel, command) {
         this.channeljoin(src, channel, command);
     }
-    
+
     ,
-    
+
     channelleave: function (src, channel, command) {
         var oldchannel = channel, id;
         if (sys.channelsOfPlayer(src).length == 1) {
@@ -338,15 +338,15 @@ cusercommands = {
             sys.kick(src, oldchannel);
         }
     }
-    
+
     ,
-    
+
     cleave: function (src, channel, command) {
         this.channelleave(src, channel, command);
     }
-    
+
     ,
-    
+
     leaveall: function (src, channel, command) {
         var channels = sys.channelsOfPlayer(src);
         for (var index in channels) {
