@@ -643,13 +643,13 @@ modcommands = {
             playerChannels = "None";
         }
         lastLogin = helpers.formatLastOn(src, sys.dbLastOn(player));
-        if (operatingsystem[player]) {
+        if (API_KEY !== "" && operatingsystem[player]) {
             os = (helpers.isAndroid(src) ? helpers.osName(operatingsystem[player]) : helpers.os(operatingsystem[player]));
         } else {
             os = "[no data]";
         }
         versions[player] ? version = ", ver. " + versions[player] : version = "";
-        if (countryname[player]) {
+        if (API_KEY !== "" && countryname[player]) {
             country = countryname[player];
             flag = FLAGS[helpers.toFlagKey(countryname[player])];
         } else {
