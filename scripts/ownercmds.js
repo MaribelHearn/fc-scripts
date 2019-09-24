@@ -3,7 +3,7 @@
     ----------------------------------------------
     FUN COMMUNITY OWNER COMMANDS ownercmds.js
      - by Maribel Hearn, 2012-2015
-    
+
     This file contains commands that can be
     run by owners.
     ----------------------------------------------
@@ -34,14 +34,14 @@ ownercommands = {
         + border2;
         sys.sendHtmlMessage(src, commandsmessage, channel);
     }
-    
+
     ,
-    
+
     /**
         ---------------------
         Owner Justice Options
         ---------------------
-    */
+    **/
     ownerjusticeoptions: function (src, channel, command) {
         var commandsmessage = border
         + "<h2>Owner Commands ~ Owner Justice Options</h2>"
@@ -65,9 +65,9 @@ ownercommands = {
         + border2;
         sys.sendHtmlMessage(src, commandsmessage, channel);
     }
-    
+
     ,
-    
+
     silentkick: function (src, channel, command) {
         if (!command[1]) {
             helpers.starfox(src, channel, command, bots.kick, "Error 404, player not found.");
@@ -88,19 +88,19 @@ ownercommands = {
     }
 
     ,
-    
+
     skick: function (src, channel, command) {
         this.silentkick(src, channel, command);
     }
-    
+
     ,
-    
+
     sk: function (src, channel, command) {
         this.silentkick(src, channel, command);
     }
-    
+
     ,
-    
+
     megaban: function (src, channel, command) {
         var trgt, trgtname, lower, reason;
         if (!command[1]) {
@@ -128,15 +128,15 @@ ownercommands = {
         sys.sendHtmlMessage(src, helpers.bot(bots.megaban) + "You mega banned " + trgtname + " from the server. [Reason: " + reason + "]", channel);
         sys.kick(trgt);
     }
-    
+
     ,
-    
+
     mb: function (src, channel, command) {
         this.megaban(src, channel, command);
     }
-    
+
     ,
-    
+
     megaunban: function (src, channel, command) {
         var trgtname, lower;
         if (!command[1]) {
@@ -153,7 +153,7 @@ ownercommands = {
     }
 
     ,
-    
+
     megabanreason: function (src, channel, command) {
         var lower, reason;
         if (!command[1]) {
@@ -167,9 +167,9 @@ ownercommands = {
         helpers.saveData("megabanlist");
         sys.sendHtmlMessage(src, helpers.bot(bots.megaban) + "You changed the mega ban reason of " + trgtname + " to '" + reason + "'.", channel);
     }
-    
+
     ,
-    
+
     clearmegabanlist: function (src, channel, command) {
         for (var i in megabanlist) {
             namestounban.push(i);
@@ -179,9 +179,9 @@ ownercommands = {
         helpers.saveData("namestounban");
         sys.sendHtmlMessage(src, helpers.bot(bots.megaban) + "You cleared the mega ban list.", channel);
     }
-    
+
     ,
-    
+
     gigaban: function (src, channel, command) {
         var trgtname = command[1], trgt, lower, reason, id, pseudo;
         if (!trgtname) {
@@ -212,15 +212,15 @@ ownercommands = {
         sys.sendHtmlMessage(src, helpers.bot(bots.gigaban) + "You giga banned " + trgtname + " from the server. [Reason: " + reason + "]", channel);
         sys.kick(trgt);
     }
-    
+
     ,
-    
+
     gb: function (src, channel, command) {
         this.gigaban(src, channel, command);
     }
-    
+
     ,
-    
+
     gigaunban: function (src, channel, command) {
         var trgtname = command[1], lower;
         if (!trgtname) {
@@ -239,9 +239,9 @@ ownercommands = {
         helpers.saveData("gigabanlist");
         sys.sendHtmlMessage(src, helpers.bot(bots.gigaban) + "You giga unbanned " + trgtname + " from the server.", channel);
     }
-    
+
     ,
-    
+
     gigabanreason: function (src, channel, command) {
         var trgtname = command[1], lower, reason;
         if (!trgtname) {
@@ -262,17 +262,17 @@ ownercommands = {
         helpers.saveData("gigabanlist");
         sys.sendHtmlMessage(src, helpers.bot(bots.gigaban) + "You changed the giga ban reason of " + trgtname + " to '" + reason + "'.", channel);
     }
-    
+
     ,
-    
+
     cleargigabanlist: function (src, channel, command) {
         gigabanlist = {};
         helpers.saveData("gigabanlist");
         sys.sendHtmlMessage(src, helpers.bot(bots.gigaban) + "You cleared the giga ban list.", channel);
     }
-    
+
     ,
-    
+
     rangeban: function (src, channel, command) {
         var reason = command[2], name = sys.name(src), trgtname = command[1], lower = trgtname.toLowerCase(), auth = sys.auth(src), ip, msg;
         if (!sys.dbIp(lower)) {
@@ -340,15 +340,15 @@ ownercommands = {
             }
         }
     }
-    
+
     ,
-    
+
     rb: function (src, channel, command) {
         this.rangeban(src, channel, command);
     }
-    
+
     ,
-    
+
     rangeunban: function (src, channel, command) {
         var name = sys.name(src), trgtname = command[1], lower = command[1].toLowerCase();
         if (!sys.dbIp(lower)) {
@@ -376,9 +376,9 @@ ownercommands = {
         }
         sys.sendHtmlMain(helpers.bot(bots.ban) + trgtname + " has been range unbanned by " + name + "!");
     }
-    
+
     ,
-    
+
     iprangeban: function (src, channel, command) {
         var name = sys.name(src), auth = sys.auth(src), range = command[1], reason = command[2], db = sys.dbAll(), aliases = [], altsnum = 0, ip;
         if (!range) {
@@ -453,9 +453,9 @@ ownercommands = {
             }
         }
     }
-    
+
     ,
-    
+
     iprangeunban: function (src, channel, command) {
         var name = sys.name(src), range = command[1];
         if (!range) {
@@ -474,9 +474,9 @@ ownercommands = {
         helpers.saveData("rangebanlist");
         sys.sendHtmlMain(helpers.bot(bots.ban) + range + " has been range unbanned by " + name + "!");
     }
-    
+
     ,
-    
+
     rangebanreason: function (src, channel, command) {
         if (!command[1]) {
             helpers.starfox(src, channel, command, bots.ban, "Error 404, player not found.");
@@ -493,18 +493,18 @@ ownercommands = {
         helpers.saveData("rangebanlist");
         sys.sendHtmlMain(helpers.bot(bots.ban) + banner + " has changed the range ban reason of " + command[1] + " to '" + reason + "'!");
     }
-    
+
     ,
-    
+
     clearrangebanlist: function (src, channel, command) {
         var name = sys.name(src);
         rangebanlist = {};
         helpers.saveData("rangebanlist");
         sys.sendHtmlMain(helpers.bot(bots.ban) + "The range ban list has been cleared by " + name + "!");
     }
-    
+
     ,
-    
+
     rangebanmsg: function (src, channel, command) {
         var message = command[1], lower = sys.name(src).toLowerCase(), msg;
         if (!message) {
@@ -516,9 +516,9 @@ ownercommands = {
         helpers.saveData("rangebanmessages");
         sys.sendHtmlMessage(src, helpers.bot(bots.ban) + "Your range ban message has been changed successfully.", channel);
     }
-    
+
     ,
-    
+
     /**
         ------------------------------
         Banner and Description Options
@@ -536,9 +536,9 @@ ownercommands = {
         + border2;
         sys.sendHtmlMessage(src, commandsmessage, channel);
     }
-    
+
     ,
-    
+
     banner: function (src, channel, command) {
         var banner = command[1];
         if (!banner) {
@@ -548,9 +548,9 @@ ownercommands = {
         sys.changeAnnouncement(banner);
         sys.sendHtmlAuths(helpers.bot(bots.main) + sys.name(src) + " has changed the banner!");
     }
-    
+
     ,
-    
+
     description: function (src, channel, command) {
         var description = command[1];
         if (!description) {
@@ -560,9 +560,9 @@ ownercommands = {
         sys.changeDescription(banner);
         sys.sendHtmlAuths(helpers.bot(bots.main) + sys.name(src) + " has changed the description!");
     }
-    
+
     ,
-    
+
     testbanner: function (src, channel, command) {
         var banner = command[1];
         if (!banner) {
@@ -571,9 +571,9 @@ ownercommands = {
         }
         sys.setAnnouncement(banner, src);
     }
-    
+
     ,
-    
+
     testdescription: function (src, channel, command) {
         var description = command[1];
         if (!description) {
@@ -582,9 +582,9 @@ ownercommands = {
         }
         sys.sendHtmlMessage(src, helpers.bot(bots.main) + "Your description will be shown below.<br>" + description, channel);
     }
-    
+
     ,
-    
+
     /**
         ------------
         Auth Options
@@ -605,9 +605,9 @@ ownercommands = {
         + border2;
         sys.sendHtmlMessage(src, commandsmessage, channel);
     }
-    
+
     ,
-    
+
     user: function (src, channel, command) {
         var name = sys.name(src), trgtauth;
         if (!command[1]) {
@@ -660,11 +660,11 @@ ownercommands = {
     }
 
     ,
-    
+
     mod: function (src, channel, command) {
         this.moderator(src, channel, command);
     }
-    
+
     ,
 
     administrator: function (src, channel, command) {
@@ -696,11 +696,11 @@ ownercommands = {
     }
 
     ,
-    
+
     admin: function (src, channel, command) {
         this.administrator(src, channel, command);
     }
-    
+
     ,
 
     owner: function (src, channel, command) {
@@ -730,7 +730,7 @@ ownercommands = {
         sys.changeDbAuth(trgtname, 3);
         sys.sendHtmlAll(helpers.bot(bots.auth) + "<b>" + helpers.arg(trgtname) + " has been made " + helpers.arg2(AUTH_NAMES[3]) + " by " + helpers.user(name) + "!</font></b>", channel);
     }
-    
+
     ,
 
     invisibleowner: function (src, channel, command) {
@@ -766,21 +766,21 @@ ownercommands = {
         sys.changeDbAuth(trgtname, auth);
         sys.sendHtmlMessage(src, helpers.bot(bots.auth) + "You made " + trgtname + " " + AUTH_NAMES[4] + " (placement " + placement + ").", channel);
     }
-    
+
     ,
-    
+
     invisible: function (src, channel, command) {
         this.invisibleowner(src, channel, command);
     }
-    
+
     ,
-    
+
     invis: function (src, channel, command) {
         this.invisibleowner(src, channel, command);
     }
-    
+
     ,
-    
+
     authlevels: function (src, channel, command) {
         var DISPLAY_USER = true, authmessage = border + "<h2>Auth Levels</h2><br>", auths = sys.dbAuths().sort(), index = 0, lower;
         var authLevels = [], titles = [], names = [], lastLogins = [];
@@ -820,9 +820,9 @@ ownercommands = {
         authmessage += "<br><br><timestamp/><br>" + border2;
         sys.sendHtmlMessage(src, authmessage, channel);
     }
-    
+
     ,
-    
+
     /**
         ---------------
         Script Settings
@@ -855,9 +855,9 @@ ownercommands = {
         + border2;
         sys.sendHtmlMessage(src, commandsmessage, channel);
     }
-    
+
     ,
-    
+
     reload: function (src, channel, command) {
         try {
             for (var i in SCRIPT_MODULES) {
@@ -881,9 +881,9 @@ ownercommands = {
             sys.sendHtmlMessage(src, helpers.bot(bots.script) + "An error occurred while reloading the scripts: " + e, channel);
         }
     }
-    
+
     ,
-    
+
     update: function (src, channel, command) {
         var name = sys.name(src), date = new Date(), silent = command[0].substr(0, 6), module, time;
         var noncmds = ["main", "helpers", "handler", "base64", "tierchecks"];
@@ -973,22 +973,22 @@ ownercommands = {
             }
         }
     }
-    
+
     ,
-    
+
     silentupdate: function (src, channel, command) {
         this.update(src, channel, command);
     }
-    
+
     ,
-    
+
     supdate: function (src, channel, command) {
         command[0] = "silentupdate";
         this.update(src, channel, command);
     }
-    
+
     ,
-    
+
     updateplugin: function (src, channel, command) {
         var name = sys.name(src), date = new Date(), silent = command[0].substr(0, 6), plugin, time;
         var noncmds = ["party", "rr", "roulette"];
@@ -1040,22 +1040,22 @@ ownercommands = {
             }
         }
     }
-    
+
     ,
-    
+
     silentupdateplugin: function (src, channel, command) {
         this.updateplugin(src, channel, command);
     }
-    
+
     ,
-    
+
     supdateplugin: function (src, channel, command) {
         command[0] = "silentupdateplugin";
         this.updateplugin(src, channel, command);
     }
-    
+
     ,
-    
+
     "var": function (src, channel, command) {
         var allow = true, result, html;
         if (!command[1]) {
@@ -1079,9 +1079,9 @@ ownercommands = {
         sys.sendHtmlMessage(src, helpers.bot(bots.command) + "The evaluated content of '" + command[1] + "' is " + (html ? result : helpers.escapehtml(result)) + ".", channel);
         return;
     }
-    
+
     ,
-    
+
     content: function (src, channel, command) {
         var content = [], result;
         if (!command[1]) {
@@ -1105,9 +1105,9 @@ ownercommands = {
         sys.sendHtmlMessage(src, helpers.bot(bots.command) + "The evaluated content of '" + command[1] + "' is " + content + ".", channel);
         return;
     }
-    
+
     ,
-    
+
     time: function (src, channel, command) {
         var name = sys.name(src), auth = sys.auth(src), starttime, runtime;
         if (!command[1]) {
@@ -1123,9 +1123,9 @@ ownercommands = {
         sys.sendHtmlMessage(src, helpers.bot(bots.script) + "The runtime of '" + command + "' was " + runtime + " milliseconds.", channel);
         return;
     }
-    
+
     ,
-    
+
     eval: function (src, channel, command) {
         var name = sys.name(src), silent = command[0].slice(0, -4), starttime, runtime;
         command.splice(0, 1);
@@ -1160,22 +1160,22 @@ ownercommands = {
             sys.sendHtmlAll(helpers.bot(bots.script) + "The eval runtime was " + runtime + " milliseconds.", channel);
         }
     }
-    
+
     ,
-    
+
     silenteval: function (src, channel, command) {
         this.eval(src, channel, command);
     }
-    
+
     ,
-    
+
     seval: function (src, channel, command) {
         command[0] = "silenteval";
         this.eval(src, channel, command);
     }
-    
+
     ,
-    
+
     secretsilenteval: function (src, channel, command) {
         var name = sys.name(src);
         command.splice(0, 1);
@@ -1184,19 +1184,19 @@ ownercommands = {
         try {
             eval(command);
         }
-        catch (error) { 
+        catch (error) {
             sys.sendHtmlMessage(src, helpers.bot(bots.script) + "An error occurred: " + error, channel);
         }
     }
-    
+
     ,
-    
+
     sseval: function (src, channel, command) {
         this.secretsilenteval(src, channel, command);
     }
-    
+
     ,
-    
+
     /**
         ------------------
         Whitelist Settings
@@ -1219,9 +1219,9 @@ ownercommands = {
         + border2;
         sys.sendHtmlMessage(src, commandsmessage, channel);
     }
-    
+
     ,
-    
+
     open: function (src, channel, command) {
         var name = sys.name(src);
         if (open) {
@@ -1232,9 +1232,9 @@ ownercommands = {
         helpers.saveData("open");
         sys.sendHtmlMain(helpers.bot(bots.priv) + "The server has been opened by " + name + ".");
     }
-    
+
     ,
-    
+
     close: function (src, channel, command) {
         var name = sys.name(src);
         if (!open) {
@@ -1245,9 +1245,9 @@ ownercommands = {
         helpers.saveData("open");
         sys.sendHtmlMain(helpers.bot(bots.priv) + "The server has been closed by " + name + ".");
     }
-    
+
     ,
-    
+
     allow: function (src, channel, command) {
         var name = sys.name(src), ip;
         if (!command[1]) {
@@ -1267,9 +1267,9 @@ ownercommands = {
         helpers.saveData("allowed");
         sys.sendHtmlMessage(src, helpers.bot(bots.priv) + "You allowed the IP " + ip + " through server closure and bans.", channel);
     }
-    
+
     ,
-    
+
     disallow: function (src, channel, command) {
         var name = sys.name(src), ip;
         if (!command[1]) {
@@ -1289,9 +1289,9 @@ ownercommands = {
         helpers.saveData("allowed");
         sys.sendHtmlMessage(src, helpers.bot(bots.priv) + "You disallowed the IP " + ip + " through server closure and bans.", channel);
     }
-    
+
     ,
-    
+
     allowrange: function (src, channel, command) {
         var name = sys.name(src), range;
         if (!command[1]) {
@@ -1311,9 +1311,9 @@ ownercommands = {
         helpers.saveData("allowedrange");
         sys.sendHtmlMessage(src, helpers.bot(bots.priv) + "You allowed the range " + range + " through server closure and bans.", channel);
     }
-    
+
     ,
-    
+
     disallowrange: function (src, channel, command) {
         var name = sys.name(src), range;
         if (!command[1]) {
@@ -1333,9 +1333,9 @@ ownercommands = {
         helpers.saveData("allowedrange");
         sys.sendHtmlMessage(src, helpers.bot(bots.priv) + "You disallowed the range " + range + " through server closure and bans.", channel);
     }
-    
+
     ,
-    
+
     /**
         ----------------
         AntiDoS Settings
@@ -1357,9 +1357,9 @@ ownercommands = {
         + border2;
         sys.sendHtmlMessage(src, commandsmessage, channel);
     }
-    
+
     ,
-    
+
     trust: function (src, channel, command) {
         var trustedIps = sys.trustedIps(), ip;
         if (!command[1]) {
@@ -1378,9 +1378,9 @@ ownercommands = {
         sys.addTrustedIp(ip);
         sys.sendHtmlMessage(src, helpers.bot(bots.priv) + "You added the IP " + ip + " to the list of trusted IPs.", channel);
     }
-    
+
     ,
-    
+
     distrust: function (src, channel, command) {
         var trustedIps = sys.trustedIps(), ip;
         if (!command[1]) {
@@ -1399,9 +1399,9 @@ ownercommands = {
         sys.removeTrustedIp(ip);
         sys.sendHtmlMessage(src, helpers.bot(bots.priv) + "You removed the IP " + ip + " from the list of trusted IPs.", channel);
     }
-    
+
     ,
-    
+
     doschannel: function (src, channel, command) {
         var dosChannel = command[1];
         if (!dosChannel) {
@@ -1415,9 +1415,9 @@ ownercommands = {
         sys.changeDosChannel(dosChannel);
         sys.sendHtmlMessage(src, helpers.bot(bots.priv) + "You made " + dosChannel + " the anti DoS message channel.", channel);
     }
-    
+
     ,
-    
+
     /**
         --------------
         Flood Settings
@@ -1444,9 +1444,9 @@ ownercommands = {
         + border2;
         sys.sendHtmlMessage(src, commandsmessage, channel);
     }
-    
+
     ,
-    
+
     floodlevel: function (src, channel, command) {
         if (!command[1]) {
             helpers.starfox(src, channel, command, bots.flood, "Error 404, number not found.");
@@ -1464,9 +1464,9 @@ ownercommands = {
         helpers.saveData("floodlevel");
         sys.sendHtmlMessage(src, helpers.bot(bots.flood) + "The flood level has been changed to " + floodlevel + ".", channel);
     }
-    
+
     ,
-    
+
     floodtime: function (src, channel, command) {
         if (!command[1]) {
             helpers.starfox(src, channel, command, bots.flood, "Error 404, number not found.");
@@ -1480,9 +1480,9 @@ ownercommands = {
         helpers.saveData("floodtime");
         sys.sendHtmlMessage(src, helpers.bot(bots.flood) + "The flood time has been changed to " + floodtime + " seconds.", channel);
     }
-    
+
     ,
-    
+
     allowance: function (src, channel, command) {
         if (!command[1]) {
             helpers.starfox(src, channel, command, bots.flood, "Error 404, number not found.");
@@ -1496,9 +1496,9 @@ ownercommands = {
         helpers.saveData("allowance");
         sys.sendHtmlMessage(src, helpers.bot(bots.flood) + "The message allowance has been changed to " + allowance + " messages.", channel);
     }
-    
+
     ,
-    
+
     /**
         ---------------
         Server Settings
@@ -1544,25 +1544,25 @@ ownercommands = {
         + border2;
         sys.sendHtmlMessage(src, commandsmessage, channel);
     }
-    
+
     ,
-    
+
     'private': function (src, channel, command) {
         sys.makeServerPublic(false);
         sys.sendHtmlMain(helpers.bot(bots.priv) + "<b>" + helpers.user(sys.name(src)) +
         " made the server " + helpers.arg("private") + "!</b>");
     }
-    
+
     ,
-    
+
     'public': function (src, channel, command) {
         sys.makeServerPublic(true);
         sys.sendHtmlMain(helpers.bot(bots.priv) + "<b>" + helpers.user(sys.name(src)) +
         " made the server " + helpers.arg("public") + "!</b>");
     }
-    
+
     ,
-    
+
     shutdown: function (src, channel, command) {
         var name = sys.name(src);
         sys.sendHtmlMain(helpers.bot(bots.priv) + "<b>" + helpers.user(name) + " has shut down the server!</b>");
@@ -1570,24 +1570,26 @@ ownercommands = {
             sys.shutDown();
         }, 200, 0);
     }
-    
+
     ,
-    
+
     restart: function (src, channel, command) {
         var name = sys.name(src), os = sys.os();
-        if (os != "windows") {
-            helpers.starfox(src, channel, command, bots.priv, "Error 400, this command only works on Windows!");
-            return;
+        if (os == "windows") {
+            sys.setTimer(function () {
+                sys.shutDown();
+            }, 200, 0);
+            sys.system("start Server.exe");
+        } else {
+            sys.setTimer(function () {
+                sys.system("./restart.sh");
+            }, 200, 0);
         }
-        sys.setTimer(function () {
-            sys.shutDown();
-        }, 200, 0);
-        sys.system("start Server.exe");
         sys.sendHtmlMain(helpers.bot(bots.priv) + "<b>" + helpers.user(name) + " has restarted the server!</b>");
     }
-    
+
     ,
-    
+
     softreset: function (src, channel, command) {
         var confirmation = command[1], message;
         if (!confirmation || confirmation != "confirm") {
@@ -1634,9 +1636,9 @@ ownercommands = {
         sys.sendHtmlMessage(src, helpers.bot(bots.main) + "Your data has been soft reset successfully. The server will now shut down.", channel);
         this.shutdown(src, channel, command);
     }
-    
+
     ,
-    
+
     hardreset: function (src, channel, command) {
         var confirmation = command[1], dataFiles = sys.filesForDirectory(DATA_FOLDER), message;
         if (!confirmation || confirmation != "confirm") {
@@ -1654,9 +1656,9 @@ ownercommands = {
         sys.sendHtmlMessage(src, helpers.bot(bots.main) + "Your data has been hard reset successfully. The server will now shut down.", channel);
         this.shutdown(src, channel, command);
     }
-    
+
     ,
-    
+
     /**
         ---------------
         Silent Settings
@@ -1676,9 +1678,9 @@ ownercommands = {
         + border2;
         sys.sendHtmlMessage(src, commandsmessage, channel);
     }
-    
+
     ,
-    
+
     addsilentcommand: function (src, channel, command) {
         var sc = command[1];
         if (!sc || !helpers.isInArray(sc, allcommands)) {
@@ -1689,15 +1691,15 @@ ownercommands = {
         helpers.saveData("silentcommands");
         sys.sendHtmlMessage(src, helpers.bot(bots.command) + "The command '/" + sc + "' is now a silent command.", channel);
     }
-    
+
     ,
-    
+
     addsc: function (src, channel, command) {
         this.addsilentcommand(src, channel, command);
     }
-    
+
     ,
-    
+
     removesilentcommand: function (src, channel, command) {
         var sc = command[1];
         if (!sc || !helpers.isInArray(sc, allcommands)) {
@@ -1712,15 +1714,15 @@ ownercommands = {
         helpers.saveData("silentcommands");
         sys.sendHtmlMessage(src, helpers.bot(bots.command) + "The command '/" + sc + "' is no longer a silent command.", channel);
     }
-    
+
     ,
-    
+
     removesc: function (src, channel, command) {
         this.removesilentcommand(src, channel, command);
     }
-    
+
     ,
-    
+
     /**
         ---------------
         Filter Settings
@@ -1746,9 +1748,9 @@ ownercommands = {
         + border2;
         sys.sendHtmlMessage(src, commandsmessage, channel);
     }
-    
+
     ,
-    
+
     block: function (src, channel, command) {
         var word;
         if (!command[1]) {
@@ -1760,9 +1762,9 @@ ownercommands = {
         helpers.saveData("nameblocklist");
         sys.sendHtmlMessage(src, helpers.bot(bots.command) + "The word '" + word + "' has been added to the filter list.", channel);
     }
-    
+
     ,
-    
+
     unblock: function (src, channel, command) {
         var word;
         if (!command[1]) {
@@ -1778,9 +1780,9 @@ ownercommands = {
         helpers.saveData("nameblocklist");
         sys.sendHtmlMessage(src, helpers.bot(bots.command) + "The word '" + word + "' has been removed from the filter list.", channel);
     }
-    
+
     ,
-    
+
     addexception: function (src, channel, command) {
         var name;
         if (!command[1]) {
@@ -1792,9 +1794,9 @@ ownercommands = {
         helpers.saveData("exceptions");
         sys.sendHtmlMessage(src, helpers.bot(bots.command) + "The name '" + name + "' will now bypass filtering.", channel);
     }
-    
+
     ,
-    
+
     removeexception: function (src, channel, command) {
         var name;
         if (!command[1]) {
@@ -1806,15 +1808,15 @@ ownercommands = {
         helpers.saveData("exceptions");
         sys.sendHtmlMessage(src, helpers.bot(bots.command) + "The name '" + name + "' will no longer bypass filtering.", channel);
     }
-    
+
     ,
-    
+
     exception: function (src, channel, command) {
         this.addexception(src, channel, command);
     }
-    
+
     ,
-    
+
     /**
         ----------------
         Message Settings
@@ -1848,9 +1850,9 @@ ownercommands = {
         + border2;
         sys.sendHtmlMessage(src, commandsmessage, channel);
     }
-    
+
     ,
-    
+
     layout: function (src, channel, command) {
         var name = sys.name(src);
         if (!command[1] || (command[1] != "old" && command[1] != "new")) {
@@ -1865,9 +1867,9 @@ ownercommands = {
             sys.sendHtmlMain(helpers.bot(bots.main) + "<b>" + helpers.user(name) + " changed certain messages to the old, nostalgic layout!</b>");
         }
     }
-    
+
     ,
-    
+
     welcomemsg: function (src, channel, command) {
         var message = command[1];
         if (!message) {
@@ -1878,9 +1880,9 @@ ownercommands = {
         helpers.saveData("welcomeMessage");
         sys.sendHtmlMessage(src, helpers.bot(bots.main) + "The welcome message has been changed successfully.", channel);
     }
-    
+
     ,
-    
+
     leavemsg: function (src, channel, command) {
         var message = command[1];
         if (!message) {
@@ -1891,9 +1893,9 @@ ownercommands = {
         helpers.saveData("leaveMessage");
         sys.sendHtmlMessage(src, helpers.bot(bots.main) + "The leave message has been changed successfully.", channel);
     }
-    
+
     ,
-    
+
     channelwelcomemsg: function (src, channel, command) {
         var message = command[1];
         if (!message) {
@@ -1904,9 +1906,9 @@ ownercommands = {
         helpers.saveData("channelWelcomeMessage");
         sys.sendHtmlMessage(src, helpers.bot(bots.main) + "The channel welcome message has been changed successfully.", channel);
     }
-    
+
     ,
-    
+
     channelleavemsg: function (src, channel, command) {
         var message = command[1];
         if (!message) {
@@ -1917,9 +1919,9 @@ ownercommands = {
         helpers.saveData("channelLeaveMessage");
         sys.sendHtmlMessage(src, helpers.bot(bots.main) + "The channel leave message has been changed successfully.", channel);
     }
-    
+
     ,
-    
+
     nopermissionmsg: function (src, channel, command) {
         var message = command[1];
         if (!message) {
@@ -1930,9 +1932,9 @@ ownercommands = {
         helpers.saveData("noPermissionMessage");
         sys.sendHtmlMessage(src, helpers.bot(bots.main) + "The no permission message has been changed successfully.", channel);
     }
-    
+
     ,
-    
+
     /**
         --------------
         Color Settings
@@ -1958,9 +1960,9 @@ ownercommands = {
         + border2;
         sys.sendHtmlMessage(src, commandsmessage, channel);
     }
-    
+
     ,
-    
+
     bordercolor: function (src, channel, command) {
         var color = command[1];
         if (!color) {
@@ -1978,15 +1980,15 @@ ownercommands = {
         "&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;</b></font>";
         sys.sendHtmlMessage(src, helpers.bot(bots.main) + "The border " + command[0].slice(6) + " has been changed to " + color + ".", channel);
     }
-    
+
     ,
-    
+
     bordercolour: function (src, channel, command) {
         this.bordercolor(src, channel, command);
     }
-    
+
     ,
-    
+
     servertopiccolor: function (src, channel, command) {
         var color = command[1];
         if (!color) {
@@ -2001,15 +2003,15 @@ ownercommands = {
         helpers.saveData("serverTopicColor");
         sys.sendHtmlMessage(src, helpers.bot(bots.main) + "The server topic " + command[0].slice(11) + " has been changed to " + color + ".", channel);
     }
-    
+
     ,
-    
+
     servertopiccolour: function (src, channel, command) {
         this.servertopiccolor(src, channel, command);
     }
-    
+
     ,
-    
+
     channeltopiccolor: function (src, channel, command) {
         var color = command[1];
         if (!color) {
@@ -2024,15 +2026,15 @@ ownercommands = {
         helpers.saveData("channelTopicColor");
         sys.sendHtmlMessage(src, helpers.bot(bots.main) + "The channel topic " + command[0].slice(12) + " has been changed to " + color + ".", channel);
     }
-    
+
     ,
-    
+
     channeltopiccolour: function (src, channel, command) {
         this.channeltopiccolor(src, channel, command);
     }
-    
+
     ,
-    
+
     commandcolor: function (src, channel, command) {
         if (!command[1]) {
             helpers.starfox(src, channel, command, bots.command, "Error 404, number not found.");
@@ -2054,15 +2056,15 @@ ownercommands = {
         helpers.saveData("cmdcolors");
         sys.sendHtmlMessage(src, helpers.bot(bots.main) + "Command " + command[0].slice(7) + " " + command[1] + " has been changed to " + command[2] + ".", channel);
     }
-    
+
     ,
-    
+
     commandcolour: function (src, channel, command) {
         this.commandcolor(src, channel, command);
     }
-    
+
     ,
-    
+
     /**
         -------------
         Rule Settings
@@ -2086,9 +2088,9 @@ ownercommands = {
         + border2;
         sys.sendHtmlMessage(src, commandsmessage, channel);
     }
-    
+
     ,
-    
+
     changerule: function (src, channel, command) {
         var number = command[1], rule;
         if (!number) {
@@ -2109,9 +2111,9 @@ ownercommands = {
         helpers.saveData("rules");
         sys.sendHtmlMessage(src, helpers.bot(bots.main) + "Rule " + number + " has been changed to '" + rule + "'.", channel);
     }
-    
+
     ,
-    
+
     explanation: function (src, channel, command) {
         var number = command[1], explanation;
         if (!number) {
@@ -2132,9 +2134,9 @@ ownercommands = {
         helpers.saveData("rules");
         sys.sendHtmlMessage(src, helpers.bot(bots.main) + "The explanation of rule " + number + " has been changed to '" + explanation + "'.", channel);
     }
-    
+
     ,
-    
+
     addrule: function (src, channel, command) {
         var rule = command[1], number = rules.rules.length, explanation;
         if (!rule) {
@@ -2151,9 +2153,9 @@ ownercommands = {
         helpers.saveData("rules");
         sys.sendHtmlMessage(src, helpers.bot(bots.main) + "Rule " + (number + 1) + " has been added to the server rules.", channel);
     }
-    
+
     ,
-    
+
     removerule: function (src, channel, command) {
         var number = command[1], previous = 1, changing = false;
         if (!number) {
@@ -2169,9 +2171,9 @@ ownercommands = {
         helpers.saveData("rules");
         sys.sendHtmlMessage(src, helpers.bot(bots.main) + "Rule " + number + " has been removed. The other rule numbers have been changed accordingly.", channel);
     }
-    
+
     ,
-    
+
     /**
         -------------
         List Settings
@@ -2195,9 +2197,9 @@ ownercommands = {
         + border2;
         sys.sendHtmlMessage(src, commandsmessage, channel);
     }
-    
+
     ,
-    
+
     listcolor: function (src, channel, command) {
         var list = command[1], color;
         if (!list) {
@@ -2221,9 +2223,9 @@ ownercommands = {
         helpers.saveData("listcolors");
         sys.sendHtmlMessage(src, helpers.bot(bots.main) + "The " + command[0].slice(4) + " of the " + list + " list has been changed to " + color + ".", channel);
     }
-    
+
     ,
-    
+
     /**
         ----------------
         Channel Settings
@@ -2248,9 +2250,9 @@ ownercommands = {
         + border2;
         sys.sendHtmlMessage(src, commandsmessage, channel);
     }
-    
+
     ,
-    
+
     registerall: function (src, channel, command) {
         cusercommands.registerthis(src, 0, ["registerthis"]);
         cownercommands.perm(src, 0, ["perm"]);
@@ -2278,9 +2280,9 @@ ownercommands = {
         helpers.saveData("regchannels");
         sys.sendHtmlMessage(src, helpers.bot(bots.main) + "All permanent channels have been registered successfully and have been given their default settings.", channel);
     }
-    
+
     ,
-    
+
     unregisterall: function (src, channel, command) {
         var confirmation = command[1], message;
         if (!confirmation || confirmation != "confirm") {
@@ -2308,9 +2310,9 @@ ownercommands = {
         helpers.saveData("regchannels");
         sys.sendHtmlMessage(src, helpers.bot(bots.main) + "All permanent channels have been unregistered successfully.", channel);
     }
-    
+
     ,
-    
+
     renamechannel: function (src, channel, command) {
         var oldName = command[1], newName, oldName, lower;
         if (!oldName) {
@@ -2342,9 +2344,9 @@ ownercommands = {
         }
         helpers.starfox(src, channel, command, bots.command, "Error 403, invalid name.");
     }
-    
+
     ,
-    
+
     /**
         -------------
         Miscellaneous
@@ -2378,9 +2380,9 @@ ownercommands = {
         + border2;
         sys.sendHtmlMessage(src, commandsmessage, channel);
     }
-    
+
     ,
-    
+
     setapi: function (src, channel, command) {
         if (API_KEY !== "") {
             helpers.starfox(src, channel, command, bots.command, "Error 400, you already have an API key set!");
@@ -2409,9 +2411,9 @@ ownercommands = {
         });
         sys.sendHtmlMessage(src, helpers.bot(bots.main) + "Your API key has been set.", channel);
     }
-    
+
     ,
-    
+
     removeapi: function (src, channel, command) {
         if (API_KEY === "") {
             helpers.starfox(src, channel, command, bots.command, "Error 400, you cannot remove an API key when you don't have one!");
@@ -2427,9 +2429,9 @@ ownercommands = {
         helpers.saveData("timezone");
         sys.sendHtmlMessage(src, helpers.bot(bots.main) + "Your API key has been removed.", channel);
     }
-    
+
     ,
-    
+
     setgoogleapi: function (src, channel, command) {
         if (GOOGLE_KEY !== "") {
             helpers.starfox(src, channel, command, bots.command, "Error 400, you already have a Google API key set!");
@@ -2444,9 +2446,9 @@ ownercommands = {
         sys.write("data/GOOGLE_KEY.txt", api);
         sys.sendHtmlMessage(src, helpers.bot(bots.main) + "Your Google API key has been set.", channel);
     }
-    
+
     ,
-    
+
     removegoogleapi: function (src, channel, command) {
         if (GOOGLE_KEY === "") {
             helpers.starfox(src, channel, command, bots.command, "Error 400, you cannot remove a Google API key when you don't have one!");
@@ -2456,9 +2458,9 @@ ownercommands = {
         helpers.saveData("GOOGLE_KEY");
         sys.sendHtmlMessage(src, helpers.bot(bots.main) + "Your Google API key has been removed.", channel);
     }
-    
+
     ,
-    
+
     clearpass: function (src, channel, command) {
         var name = sys.name(src), player, trgt;
         if (!command[1]) {
@@ -2482,9 +2484,9 @@ ownercommands = {
         }
         sys.sendHtmlAuths(helpers.bot(bots.pass) + "The password of " + player + " has been cleared by " + name + "!");
     }
-    
+
     ,
-    
+
     servertopic: function (src, channel, command) {
         var name = sys.name(src);
         if (!command[1]) {
@@ -2495,9 +2497,9 @@ ownercommands = {
         helpers.saveData("servertopic");
         sys.sendHtmlMain(helpers.bot(bots.topic) + "<b>" + helpers.user(name) + " changed the server topic to " + helpers.arg(command[1]) + ".</b>");
     }
-    
+
     ,
-    
+
     regchannelinfo: function (src, channel, command) {
         var message = border + "<h2>Registered Channels</h2><br>";
         if (helpers.isAndroid(src)) {
@@ -2523,9 +2525,9 @@ ownercommands = {
         message += "<br><br><b>Total Registered Channels:</b> " + Object.keys(regchannels).length + "<br><br><timestamp/><br>" + border2;
         sys.sendHtmlMessage(src, message, channel);
     }
-    
+
     ,
-    
+
     commandlist: function (src, channel, command) {
         var scriptmessage = border + "<h2>List of Commands</h2><br>", length, totallength;
         scriptmessage += "<b>User Commands:</b> " + Object.keys(usercommands).sort().join(", ") + "<br>" +
@@ -2565,29 +2567,29 @@ ownercommands = {
         "<b><u>Total Commands:</u></b> " + allcommands.length + "<br><br><timestamp/><br>" + border2;
         sys.sendHtmlMessage(src, scriptmessage, channel);
     }
-    
+
     ,
-    
+
     allcommands: function (src, channel, command) {
         this.commandlist(src, channel, command);
     }
-    
+
     ,
-    
+
     stopbattles: function (src, channel, command) {
         stopbattles = true;
         sys.sendHtmlMain(helpers.bot(bots.main) + "<b>" + helpers.user(sys.name(src)) + " has stopped battles! No battles can be started anymore!</b>");
     }
-    
+
     ,
-    
+
     resumebattles: function (src, channel, command) {
         stopbattles = false;
         sys.sendHtmlMain(helpers.bot(bots.main) + "<b>" + helpers.user(sys.name(src)) + " has resumed battles! Everyone can battle again!</b>");
     }
-    
+
     ,
-    
+
     updatetiers: function (src, channel, command) {
         sys.sendHtmlMain(helpers.bot(bots.tour) + "Tiers will be updated. The server might experience lag during this process.");
         sys.webCall(BETA_TIERS_URL, function (resp) {
@@ -2595,9 +2597,9 @@ ownercommands = {
             sys.reloadTiers();
         });
     }
-    
+
     ,
-    
+
     exportmembers: function (src, channel, command) {
         sys.exportMemberDatabase();
         sys.sendHtmlMessage(src, helpers.bot(bots.command) + "The member database has been successfully exported.", channel);
