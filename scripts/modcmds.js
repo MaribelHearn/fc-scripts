@@ -643,13 +643,13 @@ modcommands = {
             playerChannels = "None";
         }
         lastLogin = helpers.formatLastOn(src, sys.dbLastOn(player));
-        if (API_KEY !== "" && operatingsystem[player]) {
+        if (operatingsystem[player]) {
             os = (helpers.isAndroid(src) ? helpers.osName(operatingsystem[player]) : helpers.os(operatingsystem[player]));
         } else {
             os = "[no data]";
         }
         versions[player] ? version = ", ver. " + versions[player] : version = "";
-        if (API_KEY !== "" && countryname[player]) {
+        if (countryname[player]) {
             country = countryname[player];
             flag = FLAGS[helpers.toFlagKey(countryname[player])];
         } else {
@@ -673,7 +673,7 @@ modcommands = {
             location = (!helpers.isAndroid(src) ? flag + " " : "") + city + ", " + country;
         }
         cpmessage += "<br><b>Client:</b> " + os + version +
-        "<br><b>Location:</b> " + location +
+        "<br><b>Location:</b> " + (API_KEY !== "" ? location : "[no data]") +
         "<br><b>Time Zone:</b> " + timezone2 +
         "<br><b>Registered:</b> " + registered +
         "<br><b>Last Online:</b> " + lastLogin +
