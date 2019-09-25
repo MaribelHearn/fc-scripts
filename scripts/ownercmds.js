@@ -557,7 +557,7 @@ ownercommands = {
             sys.sendHtmlMessage(src, helpers.bot(bots.main) + "The description is currently: " + helpers.escapehtml(sys.getDescription()) + ".");
             return;
         }
-        sys.changeDescription(banner);
+        sys.changeDescription(description);
         sys.sendHtmlAuths(helpers.bot(bots.main) + sys.name(src) + " has changed the description!");
     }
 
