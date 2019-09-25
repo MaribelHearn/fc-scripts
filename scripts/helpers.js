@@ -153,6 +153,7 @@ helpers = {
             data = JSON.parse(this.readData(dataFile));
             return data;
         } catch (e) {
+            print("JSON file " + dataFile + " failed to load: " + e);
             return {};
         }
     }
