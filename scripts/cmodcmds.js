@@ -3,7 +3,7 @@
     ----------------------------------------------
     FUN COMMUNITY CMOD COMMANDS cmodcmds.js
      - by Maribel Hearn, 2012-2015
-    
+
     This file contains commands that can be
     run by channel moderators.
     ----------------------------------------------
@@ -18,7 +18,7 @@ cmodcommands = {
         + "If <b>text</b> is not specified, displays the current channel topic.<br>"
         + "<b>" + helpers.user("/addpart ") + helpers.arg("text") + "</b>: adds <b>text</b> to the current channel topic. Also /topicadd.<br>"
         + "<b>" + helpers.user("/removepart ") + helpers.arg("number") + "</b>: removes part <b>number</b> from the current channel topic. Part <b>number</b> must be yours.<br>"
-        + "<b>" + helpers.user("/changepart ") + helpers.arg("number") + helpers.arg2("*text") + "</b>: changes part <b>number</b> to <b>text</b> in the current channel topic."
+        + "<b>" + helpers.user("/changepart ") + helpers.arg("number") + helpers.arg2("*text") + "</b>: changes part <b>number</b> to <b>text</b> in the current channel topic. "
         + "Part <b>number</b> must be yours. Also /updatepart.<br>"
         + "<b>" + helpers.user("/ckick ") + helpers.arg("player") + helpers.arg2("*reason") + "</b>: kicks <b>player</b> from the current channel for <b>reason</b>. Also /ck.<br>"
         + "<b>" + helpers.user("/cmute ") + helpers.arg("player") + helpers.arg2("*reason") + "</b>: mutes <b>player</b> on the current channel for <b>reason</b>.<br>"
@@ -36,9 +36,9 @@ cmodcommands = {
         + border2;
         sys.sendHtmlMessage(src, commandsmessage, channel);
     }
-    
+
     ,
-    
+
     topic: function (src, channel, command) {
         var lower = sys.channel(channel).toLowerCase(), name = sys.name(src).toLowerCase(), text = command[1];
         if (!text) {
@@ -71,9 +71,9 @@ cmodcommands = {
         helpers.saveData("regchannels");
         sys.sendHtmlAll(helpers.bot(bots.channel) + sys.name(src) + " changed the channel topic to '" + helpers.escapehtml(((typeof(text)) == "string" ? text : text.join(TOPIC_DELIMITER))) + "'", channel);
     }
-    
+
     ,
-    
+
     addpart: function (src, channel, command) {
         var lower = sys.channel(channel).toLowerCase(), name = sys.name(src).toLowerCase(), text = command[1];
         if (!text) {
@@ -90,15 +90,15 @@ cmodcommands = {
             return;
         }
     }
-    
+
     ,
-    
+
     topicadd: function (src, channel, command) {
         this.addpart(src, channel, command);
     }
-    
+
     ,
-    
+
     removepart: function (src, channel, command) {
         var lower = sys.channel(channel).toLowerCase(), name = sys.name(src).toLowerCase(), number = command[1], oldtext;
         if (!number) {
@@ -127,9 +127,9 @@ cmodcommands = {
             return;
         }
     }
-    
+
     ,
-    
+
     changepart: function (src, channel, command) {
         var lower = sys.channel(channel).toLowerCase(), name = sys.name(src).toLowerCase(), number = command[1], oldtext;
         if (!number) {
@@ -162,15 +162,15 @@ cmodcommands = {
             return;
         }
     }
-    
+
     ,
-    
+
     updatepart: function (src, channel, command) {
         this.changepart(src, channel, command);
     }
-    
+
     ,
-    
+
     ckick: function (src, channel, command) {
         var name = sys.name(src), trgtname = command[1], lower = sys.channel(channel).toLowerCase(), reason = command[2], trgt;
         if (!trgtname) {
@@ -197,15 +197,15 @@ cmodcommands = {
         }
         sys.sendHtmlAll(helpers.bot(bots.channel) + trgtname + " has been kicked from this channel by " + name + "! [Reason: " + reason + "]", channel);
     }
-    
+
     ,
-    
+
     ck: function (src, channel, command) {
         this.ckick(src, channel, command);
     }
-    
+
     ,
-    
+
     cmute: function (src, channel, command) {
         var name = sys.name(src), trgtname = command[1], lower = sys.channel(channel).toLowerCase(), reason = command[2], trgtip;
         if (!regchannels[lower]) {
@@ -238,9 +238,9 @@ cmodcommands = {
         helpers.saveData("regchannels");
         sys.sendHtmlAll(helpers.bot(bots.channel) + trgtname + " has been muted on this channel by " + name + "! [Reason: " + reason + "]", channel);
     }
-    
+
     ,
-    
+
     cunmute: function (src, channel, command) {
         var name = sys.name(src), lower = sys.channel(channel).toLowerCase();
         if (!regchannels[lower]) {
@@ -265,9 +265,9 @@ cmodcommands = {
         helpers.saveData("regchannels");
         sys.sendHtmlAll(helpers.bot(bots.channel) + command[1] + " has been unmuted on this channel by " + name + "!", channel);
     }
-    
+
     ,
-    
+
     cmutelist: function (src, channel, command) {
         var lower = sys.channel(channel).toLowerCase(), list, names = [], ips = [], muters = [], reasons = [], dates = [], mutelistmessage;
         if (!regchannels[lower]) {
@@ -307,9 +307,9 @@ cmodcommands = {
         mutelistmessage += "<br><br><b>Total Muted Players:</b> " + Object.keys(list).length + "<br><br><timestamp/><br>" + border2;
         sys.sendHtmlMessage(src, mutelistmessage, channel);
     }
-    
+
     ,
-    
+
     cbanlist: function (src, channel, command) {
         var lower = sys.channel(channel).toLowerCase(), list, names = [], ips = [], banners = [], reasons = [], dates = [], banlistmessage;
         if (!regchannels[lower]) {
@@ -349,9 +349,9 @@ cmodcommands = {
         banlistmessage += "<br><br><b>Total Banned Players:</b> " + Object.keys(list).length + "<br><br><timestamp/><br>" + border2;
         sys.sendHtmlMessage(src, banlistmessage, channel);
     }
-    
+
     ,
-    
+
     cclose: function (src, channel, command) {
         var name = sys.name(src), cauth = helpers.cauth(players[src].name.toLowerCase(), channel), lower = sys.channel(channel).toLowerCase();
         if (channel === 0) {
@@ -377,9 +377,9 @@ cmodcommands = {
         helpers.saveData("regchannels");
         sys.sendHtmlAll(helpers.bot(bots.channel) + "This channel has been closed for any channel auth level lower than Channel " + AUTH_NAMES[strength] + " by " + name + ".", channel);
     }
-    
+
     ,
-    
+
     copen: function (src, channel, command) {
         var name = sys.name(src), lower = sys.channel(channel).toLowerCase();
         if (!regchannels[lower]) {
@@ -394,9 +394,9 @@ cmodcommands = {
         helpers.saveData("regchannels");
         sys.sendHtmlAll(helpers.bot(bots.channel) + "This channel has been opened by " + name + ".", channel);
     }
-    
+
     ,
-    
+
     silence: function (src, channel, command) {
         var name = sys.name(src), cauth = helpers.cauth(name.toLowerCase(), channel), lower = sys.channel(channel).toLowerCase(), strength = command[1], silencemessage = helpers.bot(bots.silence);
         if (regchannels[lower]) {
@@ -435,7 +435,7 @@ cmodcommands = {
             return;
         }
     }
-    
+
     ,
 
     unsilence: function (src, channel, command) {
@@ -463,9 +463,9 @@ cmodcommands = {
             return;
         }
     }
-    
+
     ,
-    
+
     caps: function (src, channel, command) {
         var lower = sys.channel(channel).toLowerCase();
         if (regchannels[lower]) {
@@ -482,9 +482,9 @@ cmodcommands = {
             return;
         }
     }
-    
+
     ,
-    
+
     flood: function (src, channel, command) {
         var lower = sys.channel(channel).toLowerCase();
         if (regchannels[lower]) {
