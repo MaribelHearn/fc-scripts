@@ -6,7 +6,7 @@
        with tournament methods by Lutra and
        pokemon db methods from main server
        scripts
-    
+
     This script file contains utility
     methods that almost every other
     script file uses.
@@ -16,18 +16,18 @@
 helpers = {
     initData: function () {
         sys.mkdir("data");
-        
+
         // Booleans
         sys.write(DATA_FOLDER + "open.txt", "true");
         sys.write(DATA_FOLDER + "autoupdating.txt", "false");
-        
+
         // Numbers
         sys.write(DATA_FOLDER + "allowance.txt", 8);
         sys.write(DATA_FOLDER + "floodtime.txt", 10);
         sys.write(DATA_FOLDER + "floodlevel.txt", 1);
         sys.write(DATA_FOLDER + "maxplayers.txt", 0);
         sys.write(DATA_FOLDER + "updatefrequency.txt", 3600);
-        
+
         // Strings
         sys.write(DATA_FOLDER + "API_KEY.txt", "");
         sys.write(DATA_FOLDER + "GOOGLE_KEY.txt", "");
@@ -45,7 +45,7 @@ helpers = {
         sys.write(DATA_FOLDER + "channelwelcomemessage.txt", "Please welcome ~Player~ to ~Channel~!");
         sys.write(DATA_FOLDER + "channelleavemessage.txt", "~Player~ has left ~Channel~!");
         sys.write(DATA_FOLDER + "nopermissionmessage.txt", "Can't let you do that, Star ~Player~!");
-        
+
         // Arrays
         sys.write(DATA_FOLDER + "allowed.txt", '["127.0.0.1"]');
         sys.write(DATA_FOLDER + "cmdcolors.txt", '["#4169E1","#008000","#FF0000","#FFA500","#FFD700","#0000FF"]');
@@ -60,7 +60,7 @@ helpers = {
         sys.write(DATA_FOLDER + "bansites.txt", sys.read("bansites.txt"));
         sys.rm("proxy_list.txt");
         sys.rm("bansites.txt");
-        
+
         // Objects
         sys.write(DATA_FOLDER + "bots.txt", '{"attack":"AttackBot","armyof":"ArmyBot","auth":"AuthBot","ban":"BanBot","caps":"CapsBot","channel":"ChannelBot",' +
         '"clear":"ClearBot","command":"CommandBot","flood":"FloodBot","fun":"FunBot","gigaban":"GigabanBot","idle":"IdleBot","kick":"KickBot",' +
@@ -97,76 +97,83 @@ helpers = {
         sys.write(DATA_FOLDER + "rangebanlist.txt", "{}");
         sys.write(DATA_FOLDER + "selfkickmessages.txt", "{}");
         sys.write(DATA_FOLDER + "rangebanmessages.txt", "{}");
-        
+
         // Plugins
         var permchannels = JSON.parse(sys.read(DATA_FOLDER + "permchannels.txt"));
-        
+
         if (helpers.isLoaded("party.js")) {
             permchannels.push("Party");
             sys.write(DATA_FOLDER + "partymode.txt", "none");
             sys.write(DATA_FOLDER + "permchannels.txt", JSON.stringify(permchannels));
         }
-        
+
         if (helpers.isLoaded("rr.js")) {
             permchannels.push("Russian Roulette");
             sys.write(DATA_FOLDER + "rr.txt", "{}");
             sys.write(DATA_FOLDER + "permchannels.txt", JSON.stringify(permchannels));
         }
-        
+
         if (helpers.isLoaded("roulette.js")) {
             permchannels.push("Roulette");
             sys.write(DATA_FOLDER + "roulette.txt", "{}");
             sys.write(DATA_FOLDER + "permchannels.txt", JSON.stringify(permchannels));
         }
-        
+
         if (helpers.isLoaded("safari.js")) {
             permchannels.push("Safari");
             sys.write(DATA_FOLDER + "safari.txt", "{}");
             sys.write(DATA_FOLDER + "permchannels.txt", JSON.stringify(permchannels));
         }
     }
-    
+
     ,
-    
+
     readData: function (dataFile) {
         return sys.read(DATA_FOLDER + dataFile + ".txt");
     }
-    
+
     ,
-    
+
     readNumber: function (dataFile) {
         return parseInt(this.readData(dataFile));
     }
-    
+
     ,
-    
+
     readBoolean: function (dataFile) {
         return this.readData(dataFile) == "true" ? true : false;
     }
-    
+
     ,
-    
+
     readObject: function (dataFile) {
-        return JSON.parse(this.readData(dataFile));
+        var data;
+
+        try {
+            data = JSON.parse(this.readData(dataFile));
+            return data;
+        } catch (e) {
+            return {};
+        }
     }
-    
+
     ,
-    
+
     saveData: function (dataFile) {
         var data = (typeof(global[dataFile]) == "object" ? JSON.stringify(global[dataFile]) : global[dataFile]);
         sys.write(DATA_FOLDER + dataFile.toLowerCase() + ".txt", data);
     }
-    
+
     ,
-    
+
     setVariable: function (variable, data) {
         if (typeof(global[variable]) == "undefined") {
             global[variable] = data;
         }
     }
-    
+
     ,
-    
+
     /**
         ----------------
         Checking Helpers
@@ -175,47 +182,47 @@ helpers = {
     isLoaded: function (plugin) {
         return pluginLoaded[SCRIPT_PLUGINS.indexOf(plugin)];
     }
-    
+
     ,
-    
+
     isMutable: function (command) {
         return /sendAll|sendHtmlAll|sendMain|sendHtmlMain|sendHtmlAuths|sendHtmlAuth|sendHtmlOwner/.test(command.toString());
     }
-    
+
     ,
-    
+
     isAndroid: function (src) {
         return sys.os(src) == "android";
     }
-    
+
     ,
-    
+
     isWeb: function (src) {
         return sys.os(src) == "webclient";
     }
-    
+
     ,
-    
+
     isAndroidOrWeb: function (src) {
         return sys.os(src) == "android" || sys.os(src) == "webclient";
     }
-    
+
     ,
-    
+
     isLetter: function (c) {
         var lower = c.toLowerCase();
         return lower >= 'a' && lower <= 'z';
     }
-    
+
     ,
-    
+
     isVowel: function (letter) {
         letter = letter.toLowerCase();
         return letter == 'a' || letter == 'e' || letter == 'i' || letter == 'o' || letter == 'u';
     }
-    
+
     ,
-    
+
     floodCheck: function (src, channelname) {
         if (regchannels[channelname]) {
             if (regchannels[channelname].flood) {
@@ -239,9 +246,9 @@ helpers = {
         }
         return false;
     }
-    
+
     ,
-    
+
     muteCheck: function (name) {
         for (var i in mutelist) {
             if (sys.dbIp(name) == mutelist[i].ip) {
@@ -252,7 +259,7 @@ helpers = {
     }
 
     ,
-    
+
     cmuteCheck: function (name, lower) {
         if (regchannels[lower]) {
             return regchannels[lower].mutelist[name.toLowerCase()] || regchannels[lower].mutedips[sys.dbIp(name)];
@@ -261,7 +268,7 @@ helpers = {
     }
 
     ,
-    
+
     /**
         --------------
         Method Helpers
@@ -309,9 +316,9 @@ helpers = {
             }
         }
     }
-    
+
     ,
-    
+
     muteMessage: function (src, channel, message) {
         var alts = sys.aliases(sys.ip(src)), lower;
         for (var i in alts) {
@@ -331,34 +338,34 @@ helpers = {
         sys.sendHtmlMessage(src, this.bot(bots.mute) + "Sorry, you are muted on the server. [Time until expiration: " + this.formatJusticeTime(mutelist[lower].time) +
         "] [Reason: " + mutelist[lower].reason + "]", channel);
     }
-    
+
     ,
-    
+
     channelMuteMessage: function (src, channel) {
         sys.sendHtmlMessage(src, this.bot(bots.mute) + "Sorry, you are muted on this channel.", channel);
     }
-    
+
     ,
-    
+
     silenceMessage: function (src, channel) {
         sys.sendHtmlMessage(src, this.bot(bots.silence) + (bots.silence == "Achmed the Dead Terrorist" ? "I KILL YOOOOUUUU!!!" : "Sorry, this channel is currently silenced."), channel);
     }
-    
+
     ,
-    
+
     reset: function (src) {
         sys.changeName(src, players[src].name);
     }
-    
+
     ,
-    
+
     formatEvent: function (event) {
         var eventFormats = {"frenzy": "<b>Shiny Frenzy</b>", "fest": "<b>Chainfest</b>", "legendary": "<b>Legendary Swarm</b>"};
         return (eventFormats[event] ? eventFormats[event] : "<b>Typeframe</b>");
     }
-    
+
     ,
-    
+
     rouletteEventMessage: function (event, ended) {
         var eventMessage;
         if (ended) {
@@ -376,9 +383,9 @@ helpers = {
         }
         sys.sendHtmlAll(this.bot(bots.roulette) + eventMessage, roulettechannel);
     }
-    
+
     ,
-    
+
     /**
         --------------
         Return Helpers
@@ -389,9 +396,9 @@ helpers = {
         var damage = Math.floor((0.84 * (attack / defense) * power + 2) * modifier);
         return [Math.floor(damage * 0.85), damage];
     }
-    
+
     ,
-    
+
     timePassed: function (color, lastMessageTime) {
         var timePassed = new Date() - lastMessageTime, unit;
         timePassed = Math.round(timePassed / 1000);
@@ -419,9 +426,9 @@ helpers = {
         }
         return "<b><font color='" + color + "'>(" + timePassed + " " + unit + " ago)</font></b>";
     }
-    
+
     ,
-    
+
     imageIndex: function (src) {
         var imageIndex = sys.auth(src);
         if (imageIndex > 3) {
@@ -434,26 +441,26 @@ helpers = {
         }
         return imageIndex;
     }
-    
+
     ,
-    
+
     channelLink: function (channelName) {
         return "<a href='po:join/" + channelName + "'>#" + channelName + "</a>";
     }
-    
+
     ,
-    
+
     battleLink: function (battle) {
         return "<a href='po:watch/" + battle + "'>Watch</a>";
     }
-    
+
     ,
-    
+
     syntaxHighlight: function (code) {
-        var KEYWORDS = ["abstract", "boolean", "break", "byte", "case", "catch", "char", "class", "const", "continue", "debugger", 
-        "default", "delete", "do", "double", "else", "enum", "export", "extends", "final", "finally", "float", "for", "function", 
-        "goto", "if", "implements", "import", "in", "instanceof", "int", "interface", "long", "native", "new", "package", "private", 
-        "protected", "public", "return", "short", "static", "super", "switch", "synchronized", "this", "throw", "throws", "transient", 
+        var KEYWORDS = ["abstract", "boolean", "break", "byte", "case", "catch", "char", "class", "const", "continue", "debugger",
+        "default", "delete", "do", "double", "else", "enum", "export", "extends", "final", "finally", "float", "for", "function",
+        "goto", "if", "implements", "import", "in", "instanceof", "int", "interface", "long", "native", "new", "package", "private",
+        "protected", "public", "return", "short", "static", "super", "switch", "synchronized", "this", "throw", "throws", "transient",
         "try", "typeof", "var", "void", "volatile", "while", "with", "true", "false", "prototype"];
         var NUMBERS = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
         var index = 0, pattern, pattern1, pattern2;
@@ -480,9 +487,9 @@ helpers = {
         code = code.replace(/\/\*/g, "<font color='#008000'>/*").replace(/\*\//g, "*/</font>");
         return code;
     }
-    
+
     ,
-    
+
     sum: function (array) {
         var sum = 0;
         for (var i in array) {
@@ -490,9 +497,9 @@ helpers = {
         }
         return sum;
     }
-    
+
     ,
-    
+
     timestampify: function (time) { // time must be a date object
         var hours = JSON.stringify(time.getHours());
         if (hours.length == 1) {
@@ -508,15 +515,15 @@ helpers = {
         }
         return "(" + hours + ":" + minutes + ":" + seconds + ")";
     }
-    
+
     ,
-    
+
     type: function (variable) {
         return variable.constructor.toString().replace("function ", "").replace("native code", "").replace(/[^A-Za-z]/g, "");
     }
-    
+
     ,
-    
+
     bannedchars: function (string) {
         if (CYRILLIC.test(string)) {
             return [true, "Cyrillic that is similar to letters"];
@@ -542,30 +549,30 @@ helpers = {
             return [false, ""];
         }
     }
-    
+
     ,
-    
+
     countryRetrievalUrl: function (ip) {
         return "http://api.ipinfodb.com/v3/ip-city/?key=" + API_KEY + "&ip=" + ip + "&format=json";
     }
-    
+
     ,
-    
+
     mapsUrl: function (city, country) {
         return "https://www.google.com/maps?q=" + city + ", " + country;
     }
-    
+
     ,
-    
+
     youtubeDataUrl: function (video) {
         if (GOOGLE_KEY === "") {
             return false;
         }
         return "https://www.googleapis.com/youtube/v3/videos?id=" + video + "&key=" + GOOGLE_KEY + "&part=snippet,contentDetails,statistics,status";
     }
-    
+
     ,
-    
+
     countrydata: function (country) {
         if (country == '-' || country === "") {
             return hostCountry;
@@ -623,9 +630,9 @@ helpers = {
             return country;
         }
     }
-    
+
     ,
-    
+
     toFlagKey: function (country) {
         country = this.removespaces(country).toUpperCase();
         if (country == "U.A.E.") {
@@ -646,9 +653,9 @@ helpers = {
             return country;
         }
     }
-    
+
     ,
-    
+
     citydata: function (city) {
         if (city == '-' || city === "") {
             return hostCity;
@@ -665,9 +672,9 @@ helpers = {
             }
         }
     }
-    
+
     ,
-    
+
     timezonedata: function (country, zone) {
         if (country == '-' || country === "") {
             return hostTimeZone;
@@ -675,9 +682,9 @@ helpers = {
             return zone;
         }
     }
-    
+
     ,
-    
+
     formatJusticeTime: function (justiceTime) { // justiceTime is in seconds
         var str = "", days = 0, hours = 0, minutes = 0, seconds = 0;
         if (justiceTime == '-') {
@@ -719,9 +726,9 @@ helpers = {
         }
         return str;
     }
-    
+
     ,
-    
+
     formatUptime: function (uptime) { // uptime is in milliseconds
         var days = 0, hours = 0, minutes = 0, seconds = 0;
         while (uptime >= 86400000) {
@@ -745,18 +752,18 @@ helpers = {
         }
         return days + " days, " + hours + " hours, " + minutes + " minutes and " + seconds + " seconds.";
     }
-    
+
     ,
-    
+
     formatLastOn: function (src, lastlogin) {
         return (timezone[players[src].name.toLowerCase()] ? this.toTimeZone(lastlogin, timezone[players[src].name.toLowerCase()].split(':')[0]) : lastlogin).split('.')[0].replace('T', ", ");
     }
-    
+
     ,
-    
+
     secondsToWording: function (seconds) {
         var result = [], days = 0, hours = 0, minutes = 0;
-        
+
         while (seconds >= 86400) {
             days += 1;
             seconds -= 86400;
@@ -769,7 +776,7 @@ helpers = {
             minutes += 1;
             seconds -= 60;
         }
-        
+
         if (days >= 1) {
             result.push(days + " day" + (days != 1 ? "s" : ""));
         }
@@ -782,12 +789,12 @@ helpers = {
         if (seconds >= 1) {
             result.push(seconds + " second" + (seconds != 1 ? "s" : ""));
         }
-        
+
         return result.join(", ");
     }
-    
+
     ,
-    
+
     version: function (version) {
         switch (version) {
             case 2630:
@@ -840,15 +847,15 @@ helpers = {
                 return "";
         }
     }
-    
+
     ,
-    
+
     isGuest: function (name) {
         return (/\bguest[0-9]/i).test(name);
     }
-    
+
     ,
-    
+
     os: function (srcos) {
         if (srcos == "windows") {
             return WINDOWS_BASE64 + " Windows";
@@ -862,9 +869,9 @@ helpers = {
             return IE_BASE64 + " Web Client";
         }
     }
-    
+
     ,
-    
+
     osImage: function (srcos) {
         if (srcos == "windows") {
             return WINDOWS_BASE64;
@@ -878,15 +885,15 @@ helpers = {
             return IE_BASE64;
         }
     }
-    
+
     ,
-    
+
     osName: function (srcos) {
         return (srcos == "webclient" ? "Web Client" : this.cap(srcos));
     }
-    
+
     ,
-    
+
     bannedcharacters: function (message, lower) {
         for (var i in bansites) {
             if (message.indexOf(bansites[i]) != -1) {
@@ -915,9 +922,9 @@ helpers = {
             }
         }
     }
-    
+
     ,
-    
+
     nyancolor: function (number) {
         switch (number) {
             case 1:
@@ -936,9 +943,9 @@ helpers = {
                 return "#FF0000";
         }
     }
-    
+
     ,
-    
+
     mode: function (src, message, channel, mode) {
         var name = this.escapehtml(sys.name(src)), auth = sys.auth(src), color = this.color(src), length = message.length;
         if (mode == "joke") {
@@ -1087,9 +1094,9 @@ helpers = {
         }
         sys.sendHtmlAll(message, channel);
     }
-    
+
     ,
-    
+
     tominutes: function (time, unit) {
         if (unit == "seconds" || unit == "second") {
             return (time / 60);
@@ -1101,9 +1108,9 @@ helpers = {
             return time;
         }
     }
-    
+
     ,
-    
+
     toTimeZone: function (d, zone) {
         d = d.split('T');
         d[0] = d[0].split('-');
@@ -1134,9 +1141,9 @@ helpers = {
         newdate = new Date(time);
         return newdate.toISOString();
     }
-    
+
     ,
-        
+
     shortdate: function (d) {
         var f = "yyyy-MM-ddThh:mm:ss", y = d.getFullYear(), m = d.getMonth() + 1, hours = d.getHours(), minutes = d.getMinutes(), seconds = d.getSeconds();
         d = d.getDate();
@@ -1152,9 +1159,9 @@ helpers = {
         f = f.replace(/ss/, z(seconds));
         return f;
     }
-    
+
     ,
-    
+
     isRange: function (range) {
         var ipdigits = range.split(".").join(""), iparray;
         if (isNaN(parseInt(ipdigits))) {
@@ -1171,9 +1178,9 @@ helpers = {
         }
         return true;
     }
-    
+
     ,
-    
+
     isIp: function (ip) {
         var ipdigits = ip.split(".").join(""), iparray;
         if (isNaN(parseInt(ipdigits))) {
@@ -1190,9 +1197,9 @@ helpers = {
         }
         return true;
     }
-    
+
     ,
-    
+
     isauthip: function (ip) {
         var alts = sys.aliases(ip);
         for (var index in alts) {
@@ -1202,16 +1209,16 @@ helpers = {
         }
         return false;
     }
-    
+
     ,
-    
+
     ipRange: function (ip) {
         var ipdigits = ip.split(".");
         return ipdigits[0] + "." + ipdigits[1];
     }
-    
+
     ,
-    
+
     sameIp: function (ip1, ip2) {
         if (ip1 == "127.0.0.1" && this.ipRange(ip2) == "192.168") {
             return true;
@@ -1220,9 +1227,9 @@ helpers = {
         }
         return ip1 == ip2;
     }
-    
+
     ,
-    
+
     isInArray: function (string, array) {
         for (var i in array) {
             if (array[i] == string) {
@@ -1231,9 +1238,9 @@ helpers = {
         }
         return false;
     }
-    
+
     ,
-    
+
     isInString: function (string, array) {
         for (var i in array) {
             if (string.indexOf(array[i]) != -1) {
@@ -1242,9 +1249,9 @@ helpers = {
         }
         return false;
     }
-    
+
     ,
-    
+
     allCommands: function () {
         var array = [];
         for (var i in usercommands) {
@@ -1298,9 +1305,9 @@ helpers = {
         }
         return array;
     }
-    
+
     ,
-    
+
     objecttoarray: function (object) {
         var array = [];
         for (var index in object) {
@@ -1308,22 +1315,22 @@ helpers = {
         }
         return array;
     }
-    
+
     ,
-    
+
     bot: function (string) {
         if (string.charAt(0) == '•') {
             return "<b><font color='" + botsymbolcolor + "'>" + string.substr(0, 3) + "</font></b><b><font color='" + botcolor + "'>" + string.slice(3) + "</font></b>";
         }
         return "<font color='" + botcolor + "'><timestamp/></font><font color='" + botsymbolcolor + "'><b>" + this.escapehtml(botsymbol) + "</b></font><font color='" + botcolor + "'><b>" + string + ": </b></font>";
     }
-    
+
     ,
-    
+
     colorcheck: function (poke) {
         POKEMON_COLORS = {
-            RED: ['Charmander', 'Charmeleon', 'Charizard', 'Vileplume', 'Paras', 'Parasect', 'Krabby', 'Kingler', 'Voltorb', 'Electrode', 'Goldeen', 'Seaking', 'Jynx', 'Magikarp', 
-            'Magmar', 'Flareon', 'Ledyba', 'Ledian', 'Ariados', 'Yanma', 'Scizor', 'Slugma', 'Magcargo', 'Octillery', 'Delibird', 'Porygon2', 'Magby', 'Ho-Oh', 'Torchic', 'Combusken', 
+            RED: ['Charmander', 'Charmeleon', 'Charizard', 'Vileplume', 'Paras', 'Parasect', 'Krabby', 'Kingler', 'Voltorb', 'Electrode', 'Goldeen', 'Seaking', 'Jynx', 'Magikarp',
+            'Magmar', 'Flareon', 'Ledyba', 'Ledian', 'Ariados', 'Yanma', 'Scizor', 'Slugma', 'Magcargo', 'Octillery', 'Delibird', 'Porygon2', 'Magby', 'Ho-Oh', 'Torchic', 'Combusken',
             'Blaziken', 'Wurmple', 'Medicham', 'Carvanha', 'Camerupt', 'Solrock', 'Corphish', 'Crawdaunt', 'Latias', 'Groudon', 'Deoxys', 'Deoxys-A', 'Deoxys-D', 'Deoxys-S',
             'Kricketot', 'Kricketune', 'Magmortar', 'Porygon-Z', 'Rotom', 'Rotom-H', 'Rotom-F', 'Rotom-W', 'Rotom-C', 'Rotom-S', 'Tepig', 'Pignite', 'Emboar', 'Pansear', 'Simisear',
             'Throh', 'Venipede', 'Scolipede', 'Krookodile', 'Darumaka', 'Darmanitan', 'Dwebble', 'Crustle', 'Scrafty', 'Shelmet', 'Accelgor', 'Druddigon', 'Pawniard', 'Bisharp',
@@ -1425,9 +1432,9 @@ helpers = {
             }
         }
     }
-    
+
     ,
-    
+
     date: function (date) {
         date = date.toString().split(' ');
         date[5] = date[5].replace(/0/g, "");
@@ -1437,9 +1444,9 @@ helpers = {
         date.splice(6, 1);
         return date.join(' ');
     }
-    
+
     ,
-    
+
     gen: function (pokenum) {
         var NUMBER_OF_GENS = 6, NUMBER_OF_POKEMON_GEN = [151, 251, 386, 493, 649, 718];
         for (var i = 0; i < NUMBER_OF_GENS; i++) {
@@ -1449,9 +1456,9 @@ helpers = {
         }
         return 0;
     }
-    
+
     ,
-    
+
     middlecup: function (poke) {
         var MIDDLE_CUP_POKEMON = "Bayleef, Boldore, Cascoon, Chansey, Charmeleon, Clefairy, Combusken, Croconaw, Dewott, Dragonair, Duosion, Dusclops, Eelektrik, Electabuzz, Flaaffy, " +
         "Fraxure, Gabite, Gloom, Golbat, Gothorita, Graveler, Grotle, Grovyle, Gurdurr, Haunter, Herdier, Ivysaur, Jigglypuff, Kadabra, Kakuna, Kirlia, Klang, Krokorok, Lairon, " +
@@ -1466,9 +1473,9 @@ helpers = {
         }
         return false;
     }
-    
+
     ,
-    
+
     getmoves: function (id, num, moves, form, derp) {
         if (form > 0)id = derp;
         var moveindex = moves.indexOf(id + ":" + form);
@@ -1481,9 +1488,9 @@ helpers = {
         }
         return movesarraya[0].join(", ");
     }
-    
+
     ,
-    
+
     getmovesarraya: function (id, num, moves, form, derp) {
         if (form > 0)id = derp;
         var moveindex = moves.indexOf(id + ":" + form);
@@ -1496,9 +1503,9 @@ helpers = {
         }
         return movesarraya[0];
     }
-    
+
     ,
-    
+
     htmlLinks:  function (text, type) {
         var exp = /([a-zA-Z]+:\/\/|www\.)[^\s]+/ig;
         var found = text.match(exp);
@@ -1530,9 +1537,9 @@ helpers = {
         }
         return type ? resp : link;
     }
-    
+
     ,
-    
+
     idsort: function (array) {
         // array consists of multiple numbers. Using array.sort() would put 1000 in front of 995, for example
         // this sorting function puts 1000 after 995
@@ -1553,9 +1560,9 @@ helpers = {
         }
         return sorted;
     }
-    
+
     ,
-    
+
     authSort: function () {
         var i, authArray = [], highestAuth = 0, list = sys.dbAuths().sort();
         for (i in list) {
@@ -1574,70 +1581,70 @@ helpers = {
         }
         return authArray;
     }
-    
+
     ,
-    
+
     cauthSort: function (channel) {
         var lower = sys.channel(channel).toLowerCase();
         return regchannels[lower].owners.sort().concat(regchannels[lower].admins.sort()).concat(regchannels[lower].mods.sort());
     }
-    
+
     ,
-    
+
     userb: function (string) {
         return "<b><font color='" + cmdcolors[0] + "'>" + this.escapehtml(string) + "</font></b>";
     }
-    
+
     ,
-    
+
     userg: function (string) {
         return "<b><font color='#808080'>" + this.escapehtml(string) + "</font></b>";
     }
-    
+
     ,
-    
+
     userl: function (string) {
         return "<a href='po:send/" + string + "' style='text-decoration: none;'><font color='" + cmdcolors[0] + "'>" + this.escapehtml(string) + "</font></a>";
     }
-    
+
     ,
-    
+
     user: function (string) {
         return "<font color='" + cmdcolors[0] + "'>" + this.escapehtml(string) + "</font>";
     }
-    
+
     ,
-    
+
     arg: function (string) {
         return "<font color='" + cmdcolors[1] + "'>" + this.escapehtml(string) + "</font>";
     }
-    
+
     ,
-    
+
     arg2: function (string) {
         return "<font color='" + cmdcolors[2] + "'>" + this.escapehtml(string) + "</font>";
     }
-    
+
     ,
-    
+
     arg3: function (string) {
         return "<font color='" + cmdcolors[3] + "'>" + this.escapehtml(string) + "</font>";
     }
-    
+
     ,
-    
+
     arg4: function (string) {
         return "<font color='" + cmdcolors[4] + "'>" + this.escapehtml(string) + "</font>";
     }
-    
+
     ,
-    
+
     arg5: function (string) {
         return "<font color='" + cmdcolors[5] + "'>" + this.escapehtml(string) + "</font>";
     }
-    
+
     ,
-    
+
     rainbow: function (given_text) {
         var x = [], y = 0, z = 0;
         while (y < given_text.length) {
@@ -1660,7 +1667,7 @@ helpers = {
     }
 
     ,
-    
+
     desu: function (given_text) {
         var x = [], y = 0, z = 0;
         var f = sys.rand(0, 2);
@@ -1689,7 +1696,7 @@ helpers = {
     }
 
     ,
-    
+
     duoColor: function (given_text, colorX, colorY) {
         var x = [], y = 0, z = 0, a = 0, text = "";
         while (y < given_text.length) {
@@ -1711,13 +1718,13 @@ helpers = {
     }
 
     ,
-        
+
     leet: function (text) {
         return text.toLowerCase().replace(/a/gi, "4").replace(/e/gi, "3").replace(/g/gi, "9").replace(/l/gi, "1").replace(/o/gi, "0").replace(/s/gi, "5").replace(/t/gi, "7").replace(/z/gi, "2");
     }
-        
+
     ,
-    
+
     morse: function (text) {
         text = text.replace(/a/gi, ".- ");
         text = text.replace(/b/gi, "-... ");
@@ -1757,15 +1764,15 @@ helpers = {
         text = text.replace(/9/g, "----. ");
         return text;
     }
-    
+
     ,
-    
+
     reverse: function (text) {
         return text.split("").reverse().join("");
     }
-    
+
     ,
-    
+
     statName: function (stat) {
         return([
             "HP",
@@ -1776,9 +1783,9 @@ helpers = {
             "Speed"
         ][stat]);
     }
-    
+
     ,
-    
+
     colorStat: function (stat) {
         if (stat <= 30) {
             return "<b><font color='#8B0000'>" + stat + "</font></b>";
@@ -1796,25 +1803,25 @@ helpers = {
             return "<b><font color='#00008B'>" + stat + "</font></b>";
         }
     }
-    
+
     ,
-    
+
     cap: function (string) {
         return string.charAt(0).toUpperCase() + string.slice(1);
     }
-    
+
     ,
-    
-    
+
+
     sep: function (num) {
         if (isNaN(num)) {
             return '-';
         }
         return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
     }
-    
+
     ,
-    
+
     correctDateNotation: function (date) {
         var tmp, time, year, month, day;
         tmp = date.split('T')[0].split('-');
@@ -1830,7 +1837,7 @@ helpers = {
         }
         return day + '-' + month + '-' + year + ", " + time;
     }
-    
+
     ,
 
     removespaces: function (string) {
@@ -1838,7 +1845,7 @@ helpers = {
     }
 
     ,
-    
+
     spaces: function (num) {
         if (isNaN(num)) {
             return "";
@@ -1850,13 +1857,13 @@ helpers = {
         }
         return spaces;
     }
-    
+
     ,
-    
+
     strip: function (str) {
         return str.replace(/<\/?[^>]*>/g, "");
     }
-    
+
     ,
 
     breakinghtml: function (string) {
@@ -1879,23 +1886,23 @@ helpers = {
     }
 
     ,
-    
+
     escapehtmluser: function (string) {
         return "<font color='" + cmdcolors[0] + "'>" + string.replace(/&/g, "&amp;").replace(/\>/g, "&gt;").replace(/</g, "&lt;") + "</font>";
     }
-    
+
     ,
-    
+
     escapehtmlarg: function (string) {
         return "<font color='" + cmdcolors[1] + "'>" + string.replace(/&/g, "&amp;").replace(/\>/g, "&gt;").replace(/</g, "&lt;") + "</font>";
     }
-    
+
     ,
-    
+
     toseconds: function (time, unit) {
         return({"minutes": time*60 , "minute": time*60, "hours": time*3600, "hour": time*3600, "days": time*86400,"day": time*86400, "weeks": time*604800, "week": time*604800, "months": time*2592000 , "month": time*2592000, "year": time*31536000 , "years": time*31536000}[unit] || time);
     }
-    
+
     ,
 
     timeplurality: function (time, unit) {
@@ -1930,7 +1937,7 @@ helpers = {
     }
 
     ,
-    
+
     typecolor: function (pokeNum) {
         return ([
             "#808000",
@@ -1954,51 +1961,51 @@ helpers = {
             "#2E8B57",
         ][sys.pokeType1(pokeNum)]);
     }
-    
+
     ,
-    
+
     pokeImage: function (pokeNum, shine) {
         return (shine ? "<img src='pokemon:" + pokeNum + "&shiny=true'>" : "<img src='pokemon:" + pokeNum + "'>");
     }
-    
+
     ,
-    
+
     pokeIcon: function (pokeNum) {
         return "<img src='icon:" + pokeNum + "'>";
     }
-    
+
     ,
-    
+
     itemImage: function (itemNum) {
         return "<img src='item:" + itemNum + "'>";
     }
-    
+
     ,
-    
+
     typeImage: function (src, type) {
         if (this.isAndroidOrWeb(src)) {
             return sys.type(type);
         }
         return "<img src='Themes/Classic/types/type" + type + ".png'>";
     }
-    
+
     ,
-    
+
     genderImage: function (src, gender) {
         if (this.isAndroidOrWeb(src)) {
             return this.cap(sys.gender(gender));
         }
         return "<img src='Themes/Classic/genders/gender" + gender + ".png'>";
     }
-    
+
     ,
-    
+
     statusImage: function (status) {
         return "<img src='Themes/Classic/status/battle_status" + this.toStatusNumber(status) + ".png'>";
     }
-    
+
     ,
-    
+
     toStatusNumber: function (status) {
         return ({
             "paralyze": 1,
@@ -2008,19 +2015,19 @@ helpers = {
             "poison": 5
         }[status]);
     }
-    
+
     ,
-    
+
     color: function (src) {
         if (sys.getColor(src) == "#000000") {
             var colorlist = ["#5811B1", "#399BCD", "#0474BB", "#F8760D", "#A00C9E", "#0D762B", "#5F4C00", "#9A4F6D", "#D0990F", "#1B1390", "#028678", "#0324B1"];
-            return colorlist[src % colorlist.length]; 
+            return colorlist[src % colorlist.length];
         }
         return sys.getColor(src);
     }
-    
+
     ,
-    
+
     isTooGreen: function (color) {
         var hex = color.substr(3, 2).toUpperCase(), first = hex.charAt(0), second = hex.charAt(1);
         if (second == 'D' || second == 'E' || second == 'F') {
@@ -2034,9 +2041,9 @@ helpers = {
         }
         return true;
     }
-    
+
     ,
-    
+
     authName: function (auth, displayuser, hideinvis) {
         if (auth === 0) {
             return displayuser ? AUTH_NAMES[auth] : "";
@@ -2046,9 +2053,9 @@ helpers = {
             return hideinvis ? AUTH_NAMES[0] : AUTH_NAMES[4];
         }
     }
-    
+
     ,
-    
+
     cauth: function (name, channel) {
         var lower = sys.channel(channel).toLowerCase();
         name = name.toLowerCase();
@@ -2073,9 +2080,9 @@ helpers = {
             return (sys.dbAuth(name) >= 4 ? 3 : sys.dbAuth(name));
         }
     }
-    
+
     ,
-    
+
     cauthname: function (name, channel) {
         var auth = this.cauth(name, channel);
         if (auth == 1) {
@@ -2087,9 +2094,9 @@ helpers = {
         }
         return "";
     }
-    
+
     ,
-    
+
     authimage: function (src, authlevel) {
         if (this.isAndroidOrWeb(src)) {
             return ({
@@ -2123,9 +2130,9 @@ helpers = {
         }[authlevel] || "<img src='Themes/Classic/client/uAway.png'>");
 
     }
-    
+
     ,
-    
+
     listOfClauses: function (number) {
         var clauses = ["Inverted Battle", "Self-KO Clause", "Wifi Battle", "Species Clause", "No Timeout", "Challenge Cup", "Item Clause", "Disallow Spects", "Freeze Clause", "Sleep Clause"],
             list = [], clause = 512, i = 0;
@@ -2143,41 +2150,41 @@ helpers = {
         }
         return list;
     }
-    
+
     ,
-    
+
     calcStat: function (stat, base, IV, EV, nature) {
         if (stat == '0') {
             return this.calcHP(base, IV, EV);
         }
         return Math.floor(Math.floor((IV + (2 * base) + Math.floor(EV / 4)) * 100 / 100 + 5) * nature);
     }
-    
+
     ,
-    
+
     calcHP: function (base, IV, EV) {
         if (base == 1) {
             return 1;
         }
         return Math.floor((IV + (2 * base) + Math.floor(EV / 4) + 100) + 10);
     }
-    
+
     ,
-        
+
     getDbIndex: function (pokeId) {
         var id = pokeId % 65536, forme = (pokeId - id) / 65536;
         return id + ':' + forme;
     }
-    
+
     ,
-        
+
     displayNum: function (pokeId) {
         var id = pokeId % 65536, forme = (pokeId - id) / 65536;
         return forme === 0 ? id : id + '-' + forme;
     }
-    
+
     ,
-    
+
     height: function (pokeId) {
         if (Object.keys(heightList).length === 0) {
             var data = sys.read("db/pokes/height.txt").split('\n');
@@ -2196,9 +2203,9 @@ helpers = {
         var base = key.substr(0, index);
         return heightList[base + '0'];
     }
-    
+
     ,
-    
+
     weight: function (pokeId) {
         if (Object.keys(weightList).length === 0) {
             var data = sys.read("db/pokes/weight.txt").split('\n');
@@ -2217,9 +2224,9 @@ helpers = {
         var base = key.substr(0, index);
         return weightList[base + '0'];
     }
-    
+
     ,
-    
+
     movepool: function (pokeId) {
         if (Object.keys(movepoolList).length === 0) {
             var data = sys.read("db/pokes/6G/all_moves.txt").split('\n');
@@ -2241,9 +2248,9 @@ helpers = {
         var base = key.substr(0, index);
         return movepoolList[base];
     }
-    
+
     ,
-    
+
     weightPower: function (weight) {
         var power;
         if (weight < 10) {
@@ -2261,9 +2268,9 @@ helpers = {
         }
         return power;
     }
-    
+
     ,
-    
+
     movePower: function (moveId) {
         if (Object.keys(powerList).length === 0) {
             var data = sys.read("db/moves/6G/power.txt").split('\n');
@@ -2279,7 +2286,7 @@ helpers = {
         }
         return powerList[moveId];
     }
-    
+
     ,
 
     moveCategory: function (moveId) {
@@ -2300,7 +2307,7 @@ helpers = {
         }
         return "<font color='#2E8B57'>Other</font>";
     }
-    
+
     ,
 
     moveAccuracy: function (moveId) {
@@ -2318,7 +2325,7 @@ helpers = {
         }
         return accList[moveId];
     }
-    
+
     ,
 
     movePP: function (moveId) {
@@ -2333,7 +2340,7 @@ helpers = {
         }
         return [ppList[moveId], ppList[moveId] * 8 / 5];
     }
-    
+
     ,
 
     moveEffect: function (moveId) {
@@ -2351,7 +2358,7 @@ helpers = {
         }
         return moveEffList[moveId].replace(/[\[\]{}]/g, "");
     }
-    
+
     ,
 
     moveContact: function (moveId) {
@@ -2366,7 +2373,7 @@ helpers = {
         }
         return (moveFlagList[moveId] % 2 === 1) ? "<font color='#008000'>Yes</font>" : "<font color='#FF0000'>No</font>";
     }
-    
+
     ,
 
     movePriority: function (moveId) {
@@ -2384,7 +2391,7 @@ helpers = {
         }
         return movePriorityList[moveId];
     }
-    
+
     ,
 
     moveRange: function (moveId) {
@@ -2402,9 +2409,9 @@ helpers = {
         }
         return this.moveRangeToText(parseInt(moveRangeList[moveId]));
     }
-    
+
     ,
-    
+
     moveRangeToText: function (moveRange) {
         switch (moveRange) {
             case 2:
@@ -2433,7 +2440,7 @@ helpers = {
                 return "Single Target";
         }
     }
-    
+
     ,
 
     ability: function (abilityId) {
@@ -2448,9 +2455,9 @@ helpers = {
         }
         return abilityList[abilityId];
     }
-    
+
     ,
-    
+
     pokemonWithAbility: function (abilityId) {
         if (!pokemonWithAbilityList[abilityId]) {
             var data1, data2, data3, index;
@@ -2479,7 +2486,7 @@ helpers = {
         }
         return pokemonWithAbilityList[abilityId];
     }
-    
+
     ,
 
     getItem: function (itemId) {
@@ -2494,7 +2501,7 @@ helpers = {
         }
         return itemList[itemId];
     }
-    
+
     ,
 
     getBerry: function (berryId) {
@@ -2509,7 +2516,7 @@ helpers = {
         }
         return berryList[berryId];
     }
-    
+
     ,
 
     getFlingPower: function (itemId) {
@@ -2524,7 +2531,7 @@ helpers = {
         }
         return flingPowerList[itemId];
     }
-    
+
     ,
 
     getBerryPower: function (berryId) {
@@ -2539,7 +2546,7 @@ helpers = {
         }
         return +berryPowerList[berryId] + 20;
     }
-    
+
     ,
 
     getBerryType: function (berryId) {
@@ -2554,9 +2561,9 @@ helpers = {
         }
         return berryTypeList[berryId].trim();
     }
-    
+
     ,
-    
+
     /**
         ------------
         Tour Helpers
@@ -2577,11 +2584,11 @@ helpers = {
     }
 
     ,
-    
+
     tourstart: function (channel) {
         tour[channel].tourmode = 2;
         tour[channel].roundnumber = 0;
-        this.roundpairing(channel);         
+        this.roundpairing(channel);
     }
 
     ,
@@ -2645,7 +2652,7 @@ helpers = {
         var battlesleft = Math.floor((tour[channel].tourcurrentnumber - tour[channel].tourlosers.length - tour[channel].tourwinners.length)/2);
         if (battlesleft !== 0 && tour[channel].tourlosers.indexOf(winnername) == -1 && tour[channel].tourmembers.indexOf(winnername) != -1) {
             var plurality = battlesleft == 1 ? "match" : "matches";
-            var battlesleftstring =  border2 + "<br/>" 
+            var battlesleftstring =  border2 + "<br/>"
             + "<font color='blue'><b>" + battlesleft + " more " + plurality  + " to be completed in this round!</b></font>";
             sys.sendHtmlMain(battlesleftstring);
         }
@@ -2675,10 +2682,10 @@ helpers = {
         while (0 in tour[channel].tourlosers) {
             tour[channel].tourmembers.splice(tour[channel].tourmembers.indexOf(tour[channel].tourlosers[0]),1);
             tour[channel].tourlosers.splice(0,1);
-        }   
+        }
         while (0 in tour[channel].tourwinners) {
             tour[channel].tourwinners.splice(0,1);
-        }      
+        }
         tour[channel].roundnumber++;
         this.fisheryates(tour[channel].tourmembers);
         this.rounddisplay(1, channel);
@@ -2719,10 +2726,10 @@ helpers = {
             }
             tourwinnerslist = tourwinnerslist.substring(0, tourwinnerslist.length-2) + ".</small></b>";
             roundstring += correctborder + "<br/>"
-            + "<font color='green'><b>Players through to the Next Round</b></font><br/>" 
+            + "<font color='green'><b>Players through to the Next Round</b></font><br/>"
             + correctborder + "<br/>"
             + tourwinnerslist + "<br/>";
-        }        
+        }
         if (tour[channel].tourlosers.length > 0) {
             var tourloserslist = "<b><small>", tourlosersindex;
             for (tourlosersindex in tour[channel].tourlosers) {
@@ -2730,7 +2737,7 @@ helpers = {
             }
             tourloserslist = tourloserslist.substring(0, tourloserslist.length-2) + ".</small></b>";
             roundstring += correctborder + "<br/>"
-            + "<font color='red'><b>Players out of the tournament</b></font><br/>" 
+            + "<font color='red'><b>Players out of the tournament</b></font><br/>"
             + correctborder + "<br/>"
             + "<b><small>" + tourloserslist + "</small></b><br/>";
         }
