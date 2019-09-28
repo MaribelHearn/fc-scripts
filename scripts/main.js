@@ -3,7 +3,7 @@
     ----------------------------------------------
     FUN COMMUNITY MAIN SCRIPT main.js
      - by Maribel Hearn, 2012-2015
-    
+
     The main script file. Defines global
     constants, variables, functions and
     contains the event handlers.
@@ -254,7 +254,7 @@
     helpers.setVariable("flingPowerList", {});
     helpers.setVariable("berryPowerList", {});
     helpers.setVariable("berryTypeList", {});
-    
+
     tour[0] = {};
     tour[0].tourmode = 0;
     bansites.splice(bansites.indexOf(""), 1);
@@ -305,80 +305,82 @@
 ).call(null);
 
 ({
-    
+
     loadScript: function () {
     }
-    
+
     ,
-    
+
     unloadScript: function () {
     }
-    
+
     ,
-    
+
     switchError: function () {
     }
-    
+
     ,
-    
+
     warning: function (warning) {
     }
-    
+
     ,
-    
+
     battleConnectionLost: function () {
         sys.sendHtmlAuth(helpers.bot(bots.spy) + "[Server] Connection to the battle server was lost.");
     }
-    
+
     ,
-    
+
     serverStartUp: function () {
         serverStarting = true;
         if (sys.fexists("RelayStation.exe") && sys.os() == "windows") {
             sys.system("start RelayStation");
+        } else if (sys.fexists("RelayStation") && sys.os() != "windows") {
+            sys.system("./RelayStation");
         }
         /**
             ----------------
             Channel Creation
             ----------------
         **/
-        var time = 500;
+        var time = 100;
         sys.setTimer(function () {
             sys.createChannel(permchannels[0]);
         }, time, 0);
-        time += 500;
+        time += 100;
         sys.setTimer(function () {
             sys.createChannel(permchannels[1]);
         }, time, 0);
-        time += 500;
+        time += 100;
         sys.setTimer(function () {
             sys.createChannel(permchannels[2]);
         }, time, 0);
         if (helpers.isLoaded("party.js")) {
-            time += 500;
+            time += 100;
             sys.setTimer(function () {
                 sys.createChannel(permchannels[3]);
             }, time, 0);
         }
         if (helpers.isLoaded("rr.js")) {
-            time += 500;
+            time += 100;
             sys.setTimer(function () {
                 sys.createChannel(permchannels[4]);
             }, time, 0);
         }
         if (helpers.isLoaded("roulette.js")) {
-            time += 500;
+            time += 100;
             sys.setTimer(function () {
                 sys.createChannel(permchannels[5]);
             }, time, 0);
         }
         if (helpers.isLoaded("safari.js")) {
-            time += 500;
+            time += 100;
             sys.setTimer(function () {
                 sys.createChannel(permchannels[6]);
             }, time, 0);
         }
-        time += 500;
+        time += 100;
         sys.setTimer(function () {
             watch = sys.channelId(permchannels[0]);
             authchannel = sys.channelId(permchannels[1]);
@@ -432,6 +434,8 @@
         sys.killBattleServer();
         if (sys.fexists("RelayStation.exe") && sys.os() == "windows") {
             sys.system("taskkill /f /im RelayStation.exe");
+        } else if (sys.fexists("RelayStation") && sys.os() != "windows") {
+            sys.system("kill $(pidof RelayStation)");
         }
     }
 
@@ -497,7 +501,7 @@
         if (helpers.isLoaded("roulette.js")) {
             if (sys.playersOfChannel(roulettechannel).length !== 0) { // only trigger events when at least one person is in the channel
                 rouletteStep += 1;
-                
+
                 // if the waiting time's up and there is no event going, start a new event
                 if (rouletteEvent === "" && rouletteStep == rouletteTime) {
                     randomEvent = sys.rand(0, 100);
@@ -525,7 +529,7 @@
                     helpers.rouletteEventMessage(rouletteEvent, false);
                     rouletteStep = 0;
                 }
-                
+
                 // stop an event once its time is up and set new waiting time
                 if (rouletteEvent !== "" && rouletteStep == rouletteTime) {
                     rouletteTime = sys.rand(ROULETTE_WAIT_MIN, ROULETTE_WAIT_MAX);
@@ -567,9 +571,9 @@
             sys.sendHtmlOwner(helpers.bot(bots.script) + "The server scripts have been automatically updated to the newest version! [Commit Message: " + commitmessage + "]");
         }
     }
-    
+
     ,
-    
+
     beforeIPConnected: function (ip) {
         /**
             ---------------------
@@ -578,8 +582,6 @@
         **/
         if (serverStarting) {
             sys.stopEvent();
-            sys.sendMessage(src, "Sorry, the server is still busy setting up at the moment. Please wait a few seconds before entering.");
-            sys.sendHtmlAuth(helpers.bot(bots.spy) + "[Server] <b><font color='" + color + "'>" + name + "</font></b> tried to enter during server setup.");
             return;
         }
         /**
@@ -613,7 +615,7 @@
             sys.sendHtmlAuth(helpers.bot(bots.spy) + "[Server] IP " + ip + " is connecting to the server.");
         }
     }
-    
+
     ,
 
     beforeLogIn: function (src) {
@@ -1140,7 +1142,7 @@
     }
 
     ,
-    
+
     beforeNewPM: function (src) {
         /**
             --------------------------------------
@@ -1156,12 +1158,12 @@
             }
         }
     }
-    
+
     ,
-    
+
     afterNewPM: function (src) {
     }
-    
+
     ,
 
     beforeChannelCreated: function (channel, channelname, creator) {
@@ -1411,8 +1413,8 @@
         **/
         var link = helpers.strip(message).substring(helpers.strip(message).indexOf(": ") + 2, helpers.strip(message).length);
         var regex = /.*(?:youtu.be\/|youtube.*v=|youtube.*\/embed\/|youtube.*\/v\/|youtube.*videos\/)([^#\&\?]*).*/;
-            
-        
+
+
         if (link.match(regex)) {
             try {
                 var data = helpers.htmlLinks(link, "object");
@@ -1420,14 +1422,14 @@
                 sys.sendHtmlAuths(helpers.bot(bots.main) + "An error occurred: " + error, channel);
                 return;
             }
-            
+
             var title = data.items[0].snippet.title;
             var username = data.items[0].snippet.channelTitle;
             var views = helpers.sep(data.items[0].statistics.viewCount);
             var likes = helpers.sep(data.items[0].statistics.likeCount);
             var dislikes = helpers.sep(data.items[0].statistics.dislikeCount);
             var publishedDate = helpers.correctDateNotation(data.items[0].snippet.publishedAt);
-            
+
             sys.sendHtmlAll(helpers.bot(bots.main) + title + ", Uploader: " + username + ", Views: <b>" + views + "</b>, Likes: <b><font color='green'>" + likes + "</font></b>, " +
             "Dislikes: <b><font color='red'>" + dislikes + "</font></b>, Published: " + publishedDate + " UTC.", channel);
         }
@@ -1494,7 +1496,7 @@
     }
 
     ,
-    
+
     beforeServerMessage: function (message) {
         sys.stopEvent();
         /**
@@ -1523,7 +1525,7 @@
                     }
                     eval(code);
                     print("Script ran successfully.");
-                } catch (e) { 
+                } catch (e) {
                     print("An error occurred: " + e);
                 }
                 var runtime = new Date() - starttime;
@@ -1536,7 +1538,7 @@
                         return;
                     }
                     print(eval(variable));
-                } catch (e) { 
+                } catch (e) {
                     print("An error occurred: " + e);
                 }
             } else if (lower == "print") {
@@ -1560,12 +1562,12 @@
         sys.sendHtmlMain("<font color='#FFA500'><timestamp/><b>~~Server~~:</b></font> " + message);
         return;
     }
-    
+
     ,
-    
+
     afterServerMessage: function (message) {
     }
-    
+
     ,
 
     beforePlayerKick: function (src, trgt) {
@@ -1616,7 +1618,7 @@
     }
 
     ,
-    
+
     beforePlayerRegister: function (src) {
         var name = sys.name(src), color = helpers.color(src);
         if (helpers.isGuest(name)) {
@@ -1627,9 +1629,9 @@
         }
         sys.sendHtmlAuth(helpers.bot(bots.spy) + "[Player] <b><font color='" + color + "'>" + name + "</font></b> registered.");
     }
-    
+
     ,
-    
+
     beforeChallengeIssued: function (src, trgt, clauses, rated, mode, team, team2) {
         /**
             ------------
@@ -1673,7 +1675,7 @@
     }
 
     ,
-    
+
     beforeFindBattle: function (src, team) {
         /**
             ------------
@@ -1688,7 +1690,7 @@
     }
 
     ,
-    
+
     afterFindBattle: function (src, team) {
         sys.sendHtmlAuth(helpers.bot(bots.spy) + "[Battle] <b><font color='" + helpers.color(src) + "'>" + sys.name(src) + "</font></b> has used the Find Battle button.");
     }
@@ -1769,7 +1771,7 @@
         "<b><font color='" + helpers.color(battler1) + "'>" + sys.name(battler1) + "</font></b> and <b><font color='" + helpers.color(battler2) + "'>" + sys.name(battler2) + "</font></b>.");
     }
 
-    ,    
+    ,
 
     beforeBattleEnded: function (winner, loser, result, battle) {
     }
@@ -1791,7 +1793,7 @@
             if (tour[0].tourbattlers.indexOf(winnername.toLowerCase()) != -1 && tour[0].tourbattlers.indexOf(losername.toLowerCase()) != -1 && !helpers.nopair(tourmemberswinner, tourmembersloser)) {
                 if (result == "tie") {
                     var tourwinner = tour[0].tourbattlers.indexOf(winnername.toLowerCase()), tourloser = tour[0].tourbattlers.indexOf(losername.toLowerCase());
-                    tour[0].tourbattlers.splice(tourloser,1); 
+                    tour[0].tourbattlers.splice(tourloser,1);
                     tour[0].tourbattlers.splice(tourwinner,1);
                     var repeatmatchmessage = border + "<br/>"
                     + "<timestamp/><b> A tournament match has been tied.</b></font><br/>"
