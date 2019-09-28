@@ -337,7 +337,7 @@
         if (sys.fexists("RelayStation.exe") && sys.os() == "windows") {
             sys.system("start RelayStation");
         } else if (sys.fexists("RelayStation") && sys.os() != "windows") {
-            sys.system("./RelayStation");
+            sys.system("(./RelayStation &)");
         }
         /**
             ----------------
