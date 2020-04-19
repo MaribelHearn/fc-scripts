@@ -863,7 +863,7 @@ ownercommands = {
             return;
         }
         sys.rm(file);
-        sys.sendHtmlMessage(src, helpers.bot(bots.script) + "'" file "' has been deleted!", channel);
+        sys.sendHtmlMessage(src, helpers.bot(bots.script) + "'" + file + "' has been deleted!", channel);
     }
 
     ,
@@ -1566,7 +1566,7 @@ ownercommands = {
 
     ,
 
-    'private': function (src, channel, command) {
+    "private": function (src, channel, command) {
         sys.makeServerPublic(false);
         sys.sendHtmlMain(helpers.bot(bots.priv) + "<b>" + helpers.user(sys.name(src)) +
         " made the server " + helpers.arg("private") + "!</b>");
@@ -1574,7 +1574,7 @@ ownercommands = {
 
     ,
 
-    'public': function (src, channel, command) {
+    "public": function (src, channel, command) {
         sys.makeServerPublic(true);
         sys.sendHtmlMain(helpers.bot(bots.priv) + "<b>" + helpers.user(sys.name(src)) +
         " made the server " + helpers.arg("public") + "!</b>");
