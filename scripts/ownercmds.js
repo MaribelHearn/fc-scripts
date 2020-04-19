@@ -932,14 +932,14 @@ ownercommands = {
         var noncmds = ["main", "helpers", "handler", "base64", "tierchecks"];
         if (!command[1]) {
             if (src) {
-                silent == "silent" ? sys.sendHtmlMessage(src, helpers.bot(bots.script) + "Downloading scripts...", channel) : sys.sendHtmlAuths(helpers.bot(bots.script) + "Downloading scripts...");
+                silent == "silent" ? sys.sendHtmlMessage(src, helpers.bot(bots.script) + "Downloading scripts...", channel) : sys.sendHtmlAuths(helpers.bot(bots.script) + "Downloading scripts...", channel);
             }
             sys.webCall(SCRIPT_URL + "main.js", function (resp) {
                 if (resp === "") {
                     if (silent == "silent" && src) {
                         sys.sendHtmlMessage(src, helpers.bot(bots.script) + "An error occurred while downloading the scripts. The scripts have not been updated.", channel);
                     } else if (src) {
-                        sys.sendHtmlAuths(helpers.bot(bots.script) + "An error occurred while downloading the scripts. The scripts have not been updated.");
+                        sys.sendHtmlAuths(helpers.bot(bots.script) + "An error occurred while downloading the scripts. The scripts have not been updated.", channel);
                     }
                     return;
                 }
@@ -949,7 +949,7 @@ ownercommands = {
                     sys.exec(SCRIPTS_FOLDER + "main.js");
                 } catch (e) {
                     if (src) {
-                        silent == "silent" ? sys.sendHtmlMessage(src, helpers.bot(bots.script) + e, channel) : sys.sendHtmlAuths(helpers.bot(bots.script) + e);
+                        silent == "silent" ? sys.sendHtmlMessage(src, helpers.bot(bots.script) + e, channel) : sys.sendHtmlAuths(helpers.bot(bots.script) + e, channel);
                     }
                     return;
                 }
@@ -957,7 +957,7 @@ ownercommands = {
                 if (silent == "silent" && src) {
                     sys.sendHtmlMessage(src, helpers.bot(bots.script) + " The server scripts have been reloaded. [Time elapsed: " + (time / 1000) + " seconds.]", channel);
                 } else if (src) {
-                    sys.sendHtmlAuths(helpers.bot(bots.script) + name + " has reloaded the server scripts! [Time elapsed: " + (time / 1000) + " seconds.]");
+                    sys.sendHtmlAuths(helpers.bot(bots.script) + name + " has reloaded the server scripts! [Time elapsed: " + (time / 1000) + " seconds.]", channel);
                 }
             });
         } else if (command[1] == "all") {
@@ -974,14 +974,14 @@ ownercommands = {
                 return;
             }
             if (src) {
-                silent == "silent" ? sys.sendHtmlMessage(src, helpers.bot(bots.script) + "Downloading scripts...", channel) : sys.sendHtmlAuths(helpers.bot(bots.script) + "Downloading scripts...");
+                silent == "silent" ? sys.sendHtmlMessage(src, helpers.bot(bots.script) + "Downloading scripts...", channel) : sys.sendHtmlAuths(helpers.bot(bots.script) + "Downloading scripts...", channel);
             }
             sys.webCall(SCRIPT_URL + module + ".js", function (resp) {
                 if (resp === "") {
                     if (silent == "silent" && src) {
                         sys.sendHtmlMessage(src, helpers.bot(bots.script) + "An error occurred while downloading the scripts. The scripts have not been updated.", channel);
                     } else if (src) {
-                        sys.sendHtmlAuths(helpers.bot(bots.script) + "An error occurred while downloading the scripts. The scripts have not been updated.");
+                        sys.sendHtmlAuths(helpers.bot(bots.script) + "An error occurred while downloading the scripts. The scripts have not been updated.", channel);
                     }
                     return;
                 }
@@ -999,13 +999,13 @@ ownercommands = {
                     if (silent == "silent" && src) {
                         sys.sendHtmlMessage(src, helpers.bot(bots.script) + " The server scripts have been reloaded. [Time elapsed: " + (time / 1000) + " seconds.]", channel);
                     } else if (src) {
-                        sys.sendHtmlAuths(helpers.bot(bots.script) + name + " has reloaded the server scripts! [Time elapsed: " + (time / 1000) + " seconds.]");
+                        sys.sendHtmlAuths(helpers.bot(bots.script) + name + " has reloaded the server scripts! [Time elapsed: " + (time / 1000) + " seconds.]", channel);
                     }
                 } else {
                     if (silent == "silent" && src) {
                         sys.sendHtmlMessage(src, helpers.bot(bots.script) + " The " + module.replace("cmds", "") + " script module has been reloaded. [Time elapsed: " + (time / 1000) + " seconds.]", channel);
                     } else if (src) {
-                        sys.sendHtmlAuths(helpers.bot(bots.script) + name + " has reloaded the " + module.replace("cmds", "") + " script module! [Time elapsed: " + (time / 1000) + " seconds.]");
+                        sys.sendHtmlAuths(helpers.bot(bots.script) + name + " has reloaded the " + module.replace("cmds", "") + " script module! [Time elapsed: " + (time / 1000) + " seconds.]", channel);
                     }
                 }
             });
@@ -1052,13 +1052,13 @@ ownercommands = {
                 helpers.starfox(src, channel, command, bots.main, "Error 404, plugin '" + plugin + "' not found.");
                 return;
             }
-            silent == "silent" ? sys.sendHtmlMessage(src, helpers.bot(bots.script) + "Downloading scripts...", channel) : sys.sendHtmlAuths(helpers.bot(bots.script) + "Downloading scripts...");
+            silent == "silent" ? sys.sendHtmlMessage(src, helpers.bot(bots.script) + "Downloading scripts...", channel) : sys.sendHtmlAuths(helpers.bot(bots.script) + "Downloading scripts...", channel);
             sys.webCall(PLUGIN_URL + plugin + ".js", function (resp) {
                 if (resp === "") {
                     if (silent == "silent") {
                         sys.sendHtmlMessage(src, helpers.bot(bots.script) + "An error occurred while downloading the scripts. The scripts have not been updated.", channel);
                     } else {
-                        sys.sendHtmlAuths(helpers.bot(bots.script) + "An error occurred while downloading the scripts. The scripts have not been updated.");
+                        sys.sendHtmlAuths(helpers.bot(bots.script) + "An error occurred while downloading the scripts. The scripts have not been updated.", channel);
                     }
                     return;
                 }
@@ -1066,14 +1066,14 @@ ownercommands = {
                 try {
                     sys.exec(PLUGINS_FOLDER + plugin + ".js");
                 } catch (e) {
-                    silent == "silent" ? sys.sendHtmlMessage(src, helpers.bot(bots.script) + e, channel) : sys.sendHtmlAuths(helpers.bot(bots.script) + e);
+                    silent == "silent" ? sys.sendHtmlMessage(src, helpers.bot(bots.script) + e, channel) : sys.sendHtmlAuths(helpers.bot(bots.script) + e, channel);
                     return;
                 }
                 time = new Date() - date;
                 if (silent == "silent") {
                     sys.sendHtmlMessage(src, helpers.bot(bots.script) + " The " + plugin.replace("cmds", "") + " script plugin has been reloaded. [Time elapsed: " + (time / 1000) + " seconds.]", channel);
                 } else {
-                    sys.sendHtmlAuths(helpers.bot(bots.script) + name + " has reloaded the " + plugin.replace("cmds", "") + " script plugin! [Time elapsed: " + (time / 1000) + " seconds.]");
+                    sys.sendHtmlAuths(helpers.bot(bots.script) + name + " has reloaded the " + plugin.replace("cmds", "") + " script plugin! [Time elapsed: " + (time / 1000) + " seconds.]", channel);
                 }
             });
         }
