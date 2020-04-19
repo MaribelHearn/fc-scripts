@@ -852,7 +852,7 @@ ownercommands = {
     ,
 
     ls: function (src, channel, command) {
-        var dir = command[1], message;
+        var dir = command[1], message, dirs, files;
         if (!dir) {
             dir = sys.cwd();
         } else {
@@ -872,14 +872,15 @@ ownercommands = {
         message = border
         + "<h2>Contents of " + dir + "</h2>"
         + "<br>";
-        for (subdir in sys.dirsForDirectory(dir)) {
-            message += subdir + "/<br>";
+        dirs = sys.dirsForDirectory(dir);
+        files = sys.filesForDirectory(dir);
+        for (subdir in dirs) {
+            message += dirs[subdir] + "/<br>";
         }
-        for (file in sys.filesForDirectory(dir)) {
-            message += file + "<br>";
+        for (file in files) {
+            message += files[file] + "<br>";
         }
-        + "<br><timestamp/><br>"
-        + border2;
+        message += "<br><timestamp/><br>" + border2;
         sys.sendHtmlMessage(src, message, channel);
     }
 
