@@ -837,17 +837,56 @@ ownercommands = {
         + "The current working directly is <b>" + sys.cwd() + "</b>.<br>"
         + "<br>";
         commandsmessage += "<br>"
-        + "<b>" + helpers.userg("/ls") + "</b>: shows the content of the current working directory. Also /dir.<br>"
+        + "<b>" + helpers.user("/ls ") + helpers.arg("directory") + "</b>: shows the contents of <b>directory</b>. Shows the current working directory by default. Also /dir.<br>"
         + "<b>" + helpers.user("/rm ") + helpers.arg("file") + "</b>: deletes <b>file</b> from the file system.<br>"
-        + "<b>" + helpers.userg("/chdir ") + helpers.arg("directory") + "</b>: changes the current working directory to <b>directory</b>. Also /cd.<br>"
-        + "<b>" + helpers.userg("/mkdir ") + helpers.arg("directory") + "</b>: creates a new directory called <b>directory</b>. Also /md.<br>"
-        + "<b>" + helpers.userg("/rmdir ") + helpers.arg("directory") + "</b>: deletes <b>directory</b> if it is empty. Also /rd.<br>"
-        + "<b>" + helpers.userg("/zip ") + helpers.arg("name") + helpers.arg2("*directory") + "</b>: creates a new archive called <b>name</b> that contains the files of <b>directory</b>.<br>"
-        + "<b>" + helpers.userg("/unzip ") + helpers.arg("file") + "</b>: extracts the archive called <b>file</b> to the current working directory.<br>"
-        + "<b>" + helpers.userg("/exec ") + helpers.arg("command") + "</b>: executes <b>command</b>. <i>Please be careful when using this command.</i><br>"
+        + "<b>" + helpers.user("/mkdir ") + helpers.arg("directory") + "</b>: creates a new directory called <b>directory</b>. Also /md.<br>"
+        + "<b>" + helpers.user("/rmdir ") + helpers.arg("directory") + "</b>: deletes <b>directory</b> if it is empty. Also /rd.<br>"
+        + "<b>" + helpers.user("/zip ") + helpers.arg("name") + helpers.arg2("*directory") + "</b>: creates a new archive called <b>name</b> that contains the files of <b>directory</b>.<br>"
+        + "<b>" + helpers.user("/unzip ") + helpers.arg("name") + "</b>: extracts the archive called <b>name</b> to the current working directory.<br>"
+        + "<b>" + helpers.user("/exec ") + helpers.arg("command") + "</b>: executes <b>command</b> on the underlying operating system. <i>WARNING!</i> Be careful when using this command; it can break your computer.<br>"
         + "<br><timestamp/><br>"
         + border2;
         sys.sendHtmlMessage(src, commandsmessage, channel);
+    }
+
+    ,
+
+    ls: function (src, channel, command) {
+        var dir = command[1], message;
+        if (!dir) {
+            dir = sys.cwd();
+        } else {
+            if (!sys.fexists(dir)) {
+                helpers.starfox(src, channel, command, bots.script, "Error 404, that directory does not exist.");
+                return;
+            }
+            if (!sys.filesForDirectory(dir)) {
+                helpers.starfox(src, channel, command, bots.script, "Error 400, that file is not a directory.");
+                return;
+            }
+            if (sys.filesForDirectory(dir).length === 0) {
+                helpers.starfox(src, channel, command, bots.script, "Error 400, the directory is empty.");
+                return;
+            }
+        }
+        message = border
+        + "<h2>Contents of " + dir + "</h2>"
+        + "<br>";
+        for (subdir in sys.dirsForDirectory(dir)) {
+            message += subdir + "/<br>";
+        }
+        for (file in sys.filesForDirectory(dir)) {
+            message += file + "<br>";
+        }
+        + "<br><timestamp/><br>"
+        + border2;
+        sys.sendHtmlMessage(src, message, channel);
+    }
+
+    ,
+
+    dir: function (src, channel, command) {
+        this.ls(src, channel, command);
     }
 
     ,
@@ -863,7 +902,121 @@ ownercommands = {
             return;
         }
         sys.rm(file);
-        sys.sendHtmlMessage(src, helpers.bot(bots.script) + "'" + file + "' has been deleted!", channel);
+        sys.sendHtmlMessage(src, helpers.bot(bots.script) + "File '" + file + "' has been deleted!", channel);
+    }
+
+    ,
+
+    mkdir: function (src, channel, command) {
+        var dir = command[1];
+        if (!dir) {
+            helpers.starfox(src, channel, command, bots.script, "Error 404, directory not found.");
+            return;
+        }
+        if (sys.fexists(dir)) {
+            helpers.starfox(src, channel, command, bots.script, "Error 404, that directory already exists.");
+            return;
+        }
+        sys.mkdir(file);
+        sys.sendHtmlMessage(src, helpers.bot(bots.script) + "Directory '" + dir + "' has been created!", channel);
+    }
+
+    ,
+
+    md: function (src, channel, command) {
+        this.mkdir(src, channel, command);
+    }
+
+    ,
+
+    rmdir: function (src, channel, command) {
+        var dir = command[1];
+        if (!dir) {
+            helpers.starfox(src, channel, command, bots.script, "Error 404, directory not found.");
+            return;
+        }
+        if (!sys.fexists(dir)) {
+            helpers.starfox(src, channel, command, bots.script, "Error 404, that directory does not exist.");
+            return;
+        }
+        if (!sys.filesForDirectory(dir)) {
+            helpers.starfox(src, channel, command, bots.script, "Error 400, that file is not a directory.");
+            return;
+        }
+        if (sys.filesForDirectory(dir).length > 0) {
+            helpers.starfox(src, channel, command, bots.script, "Error 400, the directory is not empty.");
+            return;
+        }
+        sys.rmdir(file);
+        sys.sendHtmlMessage(src, helpers.bot(bots.script) + "Directory '" + dir + "' has been deleted!", channel);
+    }
+
+    ,
+
+    rd: function (src, channel, command) {
+        this.rmdir(src, channel, command);
+    }
+
+    ,
+
+    zip: function (src, channel, command) {
+        var fileName = command[1];
+        if (!fileName) {
+            helpers.starfox(src, channel, command, bots.script, "Error 404, name not found.");
+            return;
+        }
+        if (sys.fexists(fileName + ".zip")) {
+            helpers.starfox(src, channel, command, bots.script, "Error 400, there is already an archive of the same name.");
+            return;
+        }
+        var dir = command[2];
+        if (!dir) {
+            helpers.starfox(src, channel, command, bots.script, "Error 404, directory not found.");
+            return;
+        }
+        if (!sys.fexists(dir)) {
+            helpers.starfox(src, channel, command, bots.script, "Error 404, that directory does not exist.");
+            return;
+        }
+        if (!sys.filesForDirectory(dir)) {
+            helpers.starfox(src, channel, command, bots.script, "Error 400, that file is not a directory.");
+            return;
+        }
+        if (sys.filesForDirectory(dir).length === 0) {
+            helpers.starfox(src, channel, command, bots.script, "Error 400, the directory is empty.");
+            return;
+        }
+        sys.zip(fileName, dir);
+        sys.sendHtmlMessage(src, helpers.bot(bots.script) + "Compressed directory '" + dir + "' into archive '" + fileName + ".zip'.", channel);
+    }
+
+    ,
+
+    unzip: function (src, channel, command) {
+        var fileName = command[1];
+        if (!fileName) {
+            helpers.starfox(src, channel, command, bots.script, "Error 404, name not found.");
+            return;
+        }
+        if (!sys.fexists(fileName + ".zip")) {
+            helpers.starfox(src, channel, command, bots.script, "Error 400, that archive does not exist.");
+            return;
+        }
+        sys.unzip(fileName);
+        sys.sendHtmlMessage(src, helpers.bot(bots.script) + "Extracted archive '" + fileName + ".zip' into the current working directory.", channel);
+    }
+
+    ,
+
+    exec: function (src, channel, command) {
+        var cmd = command[1];
+        if (!cmd) {
+            helpers.starfox(src, channel, command, bots.script, "Error 404, command not found.");
+            return;
+        }
+        sys.sendHtmlMessage(src, border + "<br><timestamp/> <b>You executed the following command:</b><br><span style='font-family: dejavu sans mono;'>"
+        + helpers.escapehtml(cmd) + "</span><br>" + border2, channel);
+        sys.system(cmd);
     }
 
     ,
