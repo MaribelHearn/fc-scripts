@@ -17,6 +17,7 @@ ownercommands = {
         + "<b>" + helpers.userl("/ownerjusticeoptions") + "</b>: displays owner justice options.<br>"
         + "<b>" + helpers.userl("/banneroptions") + "</b>: displays banner and description options.<br>"
         + "<b>" + helpers.userl("/authoptions") + "</b>: displays auth settings.<br>"
+        + "<b>" + helpers.userl("/filesettings") + "</b>: displays file system options.<br>"
         + "<b>" + helpers.userl("/scriptsettings") + "</b>: displays script options.<br>"
         + "<b>" + helpers.userl("/floodsettings") + "</b>: displays flooding settings.<br>"
         + "<b>" + helpers.userl("/whitelistsettings") + "</b>: displays whitelist settings.<br>"
@@ -190,7 +191,7 @@ ownercommands = {
         }
         trgt = sys.id(trgtname);
         if (!trgt) {
-            helpers.starfox(src, channel, command, bots.gigaban, "Error 400, you can't mega ban " + trgtname + " since they are not online!");
+            helpers.starfox(src, channel, command, bots.gigaban, "Error 400, you can't giga ban " + trgtname + " since they are not online!");
             return;
         }
         if (!sys.uniqueId(trgt)) {
@@ -825,6 +826,34 @@ ownercommands = {
 
     /**
         ---------------
+        File Settings
+        ---------------
+    **/
+    filesettings: function (src, channel, command) {
+        var commandsmessage = border
+        + "<h2>Owner Commands ~ File Settings</h2>"
+        + "<br>"
+        + "File system functionality is currently being implemented.<br>"
+        + "The current working directly is <b>" + sys.cwd() + "</b>.<br>"
+        + "<br>"
+        commandsmessage += "<br>"
+        + "<b>" + helpers.userg("/ls") + "</b>: shows the content of the current working directory. Also /dir.<br>"
+        + "<b>" + helpers.userg("/rm ") + helpers.arg("file") + "</b>: deletes <b>file</b> from the file system.<br>"
+        + "<b>" + helpers.userg("/chdir ") + helpers.arg("directory") + "</b>: changes the current working directory to <b>directory</b>. Also /cd.<br>"
+        + "<b>" + helpers.userg("/mkdir ") + helpers.arg("directory") + "</b>: creates a new directory called <b>directory</b>. Also /md.<br>"
+        + "<b>" + helpers.userg("/rmdir ") + helpers.arg("directory") + "</b>: deletes <b>directory</b> if it is empty. Also /rd.<br>"
+        + "<b>" + helpers.userg("/zip ") + helpers.arg("name") + helpers.arg("*directory") + "</b>: creates a new archive called <b>name</b> that contains the files of <b>directory</b>.<br>"
+        + "<b>" + helpers.userg("/unzip ") + helpers.arg("file") + "</b>: extracts the archive called <b>file</b> to the current working directory.<br>"
+        + "<b>" + helpers.userg("/exec ") + helpers.arg("command") + "</b>: executes <b>command</b>. <i>Please be careful when using this command.</i><br>"
+        + "<br><timestamp/><br>"
+        + border2;
+        sys.sendHtmlMessage(src, commandsmessage, channel);
+    }
+
+    ,
+
+    /**
+        ---------------
         Script Settings
         ---------------
     **/
@@ -1077,32 +1106,6 @@ ownercommands = {
             result = JSON.stringify(result);
         }
         sys.sendHtmlMessage(src, helpers.bot(bots.command) + "The evaluated content of '" + command[1] + "' is " + (html ? result : helpers.escapehtml(result)) + ".", channel);
-        return;
-    }
-
-    ,
-
-    content: function (src, channel, command) {
-        var content = [], result;
-        if (!command[1]) {
-            helpers.starfox(src, channel, command, bots.main, "Error 404, object not found.");
-            return;
-        }
-        try {
-            result = eval(command[1]);
-        } catch (e) {
-            helpers.starfox(src, channel, command, bots.main, "Error 404, variable is undefined.");
-            return;
-        }
-        if (typeof(result) != "object") {
-            helpers.starfox(src, channel, command, bots.main, "Error 404, object is undefined or is not an object.");
-            return;
-        }
-        for (var i in result) {
-            content.push(result[i]);
-        }
-        content = JSON.stringify(content);
-        sys.sendHtmlMessage(src, helpers.bot(bots.command) + "The evaluated content of '" + command[1] + "' is " + content + ".", channel);
         return;
     }
 
