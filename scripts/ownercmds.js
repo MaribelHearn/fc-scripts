@@ -842,7 +842,7 @@ ownercommands = {
         + "<b>" + helpers.user("/mkdir ") + helpers.arg("directory") + "</b>: creates a new directory called <b>directory</b>. Also /md.<br>"
         + "<b>" + helpers.user("/rmdir ") + helpers.arg("directory") + "</b>: deletes <b>directory</b> if it is empty. Also /rd.<br>"
         + "<b>" + helpers.user("/zip ") + helpers.arg("name") + helpers.arg2("*directory") + "</b>: creates a new archive called <b>name</b> that contains the files of <b>directory</b>.<br>"
-        + "<b>" + helpers.user("/unzip ") + helpers.arg("name") + "</b>: extracts the archive called <b>name</b> to the current working directory.<br>"
+        + "<b>" + helpers.user("/unzip ") + helpers.arg("name") + helpers.arg2("*directory") _ "</b>: extracts the archive called <b>name</b> to <b>directory</b>. If <b>directory</b> is not specified, extracts to the current working directory.<br>"
         + "<b>" + helpers.user("/exec ") + helpers.arg("command") + "</b>: executes <b>command</b> on the underlying operating system. <i>WARNING!</i> Be careful when using this command; it can break your computer.<br>"
         + "<br><timestamp/><br>"
         + border2;
@@ -918,7 +918,7 @@ ownercommands = {
             helpers.starfox(src, channel, command, bots.script, "Error 404, that directory already exists.");
             return;
         }
-        sys.mkdir(file);
+        sys.mkdir(dir);
         sys.sendHtmlMessage(src, helpers.bot(bots.script) + "Directory '" + dir + "' has been created!", channel);
     }
 
@@ -948,7 +948,7 @@ ownercommands = {
             helpers.starfox(src, channel, command, bots.script, "Error 400, the directory is not empty.");
             return;
         }
-        sys.rmdir(file);
+        sys.rmdir(dir);
         sys.sendHtmlMessage(src, helpers.bot(bots.script) + "Directory '" + dir + "' has been deleted!", channel);
     }
 
@@ -1003,8 +1003,22 @@ ownercommands = {
             helpers.starfox(src, channel, command, bots.script, "Error 400, that archive does not exist.");
             return;
         }
-        sys.unzip(fileName);
-        sys.sendHtmlMessage(src, helpers.bot(bots.script) + "Extracted archive '" + fileName + ".zip' into the current working directory.", channel);
+        var dir = command[2];
+        if (!dir) {
+            sys.extractZip(fileName);
+            sys.sendHtmlMessage(src, helpers.bot(bots.script) + "Extracted archive '" + fileName + ".zip' into the current working directory.", channel);
+            return;
+        }
+        if (!sys.fexists(dir)) {
+            helpers.starfox(src, channel, command, bots.script, "Error 404, that directory does not exist.");
+            return;
+        }
+        if (!sys.filesForDirectory(dir)) {
+            helpers.starfox(src, channel, command, bots.script, "Error 400, that file is not a directory.");
+            return;
+        }
+        sys.extractZip(fileName, dir);
+        sys.sendHtmlMessage(src, helpers.bot(bots.script) + "Extracted archive '" + fileName + ".zip' into directory '" + dir + "'.", channel);
     }
 
     ,
