@@ -658,8 +658,8 @@ usercommands = {
         }
         pokeNum = (isNaN(pokemon) ? sys.pokeNum(pokemon) : pokemon);
         pokemon = sys.pokemon(pokeNum);
-        type1 = sys.pokeType1(pokeNum, pokeNum > 999 ? 5 : undefined);
-        type2 = sys.pokeType2(pokeNum, pokeNum > 999 ? 5 : undefined);
+        type1 = sys.pokeType1(pokeNum, pokeNum > 999 ? 5 : 7);
+        type2 = sys.pokeType2(pokeNum, pokeNum > 999 ? 5 : 7);
         types.push(helpers.typeImage(src, type1));
         if (type2 != UNKNOWN_TYPE) {
             types.push(helpers.typeImage(src, type2));
@@ -677,7 +677,7 @@ usercommands = {
         americanHeight = parseInt(height * 32.808399) / 10;
         americanWeight = parseInt(weight * 22) / 10;
         weightPower = helpers.weightPower(weight);
-        baseStats = sys.pokeBaseStats(pokeNum, pokeNum > 999 ? 5 : undefined);
+        baseStats = sys.pokeBaseStats(pokeNum, pokeNum > 999 ? 5 : 7);
         bst = helpers.sum(baseStats);
         dexmessage = border + "<h2>#" + helpers.displayNum(pokeNum) + " " + pokemon + "</h2>"
         + "<br>" + helpers.pokeImage(pokeNum)
@@ -703,7 +703,6 @@ usercommands = {
             dexmessage += "<style>table {border-width: 1px; border-style: solid; border-color: #000000;}</style>"
             + "<br><table cellpadding='2' cellspacing='0'><thead><tr><th>Stat</th><th>Base</th><th>Min-</th><th>Min</th><th>Max</th><th>Max+</th></tr></thead><tbody>"
             for (var k in baseStats) {
-                print(k);
                 stat = baseStats[k];
                 dexmessage += "<tr><th>" + helpers.statName(k) + "</th>"
                 + "<td>" + helpers.colorStat(stat) + "</td>"

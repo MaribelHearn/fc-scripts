@@ -835,14 +835,14 @@ ownercommands = {
         + "<br>"
         + "File system functionality is currently being implemented.<br>"
         + "The current working directly is <b>" + sys.cwd() + "</b>.<br>"
-        + "<br>"
+        + "<br>";
         commandsmessage += "<br>"
         + "<b>" + helpers.userg("/ls") + "</b>: shows the content of the current working directory. Also /dir.<br>"
-        + "<b>" + helpers.userg("/rm ") + helpers.arg("file") + "</b>: deletes <b>file</b> from the file system.<br>"
+        + "<b>" + helpers.user("/rm ") + helpers.arg("file") + "</b>: deletes <b>file</b> from the file system.<br>"
         + "<b>" + helpers.userg("/chdir ") + helpers.arg("directory") + "</b>: changes the current working directory to <b>directory</b>. Also /cd.<br>"
         + "<b>" + helpers.userg("/mkdir ") + helpers.arg("directory") + "</b>: creates a new directory called <b>directory</b>. Also /md.<br>"
         + "<b>" + helpers.userg("/rmdir ") + helpers.arg("directory") + "</b>: deletes <b>directory</b> if it is empty. Also /rd.<br>"
-        + "<b>" + helpers.userg("/zip ") + helpers.arg("name") + helpers.arg("*directory") + "</b>: creates a new archive called <b>name</b> that contains the files of <b>directory</b>.<br>"
+        + "<b>" + helpers.userg("/zip ") + helpers.arg("name") + helpers.arg2("*directory") + "</b>: creates a new archive called <b>name</b> that contains the files of <b>directory</b>.<br>"
         + "<b>" + helpers.userg("/unzip ") + helpers.arg("file") + "</b>: extracts the archive called <b>file</b> to the current working directory.<br>"
         + "<b>" + helpers.userg("/exec ") + helpers.arg("command") + "</b>: executes <b>command</b>. <i>Please be careful when using this command.</i><br>"
         + "<br><timestamp/><br>"
@@ -851,6 +851,20 @@ ownercommands = {
     }
 
     ,
+
+    rm: function (src, channel, command) {
+        var file = command[1];
+        if (!file) {
+            helpers.starfox(src, channel, command, bots.script, "Error 404, file not found.");
+            return;
+        }
+        if (!sys.fexists(file)) {
+            helpers.starfox(src, channel, command, bots.script, "Error 404, that file does not exist.");
+            return;
+        }
+        sys.rm(file);
+        sys.sendHtmlMessage(src, helpers.bot(bots.script) + "'" file "' has been deleted!", channel);
+    }
 
     /**
         ---------------
@@ -861,7 +875,7 @@ ownercommands = {
         var commandsmessage = border
         + "<h2>Owner Commands ~ Script Settings</h2>"
         + "<br>"
-        + "Automatic updating is currently an <b>experimental</b> feature and cannot be used yet.<br>"
+        + "Automatic updating is currently an <b>experimental</b> feature and cannot be used yet.<br>";
         /*+ "Automatic updating is currently turned <b>" + (autoUpdating ? "on" : "off") + "</b>.<br>";
         if (autoUpdating) {
             commandsmessage += "Update frequency: " + helpers.secondsToWording(updateFrequency) + ".<br>"
