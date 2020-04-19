@@ -866,6 +866,8 @@ ownercommands = {
         sys.sendHtmlMessage(src, helpers.bot(bots.script) + "'" file "' has been deleted!", channel);
     }
 
+    ,
+
     /**
         ---------------
         Script Settings
