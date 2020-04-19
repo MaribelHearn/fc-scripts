@@ -2230,7 +2230,7 @@ helpers = {
 
     movepool: function (pokeId) {
         if (Object.keys(movepoolList).length === 0) {
-            var data = sys.read("db/pokes/6G/all_moves.txt").split('\n');
+            var data = sys.read("db/pokes/" + (pokeId > 999 ? "5G" : "6G") + "/all_moves.txt").split('\n');
             for (var i = 0; i < data.length; i++) {
                 var index = data[i].indexOf(' ');
                 var id = data[i].substr(0, index);

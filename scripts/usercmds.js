@@ -658,8 +658,8 @@ usercommands = {
         }
         pokeNum = (isNaN(pokemon) ? sys.pokeNum(pokemon) : pokemon);
         pokemon = sys.pokemon(pokeNum);
-        type1 = sys.pokeType1(pokeNum);
-        type2 = sys.pokeType2(pokeNum);
+        type1 = sys.pokeType1(pokeNum, pokeNum > 999 ? 5 : undefined);
+        type2 = sys.pokeType2(pokeNum, pokeNum > 999 ? 5 : undefined);
         types.push(helpers.typeImage(src, type1));
         if (type2 != UNKNOWN_TYPE) {
             types.push(helpers.typeImage(src, type2));
@@ -677,7 +677,7 @@ usercommands = {
         americanHeight = parseInt(height * 32.808399) / 10;
         americanWeight = parseInt(weight * 22) / 10;
         weightPower = helpers.weightPower(pokeNum);
-        baseStats = sys.pokeBaseStats(pokeNum);
+        baseStats = sys.pokeBaseStats(pokeNum, pokeNum > 999 ? 5 : undefined);
         bst = helpers.sum(baseStats);
         dexmessage = border + "<h2>#" + helpers.displayNum(pokeNum) + " " + pokemon + "</h2>"
         + "<br>" + helpers.pokeImage(pokeNum)
