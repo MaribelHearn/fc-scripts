@@ -2778,7 +2778,6 @@ ownercommands = {
 
     reloadtiers: function (src, channel, command) {
         sys.reloadTiers();
-        sys.sendHtmlAll(helpers.bot(bots.tour) + "The tiers have been updated.", channel);
     }
 
     ,
