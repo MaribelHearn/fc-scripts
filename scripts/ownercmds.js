@@ -833,7 +833,6 @@ ownercommands = {
         var commandsmessage = border
         + "<h2>Owner Commands ~ File Settings</h2>"
         + "<br>"
-        + "File system functionality is currently being implemented.<br>"
         + "The current working directly is <b>" + sys.cwd() + "</b>.<br>"
         + "<br>";
         commandsmessage += "<br>"
@@ -842,7 +841,7 @@ ownercommands = {
         + "<b>" + helpers.user("/mkdir ") + helpers.arg("directory") + "</b>: creates a new directory called <b>directory</b>. Also /md.<br>"
         + "<b>" + helpers.user("/rmdir ") + helpers.arg("directory") + "</b>: deletes <b>directory</b> if it is empty. Also /rd.<br>"
         + "<b>" + helpers.user("/zip ") + helpers.arg("name") + helpers.arg2("*directory") + "</b>: creates a new archive called <b>name</b> that contains the files of <b>directory</b>.<br>"
-        + "<b>" + helpers.user("/unzip ") + helpers.arg("name") + helpers.arg2("*directory") _ "</b>: extracts the archive called <b>name</b> to <b>directory</b>. If <b>directory</b> is not specified, extracts to the current working directory.<br>"
+        + "<b>" + helpers.user("/unzip ") + helpers.arg("name") + helpers.arg2("*directory") + "</b>: extracts the archive called <b>name</b> to <b>directory</b>. If <b>directory</b> is not specified, extracts to the current working directory.<br>"
         + "<b>" + helpers.user("/exec ") + helpers.arg("command") + "</b>: executes <b>command</b> on the underlying operating system. <i>WARNING!</i> Be careful when using this command; it can break your computer.<br>"
         + "<br><timestamp/><br>"
         + border2;
@@ -2561,7 +2560,7 @@ ownercommands = {
         + "<b>" + helpers.user("/commandlist") + "</b>: lists all available commands. Also /allcommands.<br>"
         + "<b>" + helpers.user("/stopbattles") + "</b>: disallows battles to be started.<br>"
         + "<b>" + helpers.user("/resumebattles") + "</b>: allows battles to be started again.<br>"
-        + "<b>" + helpers.user("/updatetiers") + "</b>: updates the server tier list to the most recent version of the main server tier list.<br>"
+        + "<b>" + helpers.user("/reloadtiers") + "</b>: reloads the server tier list.<br>"
         + "<b>" + helpers.user("/exportmembers") + "</b>: exports the member database.<br>"
         + "<br><timestamp/><br>"
         + border2;
@@ -2777,12 +2776,9 @@ ownercommands = {
 
     ,
 
-    updatetiers: function (src, channel, command) {
-        sys.sendHtmlMain(helpers.bot(bots.tour) + "Tiers will be updated. The server might experience lag during this process.");
-        sys.webCall(BETA_TIERS_URL, function (resp) {
-            sys.write("tiers.xml", resp);
-            sys.reloadTiers();
-        });
+    reloadtiers: function (src, channel, command) {
+        sys.reloadTiers();
+        sys.sendHtmlAll(helpers.bot(bots.tour) + "The tiers have been updated.", channel);
     }
 
     ,

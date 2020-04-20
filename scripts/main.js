@@ -23,7 +23,6 @@
     RELAY_STATION_PROXY = "::1%0";
     IP_RETRIEVAL_URL = "http://whatismyip.akamai.com";
     REGISTRY_URL = "http://registry.pokemon-online.eu/";
-    BETA_TIERS_URL = "https://raw.githubusercontent.com/po-devs/po-server-goodies/master/tiers.xml";
     SCRIPT_URL = "https://raw.githubusercontent.com/MaribelHearn/fc-scripts/master/scripts/";
     PLUGIN_URL = "https://raw.githubusercontent.com/MaribelHearn/fc-scripts/master/plugins/";
     AUTO_UPDATE_URL = "https://api.github.com/repos/MaribelHearn/fc-scripts/commits";
@@ -619,7 +618,12 @@
     ,
 
     beforeLogIn: function (src) {
-        var name = sys.name(src), lower = name.toLowerCase(), ip = sys.ip(src), range = sys.range(src), color = helpers.color(src), auth = sys.auth(src);
+        var name = sys.name(src),
+            lower = name.toLowerCase(),
+            ip = sys.ip(src),
+            range = sys.range(src),
+            color = helpers.color(src),
+            auth = sys.auth(src);
         /**
             -----------
             Proxy Check
@@ -708,9 +712,22 @@
     ,
 
     afterLogIn: function (src) {
-        var name = sys.name(src), lower = sys.name(src).toLowerCase(), auth = sys.auth(src), ip = sys.ip(src), range = sys.range(src), cookie = sys.cookie(src) ? sys.cookie(src) : "none";
-        var id = sys.uniqueId(src) ? sys.uniqueId(src).id : "none", color = helpers.color(src), os = sys.os(src), version = sys.version(src), ipexists = 0, derp, country;
-        var servername = sys.getServerName(), uptime = sys.profileDump().split('\n')[0].split(',')[0].split(':')[1].slice(1, -2), authtitle;
+        var name = sys.name(src),
+        lower = sys.name(src).toLowerCase(),
+        auth = sys.auth(src),
+        ip = sys.ip(src),
+        range = sys.range(src),
+        cookie = sys.cookie(src) ? sys.cookie(src) : "none",
+        id = sys.uniqueId(src) ? sys.uniqueId(src).id : "none",
+        color = helpers.color(src),
+        os = sys.os(src),
+        version = sys.version(src),
+        ipexists = 0,
+        derp,
+        country,
+        servername = sys.getServerName(),
+        uptime = sys.profileDump().split('\n')[0].split(',')[0].split(':')[1].slice(1, -2),
+        authtitle;
         /**
             -----------------------
             Player Variable Setting
