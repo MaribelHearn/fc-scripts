@@ -658,16 +658,17 @@ usercommands = {
             return;
         }
         pokeNum = (isNaN(pokemon) ? sys.pokeNum(pokemon) : pokemon);
+        gen = (pokeNum > 999 ? 5 : 7);
         pokemon = sys.pokemon(pokeNum);
-        type1 = sys.pokeType1(pokeNum, pokeNum > 999 ? 5 : 7);
-        type2 = sys.pokeType2(pokeNum, pokeNum > 999 ? 5 : 7);
+        type1 = sys.pokeType1(pokeNum, gen);
+        type2 = sys.pokeType2(pokeNum, gen);
         types.push(helpers.typeImage(src, type1));
         if (type2 != UNKNOWN_TYPE) {
             types.push(helpers.typeImage(src, type2));
         }
         for (var i = 0; i <= 2; i++) {
             if (sys.pokeAbility(pokeNum, i) !== 0) {
-                abilities.push(sys.ability(sys.pokeAbility(pokeNum, i, pokeNum > 999 ? 5 : 7)) + (i == 2 ? " (Hidden)" : ""));
+                abilities.push(sys.ability(sys.pokeAbility(pokeNum, i, gen)) + (i == 2 ? " (Hidden)" : ""));
             }
         }
         for (var j in sys.pokeGenders(pokeNum)) {
@@ -678,7 +679,7 @@ usercommands = {
         americanHeight = parseInt(height * 32.808399) / 10;
         americanWeight = parseInt(weight * 22) / 10;
         weightPower = helpers.weightPower(weight);
-        baseStats = sys.pokeBaseStats(pokeNum, pokeNum > 999 ? 5 : 7);
+        baseStats = sys.pokeBaseStats(pokeNum, gen);
         bst = helpers.sum(baseStats);
         dexmessage = border + "<h2>#" + helpers.displayNum(pokeNum) + " " + pokemon + "</h2>"
         + "<br>" + helpers.pokeImage(pokeNum)
