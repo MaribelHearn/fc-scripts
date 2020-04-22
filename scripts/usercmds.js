@@ -667,7 +667,7 @@ usercommands = {
             types.push(helpers.typeImage(src, type2));
         }
         for (var i = 0; i <= 2; i++) {
-            if (sys.pokeAbility(pokeNum, i) !== 0) {
+            if (sys.pokeAbility(pokeNum, i, gen) !== 0) {
                 abilities.push(sys.ability(sys.pokeAbility(pokeNum, i, gen)) + (i == 2 ? " (Hidden)" : ""));
             }
         }
