@@ -647,7 +647,8 @@ usercommands = {
 
     pokedex: function (src, channel, command) {
         var UNKNOWN_TYPE = 18, MAX_IV = 31, MIN_EV = 0, MAX_EV = 252, MIN_NATURE = 0.9, NEUTRAL_NATURE = 1.0, MAX_NATURE = 1.1;
-        var pokemon = command[1], pokeNum, type1, type2, types = [], abilities = [], genders = [], height, weight, americanHeight, americanWeight, weightPower, baseStats, bst, stat, dexmessage;
+        var pokemon = command[1], pokeNum, type1, type2, types = [], abilities = [], genders = [],
+        height, weight, americanHeight, americanWeight, weightPower, baseStats, bst, stat, dexmessage, tier;
         if (!pokemon) {
             helpers.starfox(src, channel, command, bots.command, "Error 404, Pokémon not found.");
             return;
@@ -666,7 +667,7 @@ usercommands = {
         }
         for (var i = 0; i <= 2; i++) {
             if (sys.pokeAbility(pokeNum, i) !== 0) {
-                abilities.push(sys.ability(sys.pokeAbility(pokeNum, i)) + (i == 2 ? " (Hidden)" : ""));
+                abilities.push(sys.ability(sys.pokeAbility(pokeNum, i, pokeNum > 999 ? 5 : 7)) + (i == 2 ? " (Hidden)" : ""));
             }
         }
         for (var j in sys.pokeGenders(pokeNum)) {
@@ -681,8 +682,11 @@ usercommands = {
         bst = helpers.sum(baseStats);
         dexmessage = border + "<h2>#" + helpers.displayNum(pokeNum) + " " + pokemon + "</h2>"
         + "<br>" + helpers.pokeImage(pokeNum)
-        + "<br><b>Type:</b> " + types.join(/img/.test(types.toString()) ? "" : " / ")
-        + "<br><b>" + (abilities.length == 1 ? "Ability" : "Abilities") + ":</b> " + abilities.join(" / ")
+        + "<br><b>Type:</b> " + types.join(/img/.test(types.toString()) ? "" : " / ");
+        if (pokeNum > 999) {
+            dexmessage += "<br><b>Tier:</b> " + helpers.tierOf(pokeNum);
+        }
+        dexmessage += "<br><b>" + (abilities.length == 1 ? "Ability" : "Abilities") + ":</b> " + abilities.join(" / ")
         + "<br><b>Gender:</b> " + genders.join(/img/.test(genders.toString()) ? "" : " / ")
         + "<br><b>Height:</b> " + height + " m / " + americanHeight + " ft"
         + "<br><b>Weight:</b> " + weight + " kg / " + americanWeight + " lbs"
