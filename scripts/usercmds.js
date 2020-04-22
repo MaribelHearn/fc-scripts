@@ -890,7 +890,11 @@ usercommands = {
             if (slot === 0 || slot == 3) {
                 viewteammessage += "<tr>";
             }
-            viewteammessage += "<td><b>" + nick + " (" + name + ") " + genderletter + "</b><br>";
+            if (nick == name) {
+                viewteammessage += "<td><b>" + name + " " + genderletter + "</b><br>";
+            } else {
+                viewteammessage += "<td><b>" + nick + " (" + name + ") " + genderletter + "</b><br>";
+            }
             iddisplay = id;
             while (index < 5) {
                 if (id >= (65536 * index)) {

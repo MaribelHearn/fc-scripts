@@ -2198,7 +2198,7 @@ helpers = {
         }
         var key = this.getDbIndex(pokeId);
         if (heightList[key] !== undefined) {
-            return heightList[key];
+            return heightList[key].trim();
         }
         var index = key.indexOf(':') + 1;
         var base = key.substr(0, index);
