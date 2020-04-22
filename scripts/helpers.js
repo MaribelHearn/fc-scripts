@@ -2202,7 +2202,7 @@ helpers = {
         }
         var index = key.indexOf(':') + 1;
         var base = key.substr(0, index);
-        return heightList[base + '0'];
+        return heightList[base + '0'].trim();
     }
 
     ,
