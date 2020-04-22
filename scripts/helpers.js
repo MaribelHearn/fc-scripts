@@ -2283,7 +2283,7 @@ helpers = {
                 28: "UU"
             }
 
-        for (i = start; i < start + 4; i++) {
+        for (i = start; i < start + 6; i++) {
             pokemon = tiers[i].substring(tiers[i].indexOf("pokemons") + 9, tiers[i].indexOf("abilities")).trim();
             pokemon = pokemon.replace(/"/g, "").split(", ");
             if (pokemon.indexOf(name) > -1) {
