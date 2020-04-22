@@ -676,7 +676,7 @@ usercommands = {
         }
         height = helpers.height(pokeNum);
         weight = helpers.weight(pokeNum);
-        americanHeight = parseInt(height * 32.808399) / 10;
+        americanHeight = (height == "Unknown" ? "Unknown" : parseInt(height * 32.808399) / 10);
         americanWeight = parseInt(weight * 22) / 10;
         weightPower = helpers.weightPower(weight);
         baseStats = sys.pokeBaseStats(pokeNum, gen);
