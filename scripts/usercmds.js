@@ -658,7 +658,7 @@ usercommands = {
             return;
         }
         pokeNum = (isNaN(pokemon) ? sys.pokeNum(pokemon) : pokemon);
-        gen = (pokeNum > 999 ? 5 : 7);
+        gen = (pokeNum > 999 && pokeNum < 1200 ? 5 : 7);
         pokemon = sys.pokemon(pokeNum);
         type1 = sys.pokeType1(pokeNum, gen);
         type2 = sys.pokeType2(pokeNum, gen);
@@ -684,7 +684,7 @@ usercommands = {
         dexmessage = border + "<h2>#" + helpers.displayNum(pokeNum) + " " + pokemon + "</h2>"
         + "<br>" + helpers.pokeImage(pokeNum)
         + "<br><b>Type:</b> " + types.join(/img/.test(types.toString()) ? "" : " / ");
-        if (pokeNum > 999) {
+        if (pokeNum > 999 && pokeNum < 1200) {
             dexmessage += "<br><b>Tier:</b> " + helpers.tierOf(pokeNum);
         }
         dexmessage += "<br><b>" + (abilities.length == 1 ? "Ability" : "Abilities") + ":</b> " + abilities.join(" / ")
