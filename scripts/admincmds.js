@@ -3,7 +3,7 @@
     ----------------------------------------------
     FUN COMMUNITY ADMIN COMMANDS admincmds.js
      - by Maribel Hearn, 2012-2015
-    
+
     This file contains commands that can be
     run by administrators.
     ----------------------------------------------
@@ -22,9 +22,9 @@ admincommands = {
         + border2;
         sys.sendHtmlMessage(src, commandsmessage, channel);
     }
-    
+
     ,
-    
+
     /**
         ---------------------
         Admin Justice Options
@@ -44,9 +44,9 @@ admincommands = {
         + border2;
         sys.sendHtmlMessage(src, commandsmessage, channel);
     }
-    
+
     ,
-    
+
     ban: function (src, channel, command) {
         var name = sys.name(src), trgtname = command[1], trgt = sys.id(trgtname), reason = command[2], auth = sys.auth(src), trgtauth, trgtip;
         if (!trgtname) {
@@ -136,9 +136,6 @@ admincommands = {
         } else {
             sys.sendHtmlAll(helpers.bot(bots.ban) + name + " has banned " + trgtname + " from the server" + (time == "forever" ? "" : " for " + time + " ") + unit + "! [Reason: " + reason + "]", channel);
         }
-        if (trgt) {
-            sys.ban(trgtname);
-        }
         for (var index in mutelist) {
             if (!sys.dbIp(index)) {
                 delete mutelist[index];
@@ -155,15 +152,15 @@ admincommands = {
             }
         }
     }
-    
+
     ,
-    
+
     b: function (src, channel, command) {
         this.ban(src, channel, command);
     }
-    
+
     ,
-    
+
     ipban: function (src, channel, command) {
         var name = sys.name(src), reason = command[2], auth = sys.auth(src), aliases;
         if (!command[1]) {
@@ -270,9 +267,9 @@ admincommands = {
             }
         }
     }
-    
+
     ,
-    
+
     unban: function (src, channel, command) {
         var name = sys.name(src), ip;
         if (!command[1]) {
@@ -303,12 +300,11 @@ admincommands = {
         if (members[lower]) {
             trgtname = members[lower];
         }
-        sys.unban(trgtname);
         sys.sendHtmlAll(helpers.bot(bots.ban) + trgtname + " has been unbanned by " + name + "!", channel);
     }
-    
+
     ,
-    
+
     ipunban: function (src, channel, command) {
         var name = sys.name(src);
         if (!command[1]) {
@@ -328,18 +324,18 @@ admincommands = {
         helpers.saveData("banlist");
         sys.sendHtmlAll(helpers.bot(bots.ban) + trgtip + " has been IP unbanned by " + name + "!", channel);
     }
-    
+
     ,
-    
+
     clearbanlist: function (src, channel, command) {
         var name = sys.name(src);
         banlist = {};
         helpers.saveData("banlist");
         sys.sendHtmlAll(helpers.bot(bots.ban) + "The ban list has been cleared by " + name + "!", channel);
     }
-    
+
     ,
-    
+
     banreason: function (src, channel, command) {
         if (!command[1]) {
             helpers.starfox(src, channel, command, bots.ban, "Error 404, player not found.");
@@ -356,9 +352,9 @@ admincommands = {
         helpers.saveData("banlist");
         sys.sendHtmlAll(helpers.bot(bots.ban) + banner + " has changed the ban reason of " + command[1] + " to '" + reason + "'!", channel);
     }
-    
+
     ,
-    
+
     banmsg: function (src, channel, command) {
         var message = command[1], lower = sys.name(src).toLowerCase(), msg;
         if (!message) {
@@ -370,9 +366,9 @@ admincommands = {
         helpers.saveData("banmessages");
         sys.sendHtmlMessage(src, helpers.bot(bots.ban) + "Your ban message has been changed successfully.", channel);
     }
-    
+
     ,
-    
+
     /**
         ------------
         Tour Options
@@ -389,9 +385,9 @@ admincommands = {
         + border2;
         sys.sendHtmlMessage(src, commandsmessage, channel);
     }
-    
+
     ,
-    
+
     tour: function (src, channel, command) {
         if (tour[0].tourmode !== 0) {
             helpers.starfox(src, channel, command, bots.tour, "Error 400, you can't start a tour because there is already a tour running!");
@@ -400,16 +396,16 @@ admincommands = {
         var tiers = sys.getTierList();
         for (var tiersindex in tiers) {
             if (command[1].toLowerCase() == tiers[tiersindex].toLowerCase()) {
-                var temptourtier = tiers[tiersindex];  
+                var temptourtier = tiers[tiersindex];
             }
         }
         tour[0].tourtier = temptourtier;
         if (tour[0].tourtier === undefined) {
-            helpers.starfox(src, channel, command, bots.tour, "Error 400, the specified tier " + command[1] + " does not exist!");  
+            helpers.starfox(src, channel, command, bots.tour, "Error 400, the specified tier " + command[1] + " does not exist!");
             return;
         }
         tour[0].tournumber = command[2];
-        if (tour[0].tournumber <= 2) {                        
+        if (tour[0].tournumber <= 2) {
             helpers.starfox(src, channel, command, bots.tour, "Error 403, you must specify a tour size of 3 or more!");
             return;
         }
@@ -424,9 +420,9 @@ admincommands = {
         tour[0].tourclauses = sys.getClauses(tour[0].tourtier);
         helpers.tourdisplay(0, 0);
     }
-    
+
     ,
-    
+
     toursize: function (src, channel, command) {
         if (tour[0].tourmode !== 0) {
             helpers.starfox(src, channel, command, bots.tour, "Error 400, you can't edit the tour size because there is already a tour running!", channel);
@@ -439,7 +435,7 @@ admincommands = {
         tour[0].tournumber = command[1];
         sys.sendHtmlMain(border + "<br>" + helpers.bot(bots.tour) + sys.name(src) + " has changed the number of tournament players to " + command[1] + "!<br>" + border2);
     }
-    
+
     ,
 
     endtour: function (src, channel, command) {
@@ -447,10 +443,10 @@ admincommands = {
             helpers.starfox(src, channel, command, bots.tour, "Error 400, you can't end the tour because there is none running!");
             return;
         }
-        tour[0].tourmode = 0;                        
+        tour[0].tourmode = 0;
         sys.sendHtmlMain(border + "<br>" + helpers.bot(bots.tour) + "The " + tour[0].tourtier + " tournament has been cancelled by " + sys.name(src) + ".<br>" + border2);
     }
-    
+
     ,
 
     /**
@@ -476,9 +472,9 @@ admincommands = {
         + border2;
         sys.sendHtmlMessage(src, commandsmessage, channel);
     }
-    
+
     ,
-    
+
     bot: function (src, channel, command) {
         var name = sys.name(src), isbot = false, bot;
         if (!command[1]) {
@@ -500,9 +496,9 @@ admincommands = {
         helpers.saveData("bots");
         sys.sendHtmlAll(helpers.bot(bots.main) + "<b>" + helpers.user(name) + " changed the " + bot + " bot's name to " + helpers.arg(command[2]) + "!</b>", channel);
     }
-    
+
     ,
-    
+
     botcolor: function (src, channel, command) {
         var name = sys.name(src);
         if (!command[1]) {
@@ -513,15 +509,15 @@ admincommands = {
         helpers.saveData("botcolor");
         sys.sendHtmlAll(helpers.bot(bots.main) + "<b>" + helpers.user(name) + " changed the bot " + command[0].slice(3) + " to " + command[1] + "!</b>", channel);
     }
-    
+
     ,
-    
+
     botcolour: function (src, channel, command) {
         this.botcolor(src, channel, command);
     }
-    
+
     ,
-    
+
     symbol: function (src, channel, command) {
         var name = sys.name(src);
         if (!command[1]) {
@@ -536,9 +532,9 @@ admincommands = {
         helpers.saveData("botsymbol");
         sys.sendHtmlAll(helpers.bot(bots.main) + "<b>" + helpers.user(name) + " changed the bot symbol to " + helpers.escapehtml(command[1]) + "!</b>", channel);
     }
-    
+
     ,
-    
+
     symbolcolor: function (src, channel, command) {
         var name = sys.name(src);
         if (!command[1]) {
@@ -549,15 +545,15 @@ admincommands = {
         helpers.saveData("botsymbolcolor");
         sys.sendHtmlAll(helpers.bot(bots.main) + "<b>" + helpers.user(name) + " changed the bot symbol " + command[0].slice(6) + " to " + helpers.escapehtml(command[1]) + "!</b>", channel);
     }
-    
+
     ,
-    
+
     symbolcolour: function (src, channel, command) {
         this.symbolcolor(src, channel, command);
     }
-    
+
     ,
-    
+
     /**
         ----------------
         Database Options
@@ -574,9 +570,9 @@ admincommands = {
         + border2;
         sys.sendHtmlMessage(src, commandsmessage, channel);
     }
-    
+
     ,
-    
+
     dbinfo: function (src, channel, command) {
         var db = sys.dbAll(), infomessage = border + "<h2>Database Info</h2><br>", ipArray = [], rangeArray = [], registeredUsers = 0, users, ip, range, registered;
         users = db.length;
@@ -598,9 +594,9 @@ admincommands = {
         + "<br><timestamp/><br>" + border2;
         sys.sendHtmlMessage(src, infomessage, channel);
     }
-    
+
     ,
-    
+
     dbsearch: function (src, channel, command) {
         var list = "", term = command[1], resultsmessage = border + "<h2>Database Search</h2><br>Your database search request '" + term + "' returned the following results:<br><br>", total = 0, db;
         if (!term) {
@@ -621,15 +617,15 @@ admincommands = {
         resultsmessage += "<br><b>Total Results:</b> " + total + "<br><br><timestamp/><br>" + border2;
         sys.sendHtmlMessage(src, resultsmessage, channel);
     }
-    
+
     ,
-    
+
     search: function (src, channel, command) {
         this.dbsearch(src, channel, command);
     }
-    
+
     ,
-    
+
     dbdelete: function (src, channel, command) {
         var auth = sys.auth(src), player, aliases;
         if (!command[1]) {

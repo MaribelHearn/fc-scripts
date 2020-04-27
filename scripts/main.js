@@ -469,7 +469,6 @@
             if (banlist[index].time !== "-") {
                 banlist[index].time--;
                 if (banlist[index].time === 0) {
-                    sys.unban(index);
                     delete banlist[index];
                     members[index] ? name = members[index] : name = index;
                     sys.sendHtmlMain(helpers.bot(bots.ban) + name + "'s ban has expired!");
