@@ -606,22 +606,9 @@
             color = helpers.color(src),
             auth = sys.auth(src);
         /**
-            -----------
-            Proxy Check
-            -----------
-        **/
-        for (var i in proxylist) {
-            if (ip == proxylist[i].split(':')[0]) {
-                sys.stopEvent();
-                sys.sendMessage(src, "You are banned!");
-                sys.sendHtmlAuth(helpers.bot(bots.spy) + "[Server] <b><font color='" + color + "'>" + name + "</font></b> tried to enter the server using a proxy.");
-                return;
-            }
-        }
-        /**
-            ----------------------------------------------
-            Allowed IPs and ranges bypass bans and closure
-            ----------------------------------------------
+            ----------------------------------------
+            Allowed IPs and ranges bypass all checks
+            ----------------------------------------
         **/
         if (!helpers.isInArray(ip, allowed) && !helpers.isInArray(range, allowedrange)) {
             /**
@@ -661,32 +648,32 @@
                 sys.sendHtmlAuth(helpers.bot(bots.spy) + "[Server] <b><font color='" + color + "'>" + name + "</font></b> tried to enter the server during closure.");
                 return;
             }
-        }
-        /**
-            ------------------
-            Banned Words Check
-            ------------------
-        **/
-        name = name.toLowerCase();
-        for (var index in nameblocklist) {
-            if (name.indexOf(nameblocklist[index]) != -1 && !helpers.isInArray(name, exceptions) && auth < 3) {
+            /**
+                ------------------
+                Banned Words Check
+                ------------------
+            **/
+            name = name.toLowerCase();
+            for (var index in nameblocklist) {
+                if (name.indexOf(nameblocklist[index]) != -1 && !helpers.isInArray(name, exceptions) && auth < 3) {
+                    sys.stopEvent();
+                    sys.sendMessage(src, helpers.bot(bots.welcome) + "Your name contains a banned word: " + nameblocklist[index] + ". Please change your name and try entering again.");
+                    sys.sendHtmlAuth(helpers.bot(bots.spy) + "[Server] <b><font color='" + color + "'>" + name + "</font></b> tried to enter the server with a banned word in their username.");
+                    return;
+                }
+            }
+            /**
+                -----------------------
+                Banned Characters Check
+                -----------------------
+            **/
+            if (helpers.bannedchars(name)[0] && auth < 3) {
                 sys.stopEvent();
-                sys.sendMessage(src, helpers.bot(bots.welcome) + "Your name contains a banned word: " + nameblocklist[index] + ". Please change your name and try entering again.");
-                sys.sendHtmlAuth(helpers.bot(bots.spy) + "[Server] <b><font color='" + color + "'>" + name + "</font></b> tried to enter the server with a banned word in their username.");
+                sys.sendMessage(src, helpers.bot(bots.welcome) + "Your name contains " + helpers.bannedchars(name)[1] + ". Please change your name and try entering again.");
+                sys.sendHtmlAuth(helpers.bot(bots.spy) + "[Server] <b><font color='" + color + "'>" + name +
+                "</font></b> tried to enter the server with " + helpers.bannedchars(name)[1] + " in their username.");
                 return;
             }
-        }
-        /**
-            -----------------------
-            Banned Characters Check
-            -----------------------
-        **/
-        if (helpers.bannedchars(name)[0] && auth < 3) {
-            sys.stopEvent();
-            sys.sendMessage(src, helpers.bot(bots.welcome) + "Your name contains " + helpers.bannedchars(name)[1] + ". Please change your name and try entering again.");
-            sys.sendHtmlAuth(helpers.bot(bots.spy) + "[Server] <b><font color='" + color + "'>" + name +
-            "</font></b> tried to enter the server with " + helpers.bannedchars(name)[1] + " in their username.");
-            return;
         }
     }
 
