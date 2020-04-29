@@ -574,6 +574,7 @@
     ,
 
     beforeIPConnected: function (ip) {
+        var range = ip.split('.')[0] + '.' + ip.split('.')[1];
         /**
             ---------------------
             Server Starting Check
@@ -582,26 +583,6 @@
         if (serverStarting) {
             sys.stopEvent();
             return;
-        }
-        /**
-            ------------
-            IP Ban Check
-            ------------
-        **/
-        var range = ip.split('.')[0] + '.' + ip.split('.')[1];
-        for (var i in banlist) {
-            if (i == ip) {
-                sys.stopEvent();
-                sys.sendHtmlAuth(helpers.bot(bots.spy) + "[Server] Banned IP " + ip + " tried to connect to the server.");
-                return;
-            }
-        }
-        for (var i in rangebanlist) {
-            if (i == range) {
-                sys.stopEvent();
-                sys.sendHtmlAuth(helpers.bot(bots.spy) + "[Server] Banned range " + range + " tried to connect to the server.");
-                return;
-            }
         }
         /**
             -------------
@@ -656,11 +637,11 @@
                     return;
                 }
             }
-            /**
-                ---------------
-                Range Ban Check
-                ---------------
-            **/
+                /**
+                    ---------------
+                    Range Ban Check
+                    ---------------
+                **/
             for (var i in rangebanlist) {
                 if (rangebanlist[i].range == range) {
                     sys.stopEvent();
