@@ -624,11 +624,11 @@
                     return;
                 }
             }
-                /**
-                    ---------------
-                    Range Ban Check
-                    ---------------
-                **/
+            /**
+                ---------------
+                Range Ban Check
+                ---------------
+            **/
             for (var i in rangebanlist) {
                 if (rangebanlist[i].range == range) {
                     sys.stopEvent();
