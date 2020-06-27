@@ -801,19 +801,12 @@
         version = versions[lower];
         sys.sendHtmlAuth(helpers.bot(bots.spy) + "[Server] <b><font color='" + color + "'>" + name + "</font></b> is using " + os + (version === "" ? "" : ", " + version) + ".");
         /**
-            -----------------------------
-            Fake Guest / Evasion Warnings
-            -----------------------------
+            ------------------
+            Fake Guest Warning
+            ------------------
         **/
         if (helpers.isGuest(name) && sys.os(src) != "android" && sys.os(src) != "webclient") {
             sys.sendHtmlAuths(helpers.bot(bots.welcome) + "This person is using a guest name, but isn't actually on " + helpers.os("android") + " or " + helpers.os("webclient") + ". Keep an eye on them!");
-        }
-        for (var index in banlist) {
-            if (sys.dbIp(index)) {
-                if (range == sys.dbRange(index) && !helpers.isauthip(ip) && !helpers.isInArray(ip, allowed) && !helpers.isInArray(range, allowedrange)) {
-                    sys.sendHtmlAuths(helpers.bot(bots.welcome) + "This person might be ban evading, as an IP on the banlist is in their range (" + range + "). Keep an eye on them!");
-                }
-            }
         }
         /**
             ---------------------
