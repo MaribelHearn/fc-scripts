@@ -659,7 +659,6 @@ modcommands = {
         timezone[player] ? timezone2 = timezone[player] : timezone2 = "[no data]";
         sys.dbRegistered(player) ? registered = "<b><font color='green'>Yes</font></b>" : registered = "<font color='red'>No</font>";
         alts = alts.join(", ");
-        iplist[player] ? usedips = iplist[player].join(", ") : usedips = "Unknown";
         if (members[player]) {
             player = members[player];
         }
@@ -679,7 +678,6 @@ modcommands = {
         "<br><b>Last Online:</b> " + lastLogin +
         "<br><b>Alts:</b> " + alts +
         "<br><b>Number of Alts:</b> " + totalAlts +
-        "<br><b>Used IPs:</b> " + usedips +
         "<br><b>Channels:</b> " + playerChannels +
         "<br><br><timestamp/><br>" + border2;
         sys.sendHtmlMessage(src, cpmessage, channel);
