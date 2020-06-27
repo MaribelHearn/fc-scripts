@@ -78,7 +78,6 @@ helpers = {
         '"Taking the rules too literally is no use when you know you are supposed to be punished anyway. Do not try to find loopholes in the rules, it will result in even more punishment."]}');
         sys.write(DATA_FOLDER + "listcolors.txt", '{"mute":"#1E90FF","ban":"#FF6900","rangeban":"#008000","megaban":"#800080","gigaban":"#AA0000"}');
         sys.write(DATA_FOLDER + "regchannels.txt", "{}");
-        sys.write(DATA_FOLDER + "iplist.txt", "{}");
         sys.write(DATA_FOLDER + "banlist.txt", "{}");
         sys.write(DATA_FOLDER + "mutelist.txt", "{}");
         sys.write(DATA_FOLDER + "bigtexts.txt", "{}");

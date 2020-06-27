@@ -194,7 +194,6 @@
     bansites = helpers.readData("bansites").replace(/\r/g, "").split('\n');
     bots = helpers.readObject("bots");
     rules = helpers.readObject("rules");
-    iplist = helpers.readObject("iplist");
     banlist = helpers.readObject("banlist");
     mutelist = helpers.readObject("mutelist");
     bigtexts = helpers.readObject("bigtexts");
@@ -751,20 +750,6 @@
         }
         members[name.toLowerCase()] = name;
         helpers.saveData("members");
-        if (!iplist[lower]) {
-            iplist[lower] = [];
-            iplist[lower].push(ip);
-        } else {
-            for (var index in iplist[lower]) {
-                if (iplist[lower][index] == ip) {
-                    ipexists++;
-                }
-            }
-            if (ipexists === 0) {
-                iplist[lower].push(ip);
-            }
-        }
-        helpers.saveData("iplist");
         /**
             -----------
             Max Players
