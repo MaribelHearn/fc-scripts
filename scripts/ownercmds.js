@@ -837,6 +837,7 @@ ownercommands = {
         + "<br>";
         commandsmessage += "<br>"
         + "<b>" + helpers.user("/ls ") + helpers.arg("directory") + "</b>: shows the contents of <b>directory</b>. Shows the current working directory by default. Also /dir.<br>"
+        + "<b>" + helpers.user("/cat ") + helpers.arg("file") + "</b>: shows the contents of <b>file</b>. Also /type.<br>"
         + "<b>" + helpers.user("/rm ") + helpers.arg("file") + "</b>: deletes <b>file</b> from the file system.<br>"
         + "<b>" + helpers.user("/mkdir ") + helpers.arg("directory") + "</b>: creates a new directory called <b>directory</b>. Also /md.<br>"
         + "<b>" + helpers.user("/rmdir ") + helpers.arg("directory") + "</b>: deletes <b>directory</b> if it is empty. Also /rd.<br>"
@@ -887,6 +888,31 @@ ownercommands = {
 
     dir: function (src, channel, command) {
         this.ls(src, channel, command);
+    }
+
+    ,
+
+    cat: function (src, channel, command) {
+        var file = command[1], message;
+        if (!file) {
+            helpers.starfox(src, channel, command, bots.script, "Error 404, file not found.");
+            return;
+        }
+        if (!sys.fexists(file)) {
+            helpers.starfox(src, channel, command, bots.script, "Error 404, that file does not exist.");
+            return;
+        }
+        message = border +
+        "<h2>Contents of " + dir +
+        "</h2><br>" + sys.getFileContent(file) +
+        "<br><timestamp/><br>" + border2;
+        sys.sendHtmlMessage(src, message, channel);
+    }
+
+    ,
+
+    type: function (src, channel, command) {
+        this.cat(src, channel, command);
     }
 
     ,
