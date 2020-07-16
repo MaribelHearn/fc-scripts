@@ -741,15 +741,16 @@ usercommands = {
             return;
         }
         moveNum = sys.moveNum(move);
-        move = sys.move(moveNum);
-        type = sys.moveType(moveNum);
-        power = helpers.movePower(moveNum);
-        category = helpers.moveCategory(moveNum);
-        accuracy = helpers.moveAccuracy(moveNum);
-        pp = helpers.movePP(moveNum);
-        effect = helpers.moveEffect(moveNum);
-        contact = helpers.moveContact(moveNum);
-        range = helpers.moveRange(moveNum);
+        gen = (moveNum > 999 ? 5 : 7);
+        move = sys.move(moveNum, gen);
+        type = sys.moveType(moveNum, gen);
+        power = helpers.movePower(moveNum, gen);
+        category = helpers.moveCategory(moveNum, gen);
+        accuracy = helpers.moveAccuracy(moveNum, gen);
+        pp = helpers.movePP(moveNum, gen);
+        effect = helpers.moveEffect(moveNum, gen);
+        contact = helpers.moveContact(moveNum, gen);
+        range = helpers.moveRange(moveNum, gen);
         movemessage = border + "<h2>#" + moveNum + " " + move + "</h2>"
         + "<br><b>Type:</b> " + helpers.typeImage(src, type)
         + "<br><b>Power:</b> " + power
