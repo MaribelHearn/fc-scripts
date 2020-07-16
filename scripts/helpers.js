@@ -2295,9 +2295,12 @@ helpers = {
 
     ,
 
-    movePower: function (moveId) {
+    movePower: function (moveId, gen) {
+        if (!gen) {
+            gen = 7;
+        }
         if (Object.keys(powerList).length === 0) {
-            var data = sys.read("db/moves/6G/power.txt").split('\n');
+            var data = sys.read("db/moves/" + gen + "G/power.txt").split('\n');
             for (var i = 0; i < data.length; i++) {
                 var index = data[i].indexOf(' ');
                 var key = data[i].substr(0, index);
@@ -2313,9 +2316,12 @@ helpers = {
 
     ,
 
-    moveCategory: function (moveId) {
+    moveCategory: function (moveId, gen) {
+        if (!gen) {
+            gen = 7;
+        }
         if (Object.keys(categoryList).length === 0) {
-            var data = sys.read("db/moves/6G/damage_class.txt").split('\n');
+            var data = sys.read("db/moves/" + gen + "G/damage_class.txt").split('\n');
             for (var i = 0; i < data.length; i++) {
                 var index = data[i].indexOf(' ');
                 var key = data[i].substr(0, index);
@@ -2334,9 +2340,12 @@ helpers = {
 
     ,
 
-    moveAccuracy: function (moveId) {
+    moveAccuracy: function (moveId, gen) {
+        if (!gen) {
+            gen = 7;
+        }
         if (Object.keys(accList).length === 0) {
-            var data = sys.read("db/moves/6G/accuracy.txt").split('\n');
+            var data = sys.read("db/moves/" + gen + "G/accuracy.txt").split('\n');
             for (var i = 0; i < data.length; i++) {
                 var index = data[i].indexOf(' ');
                 var key = data[i].substr(0, index);
@@ -2352,9 +2361,12 @@ helpers = {
 
     ,
 
-    movePP: function (moveId) {
+    movePP: function (moveId, gen) {
+        if (!gen) {
+            gen = 7;
+        }
         if (Object.keys(ppList).length === 0) {
-            var data = sys.read("db/moves/6G/pp.txt").split('\n');
+            var data = sys.read("db/moves/" + gen + "G/pp.txt").split('\n');
             for (var i = 0; i < data.length; i++) {
                 var index = data[i].indexOf(' ');
                 var key = data[i].substr(0, index);
@@ -2367,9 +2379,12 @@ helpers = {
 
     ,
 
-    moveEffect: function (moveId) {
+    moveEffect: function (moveId, gen) {
+        if (!gen) {
+            gen = 7;
+        }
         if (Object.keys(moveEffList).length === 0) {
-            var data = sys.read("db/moves/6G/effect.txt").split('\n');
+            var data = sys.read("db/moves/" + gen + "G/effect.txt").split('\n');
             for (var i = 0; i < data.length; i++) {
                 var index = data[i].indexOf(" ");
                 var key = data[i].substr(0, index);
@@ -2385,9 +2400,12 @@ helpers = {
 
     ,
 
-    moveContact: function (moveId) {
+    moveContact: function (moveId, gen) {
+        if (!gen) {
+            gen = 7;
+        }
         if (Object.keys(moveFlagList).length === 0) {
-            var data = sys.read("db/moves/6G/flags.txt").split('\n');
+            var data = sys.read("db/moves/" + gen + "G/flags.txt").split('\n');
             for (var i = 0; i < data.length; i++) {
                 var index = data[i].indexOf(' ');
                 var key = data[i].substr(0, index);
@@ -2400,9 +2418,12 @@ helpers = {
 
     ,
 
-    movePriority: function (moveId) {
+    movePriority: function (moveId, gen) {
+        if (!gen) {
+            gen = 7;
+        }
         if (Object.keys(movePriorityList).length === 0) {
-            var data = sys.read("db/moves/6G/priority.txt").split('\n');
+            var data = sys.read("db/moves/" + gen + "G/priority.txt").split('\n');
             for (var i = 0; i < data.length; i++) {
                 var index = data[i].indexOf(' ');
                 var key = data[i].substr(0, index);
@@ -2418,9 +2439,12 @@ helpers = {
 
     ,
 
-    moveRange: function (moveId) {
+    moveRange: function (moveId, gen) {
+        if (!gen) {
+            gen = 7;
+        }
         if (Object.keys(moveRangeList).length === 0) {
-            var data = sys.read("db/moves/6G/range.txt").split('\n');
+            var data = sys.read("db/moves/" + gen + "G/range.txt").split('\n');
             for (var i = 0; i < data.length; i++) {
                 var index = data[i].indexOf(' ');
                 var key = data[i].substr(0, index);
