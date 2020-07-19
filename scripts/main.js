@@ -982,7 +982,7 @@
             if (layout == "new") {
                 sys.sendHtmlMain(helpers.bot(bots.welcome) + leaveMessage.replace(/~Player~/, authtitle + name).replace(/~Server~/, servername));
             } else {
-                sys.sendHtmlMain("<timestamp/><b>~" + helpers.rainbow(name) + " has left " + servername + "~</b>");
+                sys.sendHtmlMain("<timestamp/><b>~" + leaveMessage.replace(/~Player~/, name).replace(/~Server~/, servername) + "~</b>");
             }
         }
         /**
