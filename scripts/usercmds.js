@@ -742,7 +742,7 @@ usercommands = {
         }
         moveNum = sys.moveNum(move);
         gen = (moveNum > 999 ? 5 : 7);
-        move = sys.move(moveNum, gen);
+        move = sys.move(moveNum);
         type = sys.moveType(moveNum, gen);
         power = helpers.movePower(moveNum, gen);
         category = helpers.moveCategory(moveNum, gen);
