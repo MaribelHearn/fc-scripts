@@ -3,7 +3,7 @@
     ----------------------------------------------
     FUN COMMUNITY FUN COMMANDS funcmds.js
      - by Maribel Hearn, 2012-2015
-    
+
     This file contains the notorious
     fun commands. Can be run by any user.
     ----------------------------------------------
@@ -58,44 +58,41 @@ funcommands = {
         + border2;
         sys.sendHtmlMessage(src, commandsmessage, channel);
     }
-    
+
     ,
-    
+
     armyof: function (src, channel, command) {
-        var name = sys.name(src), sprites;
+        var name = sys.name(src), pokeNum, sprites;
         if (!command[1]) {
             helpers.starfox(src, channel, command, bots.command, "Error 404, Pokémon not found.");
             return;
         }
-        if (!sys.pokeNum(command[1]) && command[1] != "tentaquil") {
-            helpers.starfox(src, channel, command, bots.command, "Error 403, invalid Pokémon name.");
-            return;
-        }
-        sprites = "<img src='pokemon:" + sys.pokeNum(command[1]) + "'>";
+        pokeNum = (!sys.pokeNum(command[1]) && command[1] != "tentaquil" ? sys.rand(0, MAX_POKEMON) : sys.pokeNum(command[1]));
+        sprites = "<img src='pokemon:" + pokeNum + "'>";
         sprites += sprites + sprites + sprites + sprites + sprites;
         sys.sendHtmlAll(helpers.bot(bots.armyof) + "<b>" + helpers.user(helpers.escapehtml(name)) +
         " has used the " + helpers.arg("A Army Of " + sys.pokemon(sys.pokeNum(command[1]))) + " command.</b><br>" + sprites, channel);
     }
-    
+
     ,
-    
+
     attack: function (src, channel, command) {
         var name = sys.name(src), random = sys.rand(0, sys.numPlayers()), player, move;
         !command[1] ? player = sys.name(sys.playerIds()[random]) : player = helpers.escapehtml(command[1]);
         !command[2] ? move = move = sys.move(sys.rand(1, 610)) : move = helpers.escapehtml(command[2]);
         sys.sendHtmlAll(helpers.bot(bots.attack) + "<b>" + helpers.user(helpers.escapehtml(name)) + " used " + helpers.arg2(move) + " on " + helpers.arg(player) + "!</b>", channel);
     }
-    
+
     ,
-    
+
     attract: function (src, channel, command) {
         var name = helpers.escapehtml(sys.name(src));
         !command[1] ? player = "Someone" : player = helpers.escapehtml(command[1]);
         sys.sendHtmlAll("<font color='#FF00FF'><timestamp/><b><font size='6'>♥</font> " + player + " has been attracted by " + name + "! <font size='6'>♥</font</b></font>", channel);
     }
-    
+
     ,
-    
+
     axolotl: function (src, channel, command) {
         var name = helpers.escapehtml(sys.name(src)), auth = sys.auth(src), color = helpers.color(src);
         if (auth >= 1 && auth <= 3) {
@@ -104,9 +101,9 @@ funcommands = {
             sys.sendHtmlAll("<font color='" + color + "'><timestamp/> <b>" + name + ":</b></font> " + AXOLOTL_BASE64, channel);
         }
     }
-    
+
     ,
-    
+
     bigtext: function (src, channel, command) {
         var name = sys.name(src), text, title, bot, color, size;
         !command[1] ? text = "Some text." : text = helpers.escapehtml(command[1]);
@@ -129,17 +126,17 @@ funcommands = {
         sys.sendHtmlAll(helpers.bot(bot) + "<b>" + helpers.user(helpers.escapehtml(name)) +
         " has used the " + helpers.arg(title) + " command.</b><br><span style='font-size:" + size + "px'><font color='" + color + "'>" + text + "</font></span>", channel);
     }
-    
+
     ,
-    
+
     bulbaderp: function (src, channel, command) {
         var name = sys.name(src);
         sys.sendHtmlAll(helpers.bot(bots.fun) + "<b>" + helpers.user(helpers.escapehtml(name)) +
         " has used the " + helpers.arg("Bulbaderp") + " command.</b><br><img src='pokemon:1'><b>" + helpers.desu("Bulbaderp!") + "</b>", channel);
     }
-    
+
     ,
-    
+
     burn: function (src, channel, command) {
         var name = helpers.escapehtml(sys.name(src)), channelPlayers = sys.playersOfChannel(channel);
         !command[1] ? player = "Someone" : player = helpers.escapehtml(command[1]);
@@ -153,63 +150,63 @@ funcommands = {
             }
         }
     }
-    
+
     ,
-    
+
     confuse: function (src, channel, command) {
         var name = helpers.escapehtml(sys.name(src));
         !command[1] ? player = "Someone" : player = helpers.escapehtml(command[1]);
         sys.sendHtmlAll("<font color='#8A2BE2'><timestamp/><b><font size='6'>@</font> " + player + " has been confused by " + name + "! <font size='6'>@</font</b></font>", channel);
     }
-    
+
     ,
-    
+
     cow: function (src, channel, command) {
         sys.sendAll(botsymbol + "Miltank: You can call it a 'cow' if you want, the question remains.", channel);
     }
-    
+
     ,
-    
+
     darp: function (src, channel, command) {
         var name = sys.name(src);
         sys.sendHtmlAll(helpers.bot(bots.fun) + "<b>" + helpers.user(helpers.escapehtml(name)) +
         " has used the " + helpers.arg("Darp") + " command.</b><br><img src='pokemon:129'><b>" + helpers.desu("Harpadarp!") + "</b>", channel);
     }
-    
+
     ,
-    
+
     dennis: function (src, channel, command) {
         var name = sys.name(src), number = (sys.rand(0, 2) == 1 ? 269 : 250);
         sys.sendHtmlAll(helpers.bot(bots.fun) + "<b>" + helpers.user(helpers.escapehtml(name)) +
         " has used the " + helpers.arg("Dennis") + " command.</b><br><b>DDDDDDDEEEEEEENNNNNNNNNNNNNNIIIIIIISSSSSSS!!!</b><img src='trainer:" + number + "'>", channel);
     }
-    
+
     ,
-    
+
     derp: function (src, channel, command) {
         var name = sys.name(src);
         sys.sendHtmlAll(helpers.bot(bots.fun) + "<b>" + helpers.user(helpers.escapehtml(name)) +
         " has used the " + helpers.arg("Derp") + " command.</b><br><img src='pokemon:618'><b>" + helpers.desu("Herpaderp!") + "</b>", channel);
     }
-    
+
     ,
-    
+
     durp: function (src, channel, command) {
         var name = sys.name(src);
         sys.sendHtmlAll(helpers.bot(bots.fun) + "<b>" + helpers.user(helpers.escapehtml(name)) +
         " has used the " + helpers.arg("Durp") + " command.</b><br><img src='pokemon:349'><b>" + helpers.desu("Hurpadurp!") + "</b>", channel);
     }
-    
+
     ,
-    
+
     epicfail: function (src, channel, command) {
         var name = helpers.escapehtml(sys.name(src)), player, move;
         !command[1] ? player = "Someone" : player = helpers.escapehtml(command[1]);
         sys.sendHtmlAll(helpers.bot(bots.fun) + "<b>Epic Fail! " + helpers.arg(player) + " epically failed. <small>- " + helpers.user(name) + "</small></b>", channel);
     }
-    
+
     ,
-    
+
     face: function (src, channel, command) {
         var name = helpers.escapehtml(sys.name(src)), auth = sys.auth(src), color = helpers.color(src), message, text;
         !command[1] ? text = "palm" : text = helpers.escapehtml(command[1]);
@@ -220,17 +217,17 @@ funcommands = {
         }
         sys.sendHtmlAll(message + "<i><font color='" + cmdcolors[0] + "'>*face" + text + "*</font></i>", channel);
     }
-    
+
     ,
-    
+
     fail: function (src, channel, command) {
         var name = helpers.escapehtml(sys.name(src)), player, move;
         !command[1] ? player = "Someone" : player = helpers.escapehtml(command[1]);
         sys.sendHtmlAll(helpers.bot(bots.fun) + "<b>" + helpers.arg(player) + " failed. <small>- " + helpers.user(name) + "</small></b>", channel);
     }
-    
+
     ,
-    
+
     ferp: function (src, channel, command) {
         var name = sys.name(src), pokenum;
         pokenum = sys.rand(0, 2);
@@ -238,9 +235,9 @@ funcommands = {
         sys.sendHtmlAll(helpers.bot(bots.fun) + "<b>" + helpers.user(helpers.escapehtml(name)) +
         " has used the " + helpers.arg("Ferp") + " command.</b><br><img src='pokemon:" + pokenum + "'><b>" + helpers.desu("Ferpaderp!") + "</b>", channel);
     }
-    
+
     ,
-    
+
     freeze: function (src, channel, command) {
         var name = helpers.escapehtml(sys.name(src)), channelPlayers = sys.playersOfChannel(channel);
         !command[1] ? player = "Someone" : player = helpers.escapehtml(command[1]);
@@ -254,34 +251,34 @@ funcommands = {
             }
         }
     }
-    
+
     ,
-    
+
     herp: function (src, channel, command) {
         var name = sys.name(src);
         sys.sendHtmlAll(helpers.bot(bots.fun) + "<b>" + helpers.user(helpers.escapehtml(name)) +
         " has used the " + helpers.arg("Herp") + " command.</b><br><img src='pokemon:507'><b>" + helpers.desu("Derpaherp!") + "</b>", channel);
     }
-    
+
     ,
-    
+
     hug: function (src, channel, command) {
         var name = sys.name(src), color = helpers.color(src);
         command.splice(0, 1);
         command = command.join(DELIMITER);
         sys.sendHtmlAll("<font color='" + color + "'><timestamp/><b>*** " + name + " hugged " + helpers.escapehtml(command) + ". ♥***</b></font>", channel);
     }
-    
+
     ,
-    
+
     hurrdurr: function (src, channel, command) {
         var name = sys.name(src);
         sys.sendHtmlAll(helpers.bot(bots.fun) + "<b>" + helpers.user(helpers.escapehtml(name)) +
         " has used the " + helpers.arg("Hurr Durr") + " command.</b><br><span style='font-size:32px'>HURR DURR!</span><br><img src='pokemon:532'><img src='pokemon:534'><img src='pokemon:533'></b>", channel);
     }
-    
+
     ,
-    
+
     meme: function (src, channel, command) {
         var name = helpers.escapehtml(sys.name(src)), text1, text2, pokenum, title, color;
         !sys.pokeNum(command[1]) ? pokenum = 129 : pokenum = sys.pokeNum(command[1]);
@@ -294,17 +291,17 @@ funcommands = {
         sys.sendHtmlAll(helpers.bot(bots.fun) + "<b>" + helpers.user(name) + " has used the " + helpers.arg(title + " Meme") + " command.</b><br><center>" +
         "<font style='font-family:impact;font-size:24px;color:" + color + "'>" + text1 + "<br><img src='pokemon:" + pokenum + "'><br>" + text2 + "</font></center>", channel);
     }
-    
+
     ,
-    
+
     merp: function (src, channel, command) {
         var name = sys.name(src);
         sys.sendHtmlAll(helpers.bot(bots.fun) + "<b>" + helpers.user(helpers.escapehtml(name)) +
         " has used the " + helpers.arg("Merp") + " command.</b><br><img src='pokemon:206'><b>" + helpers.desu("Merpaderp!") + "</b>", channel);
     }
-    
+
     ,
-    
+
     morse: function (src, channel, command) {
         var name = sys.name(src), color = helpers.color(src), charset = "abcdefghijklmnopqrstuvwxyz0123456789 ", text, message;
         var morse = [".-", "-...", "-.-.", "-..", ".", "..-.", "--.", "....", "..", ".---", "-.-", ".-..", "--", "-.", "---", ".--.", "--.-", ".-.",
@@ -325,9 +322,9 @@ funcommands = {
         message = "<font color='" + color + "'><timestamp/>" + (sys.auth(src) >= 1 ? "+<b><i>" + name + " MORSE:</i></b></font> " : "<b>" + name + " MORSE:</b></font> ") + text;
         sys.sendHtmlAll(message, channel);
     }
-    
+
     ,
-    
+
     nuke: function (src, channel, command) {
         var name = sys.name(src), text, nukemessage;
         !command[1] ? player = "Someone" : player = command[1];
@@ -339,9 +336,9 @@ funcommands = {
             sys.sendHtmlAll(nukemessage + "<font size='6' color='#800080'>☢</font></b>", channel);
         }
     }
-    
+
     ,
-    
+
     paralyze: function (src, channel, command) {
         var name = helpers.escapehtml(sys.name(src)), channelPlayers = sys.playersOfChannel(channel);
         !command[1] ? player = "Someone" : player = helpers.escapehtml(command[1]);
@@ -355,9 +352,9 @@ funcommands = {
             }
         }
     }
-    
+
     ,
-    
+
     poison: function (src, channel, command) {
         var name = helpers.escapehtml(sys.name(src)), channelPlayers = sys.playersOfChannel(channel);
         !command[1] ? player = "Someone" : player = helpers.escapehtml(command[1]);
@@ -371,9 +368,9 @@ funcommands = {
             }
         }
     }
-    
+
     ,
-    
+
     random: function (src, channel, command) {
         var name = sys.name(src), auth = sys.auth(src), color = helpers.color(src);
         var wordamount = Math.ceil(Math.random() * 5), num = 0, number = 94, message, arg;
@@ -397,7 +394,7 @@ funcommands = {
         while (num < wordamount) {
             letters[num] = Math.floor(Math.random() * 10);
             num++;
-        }            
+        }
         if (command[1] == "letters") {
             list = "abcdefghijklmopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
             number = 53;
@@ -425,18 +422,18 @@ funcommands = {
         }
         sys.sendHtmlAll(message, channel);
     }
-    
+
     ,
-    
+
     randomsupport: function (src, channel, command) {
         var name = sys.name(src), playerids = sys.playerIds(), random = sys.rand(0, sys.numPlayers()), random2 = sys.rand(0, sys.numPlayers()), name1, name2;
         !players[playerids[random]] ? name1 = sys.name(playerids[random]) : name1 = players[playerids[random]].name;
         !players[playerids[random2]] ? name2 = sys.name(playerids[random2]) : name2 = players[playerids[random2]].name;
         sys.sendHtmlAll("<font color='" + helpers.color(src) + "'><timestamp/><b>*** " + name + " supports " + name1 + " x " + name2 + " *** (random)</b></font>", channel);
     }
-    
+
     ,
-    
+
     russia: function (src, channel, command) {
         var name = helpers.escapehtml(sys.name(src)), verb, russiaverb, noun, russianoun;
         !command[1] ? verb = "drive" : verb = helpers.escapehtml(command[1]);
@@ -455,9 +452,9 @@ funcommands = {
         }
         sys.sendHtmlAll(helpers.bot(bots.russia) + "<b>In America, you " + verb + " " + noun + ". In Soviet Russia, " + russianoun + " " + russiaverb + " YOU!! <small>- " + helpers.user(name) + "</small></b>", channel);
     }
-    
+
     ,
-    
+
     sleep: function (src, channel, command) {
         var name = helpers.escapehtml(sys.name(src)), channelPlayers = sys.playersOfChannel(channel);
         !command[1] ? player = "Someone" : player = helpers.escapehtml(command[1]);
@@ -471,9 +468,9 @@ funcommands = {
             }
         }
     }
-    
+
     ,
-    
+
     kill: function (src, channel, command) {
         var name = helpers.escapehtml(sys.name(src)), player, reason;
         !command[1] ? player = "someone" : player = helpers.escapehtml(command[1]);
@@ -484,60 +481,60 @@ funcommands = {
         !command[2] ? reason = "Unknown" : reason = helpers.escapehtml(command[2]);
         sys.sendHtmlAll(helpers.bot(bots.attack) + "<b>" + helpers.user(name) + " killed " + helpers.arg(player) + "! [Reason: " + helpers.arg2(reason) + "]</b>", channel);
     }
-    
+
     ,
-    
+
     wtfboom: function (src, channel, command) {
         var name = sys.name(src);
         sys.sendHtmlAll(helpers.bot(bots.fun) + "<b>" + helpers.user(helpers.escapehtml(name)) +
         " has used the " + helpers.arg("Wtfboom") + " command.</b><br><span style='font-size: 24px;'><font color='#808080'>WHAT THE FU-" +
         "BOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOM</font></span>", channel);
     }
-    
+
     ,
-    
+
     selfpunch: function (src, channel, command) {
         var name = sys.name(src);
         sys.sendHtmlAll(helpers.bot(bots.kick) + name + " has punched themselves from the server!", channel);
         sys.kick(src);
     }
-    
+
     ,
-    
+
     die: function (src, channel, command) {
         var name = sys.name(src);
         sys.sendHtmlAll(helpers.bot(bots.kick) + name + " died. rip", channel);
         sys.kick(src);
     }
-    
+
     ,
-    
+
     dividebyzero: function (src, channel, command) {
         var name = sys.name(src), number = sys.rand(0, 1338);
         sys.sendAll(name + ": " + number + " / 0 = ...", channel);
         sys.sendHtmlAll(helpers.bot(bots.kick) + name + " divided by zero! OH SHI-", channel);
         sys.kick(src);
     }
-    
+
     ,
-    
+
     explod: function (src, channel, command) {
         var name = sys.name(src);
         sys.sendHtmlAll("<span style='font-size:24px;color:grey'>WHAT THE FU-BOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO" +
         "OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOM</span><br><font color='grey'><timestamp/><b>" + name + " explod.</b></font>", channel);
         sys.kick(src);
     }
-    
+
     ,
-    
+
     flyaway: function (src, channel, command) {
         var name = sys.name(src);
         sys.sendHtmlAll(helpers.bot(bots.kick) + name + " flew away!", channel);
         sys.kick(src);
     }
-    
+
     ,
-    
+
     see: function (src, channel, command) {
         var name = sys.name(src), text;
         !command[1] ? text = "Dennis" : text = command[1];
