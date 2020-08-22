@@ -50,6 +50,7 @@
     SCRIPTS_FOLDER = "scripts/";
     PLUGINS_FOLDER = "plugins/";
     DATA_FOLDER = "data/";
+    MAX_POKEMON = 803; // Marshadow is 802
     /**
         ------------------------
         Load Modules and Plugins
