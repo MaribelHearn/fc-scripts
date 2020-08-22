@@ -904,7 +904,7 @@ ownercommands = {
         }
         message = border +
         "<h2>Contents of " + file +
-        "</h2><br>" + sys.getFileContent(file) +
+        "</h2><br>" + sys.getFileContent(file) + "<br>" +
         "<br><timestamp/><br>" + border2;
         sys.sendHtmlMessage(src, message, channel);
     }
