@@ -63,10 +63,6 @@ funcommands = {
 
     armyof: function (src, channel, command) {
         var name = sys.name(src), pokeNum, sprites;
-        if (!command[1]) {
-            helpers.starfox(src, channel, command, bots.command, "Error 404, Pokémon not found.");
-            return;
-        }
         pokeNum = (!sys.pokeNum(command[1]) && command[1] != "tentaquil" ? sys.rand(0, MAX_POKEMON) : sys.pokeNum(command[1]));
         sprites = "<img src='pokemon:" + pokeNum + "'>";
         sprites += sprites + sprites + sprites + sprites + sprites;
