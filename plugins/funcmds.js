@@ -67,7 +67,7 @@ funcommands = {
         sprites = "<img src='pokemon:" + pokeNum + "'>";
         sprites += sprites + sprites + sprites + sprites + sprites;
         sys.sendHtmlAll(helpers.bot(bots.armyof) + "<b>" + helpers.user(helpers.escapehtml(name)) +
-        " has used the " + helpers.arg("A Army Of " + sys.pokemon(pokeNum) + " command.</b><br>" + sprites, channel);
+        " has used the " + helpers.arg("A Army Of " + sys.pokemon(pokeNum)) + " command.</b><br>" + sprites, channel);
     }
 
     ,
