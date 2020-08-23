@@ -13,8 +13,8 @@ funcommands = {
         var commandsmessage = border
         + "<h2>Fun Commands</h2>"
         + "<br>"
-        + "<b>" + helpers.user("/armyof ") + helpers.arg("Pokémon") + "</b>: posts six of the same <b>Pokémon</b>.<br>"
-        + "<b>" + helpers.user("/attack ") + helpers.arg("player") + helpers.arg2("*move") + "</b>: use <b>move</b> on <b>player</b>. If <b>move</b> is not specified, a random move is selected.<br>"
+        + "<b>" + helpers.user("/armyof ") + helpers.arg("Pokémon") + "</b>: posts six of the same <b>Pokémon</b>. If <b>Pokémon</b> is not specified, a random one is selected.<br>"
+        + "<b>" + helpers.user("/attack ") + helpers.arg("player") + helpers.arg2("*move") + "</b>: use <b>move</b> on <b>player</b>. If <b>player</b> or <b>move</b> are not specified, random ones are selected.<br>"
         + "<b>" + helpers.user("/attract ") + helpers.arg("player") + "</b>: attracts <b>player</b>. This command no longer adds 'attracted' to the player's name.<br>"
         + "<b>" + helpers.user("/axolotl") + "</b>: a strange command that makes you post an image of an axolotl.<br>"
         + "<b>" + helpers.user("/bigtext ") + helpers.arg("text") + helpers.arg2("*title") + helpers.arg3("*bot") + helpers.arg4("*color") + helpers.arg5("*size") +
