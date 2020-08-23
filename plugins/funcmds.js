@@ -62,12 +62,18 @@ funcommands = {
     ,
 
     armyof: function (src, channel, command) {
-        var name = sys.name(src), pokeNum, sprites;
+        var shiny = [], sprites = "", chance = 64, name = sys.name(src), pokeNum;
         pokeNum = (!sys.pokeNum(command[1]) && command[1] != "tentaquil" ? sys.rand(0, MAX_POKEMON) : sys.pokeNum(command[1]));
-        sprites = "<img src='pokemon:" + pokeNum + "'>";
-        sprites += sprites + sprites + sprites + sprites + sprites;
+        for (i = 0; i < 6; i++) {
+            shiny.push(sys.rand(0, chance) == 0 ? "&shiny=true" : "");
+            sprites += "<img src='pokemon:" + pokeNum + shiny[i] + "'>";
+            if (shiny[i] == "&shiny=true") {
+                chance /= 2;
+            }
+        }
         sys.sendHtmlAll(helpers.bot(bots.armyof) + "<b>" + helpers.user(helpers.escapehtml(name)) +
-        " has used the " + helpers.arg("A Army Of " + sys.pokemon(pokeNum)) + " command.</b><br>" + sprites, channel);
+        " has used the " + helpers.arg("A Army Of " + (chance == 1 ? "<b><font color='#FFA500'>Shiny</font></b>" +
+        " " : "") + sys.pokemon(pokeNum)) + " command.</b><br>" + sprites, channel);
     }
 
     ,
