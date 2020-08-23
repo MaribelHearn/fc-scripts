@@ -1230,7 +1230,7 @@ usercommands = {
         ----------------
     **/
     color: function (src, channel, command) {
-        var color = command[1], name = sys.name(src), auth = sys.auth(src);
+        var color = command[1], name = sys.name(src), auth = sys.auth(src), hexColor;
         if (!color) {
             sys.sendHtmlMessage(src, helpers.bot(bots.main) + "Your " + command[0] + " is " + helpers.color(src) + ".", channel);
             return;
@@ -1244,10 +1244,13 @@ usercommands = {
         } else if (color == "random") {
             sys.changeColor(src, "#000000");
         } else {
+            if (!helpers.isHexColor(color)) {
+                hexColor = sys.hexColor(color);
+            }
             if (auth === 0 && color != "random") {
-                sys.changeColorStrict(src, sys.hexColor(color));
+                sys.changeColorStrict(src, hexColor);
             } else {
-                sys.changeColor(src, sys.hexColor(color));
+                sys.changeColor(src, hexColor);
             }
         }
         sys.sendHtmlAll(helpers.bot(bots.main) + "<b>" + helpers.user(name) + " changed their " + command[0] + " to " + helpers.arg(color) + "!</b>", channel);
