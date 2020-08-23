@@ -114,7 +114,7 @@ rrcommands = {
 
     stats: function (src, channel, command) {
         var lower = sys.name(src).toLowerCase(), deathrate, message;
-        if (!rr[lower]) {
+        if (!rr[lower] || rr[lower].shots === 0) {
             helpers.starfox(src, channel, command, bots.rr, "Error 400, you haven't played yet!");
             return;
         }
