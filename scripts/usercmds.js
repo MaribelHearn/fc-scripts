@@ -993,7 +993,7 @@ usercommands = {
         var commandsmessage = border
         + "<h2>User Commands ~ Interact Options</h2>"
         + "<br>"
-        + "<b>" + helpers.user("/color ") + helpers.arg("color") + "</b>: changes your color to <b>color</b>. <b>color</b> must be valid. Also /colour.<br>"
+        + "<b>" + helpers.user("/color ") + helpers.arg("color") + "</b>: changes your color to <b>color</b>. <b>color</b> must be a valid color, or 'random'. Also /colour.<br>"
         + "<b>" + helpers.user("/idle") + "</b>: changes your status to idle. Also /afk or /away.<br>"
         + "<b>" + helpers.user("/unidle") + "</b>: changes your status to available. Also /(go)back.<br>"
         + "<b>" + helpers.user("/unregister") + "</b>: clears your password.<br>"
@@ -1097,138 +1097,6 @@ usercommands = {
 
     ,
 
-    /**
-        ------------
-        Tour Options
-        ------------
-    **/
-    touroptions: function (src, channel, command) {
-        var commandsmessage = border
-        + "<h2>User Commands ~ Tour Options</h2>"
-        + "<br>"
-        + "<b>" + helpers.user("/join") + "</b>: join the current tour.<br>"
-        + "<b>" + helpers.user("/leave") + "</b>: leave the current tour.<br>"
-        + "<b>" + helpers.user("/viewtour") + "</b>: display the current tour.<br>"
-        + "<b>" + helpers.user("/viewround") + "</b>: view the current round.<br>"
-        + "<br><timestamp/><br>"
-        + border2;
-        sys.sendHtmlMessage(src, commandsmessage, channel);
-    }
-
-    ,
-
-    viewtour: function (src, channel, command) {
-        if (tour[channel].tourmode === 0) {
-            helpers.starfox(src, channel, command, bots.tour, "Error 400, there is no tour running!");
-            return;
-        }
-        if (tour[channel].tourmode == 1) {
-            receiver = src;
-            helpers.tourdisplay(1, channel);
-            return;
-        }
-        receiver = src;
-        helpers.tourdisplay(2, channel);
-    }
-
-    ,
-
-    viewround: function (src, channel, command) {
-        if (tour[channel].tourmode === 0) {
-            helpers.starfox(src, channel, command, bots.tour, "Error 400, there is no tour running!");
-            return;
-        }
-        if (tour[channel].tourmode == 1) {
-            var tourplayerlist = "", tourmembersindex;
-            for (tourmembersindex = 0; tourmembersindex < tour[channel].tourmembers.length; tourmembersindex++) {
-                tourplayerlist += "<b>" + (tourmembersindex+1) + ". " + members[tour[channel].tourmembers[tourmembersindex]] + "</b><br>";
-            }
-            var viewroundmessage = border
-            + "<h3> Players in the " + tour[channel].tourtier + " Tournament: </h3>"
-            + tourplayerlist
-            + "<br>"
-            + "<timestamp/><br>"
-            + border2;
-            sys.sendHtmlMessage(src, viewroundmessage, channel);
-            return;
-        }
-        receiver = src;
-        helpers.rounddisplay(0, channel);
-    }
-
-    ,
-
-    join: function (src, channel, command) {
-        var name = players[src].name, lower = players[src].name.toLowerCase(), index = 0, team = 6;
-        if (tour[channel].tourmode === 0) {
-            helpers.starfox(src, channel, command, bots.tour, "Error 400, there is no tour running!");
-            return;
-        }
-        if (tour[channel].tourmode == 2) {
-            sys.sendHtmlMessage(src, helpers.bot(bots.tour) + "The tour has already passed the sign-up phase!", channel);
-        }
-        if (sys.battling(src)) {
-            sys.sendHtmlMessage(src, helpers.bot(bots.tour) + "You are already battling!", channel);
-            return;
-        }
-        if (helpers.tourmembersnumber(lower, channel) !== undefined ) {
-            sys.sendHtmlMessage(src, helpers.bot(bots.tour) + "You are already in the tour in this channel!", channel);
-            return;
-        }
-        while (index < sys.teamCount(src)) {
-            if (sys.tier(src, index) == tour[channel].tourtier) {
-                team = index;
-                break;
-            }
-            index++;
-        }
-        if (team > 5) {
-            sys.sendHtmlMessage(src, helpers.bot(bots.tour) + "You aren't in the " + tour[channel].tourtier + " tier! Change one of your team's tiers to " + tour[channel].tourtier + " to join.", channel);
-            return;
-        }
-        if (helpers.tourcount(channel) > 0) {
-            tour[channel].tourmembers.push(lower);
-            var plurality = helpers.tourcount(channel) == 1 ? "spot" : "spots";
-            sys.sendHtmlMain(helpers.bot(bots.tour) + name + " has joined the tournament! " + helpers.tourcount(channel) + " more " + plurality + " left!");
-            if (helpers.tourcount(channel) === 0) {
-                helpers.tourstart(channel);
-            }
-        }
-    }
-
-    ,
-
-    leave: function (src, channel, command) {
-        if (tour[channel].tourmode === 0) {
-            sys.sendHtmlMessage(src, helpers.bot(bots.tour) + "Error 400, there is no tour running!");
-            return;
-        }
-        var leavebattler = players[src].name.toLowerCase();
-        if (tour[channel].tourmembers.indexOf(leavebattler) == -1) {
-            helpers.starfox(src, channel, command, bots.tour, "Error 400, you can't leave the tour when you haven't yet joined!");
-            return;
-        }
-        if (tour[channel].tourmode == 1) {
-            tour[channel].tourmembers.splice(tour[channel].tourmembers.indexOf(leavebattler),1);
-            sys.sendHtmlMain(helpers.bot(bots.tour) + members[leavebattler] + " has left the tournament! " + helpers.tourcount(channel) + " more spots left!");
-            return;
-        }
-        if (tour[channel].tourlosers.indexOf(leavebattler) != -1) {
-            helpers.starfox(src, channel, command, bots.tour, "Error 400, you've already left the tour!");
-            return;
-        }
-        var unleavebattler = helpers.opponentof(leavebattler, channel);
-        sys.sendHtmlMain(helpers.bot(bots.tour) + members[leavebattler] + " has left the tournament! " + helpers.tourcount(channel) + " more spots left!");
-        helpers.roundincrease(unleavebattler, leavebattler, channel);
-    }
-
-    ,
-
-    /**
-        ----------------
-        Interact Options
-        ----------------
-    **/
     color: function (src, channel, command) {
         var color = command[1], name = sys.name(src), auth = sys.auth(src), hexColor;
         if (!color) {
@@ -1244,11 +1112,7 @@ usercommands = {
         } else if (color == "random") {
             sys.changeColor(src, "#000000");
         } else {
-<<<<<<< HEAD
             hexColor = (helpers.isHexColor(color) ? color : sys.hexColor(color));
-=======
-            hexColor = (!helpers.isHexColor(color) ? sys.hexColor(color) : color);
->>>>>>> d4fd589b1e5944fcca1ff4e9179346eba4185df6
             if (auth === 0 && color != "random") {
                 sys.changeColorStrict(src, hexColor);
             } else {
@@ -1585,5 +1449,132 @@ usercommands = {
             return;
         }
         sys.sendHtmlMessage(src, helpers.bot(bots.main) + spoilers[spoiler].text + " [Spoiler from: " + spoilers[spoiler].origin + "] [Sent by: " + spoilers[spoiler].sender + "]", channel);
+    }
+
+    ,
+
+    /**
+        ------------
+        Tour Options
+        ------------
+    **/
+    touroptions: function (src, channel, command) {
+        var commandsmessage = border
+        + "<h2>User Commands ~ Tour Options</h2>"
+        + "<br>"
+        + "<b>" + helpers.user("/join") + "</b>: join the current tour.<br>"
+        + "<b>" + helpers.user("/leave") + "</b>: leave the current tour.<br>"
+        + "<b>" + helpers.user("/viewtour") + "</b>: display the current tour.<br>"
+        + "<b>" + helpers.user("/viewround") + "</b>: view the current round.<br>"
+        + "<br><timestamp/><br>"
+        + border2;
+        sys.sendHtmlMessage(src, commandsmessage, channel);
+    }
+
+    ,
+
+    viewtour: function (src, channel, command) {
+        if (tour[channel].tourmode === 0) {
+            helpers.starfox(src, channel, command, bots.tour, "Error 400, there is no tour running!");
+            return;
+        }
+        if (tour[channel].tourmode == 1) {
+            receiver = src;
+            helpers.tourdisplay(1, channel);
+            return;
+        }
+        receiver = src;
+        helpers.tourdisplay(2, channel);
+    }
+
+    ,
+
+    viewround: function (src, channel, command) {
+        if (tour[channel].tourmode === 0) {
+            helpers.starfox(src, channel, command, bots.tour, "Error 400, there is no tour running!");
+            return;
+        }
+        if (tour[channel].tourmode == 1) {
+            var tourplayerlist = "", tourmembersindex;
+            for (tourmembersindex = 0; tourmembersindex < tour[channel].tourmembers.length; tourmembersindex++) {
+                tourplayerlist += "<b>" + (tourmembersindex+1) + ". " + members[tour[channel].tourmembers[tourmembersindex]] + "</b><br>";
+            }
+            var viewroundmessage = border
+            + "<h3> Players in the " + tour[channel].tourtier + " Tournament: </h3>"
+            + tourplayerlist
+            + "<br>"
+            + "<timestamp/><br>"
+            + border2;
+            sys.sendHtmlMessage(src, viewroundmessage, channel);
+            return;
+        }
+        receiver = src;
+        helpers.rounddisplay(0, channel);
+    }
+
+    ,
+
+    join: function (src, channel, command) {
+        var name = players[src].name, lower = players[src].name.toLowerCase(), index = 0, team = 6;
+        if (tour[channel].tourmode === 0) {
+            helpers.starfox(src, channel, command, bots.tour, "Error 400, there is no tour running!");
+            return;
+        }
+        if (tour[channel].tourmode == 2) {
+            sys.sendHtmlMessage(src, helpers.bot(bots.tour) + "The tour has already passed the sign-up phase!", channel);
+        }
+        if (sys.battling(src)) {
+            sys.sendHtmlMessage(src, helpers.bot(bots.tour) + "You are already battling!", channel);
+            return;
+        }
+        if (helpers.tourmembersnumber(lower, channel) !== undefined ) {
+            sys.sendHtmlMessage(src, helpers.bot(bots.tour) + "You are already in the tour in this channel!", channel);
+            return;
+        }
+        while (index < sys.teamCount(src)) {
+            if (sys.tier(src, index) == tour[channel].tourtier) {
+                team = index;
+                break;
+            }
+            index++;
+        }
+        if (team > 5) {
+            sys.sendHtmlMessage(src, helpers.bot(bots.tour) + "You aren't in the " + tour[channel].tourtier + " tier! Change one of your team's tiers to " + tour[channel].tourtier + " to join.", channel);
+            return;
+        }
+        if (helpers.tourcount(channel) > 0) {
+            tour[channel].tourmembers.push(lower);
+            var plurality = helpers.tourcount(channel) == 1 ? "spot" : "spots";
+            sys.sendHtmlMain(helpers.bot(bots.tour) + name + " has joined the tournament! " + helpers.tourcount(channel) + " more " + plurality + " left!");
+            if (helpers.tourcount(channel) === 0) {
+                helpers.tourstart(channel);
+            }
+        }
+    }
+
+    ,
+
+    leave: function (src, channel, command) {
+        if (tour[channel].tourmode === 0) {
+            sys.sendHtmlMessage(src, helpers.bot(bots.tour) + "Error 400, there is no tour running!");
+            return;
+        }
+        var leavebattler = players[src].name.toLowerCase();
+        if (tour[channel].tourmembers.indexOf(leavebattler) == -1) {
+            helpers.starfox(src, channel, command, bots.tour, "Error 400, you can't leave the tour when you haven't yet joined!");
+            return;
+        }
+        if (tour[channel].tourmode == 1) {
+            tour[channel].tourmembers.splice(tour[channel].tourmembers.indexOf(leavebattler),1);
+            sys.sendHtmlMain(helpers.bot(bots.tour) + members[leavebattler] + " has left the tournament! " + helpers.tourcount(channel) + " more spots left!");
+            return;
+        }
+        if (tour[channel].tourlosers.indexOf(leavebattler) != -1) {
+            helpers.starfox(src, channel, command, bots.tour, "Error 400, you've already left the tour!");
+            return;
+        }
+        var unleavebattler = helpers.opponentof(leavebattler, channel);
+        sys.sendHtmlMain(helpers.bot(bots.tour) + members[leavebattler] + " has left the tournament! " + helpers.tourcount(channel) + " more spots left!");
+        helpers.roundincrease(unleavebattler, leavebattler, channel);
     }
 };
