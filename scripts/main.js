@@ -178,6 +178,7 @@
     channelWelcomeMessage = helpers.readData("channelwelcomemessage");
     channelLeaveMessage = helpers.readData("channelleavemessage");
     noPermissionMessage = helpers.readData("nopermissionmessage");
+    partyMode = helpers.readData("partymode");
     updateFrequency = helpers.readNumber("updatefrequency");
     allowance = helpers.readNumber("allowance");
     floodtime = helpers.readNumber("floodtime");
@@ -223,7 +224,6 @@
     helpers.setVariable("timer", 0);
     helpers.setVariable("currentSpoiler", 0);
     helpers.setVariable("layout", "new");
-    helpers.setVariable("partyMode", "none");
     helpers.setVariable("hostIp", "");
     helpers.setVariable("hostCountry", "");
     helpers.setVariable("hostCity", "");
