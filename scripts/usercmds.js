@@ -1244,9 +1244,7 @@ usercommands = {
         } else if (color == "random") {
             sys.changeColor(src, "#000000");
         } else {
-            if (!helpers.isHexColor(color)) {
-                hexColor = sys.hexColor(color);
-            }
+            hexColor = (helpers.isHexColor(color) ? color : sys.hexColor(color));
             if (auth === 0 && color != "random") {
                 sys.changeColorStrict(src, hexColor);
             } else {
