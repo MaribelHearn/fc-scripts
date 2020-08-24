@@ -223,6 +223,7 @@
     helpers.setVariable("timer", 0);
     helpers.setVariable("currentSpoiler", 0);
     helpers.setVariable("layout", "new");
+    helpers.setVariable("partyMode", "none");
     helpers.setVariable("hostIp", "");
     helpers.setVariable("hostCountry", "");
     helpers.setVariable("hostCity", "");
