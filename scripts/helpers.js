@@ -227,6 +227,8 @@ helpers = {
         return /#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})/.test(code);
     }
 
+    ,
+
     floodCheck: function (src, channelname) {
         if (regchannels[channelname]) {
             if (regchannels[channelname].flood) {
