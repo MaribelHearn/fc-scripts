@@ -379,7 +379,7 @@ admincommands = {
         + "<h2>Administrator Commands ~ Tour Options</h2>"
         + "<br>"
         + "<b>" + helpers.user("/tour ") + helpers.arg("tier") + helpers.arg2("*number") + "</b>: starts a <b>tier</b> tournament with <b>number</b> participators.<br>"
-        + "<b>" + helpers.user("/toursize ") + helpers.arg("number") + "</b>: changed the number of participators to <b>number</b>.<br>"
+        + "<b>" + helpers.user("/toursize ") + helpers.arg("number") + "</b>: changes the number of participators to <b>number</b>.<br>"
         + "<b>" + helpers.user("/endtour") + "</b>: ends the current tournament.<br>"
         + "<br><timestamp/><br>"
         + border2;

@@ -15,12 +15,12 @@ funcommands = {
         + "<br>"
         + "<b>" + helpers.user("/armyof ") + helpers.arg("Pokémon") + "</b>: posts six of the same <b>Pokémon</b>. If <b>Pokémon</b> is not specified, a random one is selected.<br>"
         + "<b>" + helpers.user("/attack ") + helpers.arg("player") + helpers.arg2("*move") + "</b>: use <b>move</b> on <b>player</b>. If <b>player</b> or <b>move</b> are not specified, random ones are selected.<br>"
-        + "<b>" + helpers.user("/attract ") + helpers.arg("player") + "</b>: attracts <b>player</b>. This command no longer adds 'attracted' to the player's name.<br>"
+        + "<b>" + helpers.user("/attract ") + helpers.arg("player") + "</b>: attracts <b>player</b>. If <b>player</b> is not specified, attracts a random user.<br>"
         + "<b>" + helpers.user("/axolotl") + "</b>: a strange command that makes you post an image of an axolotl.<br>"
         + "<b>" + helpers.user("/bigtext ") + helpers.arg("text") + helpers.arg2("*title") + helpers.arg3("*bot") + helpers.arg4("*color") + helpers.arg5("*size") +
         "</b>: posts <b>text</b> in a large <b>color</b> font of <b>size</b> px in size, titled <b>title</b>, with <b>bot</b> as bot.<br>"
         + "<b>" + helpers.user("/bulbaderp") + "</b>: posts an image of Bulbasaur. Bulbaderp.<br>"
-        + "<b>" + helpers.user("/burn ") + helpers.arg("player") + "</b>: burns <b>player</b>. This command no longer adds 'burned' to the player's name.<br>"
+        + "<b>" + helpers.user("/burn ") + helpers.arg("player") + "</b>: burns <b>player</b>. If <b>player</b> is not specified, burns a random user.<br>"
         + "<b>" + helpers.user("/confuse ") + helpers.arg("player") + "</b>: confuses <b>player</b>. This command no longer adds 'confused' to the player's name.<br>"
         + "<b>" + helpers.user("/cow") + "</b>: a mysterious command that posts a certain quote. No one truly knows why it actually exists.<br>"
         + "<b>" + helpers.user("/darp") + "</b>: posts an image of Magikarp. Magidarp. Harpadarp.<br>"
@@ -35,7 +35,7 @@ funcommands = {
         + "<b>" + helpers.user("/fail ") + helpers.arg("text") + "</b>: posts that <b>text</b> failed. Fail!<br>"
         + "<b>" + helpers.user("/ferp") + "</b>: posts an image of Bidoof or Bibarel. Biferp or Bibaferp. Ferpaderp.<br>"
         + "<b>" + helpers.user("/flyaway") + "</b>: you fly away from the server, disconnecting you in the process.<br>"
-        + "<b>" + helpers.user("/freeze ") + helpers.arg("player") + "</b>: freezes <b>player</b>. This command no longer adds 'frozen' to the player's name.<br>"
+        + "<b>" + helpers.user("/freeze ") + helpers.arg("player") + "</b>: freezes <b>player</b>. If <b>player</b> is not specified, freezes a random user.<br>"
         + "<b>" + helpers.user("/herp") + "</b>: posts an image of Herdier. Herpdier. Derpaherp.<br>"
         + "<b>" + helpers.user("/hug ") + helpers.arg("text") + "</b>: makes you hug <b>text</b>.<br>"
         + "<b>" + helpers.user("/hurrdurr") + "</b>: posts images of the Timburr family. Hurr durr.<br>"
@@ -44,15 +44,15 @@ funcommands = {
         "</b>: posts an image macro of <b>Pokémon</b>, called <b>title</b>, with captions in <b>color</b> saying <b>text1</b> and <b>text2</b> at the top and the bottom.<br>"
         + "<b>" + helpers.user("/merp") + "</b>: posts an image of Dunsparce. Merpsparce. Merpaderp.<br>"
         + "<b>" + helpers.user("/morse ") + helpers.arg("text") + "</b>: translates <b>text</b> to Morse Code.<br>"
-        + "<b>" + helpers.user("/nuke ") + helpers.arg("player") + "</b>: nukes <b>player</b>. This command no longer adds 'nuked' to the player's name.<br>"
-        + "<b>" + helpers.user("/paralyze ") + helpers.arg("player") + "</b>: paralyzes <b>player</b>. This command no longer adds 'paralyzed' to the player's name.<br>"
-        + "<b>" + helpers.user("/poison ") + helpers.arg("player") + "</b>: poisons <b>player</b>. This command no longer adds 'poisoned' to the player's name.<br>"
+        + "<b>" + helpers.user("/nuke ") + helpers.arg("player") + "</b>: nukes <b>player</b>. If <b>player</b> is not specified, nukes a random user.<br>"
+        + "<b>" + helpers.user("/paralyze ") + helpers.arg("player") + "</b>: paralyzes <b>player</b>. If <b>player</b> is not specified, paralyzes a random user. Also /paralyse.<br>"
+        + "<b>" + helpers.user("/poison ") + helpers.arg("player") + "</b>: poisons <b>player</b>. If <b>player</b> is not specified, poisons a random user.<br>"
         + "<b>" + helpers.user("/random") + "</b>: generates a random post that doesn't make any sense.<br>"
         + "<b>" + helpers.user("/randomsupport") + "</b>: posts a message that you support a randomly generated couple.<br>"
         + "<b>" + helpers.user("/russia ") + helpers.arg("text1") + helpers.arg2("*text2") + "</b>: posts a Russian Reversal joke. In Soviet Russia, <b>text2</b> <b>text1</b> YOU!!<br>"
         + "<b>" + helpers.user("/see ") + helpers.arg("text") + "</b>: you are so afraid of <b>text</b>, you run away from the server in fear. If <b>text</b> is unspecified, you will see Dennis.<br>"
         + "<b>" + helpers.user("/selfpunch") + "</b>: punches yourself from the server.<br>"
-        + "<b>" + helpers.user("/sleep ") + helpers.arg("player") + "</b>: puts <b>player</b> to sleep. This command no longer adds 'asleep' to the player's name.<br>"
+        + "<b>" + helpers.user("/sleep ") + helpers.arg("player") + "</b>: puts <b>player</b> to sleep. If <b>player</b> is not specified, puts a random user to sleep.<br>"
         + "<b>" + helpers.user("/wtfboom") + "</b>: an extreme reaction for an astonishing surprise, like a sudden explosion.<br>"
         + "<br><timestamp/><br>"
         + border2;
@@ -89,7 +89,7 @@ funcommands = {
 
     attract: function (src, channel, command) {
         var name = helpers.escapehtml(sys.name(src));
-        !command[1] ? player = "Someone" : player = helpers.escapehtml(command[1]);
+        !command[1] ? player = sys.name(sys.playerIds()[random]) : player = helpers.escapehtml(command[1]);
         sys.sendHtmlAll("<font color='#FF00FF'><timestamp/><b><font size='6'>♥</font> " + player + " has been attracted by " + name + "! <font size='6'>♥</font</b></font>", channel);
     }
 
@@ -141,7 +141,7 @@ funcommands = {
 
     burn: function (src, channel, command) {
         var name = helpers.escapehtml(sys.name(src)), channelPlayers = sys.playersOfChannel(channel);
-        !command[1] ? player = "Someone" : player = helpers.escapehtml(command[1]);
+        !command[1] ? player = sys.name(sys.playerIds()[random]) : player = helpers.escapehtml(command[1]);
         for (var i in channelPlayers) {
             if (helpers.isAndroidOrWeb(channelPlayers[i])) {
                 sys.sendHtmlMessage(channelPlayers[i], "<font color='#FF0000'><timestamp/><b>" + STATUS[command[0].toUpperCase()] + player +
@@ -242,7 +242,7 @@ funcommands = {
 
     freeze: function (src, channel, command) {
         var name = helpers.escapehtml(sys.name(src)), channelPlayers = sys.playersOfChannel(channel);
-        !command[1] ? player = "Someone" : player = helpers.escapehtml(command[1]);
+        !command[1] ? player = sys.name(sys.playerIds()[random]) : player = helpers.escapehtml(command[1]);
         for (var i in channelPlayers) {
             if (helpers.isAndroidOrWeb(channelPlayers[i])) {
                 sys.sendHtmlMessage(channelPlayers[i], "<font color='#87CEEB'><timestamp/><b>" + STATUS[command[0].toUpperCase()] + player +
@@ -329,7 +329,7 @@ funcommands = {
 
     nuke: function (src, channel, command) {
         var name = sys.name(src), text, nukemessage;
-        !command[1] ? player = "Someone" : player = command[1];
+        !command[1] ? player = sys.name(sys.playerIds()[random]) : player = command[1];
         text = player + " has been nuked by " + name + "!";
         nukemessage = "<font color='#800080'><timestamp/></font><b><font size='6' color='#FF0000'>☢</font>" + helpers.duoColor(text, "#800080", "#FF0000");
         if (text.length / 2 != parseInt(text.length / 2)) {
@@ -343,23 +343,29 @@ funcommands = {
 
     paralyze: function (src, channel, command) {
         var name = helpers.escapehtml(sys.name(src)), channelPlayers = sys.playersOfChannel(channel);
-        !command[1] ? player = "Someone" : player = helpers.escapehtml(command[1]);
+        !command[1] ? player = sys.name(sys.playerIds()[random]) : player = helpers.escapehtml(command[1]);
         for (var i in channelPlayers) {
             if (helpers.isAndroidOrWeb(channelPlayers[i])) {
                 sys.sendHtmlMessage(channelPlayers[i], "<font color='#FFA500'><timestamp/><b>" + STATUS[command[0].toUpperCase()] + player +
-                " has been paralyzed by " + name + "!" + STATUS[command[0].toUpperCase()] + "</b></font>", channel);
+                " has been " + command[0] + "d by " + name + "!" + STATUS[command[0].toUpperCase()] + "</b></font>", channel);
             } else {
                 sys.sendHtmlMessage(channelPlayers[i], "<font color='#FFA500'><timestamp/><b>" + helpers.statusImage(command[0]) + player +
-                " has been paralyzed by " + name + "!" + helpers.statusImage(command[0]) + "</b></font>", channel);
+                " has been " + command[0] + "d by " + name + "!" + helpers.statusImage(command[0]) + "</b></font>", channel);
             }
         }
     }
 
     ,
 
+    paralyse: function (src, channel, command) {
+        this.paralyze(src, channel, command);
+    }
+
+    ,
+
     poison: function (src, channel, command) {
         var name = helpers.escapehtml(sys.name(src)), channelPlayers = sys.playersOfChannel(channel);
-        !command[1] ? player = "Someone" : player = helpers.escapehtml(command[1]);
+        !command[1] ? player = sys.name(sys.playerIds()[random]) : player = helpers.escapehtml(command[1]);
         for (var i in channelPlayers) {
             if (helpers.isAndroidOrWeb(channelPlayers[i])) {
                 sys.sendHtmlMessage(channelPlayers[i], "<font color='#800080'><timestamp/><b>" + STATUS[command[0].toUpperCase()] + player +
@@ -459,7 +465,7 @@ funcommands = {
 
     sleep: function (src, channel, command) {
         var name = helpers.escapehtml(sys.name(src)), channelPlayers = sys.playersOfChannel(channel);
-        !command[1] ? player = "Someone" : player = helpers.escapehtml(command[1]);
+        !command[1] ? player = sys.name(sys.playerIds()[random]) : player = helpers.escapehtml(command[1]);
         for (var i in channelPlayers) {
             if (helpers.isAndroidOrWeb(channelPlayers[i])) {
                 sys.sendHtmlMessage(channelPlayers[i], "<timestamp/><b>" + STATUS[command[0].toUpperCase()] + player +
