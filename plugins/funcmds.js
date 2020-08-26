@@ -21,7 +21,7 @@ funcommands = {
         "</b>: posts <b>text</b> in a large <b>color</b> font of <b>size</b> px in size, titled <b>title</b>, with <b>bot</b> as bot.<br>"
         + "<b>" + helpers.user("/bulbaderp") + "</b>: posts an image of Bulbasaur. Bulbaderp.<br>"
         + "<b>" + helpers.user("/burn ") + helpers.arg("player") + "</b>: burns <b>player</b>. If <b>player</b> is not specified, burns a random user.<br>"
-        + "<b>" + helpers.user("/confuse ") + helpers.arg("player") + "</b>: confuses <b>player</b>. This command no longer adds 'confused' to the player's name.<br>"
+        + "<b>" + helpers.user("/confuse ") + helpers.arg("player") + "</b>: confuses <b>player</b>. If <b>player</b> is not specified, confuses a random user.<br>"
         + "<b>" + helpers.user("/cow") + "</b>: a mysterious command that posts a certain quote. No one truly knows why it actually exists.<br>"
         + "<b>" + helpers.user("/darp") + "</b>: posts an image of Magikarp. Magidarp. Harpadarp.<br>"
         + "<b>" + helpers.user("/dennis") + "</b>: posts an image of Dennis, also known as Ghetsis, yelling out his name in all capitals.<br>"
@@ -88,7 +88,7 @@ funcommands = {
     ,
 
     attract: function (src, channel, command) {
-        var name = helpers.escapehtml(sys.name(src));
+        var name = helpers.escapehtml(sys.name(src)), random = sys.rand(0, sys.numPlayers());
         !command[1] ? player = sys.name(sys.playerIds()[random]) : player = helpers.escapehtml(command[1]);
         sys.sendHtmlAll("<font color='#FF00FF'><timestamp/><b><font size='6'>♥</font> " + player + " has been attracted by " + name + "! <font size='6'>♥</font</b></font>", channel);
     }
@@ -140,7 +140,7 @@ funcommands = {
     ,
 
     burn: function (src, channel, command) {
-        var name = helpers.escapehtml(sys.name(src)), channelPlayers = sys.playersOfChannel(channel);
+        var name = helpers.escapehtml(sys.name(src)), random = sys.rand(0, sys.numPlayers()), channelPlayers = sys.playersOfChannel(channel);
         !command[1] ? player = sys.name(sys.playerIds()[random]) : player = helpers.escapehtml(command[1]);
         for (var i in channelPlayers) {
             if (helpers.isAndroidOrWeb(channelPlayers[i])) {
@@ -156,8 +156,8 @@ funcommands = {
     ,
 
     confuse: function (src, channel, command) {
-        var name = helpers.escapehtml(sys.name(src));
-        !command[1] ? player = "Someone" : player = helpers.escapehtml(command[1]);
+        var name = helpers.escapehtml(sys.name(src)), random = sys.rand(0, sys.numPlayers());
+        !command[1] ? player = sys.name(sys.playerIds()[random]) : player = helpers.escapehtml(command[1]);
         sys.sendHtmlAll("<font color='#8A2BE2'><timestamp/><b><font size='6'>@</font> " + player + " has been confused by " + name + "! <font size='6'>@</font</b></font>", channel);
     }
 
@@ -241,7 +241,7 @@ funcommands = {
     ,
 
     freeze: function (src, channel, command) {
-        var name = helpers.escapehtml(sys.name(src)), channelPlayers = sys.playersOfChannel(channel);
+        var name = helpers.escapehtml(sys.name(src)), random = sys.rand(0, sys.numPlayers()), channelPlayers = sys.playersOfChannel(channel);
         !command[1] ? player = sys.name(sys.playerIds()[random]) : player = helpers.escapehtml(command[1]);
         for (var i in channelPlayers) {
             if (helpers.isAndroidOrWeb(channelPlayers[i])) {
@@ -328,7 +328,7 @@ funcommands = {
     ,
 
     nuke: function (src, channel, command) {
-        var name = sys.name(src), text, nukemessage;
+        var name = sys.name(src), random = sys.rand(0, sys.numPlayers()), text, nukemessage;
         !command[1] ? player = sys.name(sys.playerIds()[random]) : player = command[1];
         text = player + " has been nuked by " + name + "!";
         nukemessage = "<font color='#800080'><timestamp/></font><b><font size='6' color='#FF0000'>☢</font>" + helpers.duoColor(text, "#800080", "#FF0000");
@@ -342,7 +342,7 @@ funcommands = {
     ,
 
     paralyze: function (src, channel, command) {
-        var name = helpers.escapehtml(sys.name(src)), channelPlayers = sys.playersOfChannel(channel);
+        var name = helpers.escapehtml(sys.name(src)), random = sys.rand(0, sys.numPlayers()), channelPlayers = sys.playersOfChannel(channel);
         !command[1] ? player = sys.name(sys.playerIds()[random]) : player = helpers.escapehtml(command[1]);
         for (var i in channelPlayers) {
             if (helpers.isAndroidOrWeb(channelPlayers[i])) {
@@ -364,7 +364,7 @@ funcommands = {
     ,
 
     poison: function (src, channel, command) {
-        var name = helpers.escapehtml(sys.name(src)), channelPlayers = sys.playersOfChannel(channel);
+        var name = helpers.escapehtml(sys.name(src)), random = sys.rand(0, sys.numPlayers()), channelPlayers = sys.playersOfChannel(channel);
         !command[1] ? player = sys.name(sys.playerIds()[random]) : player = helpers.escapehtml(command[1]);
         for (var i in channelPlayers) {
             if (helpers.isAndroidOrWeb(channelPlayers[i])) {
@@ -464,7 +464,7 @@ funcommands = {
     ,
 
     sleep: function (src, channel, command) {
-        var name = helpers.escapehtml(sys.name(src)), channelPlayers = sys.playersOfChannel(channel);
+        var name = helpers.escapehtml(sys.name(src)), random = sys.rand(0, sys.numPlayers())c, channelPlayers = sys.playersOfChannel(channel);
         !command[1] ? player = sys.name(sys.playerIds()[random]) : player = helpers.escapehtml(command[1]);
         for (var i in channelPlayers) {
             if (helpers.isAndroidOrWeb(channelPlayers[i])) {
