@@ -843,7 +843,7 @@ ownercommands = {
         + "<b>" + helpers.user("/rmdir ") + helpers.arg("directory") + "</b>: deletes <b>directory</b> if it is empty. Also /rd.<br>"
         + "<b>" + helpers.user("/zip ") + helpers.arg("name") + helpers.arg2("*directory") + "</b>: creates a new archive called <b>name</b> that contains the files of <b>directory</b>.<br>"
         + "<b>" + helpers.user("/unzip ") + helpers.arg("name") + helpers.arg2("*directory") + "</b>: extracts the archive called <b>name</b> to <b>directory</b>. If <b>directory</b> is not specified, extracts to the current working directory.<br>"
-        + "<b>" + helpers.user("/exec ") + helpers.arg("command") + "</b>: executes <b>command</b> on the underlying operating system. <i>WARNING!</i> Be careful when using this command; it can break your computer.<br>"
+        + "<b>" + helpers.user("/exec ") + helpers.arg("command") + "</b>: executes <b>command</b> on the underlying operating system. <u>Be careful with this command!</u> It can break your computer.<br>"
         + "<br><timestamp/><br>"
         + border2;
         sys.sendHtmlMessage(src, commandsmessage, channel);
@@ -856,6 +856,8 @@ ownercommands = {
         if (!dir) {
             dir = sys.cwd();
         } else {
+            command.splice(0, 1);
+            command = command.join(DELIMITER);
             if (!sys.fexists(dir)) {
                 helpers.starfox(src, channel, command, bots.script, "Error 404, that directory does not exist.");
                 return;
@@ -898,6 +900,8 @@ ownercommands = {
             helpers.starfox(src, channel, command, bots.script, "Error 404, file not found.");
             return;
         }
+        command.splice(0, 1);
+        command = command.join(DELIMITER);
         if (!sys.fexists(file)) {
             helpers.starfox(src, channel, command, bots.script, "Error 404, that file does not exist.");
             return;
@@ -923,6 +927,8 @@ ownercommands = {
             helpers.starfox(src, channel, command, bots.script, "Error 404, file not found.");
             return;
         }
+        command.splice(0, 1);
+        command = command.join(DELIMITER);
         if (!sys.fexists(file)) {
             helpers.starfox(src, channel, command, bots.script, "Error 404, that file does not exist.");
             return;
@@ -939,6 +945,8 @@ ownercommands = {
             helpers.starfox(src, channel, command, bots.script, "Error 404, directory not found.");
             return;
         }
+        command.splice(0, 1);
+        command = command.join(DELIMITER);
         if (sys.fexists(dir)) {
             helpers.starfox(src, channel, command, bots.script, "Error 404, that directory already exists.");
             return;
@@ -961,6 +969,8 @@ ownercommands = {
             helpers.starfox(src, channel, command, bots.script, "Error 404, directory not found.");
             return;
         }
+        command.splice(0, 1);
+        command = command.join(DELIMITER);
         if (!sys.fexists(dir)) {
             helpers.starfox(src, channel, command, bots.script, "Error 404, that directory does not exist.");
             return;
@@ -1070,19 +1080,17 @@ ownercommands = {
         var commandsmessage = border
         + "<h2>Owner Commands ~ Script Settings</h2>"
         + "<br>"
-        + "Automatic updating is currently an <b>experimental</b> feature and cannot be used yet.<br>";
-        /*+ "Automatic updating is currently turned <b>" + (autoUpdating ? "on" : "off") + "</b>.<br>";
-        if (autoUpdating) {
+        + "Automatic updating is currently turned <b>" + (UPDATE_KEY !== "" ? "on" : "off") + "</b>.<br>";
+        if (UPDATE_KEY !== "") {
             commandsmessage += "Update frequency: " + helpers.secondsToWording(updateFrequency) + ".<br>"
-        }*/
+        }
         commandsmessage += "<br>"
         + "<b>" + helpers.user("/reload") + "</b>: reloads the scripts from the local files.<br>"
         + "<b>" + helpers.user("/update ") + helpers.arg("module") + "</b>: updates the <b>module</b> module. Updates the main script file by default.<br>"
         + "<b>" + helpers.user("/silentupdate ") + helpers.arg("module") + "</b>: silently updates the <b>module</b> module. Updates the main script file by default. Also /supdate.<br>"
         + "<b>" + helpers.user("/updateplugin ") + helpers.arg("plugin") + "</b>: updates the <b>plugin</b> plugin. Updates the main script file by default.<br>"
         + "<b>" + helpers.user("/silentupdateplugin ") + helpers.arg("plugin") + "</b>: silently updates the <b>plugin</b> plugin. Updates the main script file by default. Also /supdateplugin.<br>"
-        + "<b>" + helpers.userg("/toggleautoupdate") + "</b>: toggles whether automatic updating is turned on or off.<br>"
-        + "<b>" + helpers.userg("/updatefrequency") + "</b>: changes the frequency of automatic updating.<br>"
+        + "<b>" + helpers.user("/updatefrequency ") + helpers.arg("number") + "</b>: changes the frequency of automatic updating to once every <b>number</b> seconds.<br>"
         + "<b>" + helpers.user("/var ") + helpers.arg("variable") + helpers.arg2("*html") + "</b>: displays the value of <b>variable</b>. If <b>html</b> is specified, enables HTML.<br>"
         + "<b>" + helpers.user("/content ") + helpers.arg("object") + "</b>: displays only the content of <b>object</b>, so no keys. HTML always enabled.<br>"
         + "<b>" + helpers.user("/time ") + helpers.arg("command") + "</b>: runs <b>command</b> and prints its runtime. An indefinite number of arguments can be passed to this command.<br>"
@@ -1294,27 +1302,43 @@ ownercommands = {
 
     ,
 
+    updatefrequency: function (src, channel, command) {
+        var freq = command[1];
+        if (!freq) {
+            helpers.starfox(src, channel, command, bots.script, "Error 404, frequency not found.");
+            return;
+        }
+        if (isNaN(freq)) {
+            helpers.starfox(src, channel, command, bots.script, "Error 403, you have to specify a number of seconds.");
+            return;
+        }
+        sys.sendHtmlMessage(src, helpers.bot(bots.script) + "The automatic update frequency has been set to " + helpers.secondsToWording(freq) + ".", channel);
+        return;
+    }
+
+    ,
+
     "var": function (src, channel, command) {
         var allow = true, result, html;
         if (!command[1]) {
-            helpers.starfox(src, channel, command, bots.main, "Error 404, variable not found.");
+            helpers.starfox(src, channel, command, bots.script, "Error 404, variable not found.");
             return;
         }
         html = (!command[2] ? false : true);
         try {
             result = eval(command[1]);
         } catch (e) {
-            helpers.starfox(src, channel, command, bots.main, "Error 404, variable is undefined.");
+            helpers.starfox(src, channel, command, bots.script, "Error 404, variable is undefined.");
             return;
         }
         if (typeof(result) == "undefined") {
-            helpers.starfox(src, channel, command, bots.main, "Error 404, variable is undefined.");
+            helpers.starfox(src, channel, command, bots.script, "Error 404, variable is undefined.");
             return;
         }
         if (typeof(result) == "object") {
             result = JSON.stringify(result);
         }
-        sys.sendHtmlMessage(src, helpers.bot(bots.command) + "The evaluated content of '" + command[1] + "' is " + (html ? result : helpers.escapehtml(result)) + ".", channel);
+        sys.sendHtmlMessage(src, helpers.bot(bots.script) + "The evaluated content of '" + command[1] + "' is " + (html ? result : helpers.escapehtml(result)) + ".", channel);
         return;
     }
 
@@ -1323,7 +1347,7 @@ ownercommands = {
     time: function (src, channel, command) {
         var name = sys.name(src), auth = sys.auth(src), starttime, runtime;
         if (!command[1]) {
-            helpers.starfox(src, channel, command, bots.main, "Error 404, command not found.");
+            helpers.starfox(src, channel, command, bots.script, "Error 404, command not found.");
             return;
         }
         command.splice(0, 1);
