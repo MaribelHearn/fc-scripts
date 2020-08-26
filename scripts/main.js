@@ -573,7 +573,7 @@
             }
             latestShaHash = sha;
             helpers.saveData("latestShaHash");
-            ownercommands.exec(false, 0, ["exec", "git pull origin master"]);
+            sys.system("git pull origin master");
             ownercommands.reload(false, 0, ["reload"]);
             sys.sendHtmlOwner(helpers.bot(bots.script) + "The server scripts have been automatically updated to the newest version! [Commit Message: " + commitmessage + "]");
         }
@@ -1391,7 +1391,7 @@
             try {
                 var data = helpers.htmlLinks(link, "object");
             } catch (error) {
-                sys.sendHtmlAuths(helpers.bot(bots.main) + "An error occurred: " + error, channel);
+                sys.sendHtmlOwner(helpers.bot(bots.main) + "An error occurred: " + error, channel);
                 return;
             }
 
@@ -1449,7 +1449,7 @@
             if (/Script Check: Fatal script error on line \d+\:/.test(message)) {
                 sys.stopEvent();
                 var errorMessage = message.split("changeScript");
-                sys.sendHtmlAuths(helpers.bot(bots.script) + errorMessage[0]);
+                sys.sendHtmlOwner(helpers.bot(bots.script) + errorMessage[0]);
                 return;
             }
             if (/Script Error line \d+\:/.test(message) || /Script Warning:/.test(message) || /Script Warning in/.test(message)) {
