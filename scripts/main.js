@@ -575,7 +575,7 @@
             helpers.saveData("latestShaHash");
             sys.system("git pull origin master");
             ownercommands.reload(false, 0, ["reload"]);
-            sys.sendHtmlOwner(helpers.bot(bots.script) + "The server scripts have been automatically updated to the newest version! [Commit Message: " + commitmessage + "]");
+            sys.sendHtmlOwner(helpers.bot(bots.script) + "The server scripts have been automatically updated! [Commit Message: " + commitmessage + "]");
         }
     }
 
