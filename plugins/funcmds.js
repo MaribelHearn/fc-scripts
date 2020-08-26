@@ -212,7 +212,7 @@ funcommands = {
     face: function (src, channel, command) {
         var name = helpers.escapehtml(sys.name(src)), auth = sys.auth(src), color = helpers.color(src), message, text;
         !command[1] ? text = "palm" : text = helpers.escapehtml(command[1]);
-        if (auth > 0) {
+        if (auth >= 1 && auth <= 3) {
             message = "<font color='" + color + "'><timestamp/>+<i><b>" + name + ":</b></i></font> ";
         } else {
             message = "<font color='" + color + "'><timestamp/><b>" + name + ":</b></font> ";
