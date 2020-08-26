@@ -71,7 +71,7 @@
     }
     if (helpers.isInArray("plugins", sys.dirsForDirectory(sys.cwd()))) {
         for (var i in SCRIPT_PLUGINS) {
-            if (sys.fileExists(PLUGINS_FOLDER + SCRIPT_PLUGINS[i]) && !pluginLoaded[i]) {
+            if (sys.fexists(PLUGINS_FOLDER + SCRIPT_PLUGINS[i]) && !pluginLoaded[i]) {
                 print("Loaded plugin " + SCRIPT_PLUGINS[i]);
                 sys.exec(PLUGINS_FOLDER + SCRIPT_PLUGINS[i]);
                 pluginLoaded[i] = true;
@@ -164,6 +164,7 @@
         ----------------
     **/
     open = helpers.readBoolean("open");
+    autoUpdate = helpers.readBoolean("autoupdate");
     latestShaHash = helpers.readData("latestshahash");
     botcolor = helpers.readData("botcolor");
     botsymbol = helpers.readData("botsymbol");
@@ -548,7 +549,13 @@
             Auto-Updating
             -------------
         **/
-        if (UPDATE_KEY !== "" && sys.time() % updateFrequency === 0) {
+        if (autoUpdate && sys.time() % updateFrequency === 0) {
+            if (!sys.fexists(".git")) {
+                autoUpdate = false;
+                helpers.saveData("autoUpdate");
+                sys.sendHtmlOwner(helpers.bot(bots.script) + "The git repository seems to have been deleted. Automatic updating has been turned off.");
+                return;
+            }
             var resp = sys.synchronousWebCall(AUTO_UPDATE_URL + UPDATE_KEY);
             var json = JSON.parse(resp);
             var i = 0;
