@@ -1080,8 +1080,8 @@ ownercommands = {
         var commandsmessage = border
         + "<h2>Owner Commands ~ Script Settings</h2>"
         + "<br>"
-        + "Automatic updating is currently turned <b>" + (UPDATE_KEY !== "" ? "on" : "off") + "</b>.<br>";
-        if (UPDATE_KEY !== "") {
+        + "Automatic updating is currently turned <b>" + (autoUpdate ? "on" : "off") + "</b>.<br>";
+        if (autoUpdate) {
             commandsmessage += "Update frequency: " + helpers.secondsToWording(updateFrequency) + ".<br>"
         }
         commandsmessage += "<br>"
@@ -1090,9 +1090,9 @@ ownercommands = {
         + "<b>" + helpers.user("/silentupdate ") + helpers.arg("module") + "</b>: silently updates the <b>module</b> module. Updates the main script file by default. Also /supdate.<br>"
         + "<b>" + helpers.user("/updateplugin ") + helpers.arg("plugin") + "</b>: updates the <b>plugin</b> plugin. Updates the main script file by default.<br>"
         + "<b>" + helpers.user("/silentupdateplugin ") + helpers.arg("plugin") + "</b>: silently updates the <b>plugin</b> plugin. Updates the main script file by default. Also /supdateplugin.<br>"
+        + "<b>" + helpers.user("/autoupdate") + "</b>: enables or disables automatic updating. The server folder has to be a clone of the <tt>fcscripts</tt> repository to enable it.<br>"
         + "<b>" + helpers.user("/updatefrequency ") + helpers.arg("number") + "</b>: changes the frequency of automatic updating to once every <b>number</b> seconds.<br>"
         + "<b>" + helpers.user("/var ") + helpers.arg("variable") + helpers.arg2("*html") + "</b>: displays the value of <b>variable</b>. If <b>html</b> is specified, enables HTML.<br>"
-        + "<b>" + helpers.user("/content ") + helpers.arg("object") + "</b>: displays only the content of <b>object</b>, so no keys. HTML always enabled.<br>"
         + "<b>" + helpers.user("/time ") + helpers.arg("command") + "</b>: runs <b>command</b> and prints its runtime. An indefinite number of arguments can be passed to this command.<br>"
         + "<b>" + helpers.user("/eval ") + helpers.arg("code") + "</b>: executes <b>code</b>.<br>"
         + "<b>" + helpers.user("/silenteval ") + helpers.arg("code") + "</b>: executes <b>code</b> silently. Also /seval.<br>"
@@ -1113,7 +1113,7 @@ ownercommands = {
             }
             if (helpers.isInArray("plugins", sys.dirsForDirectory(sys.cwd()))) {
                 for (var i in SCRIPT_PLUGINS) {
-                    if (sys.fileExists(PLUGINS_FOLDER + SCRIPT_PLUGINS[i])) {
+                    if (sys.fexists(PLUGINS_FOLDER + SCRIPT_PLUGINS[i])) {
                         print("Loaded plugin " + SCRIPT_PLUGINS[i]);
                         sys.exec(PLUGINS_FOLDER + SCRIPT_PLUGINS[i]);
                         pluginLoaded[i] = true;
@@ -1298,6 +1298,18 @@ ownercommands = {
     supdateplugin: function (src, channel, command) {
         command[0] = "silentupdateplugin";
         this.updateplugin(src, channel, command);
+    }
+
+    ,
+
+    autoupdate: function (src, channel, command) {
+        if (!sys.fexists(".git")) {
+            helpers.starfox(src, channel, command, bots.script, "Error 404, git repository not found.");
+            return;
+        }
+        autoUpdate = !autoUpdate;
+        helpers.saveData("autoUpdate");
+        sys.sendHtmlMessage(src, helpers.bot(bots.script) + "Automatic updating has been turned " + (autoUpdate ? "on" : "off") + ".");
     }
 
     ,
