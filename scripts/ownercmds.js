@@ -908,7 +908,7 @@ ownercommands = {
         }
         message = border +
         "<h2>Contents of " + file +
-        "</h2><br>" + sys.getFileContent(file) + "<br>" +
+        "</h2><br>" + helpers.escapehtml(sys.getFileContent(file)) + "<br>" +
         "<br><timestamp/><br>" + border2;
         sys.sendHtmlMessage(src, message, channel);
     }
@@ -1352,7 +1352,7 @@ ownercommands = {
         if (typeof(result) == "object") {
             result = JSON.stringify(result);
         }
-        sys.sendHtmlMessage(src, helpers.bot(bots.script) + "The evaluated content of '" + command[1] + "' is " + (html ? result : helpers.escapehtml(result)) + ".", channel);
+        sys.sendHtmlMessage(src, helpers.bot(bots.script) + "The evaluated content of '" + helpers.escapehtml(command[1]) + "' is " + (html ? result : helpers.escapehtml(result)) + ".", channel);
         return;
     }
 
