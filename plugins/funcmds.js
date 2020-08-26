@@ -346,11 +346,11 @@ funcommands = {
         !command[1] ? player = sys.name(sys.playerIds()[random]) : player = helpers.escapehtml(command[1]);
         for (var i in channelPlayers) {
             if (helpers.isAndroidOrWeb(channelPlayers[i])) {
-                sys.sendHtmlMessage(channelPlayers[i], "<font color='#FFA500'><timestamp/><b>" + STATUS[command[0].toUpperCase()] + player +
-                " has been " + command[0] + "d by " + name + "!" + STATUS[command[0].toUpperCase()] + "</b></font>", channel);
+                sys.sendHtmlMessage(channelPlayers[i], "<font color='#FFA500'><timestamp/><b>" + STATUS["PARALYZE"] + player +
+                " has been " + command[0] + "d by " + name + "!" + STATUS["PARALYZE"] + "</b></font>", channel);
             } else {
-                sys.sendHtmlMessage(channelPlayers[i], "<font color='#FFA500'><timestamp/><b>" + helpers.statusImage(command[0]) + player +
-                " has been " + command[0] + "d by " + name + "!" + helpers.statusImage(command[0]) + "</b></font>", channel);
+                sys.sendHtmlMessage(channelPlayers[i], "<font color='#FFA500'><timestamp/><b>" + helpers.statusImage("paralyze") + player +
+                " has been " + command[0] + "d by " + name + "!" + helpers.statusImage("paralyze") + "</b></font>", channel);
             }
         }
     }
