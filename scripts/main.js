@@ -164,7 +164,6 @@
         ----------------
     **/
     open = helpers.readBoolean("open");
-    autoUpdating = helpers.readBoolean("autoupdating");
     latestShaHash = helpers.readData("latestshahash");
     botcolor = helpers.readData("botcolor");
     botsymbol = helpers.readData("botsymbol");
@@ -549,7 +548,7 @@
             Auto-Updating
             -------------
         **/
-        if (UPDATE_KEY !== "" && autoUpdating && sys.time() % updateFrequency === 0) {
+        if (UPDATE_KEY !== "" && sys.time() % updateFrequency === 0) {
             var resp = sys.synchronousWebCall(AUTO_UPDATE_URL + UPDATE_KEY);
             var json = JSON.parse(resp);
             var i = 0;
@@ -567,7 +566,8 @@
             }
             latestShaHash = sha;
             helpers.saveData("latestShaHash");
-            ownercommands.silentupdate(false, 0, ["silentupdate", "all"]);
+            ownercommands.exec(false, 0, ["exec", "git pull origin master"]);
+            ownercommands.reload(false, 0, ["reload"]);
             sys.sendHtmlOwner(helpers.bot(bots.script) + "The server scripts have been automatically updated to the newest version! [Commit Message: " + commitmessage + "]");
         }
     }

@@ -19,7 +19,6 @@ helpers = {
 
         // Booleans
         sys.write(DATA_FOLDER + "open.txt", "true");
-        sys.write(DATA_FOLDER + "autoupdating.txt", "false");
 
         // Numbers
         sys.write(DATA_FOLDER + "allowance.txt", 8);
