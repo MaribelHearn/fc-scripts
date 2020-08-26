@@ -464,7 +464,7 @@ funcommands = {
     ,
 
     sleep: function (src, channel, command) {
-        var name = helpers.escapehtml(sys.name(src)), random = sys.rand(0, sys.numPlayers())c, channelPlayers = sys.playersOfChannel(channel);
+        var name = helpers.escapehtml(sys.name(src)), random = sys.rand(0, sys.numPlayers()), channelPlayers = sys.playersOfChannel(channel);
         !command[1] ? player = sys.name(sys.playerIds()[random]) : player = helpers.escapehtml(command[1]);
         for (var i in channelPlayers) {
             if (helpers.isAndroidOrWeb(channelPlayers[i])) {
