@@ -164,7 +164,7 @@ funcommands = {
     ,
 
     cow: function (src, channel, command) {
-        sys.sendAll(botsymbol + "Miltank: You can call it a 'cow' if you want, the question remains.", channel);
+        sys.sendHtmlAll(helpers.bot(bots.cow) + "You can call it a 'cow' if you want, the question remains. <small>- " + helpers.user(name) + "</small></b>", channel);
     }
 
     ,
