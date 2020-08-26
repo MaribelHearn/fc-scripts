@@ -1167,24 +1167,18 @@ modcommands = {
         sys.changeAuth(src, 0);
         id ? sys.changeAuth(id, auth) : sys.changeDbAuth(player, auth);
         for (var index in regchannels) {
-            if (auth == 1) {
-                if (helpers.isInArray(lower, regchannels[index].mods)) {
-                    regchannels[index].mods.splice(regchannels[index].mods.indexOf(lower), 1);
-                    regchannels[index].mods.push(player);
-                    helpers.saveData("regchannels");
-                }
-            } else if (auth == 2) {
-                if (helpers.isInArray(lower, regchannels[index].admins)) {
-                    regchannels[index].admins.splice(regchannels[index].admins.indexOf(lower), 1);
-                    regchannels[index].admins.push(player);
-                    helpers.saveData("regchannels");
-                }
-            } else {
-                if (helpers.isInArray(lower, regchannels[index].owners)) {
-                    regchannels[index].owners.splice(regchannels[index].owners.indexOf(lower), 1);
-                    regchannels[index].owners.push(player);
-                    helpers.saveData("regchannels");
-                }
+            if (helpers.isInArray(lower, regchannels[index].mods)) {
+                regchannels[index].mods.splice(regchannels[index].mods.indexOf(lower), 1);
+                regchannels[index].mods.push(player);
+                helpers.saveData("regchannels");
+            } else if (helpers.isInArray(lower, regchannels[index].admins)) {
+                regchannels[index].admins.splice(regchannels[index].admins.indexOf(lower), 1);
+                regchannels[index].admins.push(player);
+                helpers.saveData("regchannels");
+            } else if (helpers.isInArray(lower, regchannels[index].owners)) {
+                regchannels[index].owners.splice(regchannels[index].owners.indexOf(lower), 1);
+                regchannels[index].owners.push(player);
+                helpers.saveData("regchannels");
             }
         }
         if (members[player])player = members[player];
