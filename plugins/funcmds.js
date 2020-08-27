@@ -164,7 +164,7 @@ funcommands = {
     ,
 
     cow: function (src, channel, command) {
-        sys.sendHtmlAll(helpers.bot(bots.cow) + "You can call it a 'cow' if you want, the question remains. <small>- " + helpers.user(helpers.escapehtml(sys.name(src))) + "</small></b>", channel);
+        sys.sendHtmlAll(helpers.bot(bots.cow) + "You can call it a 'cow' if you want, the question remains. <b><small>- " + helpers.user(helpers.escapehtml(sys.name(src))) + "</small></b>", channel);
     }
 
     ,
@@ -202,8 +202,8 @@ funcommands = {
     ,
 
     epicfail: function (src, channel, command) {
-        var name = helpers.escapehtml(sys.name(src)), player, move;
-        !command[1] ? player = "Someone" : player = helpers.escapehtml(command[1]);
+        var name = helpers.escapehtml(sys.name(src)), random = sys.rand(0, sys.numPlayers()), player, move;
+        !command[1] ? player = sys.name(sys.playerIds()[random]) : player = helpers.escapehtml(command[1]);
         sys.sendHtmlAll(helpers.bot(bots.fun) + "<b>Epic Fail! " + helpers.arg(player) + " epically failed. <small>- " + helpers.user(name) + "</small></b>", channel);
     }
 
@@ -223,8 +223,8 @@ funcommands = {
     ,
 
     fail: function (src, channel, command) {
-        var name = helpers.escapehtml(sys.name(src)), player, move;
-        !command[1] ? player = "Someone" : player = helpers.escapehtml(command[1]);
+        var name = helpers.escapehtml(sys.name(src)), random = sys.rand(0, sys.numPlayers()), player, move;
+        !command[1] ? player = sys.name(sys.playerIds()[random]) : player = helpers.escapehtml(command[1]);
         sys.sendHtmlAll(helpers.bot(bots.fun) + "<b>" + helpers.arg(player) + " failed. <small>- " + helpers.user(name) + "</small></b>", channel);
     }
 
@@ -265,10 +265,9 @@ funcommands = {
     ,
 
     hug: function (src, channel, command) {
-        var name = sys.name(src), color = helpers.color(src);
-        command.splice(0, 1);
-        command = command.join(DELIMITER);
-        sys.sendHtmlAll("<font color='" + color + "'><timestamp/><b>*** " + name + " hugged " + helpers.escapehtml(command) + ". ♥***</b></font>", channel);
+        var name = sys.name(src), random = sys.rand(0, sys.numPlayers()), color = helpers.color(src), player;
+        !command[1] ? player = sys.name(sys.playerIds()[random]) : player = helpers.escapehtml(command[1]);
+        sys.sendHtmlAll("<font color='" + color + "'><timestamp/><b>*** " + name + " hugged " + player + ". ♥***</b></font>", channel);
     }
 
     ,
@@ -480,8 +479,8 @@ funcommands = {
     ,
 
     kill: function (src, channel, command) {
-        var name = helpers.escapehtml(sys.name(src)), player, reason;
-        !command[1] ? player = "someone" : player = helpers.escapehtml(command[1]);
+        var name = helpers.escapehtml(sys.name(src)), random = sys.rand(0, sys.numPlayers()), player, reason;
+        !command[1] ? player = sys.name(sys.playerIds()[random]) : player = helpers.escapehtml(command[1]);
         if (player == "Chuck Norris") {
             helpers.starfox(src, channel, command, bots.command, "You tried.");
             return;
