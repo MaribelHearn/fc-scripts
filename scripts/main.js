@@ -164,7 +164,6 @@
         ----------------
     **/
     open = helpers.readBoolean("open");
-    autoUpdate = helpers.readBoolean("autoupdate");
     latestShaHash = helpers.readData("latestshahash");
     botcolor = helpers.readData("botcolor");
     botsymbol = helpers.readData("botsymbol");
@@ -549,11 +548,9 @@
             Auto-Updating
             -------------
         **/
-        if (autoUpdate && sys.time() % updateFrequency === 0) {
+        if (UPDATE_KEY !== "" && sys.time() % updateFrequency === 0) {
             if (!sys.fexists(".git")) {
-                autoUpdate = false;
-                helpers.saveData("autoUpdate");
-                sys.sendHtmlOwner(helpers.bot(bots.script) + "The git repository seems to have been deleted. Automatic updating has been turned off.");
+                sys.sendHtmlOwner(helpers.bot(bots.script) + "The git repository seems to have been deleted; the scripts will not be automatically updated.");
                 return;
             }
             var resp = sys.synchronousWebCall(AUTO_UPDATE_URL + UPDATE_KEY);
@@ -562,7 +559,7 @@
             var commitmessage = json[i].commit.message;
             var author = json[i].committer.login;
             var sha = json[i].sha;
-            if (commitmessage == "Merge branch 'master' of github.com:MaribelHearn/fc-scripts" || commitmessage == "Merge git://github.com/MaribelHearn/fc-scripts") {
+            if (commitmessage == "Merge branch 'master' of https://github.com:MaribelHearn/fc-scripts into master" || commitmessage == "Merge git://github.com/MaribelHearn/fc-scripts") {
                 i = i + 1;
                 commitmessage = json[i].commit.message;
                 author = json[i].committer.login;

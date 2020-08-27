@@ -843,7 +843,7 @@ ownercommands = {
         + "<b>" + helpers.user("/rmdir ") + helpers.arg("directory") + "</b>: deletes <b>directory</b> if it is empty. Also /rd.<br>"
         + "<b>" + helpers.user("/zip ") + helpers.arg("name") + helpers.arg2("*directory") + "</b>: creates a new archive called <b>name</b> that contains the files of <b>directory</b>.<br>"
         + "<b>" + helpers.user("/unzip ") + helpers.arg("name") + helpers.arg2("*directory") + "</b>: extracts the archive called <b>name</b> to <b>directory</b>. If <b>directory</b> is not specified, extracts to the current working directory.<br>"
-        + "<b>" + helpers.user("/exec ") + helpers.arg("command") + "</b>: executes <b>command</b> on the underlying operating system. <u>Be careful with this command!</u> It can break your computer.<br>"
+        + "<b>" + helpers.user("/exec ") + helpers.arg("command") + "</b>: executes <b>command</b> on the underlying operating system. <u>Be careful with this command!</u> It can break your computer!<br>"
         + "<br><timestamp/><br>"
         + border2;
         sys.sendHtmlMessage(src, commandsmessage, channel);
@@ -1080,8 +1080,8 @@ ownercommands = {
         var commandsmessage = border
         + "<h2>Owner Commands ~ Script Settings</h2>"
         + "<br>"
-        + "Automatic updating is currently turned <b>" + (autoUpdate ? "on" : "off") + "</b>.<br>";
-        if (autoUpdate) {
+        + "Automatic updating is currently turned <b>" + (UPDATE_KEY !== "" ? "on" : "off") + "</b>.<br>";
+        if (UPDATE_KEY !== "") {
             commandsmessage += "Update frequency: " + helpers.secondsToWording(updateFrequency) + ".<br>"
         }
         commandsmessage += "<br>"
@@ -1089,10 +1089,15 @@ ownercommands = {
         + "<b>" + helpers.user("/update ") + helpers.arg("module") + "</b>: updates the <b>module</b> module. Updates the main script file by default.<br>"
         + "<b>" + helpers.user("/silentupdate ") + helpers.arg("module") + "</b>: silently updates the <b>module</b> module. Updates the main script file by default. Also /supdate.<br>"
         + "<b>" + helpers.user("/updateplugin ") + helpers.arg("plugin") + "</b>: updates the <b>plugin</b> plugin. Updates the main script file by default.<br>"
-        + "<b>" + helpers.user("/silentupdateplugin ") + helpers.arg("plugin") + "</b>: silently updates the <b>plugin</b> plugin. Updates the main script file by default. Also /supdateplugin.<br>"
-        + "<b>" + helpers.user("/autoupdate") + "</b>: enables or disables automatic updating. The server folder has to be a clone of the <tt>fcscripts</tt> repository to enable it.<br>"
-        + "<b>" + helpers.user("/updatefrequency ") + helpers.arg("number") + "</b>: changes the frequency of automatic updating to once every <b>number</b> seconds.<br>"
-        + "<b>" + helpers.user("/var ") + helpers.arg("variable") + helpers.arg2("*html") + "</b>: displays the value of <b>variable</b>. If <b>html</b> is specified, enables HTML.<br>"
+        + "<b>" + helpers.user("/silentupdateplugin ") + helpers.arg("plugin") + "</b>: silently updates the <b>plugin</b> plugin. Updates the main script file by default. Also /supdateplugin.<br>";
+        if (UPDATE_KEY === "") {
+            commandsmessage += "<b>" + helpers.user("/setgithubkey ") + helpers.arg("key") + "</b>: sets the GitHub API key for automatic script updates to <b>key</b>.<br>"
+            + "Requires the server folder to be a clone of the <tt>fc-scripts</tt> git repository. <u>Be careful with this command!</u> Entering an invalid API key will rate limit the updates!<br>";
+        } else {
+            commandsmessage += "<b>" + helpers.user("/removegithubkey") + "</b>: removes your GitHub API key. This will disable automatic script updates.<br>"
+            + "<b>" + helpers.user("/updatefrequency ") + helpers.arg("number") + "</b>: changes the frequency of automatic updating to once every <b>number</b> seconds.<br>";
+        }
+        commandsmessage += "<b>" + helpers.user("/var ") + helpers.arg("variable") + helpers.arg2("*html") + "</b>: displays the value of <b>variable</b>. If <b>html</b> is specified, enables HTML.<br>"
         + "<b>" + helpers.user("/time ") + helpers.arg("command") + "</b>: runs <b>command</b> and prints its runtime. An indefinite number of arguments can be passed to this command.<br>"
         + "<b>" + helpers.user("/eval ") + helpers.arg("code") + "</b>: executes <b>code</b>.<br>"
         + "<b>" + helpers.user("/silenteval ") + helpers.arg("code") + "</b>: executes <b>code</b> silently. Also /seval.<br>"
@@ -1302,14 +1307,35 @@ ownercommands = {
 
     ,
 
-    autoupdate: function (src, channel, command) {
-        if (!sys.fexists(".git")) {
-            helpers.starfox(src, channel, command, bots.script, "Error 404, git repository not found.");
+    setgithubkey: function (src, channel, command) {
+        if (UPDATE_KEY !== "") {
+            helpers.starfox(src, channel, command, bots.command, "Error 400, you already have a GitHub API key set!");
             return;
         }
-        autoUpdate = !autoUpdate;
-        helpers.saveData("autoUpdate");
-        sys.sendHtmlMessage(src, helpers.bot(bots.script) + "Automatic updating has been turned " + (autoUpdate ? "on" : "off") + ".");
+        if (!sys.fexists(".git")) {
+            helpers.starfox(src, channel, command, bots.command, "Error 403, you cannot set a GitHub API key without a git repository. Please clone <tt>fc-scripts</tt> in your server folder.");
+            return;
+        }
+        var key = command[1];
+        if (!key) {
+            helpers.starfox(src, channel, command, bots.command, "Error 404, key not found.");
+            return;
+        }
+        UPDATE_KEY = key;
+        helpers.saveData("UPDATE_KEY");
+        sys.sendHtmlMessage(src, helpers.bot(bots.script) + "Your GitHub API key has been set.", channel);
+    }
+
+    ,
+
+    removegithubkey: function (src, channel, command) {
+        if (UPDATE_KEY === "") {
+            helpers.starfox(src, channel, command, bots.command, "Error 400, you cannot remove a GitHub API key when you don't have one!");
+            return;
+        }
+        UPDATE_KEY = "";
+        helpers.saveData("UPDATE_KEY");
+        sys.sendHtmlMessage(src, helpers.bot(bots.script) + "Your GitHub API key has been removed.", channel);
     }
 
     ,
@@ -1788,8 +1814,8 @@ ownercommands = {
         + "Use <b>" + helpers.user("/private") + "</b> to make the server private.<br>"
         + "Use <b>" + helpers.user("/shutdown") + "</b> to shut down the server.<br>"
         + "Use <b>" + helpers.user("/restart") + "</b> to restart the server. Windows only.<br>"
-        + "Use <b>" + helpers.user("/softreset") + "</b> to set all the customisable settings back to their default values, then shut down the server. Will ask for confirmation before doing so.<br>"
-        + "Use <b>" + helpers.user("/hardreset") + "</b> to reinitialise the scripts, erasing <u>all data</u> in the process, then shut down the server. Will ask for confirmation before doing so.<br>"
+        + "Use <b>" + helpers.user("/softreset") + "</b> to set all the customisable settings back to their default values. Will ask for confirmation before doing so.<br>"
+        + "Use <b>" + helpers.user("/hardreset") + "</b> to reinitialize the scripts, erasing <u>all data</u> in the process, then shut down the server. Will ask for confirmation before doing so.<br>"
         + "<br><timestamp/><br>"
         + border2;
         sys.sendHtmlMessage(src, commandsmessage, channel);
@@ -1883,8 +1909,7 @@ ownercommands = {
         sys.write(DATA_FOLDER + "authtitles.txt", "{}");
         sys.write(DATA_FOLDER + "selfkickmsg.txt", "{}");
         sys.write(DATA_FOLDER + "rangebanmsg.txt", "{}");
-        sys.sendHtmlMessage(src, helpers.bot(bots.main) + "Your data has been soft reset successfully. The server will now shut down.", channel);
-        this.shutdown(src, channel, command);
+        sys.sendHtmlMessage(src, helpers.bot(bots.main) + "Your data has been soft reset successfully.", channel);
     }
 
     ,
@@ -2209,6 +2234,12 @@ ownercommands = {
         + "<br><timestamp/><br>"
         + border2;
         sys.sendHtmlMessage(src, commandsmessage, channel);
+    }
+
+    ,
+
+    coloursettings: function (src, channel, command) {
+        this.colorsettings(src, channel, command);
     }
 
     ,
@@ -2607,16 +2638,16 @@ ownercommands = {
         + "<h2>Owner Commands ~ Miscellaneous</h2>"
         + "<br>";
         if (API_KEY === "") {
-            commandsmessage += "<b>" + helpers.user("/setapi ") + helpers.arg("API") + "</b>: sets the IPinfoDB API key for country and time zone retrieval to <b>API</b>.<br>"
+            commandsmessage += "<b>" + helpers.user("/setipkey ") + helpers.arg("key") + "</b>: sets the IPinfoDB API key for country and time zone retrieval to <b>key</b>.<br>"
             + "<u>Be careful with this command!</u> Entering an invalid API key will break things!<br>";
         } else {
-            commandsmessage += "<b>" + helpers.user("/removeapi") + "</b>: removes your IPinfoDB API key. This will disable country and time zone retrieval and reset all corresponding data.<br>";
+            commandsmessage += "<b>" + helpers.user("/removeipkey") + "</b>: removes your IPinfoDB API key. This will disable country and time zone retrieval and reset all corresponding data.<br>";
         }
         if (GOOGLE_KEY === "") {
-            commandsmessage += "<b>" + helpers.user("/setgoogleapi ") + helpers.arg("API") + "</b>: sets the Google API key for youtube links <b>API</b>.<br>"
+            commandsmessage += "<b>" + helpers.user("/setgooglekey ") + helpers.arg("key") + "</b>: sets the Google API key for youtube links <b>key</b>.<br>"
             + "<u>Be careful with this command!</u> Entering an invalid API key will break things!<br>";
         } else {
-            commandsmessage += "<b>" + helpers.user("/removegoogleapi") + "</b>: removes your Google API key. This will disable youtube link information and the /listen command.<br>";
+            commandsmessage += "<b>" + helpers.user("/removegooglekey") + "</b>: removes your Google API key. This will disable youtube link information and the /listen command.<br>";
         }
         commandsmessage += "<b>" + helpers.user("/clearpass ") + helpers.arg("player") + "</b>: clears <b>player</b>'s password.<br>"
         + "<b>" + helpers.user("/servertopic ") + helpers.arg("text") + "</b>: changes the server topic to <b>text</b>.<br>"
@@ -2633,9 +2664,9 @@ ownercommands = {
 
     ,
 
-    setapi: function (src, channel, command) {
+    setipkey: function (src, channel, command) {
         if (API_KEY !== "") {
-            helpers.starfox(src, channel, command, bots.command, "Error 400, you already have an API key set!");
+            helpers.starfox(src, channel, command, bots.command, "Error 400, you already have an IPinfoDB API key set!");
             return;
         }
         var api = command[1];
@@ -2644,7 +2675,7 @@ ownercommands = {
             return;
         }
         API_KEY = api;
-        sys.write("data/API_KEY.txt", api);
+        helpers.saveData("API_KEY");
         sys.webCall(IP_RETRIEVAL_URL, function (resp) {
             if (resp === "") {
                 print("An error occurred while loading the host IP address.");
@@ -2659,14 +2690,14 @@ ownercommands = {
                 print("Host location data has been loaded.");
             });
         });
-        sys.sendHtmlMessage(src, helpers.bot(bots.main) + "Your API key has been set.", channel);
+        sys.sendHtmlMessage(src, helpers.bot(bots.main) + "Your IPinfoDB API key has been set.", channel);
     }
 
     ,
 
-    removeapi: function (src, channel, command) {
+    removeipkey: function (src, channel, command) {
         if (API_KEY === "") {
-            helpers.starfox(src, channel, command, bots.command, "Error 400, you cannot remove an API key when you don't have one!");
+            helpers.starfox(src, channel, command, bots.command, "Error 400, you cannot remove an IPinfoDB API key when you don't have one!");
             return;
         }
         API_KEY = "";
@@ -2677,12 +2708,12 @@ ownercommands = {
         helpers.saveData("countryname");
         helpers.saveData("cityname");
         helpers.saveData("timezone");
-        sys.sendHtmlMessage(src, helpers.bot(bots.main) + "Your API key has been removed.", channel);
+        sys.sendHtmlMessage(src, helpers.bot(bots.main) + "Your IPinfoDB API key has been removed.", channel);
     }
 
     ,
 
-    setgoogleapi: function (src, channel, command) {
+    setgooglekey: function (src, channel, command) {
         if (GOOGLE_KEY !== "") {
             helpers.starfox(src, channel, command, bots.command, "Error 400, you already have a Google API key set!");
             return;
@@ -2693,13 +2724,13 @@ ownercommands = {
             return;
         }
         GOOGLE_KEY = api;
-        sys.write("data/GOOGLE_KEY.txt", api);
+        helpers.saveData("GOOGLE_KEY");
         sys.sendHtmlMessage(src, helpers.bot(bots.main) + "Your Google API key has been set.", channel);
     }
 
     ,
 
-    removegoogleapi: function (src, channel, command) {
+    removegooglekey: function (src, channel, command) {
         if (GOOGLE_KEY === "") {
             helpers.starfox(src, channel, command, bots.command, "Error 400, you cannot remove a Google API key when you don't have one!");
             return;
