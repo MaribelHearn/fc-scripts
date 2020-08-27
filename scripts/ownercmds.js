@@ -1127,7 +1127,9 @@ ownercommands = {
             }
             sys.exec(SCRIPTS_FOLDER + "main.js");
             print("Script Check: OK");
-            sys.sendHtmlOwner(helpers.bot(bots.script) + "The server scripts have been reloaded successfully.", channel);
+            if (command[0] != "auto") {
+                sys.sendHtmlOwner(helpers.bot(bots.script) + "The server scripts have been reloaded successfully.", channel);
+            }
         } catch (e) {
             sys.sendHtmlOwner(helpers.bot(bots.script) + "An error occurred while reloading the scripts: " + e, channel);
         }
