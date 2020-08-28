@@ -1615,13 +1615,23 @@ helpers = {
     ,
 
     user: function (string) {
-        return (layout == "old" ? "\u2022 " : "") + "<font color='" + (layout == "new" ? cmdcolors[0] : "green") + "'>" + this.escapehtml(string) + "</font>";
+        if (layout == "new") {
+            return "<font color='" + cmdcolors[0] + "'>" + this.escapehtml(string) + "</font>";
+        } else {
+            return (!sys.id(string) ? "\u2022 <font color='green'>" : "") + this.escapehtml(string) + "</font>";
+        }
+
     }
 
     ,
 
     arg: function (string) {
-        return "<font color='" + (layout == "new" ? cmdcolors[1] : "red") + "'>" + this.escapehtml(string) + "</font>";
+        if (layout == "new") {
+            return "<font color='" + cmdcolors[1] + "'>" + this.escapehtml(string) + "</font>";
+        } else {
+            return "<font color='" + (string.toLowerCase() !== string ? "green" : "red") + "'>" + this.escapehtml(string) + "</font>";
+        }
+
     }
 
     ,
