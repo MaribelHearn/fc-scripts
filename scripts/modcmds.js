@@ -1325,7 +1325,7 @@ modcommands = {
             return;
         }
         lower = command[1].toLowerCase();
-        if (!helpers.isInArray(lower), Object.keys(bigtexts)) {
+        if (!helpers.isInArray(lower, Object.keys(bigtexts))) {
             helpers.starfox(src, channel, command, bots.command, "Error 400, that command doesn't exist.");
             return;
         }

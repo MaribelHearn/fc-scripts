@@ -2132,11 +2132,7 @@ ownercommands = {
 
     layout: function (src, channel, command) {
         var name = sys.name(src);
-        if (!command[1] || (command[1] != "old" && command[1] != "new")) {
-            helpers.starfox(src, channel, command, bots.command, "Error 404, layout not found.");
-            return;
-        }
-        if (command[1] == "new") {
+        if (layout == "old") {
             layout = "new";
             border = "<font color='" + borderColor + "'><b>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>></b></font>";
             border2 = "<font color='" + borderColor + "'><b>&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;" +
