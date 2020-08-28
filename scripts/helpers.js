@@ -1596,20 +1596,18 @@ helpers = {
 
     ,
 
-    userb: function (string) {
-        return "<b><font color='" + cmdcolors[0] + "'>" + this.escapehtml(string) + "</font></b>";
-    }
-
-    ,
-
     userg: function (string) {
-        return "<b><font color='#808080'>" + this.escapehtml(string) + "</font></b>";
+        return (layout == "old" ? "\u2022 " : "") + "<b><font color='#808080'>" + this.escapehtml(string) + "</font></b>";
     }
 
     ,
 
     userl: function (string) {
-        return "<a href='po:send/" + string + "' style='text-decoration: none;'><font color='" + cmdcolors[0] + "'>" + this.escapehtml(string) + "</font></a>";
+        if (layout == "new") {
+            return "<a href='po:send/" + string + "' style='text-decoration: none;'><font color='" + cmdcolors[0] + "'>" + this.escapehtml(string) + "</font></a>";
+        } else {
+            return "\u2022 <a href='po:send/" + string + "' style='text-decoration: none;'><font color='green'>" + this.escapehtml(string) + "</font></a>";
+        }
     }
 
     ,
