@@ -135,7 +135,8 @@ funcommands = {
     bulbaderp: function (src, channel, command) {
         var name = sys.name(src);
         sys.sendHtmlAll(helpers.bot(bots.fun) + "<b>" + helpers.user(helpers.escapehtml(name)) +
-        " has used the " + helpers.arg("Bulbaderp") + " command.</b><br><img src='pokemon:1'><b>" + helpers.desu("Bulbaderp!") + "</b>", channel);
+        " has used the " + helpers.arg("Bulbaderp") + " command.</b><br><img src='pokemon:1" + (layout == "old" ? "&gen=5" : "") +
+        "'><b>" + helpers.desu("Bulbaderp!") + "</b>", channel);
     }
 
     ,
@@ -188,7 +189,8 @@ funcommands = {
     darp: function (src, channel, command) {
         var name = sys.name(src);
         sys.sendHtmlAll(helpers.bot(bots.fun) + "<b>" + helpers.user(helpers.escapehtml(name)) +
-        " has used the " + helpers.arg("Darp") + " command.</b><br><img src='pokemon:129'><b>" + helpers.desu("Harpadarp!") + "</b>", channel);
+        " has used the " + helpers.arg("Darp") + " command.</b><br><img src='pokemon:129" + (layout == "old" ? "&gen=5" : "") +
+        "'><b>" + helpers.desu("Harpadarp!") + "</b>", channel);
     }
 
     ,
@@ -204,7 +206,8 @@ funcommands = {
     derp: function (src, channel, command) {
         var name = sys.name(src);
         sys.sendHtmlAll(helpers.bot(bots.fun) + "<b>" + helpers.user(helpers.escapehtml(name)) +
-        " has used the " + helpers.arg("Derp") + " command.</b><br><img src='pokemon:618'><b>" + helpers.desu("Herpaderp!") + "</b>", channel);
+        " has used the " + helpers.arg("Derp") + " command.</b><br><img src='pokemon:618" + (layout == "old" ? "&gen=5" : "") +
+        "'><b>" + helpers.desu("Herpaderp!") + "</b>", channel);
     }
 
     ,
@@ -212,7 +215,8 @@ funcommands = {
     durp: function (src, channel, command) {
         var name = sys.name(src);
         sys.sendHtmlAll(helpers.bot(bots.fun) + "<b>" + helpers.user(helpers.escapehtml(name)) +
-        " has used the " + helpers.arg("Durp") + " command.</b><br><img src='pokemon:349'><b>" + helpers.desu("Hurpadurp!") + "</b>", channel);
+        " has used the " + helpers.arg("Durp") + " command.</b><br><img src='pokemon:349" + (layout == "old" ? "&gen=5" : "") +
+        "'><b>" + helpers.desu("Hurpadurp!") + "</b>", channel);
     }
 
     ,
@@ -251,7 +255,8 @@ funcommands = {
         pokenum = sys.rand(0, 2);
         pokenum == 1 ? pokenum = 399 : pokenum = 400;
         sys.sendHtmlAll(helpers.bot(bots.fun) + "<b>" + helpers.user(helpers.escapehtml(name)) +
-        " has used the " + helpers.arg("Ferp") + " command.</b><br><img src='pokemon:" + pokenum + "'><b>" + helpers.desu("Ferpaderp!") + "</b>", channel);
+        " has used the " + helpers.arg("Ferp") + " command.</b><br><img src='pokemon:" + pokenum + (layout == "old" ? "&gen=5" : "") +
+        "'><b>" + helpers.desu("Ferpaderp!") + "</b>", channel);
     }
 
     ,
@@ -275,7 +280,8 @@ funcommands = {
     herp: function (src, channel, command) {
         var name = sys.name(src);
         sys.sendHtmlAll(helpers.bot(bots.fun) + "<b>" + helpers.user(helpers.escapehtml(name)) +
-        " has used the " + helpers.arg("Herp") + " command.</b><br><img src='pokemon:507'><b>" + helpers.desu("Derpaherp!") + "</b>", channel);
+        " has used the " + helpers.arg("Herp") + " command.</b><br><img src='pokemon:507" + (layout == "old" ? "&gen=5" : "") +
+        "'><b>" + helpers.desu("Derpaherp!") + "</b>", channel);
     }
 
     ,
@@ -291,7 +297,9 @@ funcommands = {
     hurrdurr: function (src, channel, command) {
         var name = sys.name(src);
         sys.sendHtmlAll(helpers.bot(bots.fun) + "<b>" + helpers.user(helpers.escapehtml(name)) +
-        " has used the " + helpers.arg("Hurr Durr") + " command.</b><br><span style='font-size:32px'>HURR DURR!</span><br><img src='pokemon:532'><img src='pokemon:534'><img src='pokemon:533'></b>", channel);
+        " has used the " + helpers.arg("Hurr Durr") + " command.</b><br><span style='font-size:32px'>HURR DURR!</span><br>" +
+        "<img src='pokemon:532" + (layout == "old" ? "&gen=5" : "") + "'><img src='pokemon:534" + (layout == "old" ? "&gen=5" : "") +
+        "'><img src='pokemon:533" + (layout == "old" ? "&gen=5" : "") + "'></b>", channel);
     }
 
     ,
@@ -314,7 +322,8 @@ funcommands = {
     merp: function (src, channel, command) {
         var name = sys.name(src);
         sys.sendHtmlAll(helpers.bot(bots.fun) + "<b>" + helpers.user(helpers.escapehtml(name)) +
-        " has used the " + helpers.arg("Merp") + " command.</b><br><img src='pokemon:206'><b>" + helpers.desu("Merpaderp!") + "</b>", channel);
+        " has used the " + helpers.arg("Merp") + " command.</b><br><img src='pokemon:206" + (layout == "old" ? "&gen=5" : "") +
+        "'><b>" + helpers.desu("Merpaderp!") + "</b>", channel);
     }
 
     ,

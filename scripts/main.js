@@ -785,7 +785,7 @@
             sys.sendHtmlMessage(src, "<b><font color='blueviolet'>Server Run Time:</font></b> " + helpers.formatUptime(uptime));
             sys.sendHtmlMessage(src, "<b><font color='red'>Number of Players Online:</font></b> <em>1 out of a record maximum of 3.</em>");
             sys.sendHtmlMessage(src, "<br><timestamp/><b>Type: <font color='green'>/Commands</font></b> into a channel's main chat to view a list of commands.");
-            sys.sendHtmlMessage(src, "<timestamp/><b>Type: <font color='green'>/Rules</font></b> into a channel's main chat to view the server rules.");
+            sys.sendHtmlMessage(src, "<timestamp/><b>Type: <font color='green'>/Rules</font></b> into a channel's main chat to view the server rules.<br>");
         }
         /**
             ---------------
