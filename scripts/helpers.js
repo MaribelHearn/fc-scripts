@@ -1615,37 +1615,37 @@ helpers = {
     ,
 
     user: function (string) {
-        return "<font color='" + cmdcolors[0] + "'>" + this.escapehtml(string) + "</font>";
+        return (layout == "old" ? "\u2022 " : "") + "<font color='" + (layout == "new" ? cmdcolors[0] : "green") + "'>" + this.escapehtml(string) + "</font>";
     }
 
     ,
 
     arg: function (string) {
-        return "<font color='" + cmdcolors[1] + "'>" + this.escapehtml(string) + "</font>";
+        return "<font color='" + (layout == "new" ? cmdcolors[1] : "red") + "'>" + this.escapehtml(string) + "</font>";
     }
 
     ,
 
     arg2: function (string) {
-        return "<font color='" + cmdcolors[2] + "'>" + this.escapehtml(string) + "</font>";
+        return "<font color='" + (layout == "new" ? cmdcolors[2] : "blue") + "'>" + this.escapehtml(string) + "</font>";
     }
 
     ,
 
     arg3: function (string) {
-        return "<font color='" + cmdcolors[3] + "'>" + this.escapehtml(string) + "</font>";
+        return "<font color='" + (layout == "new" ? cmdcolors[3] : "blueviolet") + "'>" + this.escapehtml(string) + "</font>";
     }
 
     ,
 
     arg4: function (string) {
-        return "<font color='" + cmdcolors[4] + "'>" + this.escapehtml(string) + "</font>";
+        return "<font color='" + (layout == "new" ? cmdcolors[4] : "olive") + "'>" + this.escapehtml(string) + "</font>";
     }
 
     ,
 
     arg5: function (string) {
-        return "<font color='" + cmdcolors[5] + "'>" + this.escapehtml(string) + "</font>";
+        return "<font color='" + (layout == "new" ? cmdcolors[4] : "orange") + "'>" + this.escapehtml(string) + "</font>";
     }
 
     ,

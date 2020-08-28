@@ -22,6 +22,7 @@ funcommands = {
         + "<b>" + helpers.user("/bulbaderp") + "</b>: posts an image of Bulbasaur. Bulbaderp.<br>"
         + "<b>" + helpers.user("/burn ") + helpers.arg("player") + "</b>: burns <b>player</b>. If <b>player</b> is not specified, burns a random user.<br>"
         + "<b>" + helpers.user("/confuse ") + helpers.arg("player") + "</b>: confuses <b>player</b>. If <b>player</b> is not specified, confuses a random user.<br>"
+        + "<b>" + helpers.user("/combobreaker") + "</b>: when a combo has abruptly come to an end. C-C-C-COMBOBREAKER!!! Also /cbreak.<br>"
         + "<b>" + helpers.user("/cow") + "</b>: a mysterious command that posts a certain quote. No one truly knows why it actually exists.<br>"
         + "<b>" + helpers.user("/darp") + "</b>: posts an image of Magikarp. Magidarp. Harpadarp.<br>"
         + "<b>" + helpers.user("/dennis") + "</b>: posts an image of Dennis, also known as Ghetsis, yelling out his name in all capitals.<br>"
@@ -151,6 +152,21 @@ funcommands = {
                 " has been burned by " + name + "!" + helpers.statusImage(command[0]) + "</b></font>", channel);
             }
         }
+    }
+
+    ,
+
+    combobreaker: function (src, channel, command) {
+        var name = sys.name(src);
+        sys.sendHtmlAll(helpers.bot(bots.fun) + "<b>" + helpers.user(helpers.escapehtml(name)) +
+        " has used the " + helpers.arg("Combobreaker") +
+        " command.</b><br><span style='font-size: 32px;'>C-C-C-COMBOBREAKER!!!</span>", channel);
+    }
+
+    ,
+
+    cbreak: function (src, channel, command) {
+        this.combobreaker(src, channel, command);
     }
 
     ,
