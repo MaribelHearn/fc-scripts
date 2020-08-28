@@ -770,15 +770,22 @@
             Entry Messages
             --------------
         **/
-        sys.sendMessage(src, "Welcome Message: The server has been up for " + helpers.formatUptime(uptime));
-        sys.sendMessage(src, "Welcome Message: The current number of players online is " + (eval(sys.numPlayers())) + " out of a record maximum of " + maxplayers + ".");
-        if (helpers.isAndroid(src)) {
-            sys.sendHtmlMessage(src, "<font color='blue'><timestamp/></font><b><font color='blue'>Welcome Message:</font></b> Type /commands in the chat window "
-            + "to view a list of commands. Type /rules for our server rules. You are supposed to know them, so you should read them!");
+        if (layout == "new") {
+            sys.sendMessage(src, "Welcome Message: The server has been up for " + helpers.formatUptime(uptime));
+            sys.sendMessage(src, "Welcome Message: The current number of players online is " + (eval(sys.numPlayers())) + " out of a record maximum of " + maxplayers + ".");
+            if (helpers.isAndroid(src)) {
+                sys.sendHtmlMessage(src, "<font color='blue'><timestamp/></font><b><font color='blue'>Welcome Message:</font></b> Type /commands in the chat window "
+                + "to view a list of commands. Type /rules for our server rules. You are supposed to know them, so you should read them!");
+            } else {
+                sys.sendHtmlMessage(src, "<font color='blue'><timestamp/></font><b><font color='blue'>Welcome Message:</font></b> Type /commands in the chat window, "
+                + "<a href='po:send//commands'>or click here</a>, to view a list of commands. Type /rules, <a href='po:send//rules'>or click here</a>, "
+                + "for our server rules. You are supposed to know them, so you should read them!");
+            }
         } else {
-            sys.sendHtmlMessage(src, "<font color='blue'><timestamp/></font><b><font color='blue'>Welcome Message:</font></b> Type /commands in the chat window, "
-            + "<a href='po:send//commands'>or click here</a>, to view a list of commands. Type /rules, <a href='po:send//rules'>or click here</a>, "
-            + "for our server rules. You are supposed to know them, so you should read them!");
+            sys.sendHtmlMessage(src, "<b><font color='blueviolet'>Server Run Time:</font></b> " + helpers.formatUptime(uptime));
+            sys.sendHtmlMessage(src, "<b><font color='red'>Number of Players Online:</font></b> <em>1 out of a record maximum of 3.</em>");
+            sys.sendHtmlMessage(src, "<br><timestamp/><b>Type: <font color='green'>/Commands</font></b> into a channel's main chat to view a list of commands.");
+            sys.sendHtmlMessage(src, "<timestamp/><b>Type: <font color='green'>/Rules</font></b> into a channel's main chat to view the server rules.");
         }
         /**
             ---------------
@@ -885,11 +892,11 @@
             Server and Channel Topic
             ------------------------
         **/
-        sys.sendHtmlMessage(src, "<b><font color='" + serverTopicColor + "'>Server Topic:</font></b> " + servertopic, channel);
+        sys.sendHtmlMessage(src, "<b><font color='" + (layout == "new" ? serverTopicColor : "maroon") + "'>Server Topic:</font></b> " + servertopic, channel);
         if (regchannels[lower]) {
-            sys.sendHtmlMessage(src, "<b><font color='" + channelTopicColor + "'>Channel Topic:</font></b> " + regchannels[lower].topic.join(TOPIC_DELIMITER), channel);
+            sys.sendHtmlMessage(src, "<b><font color='" + (layout == "new" ? channelTopicColor : "indigo") + "'>Channel Topic:</font></b> " + regchannels[lower].topic.join(TOPIC_DELIMITER), channel);
         } else {
-            sys.sendHtmlMessage(src, "<b><font color='" + channelTopicColor + "'>Channel Topic:</font></b> Welcome to " + channelname + "!", channel);
+            sys.sendHtmlMessage(src, "<b><font color='" + (layout == "new" ? channelTopicColor : "indigo") + "'>Channel Topic:</font></b> Welcome to " + channelname + "!", channel);
         }
         if (helpers.isLoaded("party.js")) {
             if (channel == partychannel && partyMode == "nightclub") {
