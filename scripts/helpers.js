@@ -185,7 +185,7 @@ helpers = {
     ,
 
     isMutable: function (command) {
-        return /sendAll|sendHtmlAll|sendMain|sendHtmlMain|sendHtmlAuths|sendHtmlAuth|sendHtmlOwner/.test(command.toString());
+        return /sendAll|sendHtmlAll|sendHtmlMain|sendHtmlAuths|sendHtmlAuth|sendHtmlOwner/.test(command.toString());
     }
 
     ,

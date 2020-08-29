@@ -21,6 +21,7 @@ modcommands = {
         + "<b>" + helpers.userl("/altsettings") + "</b>: displays alt settings.<br>"
         + "<b>" + helpers.userl("/bigtextsettings") + "</b>: displays custom bigtext settings.<br>"
         + "<b>" + helpers.userl("/customsettings") + "</b>: displays justice message customisation settings.<br>"
+        + "<b>" + helpers.userl("/filtersettings") + "</b>: displays name filtering settings.<br>"
         + "<br><timestamp/><br>"
         + border2;
         sys.sendHtmlMessage(src, commandsmessage, channel);
@@ -547,6 +548,8 @@ modcommands = {
         + "<b>" + helpers.user("/getcolor ") + helpers.arg("player") + "</b>: displays <b>player</b>'s color as hexadecimal color code. Also /getcolour.<br>"
         + "<b>" + helpers.user("/rangealts ") + helpers.arg("range") + "</b>: displays alts for <b>range</b>.<br>"
         + "<b>" + helpers.user("/lastmessages") + "</b>: Shows everyone's last 10 messages in a neat table. Also /lastmsgs or /lastposts.<br>"
+        + "<b>" + helpers.user("/regchannelinfo") + "</b>: lists all registered channels and their info.<br>"
+        + "<b>" + helpers.user("/commandlist") + "</b>: lists all available commands. Also /allcommands.<br>"
         + "<br><timestamp/><br>"
         + border2;
         sys.sendHtmlMessage(src, commandsmessage, channel);
@@ -829,6 +832,82 @@ modcommands = {
 
     ,
 
+    regchannelinfo: function (src, channel, command) {
+        var message = border + "<h2>Registered Channels</h2><br>";
+        if (helpers.isAndroid(src)) {
+            message += "<tt>";
+            for (var i in regchannels) {
+                message += "#" + (typeof(sys.channelId(i)) == "number" ? sys.channel(sys.channelId(i)) : i) + " | "
+                + (regchannels[i].stay || sys.channelId(i) <= permchannels.length ? "<b><font color='green'>Permanent</font></b>" : "<font color='red'>Not permanent</font>") + "<br>";
+            }
+            message += "</tt>";
+        } else {
+            message += "<style>table {border-width: 1px; border-style: solid; border-color: #000000;}</style>"
+            + "<table cellpadding='2' cellspacing='0'><thead><tr style='background-color: #B0B0B0;'>"
+            + "<th>Channel</th><th>Permanent</th><th>Private</th><th>Closure Level</th><th>Owners</th></tr></thead><tbody>";
+            for (var j in regchannels) {
+                message += "<tr>";
+                typeof(sys.channelId(j)) == "number" ? message += "<td style='width: 20px;'>" + helpers.channelLink(sys.channel(sys.channelId(j))) + "</td>" : message += "<td>#" + j + "</td>";
+                regchannels[j].stay || sys.channelId(j) <= permchannels.length ? message += "<td><b><font color='green'>Yes</font></b></td>" : message += "<td><font color='red'>No</font></td>";
+                regchannels[j].priv ? message += "<td><b><font color='green'>Yes</font></b></td>" : message += "<td><font color='red'>No</font></td>";
+                message += "<td>" + regchannels[j].close + "</td><td>" + regchannels[j].owners.join(", ") + "</td></tr>";
+            }
+            message += "</tbody></table>";
+        }
+        message += "<br><br><b>Total Registered Channels:</b> " + Object.keys(regchannels).length + "<br><br><timestamp/><br>" + border2;
+        sys.sendHtmlMessage(src, message, channel);
+    }
+
+    ,
+
+    commandlist: function (src, channel, command) {
+        var scriptmessage = border + "<h2>List of Commands</h2><br>", length, totallength;
+        scriptmessage += "<b>User Commands:</b> " + Object.keys(usercommands).sort().join(", ") + "<br>" +
+        "<b>Moderator Commands:</b> " + Object.keys(modcommands).sort().join(", ") + "<br>" +
+        "<b>Administrator Commands:</b> " + Object.keys(admincommands).sort().join(", ") + "<br>" +
+        "<b>Owner Commands:</b> " + Object.keys(ownercommands).sort().join(", ") + "<br>" +
+        "<b>Channel User Commands:</b> " + Object.keys(cusercommands).sort().join(", ") + "<br>" +
+        "<b>Channel Moderator Commands:</b> " + Object.keys(cmodcommands).sort().join(", ") + "<br>" +
+        "<b>Channel Administrator Commands:</b> " + Object.keys(cadmincommands).sort().join(", ") + "<br>" +
+        "<b>Channel Owner Commands:</b> " + Object.keys(cownercommands).sort().join(", ") + "<br>" +
+        "<b>All Commands:</b> " + allcommands.sort().join(", ") + "<br>" +
+        "<b>Helpers:</b> " + Object.keys(helpers).sort().join(", ") + "<br><br>" +
+        "<b>Total User Commands:</b> " + Object.keys(usercommands).length + "<br>" +
+        "<b>Total Moderator Commands:</b> " + Object.keys(modcommands).length + "<br>" +
+        "<b>Total Administrator Commands:</b> " + Object.keys(admincommands).length + "<br>" +
+        "<b>Total Owner Commands:</b> " + Object.keys(ownercommands).length + "<br>" +
+        "<b>Total Channel User Commands:</b> " + Object.keys(cusercommands).length + "<br>" +
+        "<b>Total Channel Mod Commands:</b> " + Object.keys(cmodcommands).length + "<br>" +
+        "<b>Total Channel Admin Commands:</b> " + Object.keys(cadmincommands).length + "<br>" +
+        "<b>Total Channel Owner Commands:</b> " + Object.keys(cownercommands).length;
+        if (helpers.isLoaded("funcmds.js")) {
+            scriptmessage += "<br><b>Total Fun Commands:</b> " + Object.keys(funcommands).length;
+        }
+        if (helpers.isLoaded("party.js")) {
+            scriptmessage += "<br><b>Total Party Commands:</b> " + Object.keys(partycommands).length;
+        }
+        if (helpers.isLoaded("rr.js")) {
+            scriptmessage += "<br><b>Total Russian Roulette Commands:</b> " + Object.keys(rrcommands).length;
+        }
+        if (helpers.isLoaded("roulette.js")) {
+            scriptmessage += "<br><b>Total Roulette Commands:</b> " + Object.keys(roulettecommands).length;
+        }
+        if (helpers.isLoaded("safari.js")) {
+            scriptmessage += "<br><b>Total Safari Commands:</b> " + Object.keys(safaricommands).length;
+        }
+        scriptmessage += "<br><b>Total Helpers:</b> " + Object.keys(helpers).length + "<br>" +
+        "<b><u>Total Commands:</u></b> " + allcommands.length + "<br><br><timestamp/><br>" + border2;
+        sys.sendHtmlMessage(src, scriptmessage, channel);
+    }
+
+    ,
+
+    allcommands: function (src, channel, command) {
+        this.commandlist(src, channel, command);
+    }
+
+    ,
+
     /**
         ------------
         Name Options
@@ -946,6 +1025,7 @@ modcommands = {
         var commandsmessage = border
         + "<h2>Moderator Commands ~ Other Options</h2>"
         + "<br>"
+        + "<b>" + helpers.user("/servertopic ") + helpers.arg("text") + "</b>: changes the server topic to <b>text</b>.<br>"
         + "<b>" + helpers.user("/clear") + "</b>: clears the chat. Also /chatclear and /clearchat.<br>"
         + "<b>" + helpers.user("/fullclear") + "</b>: actually clears the entire chat. Takes a long time, so prepare for lag.<br>"
         + "<b>" + helpers.user("/flash ") + helpers.arg("player") + "</b>: flashes <b>player</b>.<br>"
@@ -953,6 +1033,19 @@ modcommands = {
         + "<br><timestamp/><br>"
         + border2;
         sys.sendHtmlMessage(src, commandsmessage, channel);
+    }
+
+    ,
+
+    servertopic: function (src, channel, command) {
+        var name = sys.name(src);
+        if (!command[1]) {
+            sys.sendHtmlMessage(src, helpers.bot(bots.topic) + "The current server topic is: " + servertopic, channel);
+            return;
+        }
+        servertopic = command[1];
+        helpers.saveData("servertopic");
+        sys.sendHtmlAll(helpers.bot(bots.topic) + "<b>" + helpers.user(name) + " changed the server topic to " + helpers.arg(command[1]) + ".</b>");
     }
 
     ,
@@ -1350,10 +1443,8 @@ modcommands = {
         + "<b>Kick message:</b> " + (!kickmessages[lower] ? "none" : kickmessages[lower]) + "<br>"
         + "<b>Mute message:</b> " + (!mutemessages[lower] ? "none" : mutemessages[lower]) + "<br>";
         if (auth >= 2) {
-            commandsmessage += "<b>Ban message:</b> " + (!banmessages[lower] ? "none" : banmessages[lower]) + "<br>";
-        }
-        if (auth >= 3) {
-            commandsmessage += "<b>Range ban message:</b> " + (!rangebanmessages[lower] ? "none" : rangebanmessages[lower]) + "<br>";
+            commandsmessage += "<b>Ban message:</b> " + (!banmessages[lower] ? "none" : banmessages[lower]) + "<br>"
+            + "<b>Range ban message:</b> " + (!rangebanmessages[lower] ? "none" : rangebanmessages[lower]) + "<br>";
         }
         commandsmessage += "<br>"
         + "Syntax for custom messages:<br>"
@@ -1372,9 +1463,7 @@ modcommands = {
         + "Use <b>" + helpers.user("/mutemsg ") + helpers.arg("text") + "</b> to change your mute message to <b>text</b>. If <b>text</b> is not specified, displays your current mute message.<br>";
         if (auth >= 2) {
             commandsmessage += "Use <b>" + helpers.user("/banmsg ") + helpers.arg("text") +
-            "</b> to change your ban message to <b>text</b>. If <b>text</b> is not specified, displays your current ban message.<br>";
-        }
-        if (auth >= 3) {
+            "</b> to change your ban message to <b>text</b>. If <b>text</b> is not specified, displays your current ban message.<br>" +
             commandsmessage += "Use <b>" + helpers.user("/rangebanmsg ") + helpers.arg("text") +
             "</b> to change your range ban message to <b>text</b>. If <b>text</b> is not specified, displays your current range ban message.<br>";
         }
@@ -1471,5 +1560,111 @@ modcommands = {
         helpers.saveData("banmessages");
         helpers.saveData("rangebanmessages");
         sys.sendHtmlMessage(src, helpers.bot(bots.main) + "Your messages have been reset.", channel);
+    }
+
+    ,
+
+    /**
+        ---------------
+        Filter Settings
+        ---------------
+    **/
+    filtersettings: function (src, channel, command) {
+        var commandsmessage = border
+        + "<h2>Owner Commands ~ Filter Settings</h2>"
+        + "<br>"
+        + "The following words are currently not allowed to be in a username:<br>"
+        + "<br>"
+        + nameblocklist.join(", ") + "<br>"
+        + "<br>"
+        + "The following names are exceptions to this:<br>"
+        + "<br>"
+        + exceptions.join(", ") + "<br>"
+        + "<br>"
+        + "Use <b>" + helpers.user("/filter ") + helpers.arg("text") + "</b> to filter <b>text</b>. Also /block.<br>"
+        + "Use <b>" + helpers.user("/unfilter ") + helpers.arg("text") + "</b> to stop filtering <b>text</b>. Also /unblock.<br>"
+        + "Use <b>" + helpers.user("/addexception ") + helpers.arg("name") + "</b> to allow <b>name</b> to bypass filtering. Also /exception.<br>"
+        + "Use <b>" + helpers.user("/removeexception ") + helpers.arg("name") + "</b> to disallow <b>name</b> to bypass filtering.<br>"
+        + "<br><timestamp/><br>"
+        + border2;
+        sys.sendHtmlMessage(src, commandsmessage, channel);
+    }
+
+    ,
+
+    filter: function (src, channel, command) {
+        var word;
+        if (!command[1]) {
+            helpers.starfox(src, channel, command, bots.command, "Error 404, word not found.");
+            return;
+        }
+        word = command[1].toLowerCase();
+        nameblocklist.push(word);
+        helpers.saveData("nameblocklist");
+        sys.sendHtmlAuths(helpers.bot(bots.command) + "The word '" + word + "' has been added to the filter list.");
+    }
+
+    ,
+
+    block: function (src, channel, command) {
+        this.filter(src, channel, command);
+    }
+
+    ,
+
+    unfilter: function (src, channel, command) {
+        var word;
+        if (!command[1]) {
+            helpers.starfox(src, channel, command, bots.command, "Error 404, word not found.");
+            return;
+        }
+        word = command[1].toLowerCase();
+        if (!helpers.isInArray(word, nameblocklist)) {
+            helpers.starfox(src, channel, command, bots.command, "Error 400, that word isn't blocked.");
+            return;
+        }
+        nameblocklist.splice(nameblocklist.indexOf(word), 1);
+        helpers.saveData("nameblocklist");
+        sys.sendHtmlAuths(helpers.bot(bots.command) + "The word '" + word + "' has been removed from the filter list.");
+    }
+
+    ,
+
+    unblock: function (src, channel, command) {
+        this.unfilter(src, channel, command);
+    }
+
+    ,
+
+    addexception: function (src, channel, command) {
+        var name;
+        if (!command[1]) {
+            helpers.starfox(src, channel, command, bots.command, "Error 404, name not found.");
+            return;
+        }
+        name = command[1].toLowerCase();
+        exceptions.push(name);
+        helpers.saveData("exceptions");
+        sys.sendHtmlAuths(helpers.bot(bots.command) + "The name '" + name + "' will now bypass filtering.");
+    }
+
+    ,
+
+    removeexception: function (src, channel, command) {
+        var name;
+        if (!command[1]) {
+            helpers.starfox(src, channel, command, bots.command, "Error 404, name not found.");
+            return;
+        }
+        name = command[1].toLowerCase();
+        exceptions.splice(exceptions.indexOf(name), 1);
+        helpers.saveData("exceptions");
+        sys.sendHtmlAuths(helpers.bot(bots.command) + "The name '" + name + "' will no longer bypass filtering.");
+    }
+
+    ,
+
+    exception: function (src, channel, command) {
+        this.addexception(src, channel, command);
     }
 };
