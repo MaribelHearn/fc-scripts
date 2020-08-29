@@ -1462,10 +1462,10 @@ modcommands = {
         + "Use <b>" + helpers.user("/kickmsg ") + helpers.arg("text") + "</b> to change your kick message to <b>text</b>. If <b>text</b> is not specified, displays your current kick message.<br>"
         + "Use <b>" + helpers.user("/mutemsg ") + helpers.arg("text") + "</b> to change your mute message to <b>text</b>. If <b>text</b> is not specified, displays your current mute message.<br>";
         if (auth >= 2) {
-            commandsmessage += "Use <b>" + helpers.user("/banmsg ") + helpers.arg("text") +
-            "</b> to change your ban message to <b>text</b>. If <b>text</b> is not specified, displays your current ban message.<br>" +
-            commandsmessage += "Use <b>" + helpers.user("/rangebanmsg ") + helpers.arg("text") +
-            "</b> to change your range ban message to <b>text</b>. If <b>text</b> is not specified, displays your current range ban message.<br>";
+            commandsmessage += "Use <b>" + helpers.user("/banmsg ") + helpers.arg("text")
+            + "</b> to change your ban message to <b>text</b>. If <b>text</b> is not specified, displays your current ban message.<br>"
+            + "Use <b>" + helpers.user("/rangebanmsg ") + helpers.arg("text")
+            + "</b> to change your range ban message to <b>text</b>. If <b>text</b> is not specified, displays your current range ban message.<br>";
         }
         commandsmessage += "Use <b>" + helpers.user("/resetmsg ") + helpers.arg("message") + "</b> to reset <b>message</b> to its default.<br>";
         commandsmessage += "Use <b>" + helpers.user("/resetmsgs") + "</b> to reset your messages to their defaults.<br>"
