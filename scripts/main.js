@@ -100,9 +100,6 @@
     sys.dbRange = function(name) {
         return sys.dbIp(name).split('.')[0] + '.' + sys.dbIp(name).split('.')[1];
     };
-    sys.sendMain = function (message) {
-        sys.sendAll(message, 0);
-    };
     sys.sendHtmlMain = function (message) {
         sys.sendHtmlAll(message, 0);
     };
@@ -116,7 +113,7 @@
         } else {
             for (var index in players) {
                 if (sys.auth(index) > 1) {
-                    sys.sendHtmlMessage(index, message, channel);
+                    sys.sendHtmlMessage(index, message);
                 }
             }
         }
@@ -471,7 +468,7 @@
                 if (banlist[index].time === 0) {
                     delete banlist[index];
                     members[index] ? name = members[index] : name = index;
-                    sys.sendHtmlMain(helpers.bot(bots.ban) + name + "'s ban has expired!");
+                    sys.sendHtmlAuths(helpers.bot(bots.ban) + name + "'s ban has expired!");
                 }
                 helpers.saveData("banlist");
             }
@@ -487,7 +484,7 @@
                 if (mutelist[index].time === 0) {
                     delete mutelist[index];
                     members[index] ? name = members[index] : name = index;
-                    sys.sendHtmlMain(helpers.bot(bots.mute) + name + "'s mute has expired!");
+                    sys.sendHtmlAuths(helpers.bot(bots.mute) + name + "'s mute has expired!");
                 }
                 helpers.saveData("mutelist");
             }
