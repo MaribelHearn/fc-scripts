@@ -1003,6 +1003,7 @@ usercommands = {
         + "<b>" + helpers.user("/resetcolor") + "</b>: sets your color back to its original state. Also /resetcolour.<br>"
         + "<b>" + helpers.user("/reverse") + "</b>: reverses your username.<br>"
         + "<b>" + helpers.user("/selfkick") + "</b>: kicks yourself from the server.<br>"
+        + "<b>" + helpers.user("/selfban") + "</b>: bans yourself from the server.<br>"
         + "<br><timestamp/><br>"
         + border2;
         sys.sendHtmlMessage(src, commandsmessage, channel);
@@ -1095,6 +1096,14 @@ usercommands = {
         sys.kick(src);
     }
 
+    ,
+    
+    selfban: function (src, channel, command) {
+        var name = sys.name(src), lower = name.toLowerCase();
+        sys.sendHtmlAll(helpers.bot(bots.ban) + name + " has banned themselves from the server!", channel);
+        sys.ban(src);
+    }
+    
     ,
 
     color: function (src, channel, command) {
