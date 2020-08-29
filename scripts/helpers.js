@@ -291,33 +291,33 @@ helpers = {
         if (command) {
             cmd = (typeof(command) == "string" ? command : command.join(DELIMITER).replace(DELIMITER, ' '));
             if ((message.indexOf("Error 403, ") != -1 || bot == bots.starfox) && message != "Error 403, you are not allowed to post banned links or characters.") {
-                sys.sendHtmlAuth(this.bot(bots.spy ) + "[<a href=\"po:join/" + channelname + "\">#" + channelname +
+                sys.sendHtmlWatch(this.bot(bots.spy ) + "[<a href=\"po:join/" + channelname + "\">#" + channelname +
                 "</a>] <b><font color='" + this.color(src) + "'>" + this.escapehtml(name) + "</font></b> got Star Fox'd because of trying to run /" + this.escapehtml(cmd) + " (Error 403 Forbidden).");
             } else if (message.indexOf("Error 404, ") != -1) {
-                sys.sendHtmlAuth(this.bot(bots.spy) + "[<a href=\"po:join/" + channelname + "\">#" + channelname +
+                sys.sendHtmlWatch(this.bot(bots.spy) + "[<a href=\"po:join/" + channelname + "\">#" + channelname +
                 "</a>] <b><font color='" + this.color(src) + "'>" + this.escapehtml(name) + "</font></b> got Star Fox'd because of trying to run /" + this.escapehtml(cmd) + " (Error 404 Not Found).");
             } else if (message.indexOf("Error 400, ") != -1) {
-                sys.sendHtmlAuth(this.bot(bots.spy) + "[<a href=\"po:join/" + channelname + "\">#" + channelname +
+                sys.sendHtmlWatch(this.bot(bots.spy) + "[<a href=\"po:join/" + channelname + "\">#" + channelname +
                 "</a>] <b><font color='" + this.color(src) + "'>" + this.escapehtml(name) + "</font></b> got Star Fox'd because of trying to run /" + this.escapehtml(cmd) + " (Error 400 Bad Request).");
             } else if (message.indexOf("I KILL YOOOOUUUU!!!") != -1 || message.indexOf("Sorry, this channel is currently silenced.") != -1) {
-                sys.sendHtmlAuth(this.bot(bots.spy) + "[<a href=\"po:join/" + channelname + "\">#" + channelname +
+                sys.sendHtmlWatch(this.bot(bots.spy) + "[<a href=\"po:join/" + channelname + "\">#" + channelname +
                 "</a>] <b><font color='" + this.color(src) + "'>" + this.escapehtml(name) + "</font></b> got Star Fox'd because of trying to post during silence.");
             } else if (message == "You tried.") {
-                sys.sendHtmlAuth(this.bot(bots.spy) + "[<a href=\"po:join/" + channelname + "\">#" + channelname +
+                sys.sendHtmlWatch(this.bot(bots.spy) + "[<a href=\"po:join/" + channelname + "\">#" + channelname +
                 "</a>] <b><font color='" + this.color(src) + "'>" + this.escapehtml(name) + "</font></b> got Star Fox'd because of trying to kill Chuck Norris. How silly.");
             } else if (message == "Error 403, you are not allowed to post banned links or characters.") {
-                sys.sendHtmlAuth(this.bot(bots.spy) + "[<a href=\"po:join/" + channelname + "\">#" + channelname +
+                sys.sendHtmlWatch(this.bot(bots.spy) + "[<a href=\"po:join/" + channelname + "\">#" + channelname +
                 "</a>] <b><font color='" + this.color(src) + "'>" + name + "</font></b> tried to  post (a) banned link(s) or character(s). (Error 403 Forbidden)");
             } else {
-                sys.sendHtmlAuth(this.bot(bots.spy) + "[<a href=\"po:join/" + channelname + "\">#" + channelname +
+                sys.sendHtmlWatch(this.bot(bots.spy) + "[<a href=\"po:join/" + channelname + "\">#" + channelname +
                 "</a>] <b><font color='" + this.color(src) + "'>" + this.escapehtml(name) + "</font></b> got Star Fox'd because of trying to run /" + this.escapehtml(cmd) + ".");
             }
         } else {
             if (message.indexOf("I KILL YOOOOUUUU!!!") != -1 || message.indexOf("Sorry, this channel is currently silenced.") != -1) {
-                sys.sendHtmlAuth(this.bot(bots.spy) + "[<a href=\"po:join/" + channelname + "\">#" + channelname +
+                sys.sendHtmlWatch(this.bot(bots.spy) + "[<a href=\"po:join/" + channelname + "\">#" + channelname +
                 "</a>] <b><font color='" + this.color(src) + "'>" + this.escapehtml(name) + "</font></b> got Star Fox'd because of trying to talk during silence.");
             } else {
-                sys.sendHtmlAuth(this.bot(bots.spy) + "[<a href=\"po:join/" + channelname + "\">#" + channelname + "</a>] <b><font color='" + this.color(src) + "'>" + this.escapehtml(name) +
+                sys.sendHtmlWatch(this.bot(bots.spy) + "[<a href=\"po:join/" + channelname + "\">#" + channelname + "</a>] <b><font color='" + this.color(src) + "'>" + this.escapehtml(name) +
                 "</font></b> got Star Fox'd.");
             }
         }
