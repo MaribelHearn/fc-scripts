@@ -2014,6 +2014,13 @@ helpers = {
 
     ,
 
+    pokeBallImage: function (ball) {
+        var mapping = {"poke": "u", "great": "m", "ultra": "a", "master": "o"};
+        return "<img src='Themes/Classic/client/" + mapping[ball] + "Available.png'>";
+    }
+
+    ,
+
     statusImage: function (status) {
         return "<img src='Themes/Classic/status/battle_status" + this.toStatusNumber(status) + ".png'>";
     }
