@@ -21,8 +21,9 @@ funcommands = {
         "</b>: posts <b>text</b> in a large <b>color</b> font of <b>size</b> px in size, titled <b>title</b>, with <b>bot</b> as bot.<br>"
         + "<b>" + helpers.user("/bulbaderp") + "</b>: posts an image of Bulbasaur. Bulbaderp.<br>"
         + "<b>" + helpers.user("/burn ") + helpers.arg("player") + "</b>: burns <b>player</b>. If <b>player</b> is not specified, burns a random user.<br>"
-        + "<b>" + helpers.user("/confuse ") + helpers.arg("player") + "</b>: confuses <b>player</b>. If <b>player</b> is not specified, confuses a random user.<br>"
+        + "<b>" + helpers.user("/capture ") + helpers.arg("player") + helpers.arg2("*Poké Ball type") + "</b>: attempts to capture <b>player</b> in a <b>Poké Ball type</b>. If <b>player</b> is not specified, captures a random user.<br>"
         + "<b>" + helpers.user("/combobreaker") + "</b>: when a combo has abruptly come to an end. C-C-C-COMBOBREAKER!!! Also /cbreak.<br>"
+        + "<b>" + helpers.user("/confuse ") + helpers.arg("player") + "</b>: confuses <b>player</b>. If <b>player</b> is not specified, confuses a random user.<br>"
         + "<b>" + helpers.user("/cow") + "</b>: a mysterious command that posts a certain quote. No one truly knows why it actually exists.<br>"
         + "<b>" + helpers.user("/darp") + "</b>: posts an image of Magikarp. Magidarp. Harpadarp.<br>"
         + "<b>" + helpers.user("/dennis") + "</b>: posts an image of Dennis, also known as Ghetsis, yelling out his name in all capitals.<br>"
@@ -153,6 +154,26 @@ funcommands = {
                 " has been burned by " + name + "!" + helpers.statusImage(command[0]) + "</b></font>", channel);
             }
         }
+    }
+
+    ,
+
+    capture: function (src, channel, command) {
+        var pokeballs = {
+            "poke": {"rate": 8, "name": "Poké Ball", "color": "darkred"},
+            "great": {"rate": 6, "name": "Great Ball", "color": "blue"},
+            "ultra": {"rate": 3, "name": "Ultra Ball", "color": "darkblue"},
+            "master": {"rate": -1, "name": "Master Ball", "color": "purple"}
+        }, name = sys.name(src), random = sys.rand(0, sys.numPlayers()), rng = sys.rand(0, 11), player, ball;
+        !command[1] ? player = sys.name(sys.playerIds()[random]) : player = helpers.escapehtml(command[1]);
+        !command[2] ? ball = "poke" : ball = command[2];
+        ball = helpers.removeSpaces(ball.toLowerCase().replace("é", "e").replace("ball", ""));
+        if (!helpers.isInArray(ball, Object.keys(pokeballs))) {
+            helpers.starfox(src, channel, command, bots.command, "Error 400, invalid Poké Ball type.");
+            return;
+        }
+        sys.sendHtmlAll("<font color='" + pokeballs[ball].color + "'><timestamp/><b>" + helpers.pokeBallImage(ball) + player +
+        " has been caught in a " + pokeballs[ball].name + " by " + name + "!" + helpers.pokeBallImage(ball) + "</b></font>", channel);
     }
 
     ,
