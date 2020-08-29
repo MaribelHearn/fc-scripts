@@ -1096,6 +1096,14 @@ usercommands = {
     }
 
     ,
+    
+    selfban: function (src, channel, command) {
+        var name = sys.name(src), lower = name.toLowerCase();
+        sys.sendHtmlAll(helpers.bot(bots.ban) + name + " has banned themselves from the server!", channel);
+        sys.ban(src);
+    }
+    
+    ,
 
     color: function (src, channel, command) {
         var color = command[1], name = sys.name(src), auth = sys.auth(src), hexColor;
