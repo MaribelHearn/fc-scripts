@@ -226,13 +226,13 @@ watchChannelLogging = function (message, channel, name, lower, color) {
     if (regchannels[sys.channel(channel).toLowerCase()]) {
         if (!regchannels[sys.channel(channel).toLowerCase()].priv) {
             if (!helpers.isInArray(lower, silentcommands)) {
-                sys.sendHtmlAuth(helpers.bot(bots.spy) + "[" + helpers.channelLink(sys.channel(channel)) + "] <b><font color='" + color +
+                sys.sendHtmlWatch(helpers.bot(bots.spy) + "[" + helpers.channelLink(sys.channel(channel)) + "] <b><font color='" + color +
                 "'>" + helpers.escapehtml(name) + "</font></b> ran /" + helpers.escapehtml(message.slice(1)) + ".");
             }
         }
     } else {
         if (!helpers.isInArray(lower, silentcommands)) {
-            sys.sendHtmlAuth(helpers.bot(bots.spy) + "[" + helpers.channelLink(sys.channel(channel)) + "] <b><font color='" + color +
+            sys.sendHtmlWatch(helpers.bot(bots.spy) + "[" + helpers.channelLink(sys.channel(channel)) + "] <b><font color='" + color +
             "'>" + helpers.escapehtml(name) + "</font></b> ran /" + helpers.escapehtml(message.slice(1)) + ".");
         }
     }

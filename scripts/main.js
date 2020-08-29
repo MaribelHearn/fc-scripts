@@ -107,31 +107,31 @@
         if (!channel) {
             for (var index in players) {
                 if (sys.auth(index) > 1) {
-                    sys.sendHtmlMessage(index, message, 0);
+                    sys.sendHtmlMessage(index, message);
                 }
             }
         } else {
             for (var index in players) {
                 if (sys.auth(index) > 1) {
-                    sys.sendHtmlMessage(index, message);
+                    sys.sendHtmlMessage(index, message, channel);
                 }
             }
         }
     };
-    sys.sendHtmlAuth = function (message) {
+    sys.sendHtmlWatch = function (message) {
         sys.sendHtmlAll(message, watch);
     };
     sys.sendHtmlOwner = function (message) {
         if (!channel) {
             for (var index in players) {
                 if (sys.auth(index) >= 3) {
-                    sys.sendHtmlMessage(index, message, 0);
+                    sys.sendHtmlMessage(index, message);
                 }
             }
         } else {
             for (var index in players) {
                 if (sys.auth(index) >= 3) {
-                    sys.sendHtmlMessage(index, message);
+                    sys.sendHtmlMessage(index, message, channel);
                 }
             }
         }
@@ -335,7 +335,7 @@
     ,
 
     battleConnectionLost: function () {
-        sys.sendHtmlAuth(helpers.bot(bots.spy) + "[Server] Connection to the battle server was lost.");
+        sys.sendHtmlWatch(helpers.bot(bots.spy) + "[Server] Connection to the battle server was lost.");
     }
 
     ,
@@ -604,9 +604,9 @@
             -------------
         **/
         if (ip == RELAY_STATION_PROXY) {
-            sys.sendHtmlAuth(helpers.bot(bots.spy) + "[Server] The web client is connecting to the server.");
+            sys.sendHtmlWatch(helpers.bot(bots.spy) + "[Server] The web client is connecting to the server.");
         } else {
-            sys.sendHtmlAuth(helpers.bot(bots.spy) + "[Server] IP " + ip + " is connecting to the server.");
+            sys.sendHtmlWatch(helpers.bot(bots.spy) + "[Server] IP " + ip + " is connecting to the server.");
         }
     }
 
@@ -634,7 +634,7 @@
                 if (banlist[i].ip == ip) {
                     sys.stopEvent();
                     sys.sendMessage(src, "You are banned!");
-                    sys.sendHtmlAuth(helpers.bot(bots.spy) + "[Server] Banned user <b><font color='" + color + "'>" + name + "</font></b> tried to enter the server.");
+                    sys.sendHtmlWatch(helpers.bot(bots.spy) + "[Server] Banned user <b><font color='" + color + "'>" + name + "</font></b> tried to enter the server.");
                     return;
                 }
             }
@@ -647,7 +647,7 @@
                 if (rangebanlist[i].range == range) {
                     sys.stopEvent();
                     sys.sendMessage(src, "You are banned!");
-                    sys.sendHtmlAuth(helpers.bot(bots.spy) + "[Server] Range banned user <b><font color='" + color + "'>" + name + "</font></b> tried to enter the server.");
+                    sys.sendHtmlWatch(helpers.bot(bots.spy) + "[Server] Range banned user <b><font color='" + color + "'>" + name + "</font></b> tried to enter the server.");
                     return;
                 }
             }
@@ -659,7 +659,7 @@
             if (!open) {
                 sys.stopEvent();
                 sys.sendMessage(src, "Sorry, the server is closed for maintenance at the moment.");
-                sys.sendHtmlAuth(helpers.bot(bots.spy) + "[Server] <b><font color='" + color + "'>" + name + "</font></b> tried to enter the server during closure.");
+                sys.sendHtmlWatch(helpers.bot(bots.spy) + "[Server] <b><font color='" + color + "'>" + name + "</font></b> tried to enter the server during closure.");
                 return;
             }
             /**
@@ -672,7 +672,7 @@
                 if (name.indexOf(nameblocklist[index]) != -1 && !helpers.isInArray(name, exceptions) && auth < 3) {
                     sys.stopEvent();
                     sys.sendMessage(src, helpers.bot(bots.welcome) + "Your name contains a banned word: " + nameblocklist[index] + ". Please change your name and try entering again.");
-                    sys.sendHtmlAuth(helpers.bot(bots.spy) + "[Server] <b><font color='" + color + "'>" + name + "</font></b> tried to enter the server with a banned word in their username.");
+                    sys.sendHtmlWatch(helpers.bot(bots.spy) + "[Server] <b><font color='" + color + "'>" + name + "</font></b> tried to enter the server with a banned word in their username.");
                     return;
                 }
             }
@@ -684,7 +684,7 @@
             if (helpers.bannedchars(name)[0] && auth < 3) {
                 sys.stopEvent();
                 sys.sendMessage(src, helpers.bot(bots.welcome) + "Your name contains " + helpers.bannedchars(name)[1] + ". Please change your name and try entering again.");
-                sys.sendHtmlAuth(helpers.bot(bots.spy) + "[Server] <b><font color='" + color + "'>" + name +
+                sys.sendHtmlWatch(helpers.bot(bots.spy) + "[Server] <b><font color='" + color + "'>" + name +
                 "</font></b> tried to enter the server with " + helpers.bannedchars(name)[1] + " in their username.");
                 return;
             }
@@ -732,7 +732,7 @@
         **/
         if (sys.isGigaBanned(id)) {
             sys.sendMessage(src, "You are banned!");
-            sys.sendHtmlAuth(helpers.bot(bots.spy) + "[Server] Giga banned user <b><font color='" + color + "'>" + name + "</font></b> tried to enter the server.");
+            sys.sendHtmlWatch(helpers.bot(bots.spy) + "[Server] Giga banned user <b><font color='" + color + "'>" + name + "</font></b> tried to enter the server.");
             gigabancheck = true;
             sys.kick(src);
             return;
@@ -749,7 +749,7 @@
         } else {
             if (sys.isMegaBanned(cookie)) {
                 sys.sendMessage(src, "You are banned!");
-                sys.sendHtmlAuth(helpers.bot(bots.spy) + "[Server] Mega banned user <b><font color='" + color + "'>" + name + "</font></b> tried to enter the server.");
+                sys.sendHtmlWatch(helpers.bot(bots.spy) + "[Server] Mega banned user <b><font color='" + color + "'>" + name + "</font></b> tried to enter the server.");
                 megabancheck = true;
                 sys.kick(src);
                 return;
@@ -821,7 +821,7 @@
         versions[lower] = helpers.version(version);
         helpers.saveData("versions");
         version = versions[lower];
-        sys.sendHtmlAuth(helpers.bot(bots.spy) + "[Server] <b><font color='" + color + "'>" + name + "</font></b> is using " + os + (version === "" ? "" : ", " + version) + ".");
+        sys.sendHtmlWatch(helpers.bot(bots.spy) + "[Server] <b><font color='" + color + "'>" + name + "</font></b> is using " + os + (version === "" ? "" : ", " + version) + ".");
         /**
             ------------------
             Fake Guest Warning
@@ -838,7 +838,7 @@
         if (API_KEY !== "") {
             if (countryname[lower]) {
                 country = helpers.toFlagKey(helpers.removespaces(countryname[lower].toUpperCase()));
-                sys.sendHtmlAuth(helpers.bot(bots.spy) + "[Server] <b><font color='" + color + "'>" + name + "</font></b> is from " + FLAGS[country] + " " + countryname[lower] + ".");
+                sys.sendHtmlWatch(helpers.bot(bots.spy) + "[Server] <b><font color='" + color + "'>" + name + "</font></b> is from " + FLAGS[country] + " " + countryname[lower] + ".");
             } else {
                 sys.webCall(helpers.countryRetrievalUrl(ip), function (resp) {
                     resp = JSON.parse(resp);
@@ -849,7 +849,7 @@
                     helpers.saveData("countryname");
                     helpers.saveData("cityname");
                     country = helpers.toFlagKey(helpers.removespaces(countryname[lower].toUpperCase()));
-                    sys.sendHtmlAuth(helpers.bot(bots.spy) + "[Server] <b><font color='" + color + "'>" + name + "</font></b> is from " + FLAGS[country] + " " + countryname[lower] + ".");
+                    sys.sendHtmlWatch(helpers.bot(bots.spy) + "[Server] <b><font color='" + color + "'>" + name + "</font></b> is from " + FLAGS[country] + " " + countryname[lower] + ".");
                 });
             }
         }
@@ -909,7 +909,7 @@
         }
         if (helpers.isLoaded("party.js")) {
             if (channel == partychannel && partyMode == "nightclub") {
-                sys.sendHtmlAuth(helpers.bot(bots.spy) + "[Server] <b><font color='" + helpers.color(src) + "'>" + sys.name(src) + "</b> has joined the channel " + helpers.channelLink(channelname) + ".");
+                sys.sendHtmlWatch(helpers.bot(bots.spy) + "[Server] <b><font color='" + helpers.color(src) + "'>" + sys.name(src) + "</b> has joined the channel " + helpers.channelLink(channelname) + ".");
                 return;
             }
         }
@@ -926,7 +926,7 @@
                 sys.sendHtmlAll("<timestamp/><b>~Please Welcome " + helpers.rainbow(name) + " to " + channelname + "~</b>", channel);
             }
         }
-        sys.sendHtmlAuth(helpers.bot(bots.spy) + "[Server] <b><font color='" + helpers.color(src) + "'>" + sys.name(src) + "</font></b> has joined the channel " + helpers.channelLink(channelname) + ".");
+        sys.sendHtmlWatch(helpers.bot(bots.spy) + "[Server] <b><font color='" + helpers.color(src) + "'>" + sys.name(src) + "</font></b> has joined the channel " + helpers.channelLink(channelname) + ".");
     }
 
     ,
@@ -946,7 +946,7 @@
         var cookie = sys.cookie(src) ? sys.cookie(src) : "none", id = sys.uniqueId(src) ? sys.uniqueId(src).id : "none";
         if (helpers.isLoaded("party.js")) {
             if (channel == partychannel && partyMode == "nightclub") {
-                sys.sendHtmlAuth(helpers.bot(bots.spy) + "[Server] <b><font color='" + helpers.color(src) + "'>" + name + "</font></b> has left the channel " + helpers.channelLink(channelname) + ".");
+                sys.sendHtmlWatch(helpers.bot(bots.spy) + "[Server] <b><font color='" + helpers.color(src) + "'>" + name + "</font></b> has left the channel " + helpers.channelLink(channelname) + ".");
                 return;
             }
         }
@@ -962,7 +962,7 @@
                     sys.sendHtmlAll("<timestamp/><b>~" + helpers.rainbow(name) + " has left " + channelname + "~</b>", channel);
                 }
             }
-            sys.sendHtmlAuth(helpers.bot(bots.spy) + "[Server] <b><font color='" + helpers.color(src) + "'>" + name + "</font></b> has left the channel " + helpers.channelLink(channelname) + ".");
+            sys.sendHtmlWatch(helpers.bot(bots.spy) + "[Server] <b><font color='" + helpers.color(src) + "'>" + name + "</font></b> has left the channel " + helpers.channelLink(channelname) + ".");
         }
     }
 
@@ -1059,7 +1059,7 @@
         **/
         members[name.toLowerCase()] = name;
         helpers.saveData("members");
-        sys.sendHtmlAuth(helpers.bot(bots.spy) + "[Player] <b><font color='" + players[src].color + "'>" + players[src].name + "</font></b> changed their team, and their name to <b><font color='" + color +
+        sys.sendHtmlWatch(helpers.bot(bots.spy) + "[Player] <b><font color='" + players[src].color + "'>" + players[src].name + "</font></b> changed their team, and their name to <b><font color='" + color +
         "'>" + name + "</font></b>.");
         players[src].name = name;
         players[src].color = color;
@@ -1122,7 +1122,7 @@
         monospeciescheck(src, team);
         monogencheck(src, team);
         monolettercheck(src, team);
-        sys.sendHtmlAuth(helpers.bot(bots.spy) + "[Player] <b><font color='" + helpers.color(src) + "'>" + sys.name(src) + "</font></b> has changed team " + team + " from the " + oldtier +
+        sys.sendHtmlWatch(helpers.bot(bots.spy) + "[Player] <b><font color='" + helpers.color(src) + "'>" + sys.name(src) + "</font></b> has changed team " + team + " from the " + oldtier +
         " tier to the " + newtier + " tier.");
     }
 
@@ -1169,7 +1169,7 @@
 
     afterChannelCreated: function (channel, channelname, creator) {
         var lower = sys.channel(channel).toLowerCase();
-        sys.sendHtmlAuth(helpers.bot(bots.spy) + "[Server] <b><font color='" + helpers.color(creator) + "'>" + sys.name(creator) +
+        sys.sendHtmlWatch(helpers.bot(bots.spy) + "[Server] <b><font color='" + helpers.color(creator) + "'>" + sys.name(creator) +
         "</font></b> has created the channel " + helpers.channelLink(sys.channel(channel)) + ".");
     }
 
@@ -1192,7 +1192,7 @@
                 return;
             }
         }
-        sys.sendHtmlAuth(helpers.bot(bots.spy) + "[Server] The channel #" + sys.channel(channel) + " has been destroyed.");
+        sys.sendHtmlWatch(helpers.bot(bots.spy) + "[Server] The channel #" + sys.channel(channel) + " has been destroyed.");
     }
 
     ,
@@ -1345,7 +1345,7 @@
         **/
         if (regchannels[channelname2]) {
             if (!regchannels[channelname2].priv) {
-                sys.sendHtmlAuth(helpers.bot(bots.spy) + "[<a href=\"po:join/" + sys.channel(channel) + "\">#" + sys.channel(channel) +
+                sys.sendHtmlWatch(helpers.bot(bots.spy) + "[<a href=\"po:join/" + sys.channel(channel) + "\">#" + sys.channel(channel) +
                 "</a>] <b><font color='" + color + "'>" + helpers.escapehtml(name) + ":</font></b> " + helpers.escapehtml(message));
             }
         }
@@ -1599,7 +1599,7 @@
     ,
 
     afterPlayerAway: function (src, away) {
-        sys.sendHtmlAuth(helpers.bot(bots.spy) + "[Player] <b><font color='" + helpers.color(src) + "'>" + sys.name(src) + "</font></b> is " + (away ? "idling" : "back") + ".");
+        sys.sendHtmlWatch(helpers.bot(bots.spy) + "[Player] <b><font color='" + helpers.color(src) + "'>" + sys.name(src) + "</font></b> is " + (away ? "idling" : "back") + ".");
     }
 
     ,
@@ -1609,10 +1609,10 @@
         if (helpers.isGuest(name)) {
             sys.stopEvent();
             sys.sendMessage(src, helpers.bot(bots.pass) + "You may not register guest names!");
-            sys.sendHtmlAuth(helpers.bot(bots.spy) + "[Player] <b><font color='" + color + "'>" + name + "</font></b> tried to register a guest name.");
+            sys.sendHtmlWatch(helpers.bot(bots.spy) + "[Player] <b><font color='" + color + "'>" + name + "</font></b> tried to register a guest name.");
             return;
         }
-        sys.sendHtmlAuth(helpers.bot(bots.spy) + "[Player] <b><font color='" + color + "'>" + name + "</font></b> registered.");
+        sys.sendHtmlWatch(helpers.bot(bots.spy) + "[Player] <b><font color='" + color + "'>" + name + "</font></b> registered.");
     }
 
     ,
@@ -1650,11 +1650,11 @@
 
     afterChallengeIssued: function (src, trgt, clauses, rated, mode) {
         if (clauses === 0) {
-            sys.sendHtmlAuth(helpers.bot(bots.spy) + "[Battle] <b><font color='" + helpers.color(src) + "'>" + sys.name(src) + "</font></b> has challenged <b><font color='" + helpers.color(trgt) +
+            sys.sendHtmlWatch(helpers.bot(bots.spy) + "[Battle] <b><font color='" + helpers.color(src) + "'>" + sys.name(src) + "</font></b> has challenged <b><font color='" + helpers.color(trgt) +
             "'>" + sys.name(trgt) + "</font></b> without any clauses.");
         } else {
             var list = helpers.listOfClauses(clauses);
-            sys.sendHtmlAuth(helpers.bot(bots.spy) + "[Battle] <b><font color='" + helpers.color(src) + "'>" + sys.name(src) + "</font></b> has challenged <b><font color='" + helpers.color(trgt) +
+            sys.sendHtmlWatch(helpers.bot(bots.spy) + "[Battle] <b><font color='" + helpers.color(src) + "'>" + sys.name(src) + "</font></b> has challenged <b><font color='" + helpers.color(trgt) +
             "'>" + sys.name(trgt) + "</font></b> with the clauses " + (typeof(list) == "string" ? list : list.join(", ")) + ".");
         }
     }
@@ -1677,7 +1677,7 @@
     ,
 
     afterFindBattle: function (src, team) {
-        sys.sendHtmlAuth(helpers.bot(bots.spy) + "[Battle] <b><font color='" + helpers.color(src) + "'>" + sys.name(src) + "</font></b> has used the Find Battle button.");
+        sys.sendHtmlWatch(helpers.bot(bots.spy) + "[Battle] <b><font color='" + helpers.color(src) + "'>" + sys.name(src) + "</font></b> has used the Find Battle button.");
     }
 
     ,
@@ -1734,7 +1734,7 @@
                 }
             }
         } else {
-            sys.sendHtmlAuth(helpers.bot(bots.spy) + "[Battle] A battle has started between <b><font color='" + helpers.color(src) + "'>" + sys.name(src) +
+            sys.sendHtmlWatch(helpers.bot(bots.spy) + "[Battle] A battle has started between <b><font color='" + helpers.color(src) + "'>" + sys.name(src) +
             "</font></b> and <b><font color='" + helpers.color(trgt) + "'>" + sys.name(trgt) + "</font></b>.");
         }
     }
@@ -1752,7 +1752,7 @@
     ,
 
     afterSpectateBattle: function (src, battler1, battler2) {
-        sys.sendHtmlAuth(helpers.bot(bots.spy) + "[Battle] <b><font color='" + helpers.color(src) + "'>" + sys.name(src) + "</font></b> is spectating the battle between " +
+        sys.sendHtmlWatch(helpers.bot(bots.spy) + "[Battle] <b><font color='" + helpers.color(src) + "'>" + sys.name(src) + "</font></b> is spectating the battle between " +
         "<b><font color='" + helpers.color(battler1) + "'>" + sys.name(battler1) + "</font></b> and <b><font color='" + helpers.color(battler2) + "'>" + sys.name(battler2) + "</font></b>.");
     }
 
@@ -1798,13 +1798,13 @@
         **/
         } else {
             if (result == "tie") {
-                sys.sendHtmlAuth(helpers.bot(bots.spy) + "[Battle] <b><font color='" + helpers.color(winner) + "'>" + winnername +
+                sys.sendHtmlWatch(helpers.bot(bots.spy) + "[Battle] <b><font color='" + helpers.color(winner) + "'>" + winnername +
                 "</font></b> has tied against <b><font color='" + helpers.color(loser) + "'>" + losername + "</font></b>.");
             } else if (result == "forfeit") {
-                sys.sendHtmlAuth(helpers.bot(bots.spy) + "[Battle] <b><font color='" + helpers.color(loser) + "'>" + losername +
+                sys.sendHtmlWatch(helpers.bot(bots.spy) + "[Battle] <b><font color='" + helpers.color(loser) + "'>" + losername +
                 "</font></b> has forfeited against <b><font color='" + helpers.color(winner) + "'>" + winnername + "</font></b>.");
             } else {
-                sys.sendHtmlAuth(helpers.bot(bots.spy) + "[Battle] <b><font color='" + helpers.color(winner) + "'>" + winnername +
+                sys.sendHtmlWatch(helpers.bot(bots.spy) + "[Battle] <b><font color='" + helpers.color(winner) + "'>" + winnername +
                 "</font></b> has beaten <b><font color='" + helpers.color(loser) + "'>" + losername + "</font></b>.");
             }
         }
