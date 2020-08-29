@@ -186,7 +186,6 @@
     channelWelcomeMessage = helpers.readData("channelwelcomemessage");
     channelLeaveMessage = helpers.readData("channelleavemessage");
     noPermissionMessage = helpers.readData("nopermissionmessage");
-    partyMode = helpers.readData("partymode");
     updateFrequency = helpers.readNumber("updatefrequency");
     allowance = helpers.readNumber("allowance");
     floodtime = helpers.readNumber("floodtime");
@@ -268,6 +267,11 @@
     bansites.splice(bansites.indexOf(""), 1);
     bansites.splice(bansites.lastIndexOf(""), 1);
     allcommands = helpers.allCommands();
+    if (permchannels.length == 8) {
+        if (!helpers.isLoaded("mafia.js")) {
+            permchannels.splice(7, 1);
+        }
+    }
     if (permchannels.length == 7) {
         if (!helpers.isLoaded("safari.js")) {
             permchannels.splice(6, 1);
@@ -306,6 +310,11 @@
     if (permchannels.length == 6) {
         if (helpers.isLoaded("safari.js")) {
             permchannels.push("Safari");
+        }
+    }
+    if (permchannels.length == 7) {
+        if (helpers.isLoaded("mafia.js")) {
+            permchannels.push("Mafia");
         }
     }
     helpers.saveData("permchannels");
@@ -388,6 +397,12 @@
                 sys.createChannel(permchannels[6]);
             }, time, 0);
         }
+        if (helpers.isLoaded("mafia.js")) {
+            time += 100;
+            sys.setTimer(function () {
+                sys.createChannel(permchannels[7]);
+            }, time, 0);
+        }
         time += 100;
         sys.setTimer(function () {
             watch = sys.channelId(permchannels[0]);
@@ -404,6 +419,9 @@
             }
             if (helpers.isLoaded("safari.js")) {
                 safarichannel = sys.channelId(permchannels[6]);
+            }
+            if (helpers.isLoaded("mafia.js")) {
+                mafiachannel = sys.channelId(permchannels[7]);
             }
             print("The default channels have been created.");
             serverStarting = false;
@@ -450,7 +468,7 @@
     ,
 
     step: function () {
-        var name, number, number2, randomEvent;
+        var name, number, number2;
         /**
             --------
             Flooding
@@ -502,57 +520,6 @@
             }
         }
         /**
-            ---------------
-            Roulette Events
-            ---------------
-        **/
-        if (helpers.isLoaded("roulette.js")) {
-            if (sys.playersOfChannel(roulettechannel).length !== 0) { // only trigger events when at least one person is in the channel
-                rouletteStep += 1;
-
-                // if the waiting time's up and there is no event going, start a new event
-                if (rouletteEvent === "" && rouletteStep == rouletteTime) {
-                    randomEvent = sys.rand(0, 100);
-                    if (randomEvent < 34) {
-                        rouletteEvent = "frenzy";
-                        for (var i in roulette) {
-                            roulette[i].shinyChance = parseInt(4096 / (4096 / 33));
-                        }
-                        rouletteTime = 33;
-                    } else if (randomEvent < 55) {
-                        rouletteEvent = "fest";
-                        rouletteTime = sys.rand(ROULETTE_FEST_MIN, ROULETTE_FEST_MAX);
-                    } else if (randomEvent < 76) {
-                        rouletteEvent = sys.type(sys.rand(0, 19));
-                        rouletteTime = sys.rand(ROULETTE_EVENT_MIN, ROULETTE_EVENT_MAX);
-                    } else {
-                        rouletteEvent = "legendary";
-                        rouletteTime = sys.rand(ROULETTE_EVENT_MIN, ROULETTE_EVENT_MAX);
-                    }
-                    for (var i in roulette) { // flash those with event flashing on
-                        if (roulette[i].eventFlash && sys.id(i)) {
-                            sys.sendHtmlMessage(sys.id(i), "<ping/>", roulette);
-                        }
-                    }
-                    helpers.rouletteEventMessage(rouletteEvent, false);
-                    rouletteStep = 0;
-                }
-
-                // stop an event once its time is up and set new waiting time
-                if (rouletteEvent !== "" && rouletteStep == rouletteTime) {
-                    rouletteTime = sys.rand(ROULETTE_WAIT_MIN, ROULETTE_WAIT_MAX);
-                    helpers.rouletteEventMessage(rouletteEvent, true); // sets 'ended' to true
-                    if (rouletteEvent == "frenzy") {
-                        for (var i in roulette) {
-                            roulette[i].shinyChance = parseInt(roulette[i].shinyChance * (4096 / 33));
-                        }
-                    }
-                    rouletteEvent = "";
-                    rouletteStep = 0;
-                }
-            }
-        }
-        /**
             -------------
             Auto-Updating
             -------------
@@ -582,6 +549,14 @@
             sys.system("git pull origin master");
             ownercommands.reload(false, 0, ["auto"]);
             sys.sendHtmlOwner(helpers.bot(bots.script) + "The server scripts have been automatically updated! [Commit Message: " + commitmessage + "]");
+        }
+        /**
+            ---------------
+            Roulette Events
+            ---------------
+        **/
+        if (helpers.isLoaded("roulette.js")) {
+            rouletteEvents();
         }
     }
 
@@ -1290,9 +1265,21 @@
             -----
         **/
         if (helpers.isLoaded("party.js")) {
-            if (channel == partychannel && partyMode != "none" && message.split(' ')[0] != "/mode") {
+            if (channel == partychannel) {
                 sys.stopEvent();
-                helpers.mode(src, message, channel, partyMode);
+                partyBeforeChat(src, message, channel, partyMode);
+                return;
+            }
+        }
+        /**
+            -----
+            Mafia
+            -----
+        **/
+        if (helpers.isLoaded("mafia.js")) {
+            if (channel == mafiachannel) {
+                sys.stopEvent();
+                mafiaBeforeChat(src, message, channel);
                 return;
             }
         }
