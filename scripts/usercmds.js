@@ -1141,6 +1141,7 @@ usercommands = {
         } else {
             sys.sendHtmlAll(helpers.bot(bots.ban) + name + " has banned themselves from the server!", channel);
         }
+        sys.kick(src);
     }
     
     ,
