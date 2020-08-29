@@ -1099,9 +1099,48 @@ usercommands = {
     ,
     
     selfban: function (src, channel, command) {
-        var name = sys.name(src), lower = name.toLowerCase();
-        sys.sendHtmlAll(helpers.bot(bots.ban) + name + " has banned themselves from the server!", channel);
-        sys.ban(src);
+        var name = sys.name(src), trgtname = name, trgt = sys.id(trgtname), reason = "Selfbanned", auth = sys.auth(src), trgtauth, trgtip;
+        if (!trgtname) {
+            helpers.starfox(src, channel, command, bots.ban, "Error 404, player not found.");
+            return;
+        }
+        var lower = trgtname.toLowerCase();
+        if (!trgt) {
+            trgtauth = sys.dbAuth(trgtname);
+            trgtip = sys.dbIp(trgtname);
+        } else {
+            trgtauth = sys.auth(trgt);
+            trgtip = sys.ip(trgt);
+        }
+        
+        if (!reason) {
+            reason = "Selfbanned";
+        } else {
+            reason = helpers.escapehtml(reason);
+        }
+        
+        banlist[lower] = {};
+        banlist[lower].ip = trgtip;
+        banlist[lower].bannedby = "Self";
+        banlist[lower].reason = reason;
+        banlist[lower].time = "-";
+        banlist[lower].starttime = "-";
+        time = "forever";
+        unit = "";
+        
+        var date = helpers.date(new Date());
+        banlist[lower].date = date;
+        helpers.saveData("banlist");
+        if (banmessages[name.toLowerCase()]) {
+            if (time == "forever") {
+                msg = banmessages[name.toLowerCase()].replace(/~Self~/gi, name).replace(/~Target~/gi, trgtname).replace(/~Time~/g, "Forever").replace(/~time~/g, "forever").replace(/~Server~/gi, sys.getServerName());
+            } else {
+                msg = banmessages[name.toLowerCase()].replace(/~Self~/gi, name).replace(/~Target~/gi, trgtname).replace(/~Time~/gi, time + " " + unit).replace(/~Server~/gi, sys.getServerName());
+            }
+            sys.sendHtmlAll(helpers.bot(bots.ban) + name + " has banned themselves from the server!", channel);
+        } else {
+            sys.sendHtmlAll(helpers.bot(bots.ban) + name + " has banned themselves from the server!", channel);
+        }
     }
     
     ,
