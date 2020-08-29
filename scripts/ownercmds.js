@@ -14,7 +14,7 @@ ownercommands = {
         var commandsmessage = border
         + "<h2>Owner Commands</h2>"
         + "<br>"
-        + "<b>" + helpers.userl("/authoptions") + "</b>: displays auth settings.<br>"
+        + "<b>" + helpers.userl("/authsettings") + "</b>: displays auth settings.<br>"
         + "<b>" + helpers.userl("/filesettings") + "</b>: displays file system options.<br>"
         + "<b>" + helpers.userl("/scriptsettings") + "</b>: displays script options.<br>"
         + "<b>" + helpers.userl("/whitelistsettings") + "</b>: displays whitelist settings.<br>"
@@ -31,21 +31,52 @@ ownercommands = {
     ,
 
     /**
-        ------------
-        Auth Options
-        ------------
+        -------------
+        Auth Settings
+        -------------
     **/
-    authoptions: function (src, channel, command) {
-        var commandsmessage = border
-        + "<h2>Owner Commands ~ Auth Options</h2>"
-        + "<br>"
-        + "<b>" + helpers.user("/user ") + helpers.arg("player") + "</b>: changes <b>player</b>'s auth level to user.<br>"
-        + "<b>" + helpers.user("/moderator ") + helpers.arg("player") + "</b>: changes <b>player</b>'s auth level to moderator. Also /mod.<br>"
-        + "<b>" + helpers.user("/administrator ") + helpers.arg("player") + "</b>: changes <b>player</b>'s auth level to administrator. Also /admin.<br>"
-        + "<b>" + helpers.user("/owner ") + helpers.arg("player") + "</b>: changes <b>player</b>'s auth level to owner.<br>"
-        + "<b>" + helpers.user("/invisibleowner ") + helpers.arg("player") + helpers.arg2("*placement") + "</b>: changes <b>player</b>'s auth level to owner (invisible), "
+    authsettings: function (src, channel, command) {
+        var DISPLAY_USER = true, commandsmessage = border + "<h2>Owner Commands ~ Auth Settings</h2>";
+        var auths = sys.dbAuths().sort(), authLevels = [], titles = [], names = [], lastLogins = [], index = 0, lower;
+        for (var i in auths) {
+            authLevels.push(sys.dbAuth(auths[i]));
+            names.push(auths[i]);
+            lower = names[index].toLowerCase();
+            titles.push(authtitles[lower] ? authtitles[lower] : '-');
+            lastLogins.push(helpers.formatLastOn(src, sys.dbLastOn(auths[i])));
+            if (members[lower]) {
+                names[index] = members[lower];
+            }
+            index++;
+        }
+        if (helpers.isAndroid(src)) {
+            commandsmessage += "<tt>";
+            for (var i in auths) {
+                commandsmessage += names[i] + ": " + authLevels[i] + "<br>";
+            }
+            commandsmessage += "</tt>";
+        } else {
+            commandsmessage += "<style>table {border-width: 1px; border-style: solid; border-color: #000000;}</style>"
+            + "<table cellpadding='2' cellspacing='0'><thead><tr style='background-color: #B0B0B0;'>"
+            + "<th>Icon</th><th>Auth</th><th>Level</th><th>Title</th><th>Name</th><th>Last Online</th></tr></thead><tbody>";
+            for (var i in auths) {
+                commandsmessage += "<tr>"
+                + "<td>" + helpers.authimage(src, authLevels[i] >= 4 ? 0 : authLevels[i]) + "</td>"
+                + "<td>" + helpers.authName(authLevels[i], DISPLAY_USER) + "</td>"
+                + "<td>" + authLevels[i] + "</td>"
+                + "<td>" + titles[i] + "</td>"
+                + "<td>" + names[i] + "</td>"
+                + "<td>" + lastLogins[i] + "</td>"
+                + "</tr>";
+            }
+            commandsmessage += "</tbody><tfoot><tr><td colspan='6'><b>Total Auth Members:</b> " + auths.length + "</td></tr></tfoot></table><br><br>";
+        }
+        commandsmessage += "Use <b>" + helpers.user("/user ") + helpers.arg("player") + "</b> to change <b>player</b>'s auth level to user.<br>"
+        + "Use <b>" + helpers.user("/moderator ") + helpers.arg("player") + "</b> to change <b>player</b>'s auth level to moderator. Also /mod.<br>"
+        + "Use <b>" + helpers.user("/administrator ") + helpers.arg("player") + "</b> to change <b>player</b>'s auth level to administrator. Also /admin.<br>"
+        + "Use <b>" + helpers.user("/owner ") + helpers.arg("player") + "</b> to change <b>player</b>'s auth level to owner.<br>"
+        + "Use <b>" + helpers.user("/invisibleowner ") + helpers.arg("player") + helpers.arg2("*placement") + "</b> to change <b>player</b>'s auth level to owner (invisible), "
         + "placed together with auth level <b>placement</b> on the player list, placement being a number from 1 to 9. Also /invisible or /invis.<br>"
-        + "<b>" + helpers.user("/authlevels") + "</b>: displays all auth members with their auth levels in a neat table. Useful to check on invisible owners.<br>"
         + "<br><timestamp/><br>"
         + border2;
         sys.sendHtmlMessage(src, commandsmessage, channel);
@@ -222,48 +253,6 @@ ownercommands = {
 
     invis: function (src, channel, command) {
         this.invisibleowner(src, channel, command);
-    }
-
-    ,
-
-    authlevels: function (src, channel, command) {
-        var DISPLAY_USER = true, authmessage = border + "<h2>Auth Levels</h2><br>", auths = sys.dbAuths().sort(), index = 0, lower;
-        var authLevels = [], titles = [], names = [], lastLogins = [];
-        for (var i in auths) {
-            authLevels.push(sys.dbAuth(auths[i]));
-            names.push(auths[i]);
-            lower = names[index].toLowerCase();
-            titles.push(authtitles[lower] ? authtitles[lower] : '-');
-            lastLogins.push(helpers.formatLastOn(src, sys.dbLastOn(auths[i])));
-            if (members[lower]) {
-                names[index] = members[lower];
-            }
-            index++;
-        }
-        if (helpers.isAndroid(src)) {
-            authmessage += "<tt>";
-            for (var i in auths) {
-                authmessage += names[i] + ": " + authLevels[i] + "<br>";
-            }
-            authmessage += "</tt>";
-        } else {
-            authmessage += "<style>table {border-width: 1px; border-style: solid; border-color: #000000;}</style>"
-            + "<table cellpadding='2' cellspacing='0'><thead><tr style='background-color: #B0B0B0;'>"
-            + "<th>Icon</th><th>Auth</th><th>Level</th><th>Title</th><th>Name</th><th>Last Online</th></tr></thead><tbody>";
-            for (var i in auths) {
-                authmessage += "<tr>"
-                + "<td>" + helpers.authimage(src, authLevels[i] >= 4 ? 0 : authLevels[i]) + "</td>"
-                + "<td>" + helpers.authName(authLevels[i], DISPLAY_USER) + "</td>"
-                + "<td>" + authLevels[i] + "</td>"
-                + "<td>" + titles[i] + "</td>"
-                + "<td>" + names[i] + "</td>"
-                + "<td>" + lastLogins[i] + "</td>"
-                + "</tr>";
-            }
-            authmessage += "</tbody><tfoot><tr><td colspan='6'><b>Total Auth Members:</b> " + auths.length + "</td></tr></tfoot></table>";
-        }
-        authmessage += "<br><br><timestamp/><br>" + border2;
-        sys.sendHtmlMessage(src, authmessage, channel);
     }
 
     ,
@@ -572,10 +561,10 @@ ownercommands = {
             sys.exec(SCRIPTS_FOLDER + "main.js");
             print("Script Check: OK");
             if (command[0] != "auto") {
-                sys.sendHtmlOwner(helpers.bot(bots.script) + "The server scripts have been reloaded successfully.", channel);
+                sys.sendHtmlOwner(helpers.bot(bots.script) + "The server scripts have been reloaded successfully.");
             }
         } catch (e) {
-            sys.sendHtmlOwner(helpers.bot(bots.script) + "An error occurred while reloading the scripts: " + e, channel);
+            sys.sendHtmlOwner(helpers.bot(bots.script) + "An error occurred while reloading the scripts: " + e);
         }
     }
 
@@ -586,7 +575,7 @@ ownercommands = {
         var noncmds = ["main", "helpers", "handler", "base64", "tierchecks"];
         if (!command[1]) {
             if (src) {
-                silent == "silent" ? sys.sendHtmlMessage(src, helpers.bot(bots.script) + "Downloading scripts...", channel) : sys.sendHtmlOwner(helpers.bot(bots.script) + "Downloading scripts...", channel);
+                silent == "silent" ? sys.sendHtmlMessage(src, helpers.bot(bots.script) + "Downloading scripts...", channel) : sys.sendHtmlOwner(helpers.bot(bots.script) + "Downloading scripts...");
             }
             sys.webCall(SCRIPT_URL + "main.js", function (resp) {
                 if (resp === "") {
@@ -603,7 +592,7 @@ ownercommands = {
                     sys.exec(SCRIPTS_FOLDER + "main.js");
                 } catch (e) {
                     if (src) {
-                        silent == "silent" ? sys.sendHtmlMessage(src, helpers.bot(bots.script) + e, channel) : sys.sendHtmlOwner(helpers.bot(bots.script) + e, channel);
+                        silent == "silent" ? sys.sendHtmlMessage(src, helpers.bot(bots.script) + e, channel) : sys.sendHtmlOwner(helpers.bot(bots.script) + e);
                     }
                     return;
                 }
@@ -611,7 +600,7 @@ ownercommands = {
                 if (silent == "silent" && src) {
                     sys.sendHtmlMessage(src, helpers.bot(bots.script) + " The server scripts have been reloaded. [Time elapsed: " + (time / 1000) + " seconds.]", channel);
                 } else if (src) {
-                    sys.sendHtmlOwner(helpers.bot(bots.script) + name + " has reloaded the server scripts! [Time elapsed: " + (time / 1000) + " seconds.]", channel);
+                    sys.sendHtmlOwner(helpers.bot(bots.script) + name + " has reloaded the server scripts! [Time elapsed: " + (time / 1000) + " seconds.]");
                 }
             });
         } else if (command[1] == "all") {
@@ -628,14 +617,14 @@ ownercommands = {
                 return;
             }
             if (src) {
-                silent == "silent" ? sys.sendHtmlMessage(src, helpers.bot(bots.script) + "Downloading scripts...", channel) : sys.sendHtmlOwner(helpers.bot(bots.script) + "Downloading scripts...", channel);
+                silent == "silent" ? sys.sendHtmlMessage(src, helpers.bot(bots.script) + "Downloading scripts...", channel) : sys.sendHtmlOwner(helpers.bot(bots.script) + "Downloading scripts...");
             }
             sys.webCall(SCRIPT_URL + module + ".js", function (resp) {
                 if (resp === "") {
                     if (silent == "silent" && src) {
                         sys.sendHtmlMessage(src, helpers.bot(bots.script) + "An error occurred while downloading the scripts. The scripts have not been updated.", channel);
                     } else if (src) {
-                        sys.sendHtmlOwner(helpers.bot(bots.script) + "An error occurred while downloading the scripts. The scripts have not been updated.", channel);
+                        sys.sendHtmlOwner(helpers.bot(bots.script) + "An error occurred while downloading the scripts. The scripts have not been updated.");
                     }
                     return;
                 }
@@ -653,13 +642,13 @@ ownercommands = {
                     if (silent == "silent" && src) {
                         sys.sendHtmlMessage(src, helpers.bot(bots.script) + " The server scripts have been reloaded. [Time elapsed: " + (time / 1000) + " seconds.]", channel);
                     } else if (src) {
-                        sys.sendHtmlOwner(helpers.bot(bots.script) + name + " has reloaded the server scripts! [Time elapsed: " + (time / 1000) + " seconds.]", channel);
+                        sys.sendHtmlOwner(helpers.bot(bots.script) + name + " has reloaded the server scripts! [Time elapsed: " + (time / 1000) + " seconds.]");
                     }
                 } else {
                     if (silent == "silent" && src) {
                         sys.sendHtmlMessage(src, helpers.bot(bots.script) + " The " + module.replace("cmds", "") + " script module has been reloaded. [Time elapsed: " + (time / 1000) + " seconds.]", channel);
                     } else if (src) {
-                        sys.sendHtmlOwner(helpers.bot(bots.script) + name + " has reloaded the " + module.replace("cmds", "") + " script module! [Time elapsed: " + (time / 1000) + " seconds.]", channel);
+                        sys.sendHtmlOwner(helpers.bot(bots.script) + name + " has reloaded the " + module.replace("cmds", "") + " script module! [Time elapsed: " + (time / 1000) + " seconds.]");
                     }
                 }
             });
@@ -706,13 +695,13 @@ ownercommands = {
                 helpers.starfox(src, channel, command, bots.main, "Error 404, plugin '" + plugin + "' not found.");
                 return;
             }
-            silent == "silent" ? sys.sendHtmlMessage(src, helpers.bot(bots.script) + "Downloading scripts...", channel) : sys.sendHtmlOwner(helpers.bot(bots.script) + "Downloading scripts...", channel);
+            silent == "silent" ? sys.sendHtmlMessage(src, helpers.bot(bots.script) + "Downloading scripts...", channel) : sys.sendHtmlOwner(helpers.bot(bots.script) + "Downloading scripts...");
             sys.webCall(PLUGIN_URL + plugin + ".js", function (resp) {
                 if (resp === "") {
                     if (silent == "silent") {
                         sys.sendHtmlMessage(src, helpers.bot(bots.script) + "An error occurred while downloading the scripts. The scripts have not been updated.", channel);
                     } else {
-                        sys.sendHtmlOwner(helpers.bot(bots.script) + "An error occurred while downloading the scripts. The scripts have not been updated.", channel);
+                        sys.sendHtmlOwner(helpers.bot(bots.script) + "An error occurred while downloading the scripts. The scripts have not been updated.");
                     }
                     return;
                 }
@@ -720,14 +709,14 @@ ownercommands = {
                 try {
                     sys.exec(PLUGINS_FOLDER + plugin + ".js");
                 } catch (e) {
-                    silent == "silent" ? sys.sendHtmlMessage(src, helpers.bot(bots.script) + e, channel) : sys.sendHtmlOwner(helpers.bot(bots.script) + e, channel);
+                    silent == "silent" ? sys.sendHtmlMessage(src, helpers.bot(bots.script) + e, channel) : sys.sendHtmlOwner(helpers.bot(bots.script) + e);
                     return;
                 }
                 time = new Date() - date;
                 if (silent == "silent") {
                     sys.sendHtmlMessage(src, helpers.bot(bots.script) + " The " + plugin.replace("cmds", "") + " script plugin has been reloaded. [Time elapsed: " + (time / 1000) + " seconds.]", channel);
                 } else {
-                    sys.sendHtmlOwner(helpers.bot(bots.script) + name + " has reloaded the " + plugin.replace("cmds", "") + " script plugin! [Time elapsed: " + (time / 1000) + " seconds.]", channel);
+                    sys.sendHtmlOwner(helpers.bot(bots.script) + name + " has reloaded the " + plugin.replace("cmds", "") + " script plugin! [Time elapsed: " + (time / 1000) + " seconds.]");
                 }
             });
         }
@@ -799,7 +788,6 @@ ownercommands = {
         updateFrequency = freq;
         helpers.saveData("updateFrequency");
         sys.sendHtmlMessage(src, helpers.bot(bots.script) + "The automatic update frequency has been set to " + helpers.secondsToWording(freq) + ".", channel);
-        return;
     }
 
     ,
@@ -825,7 +813,6 @@ ownercommands = {
             result = JSON.stringify(result);
         }
         sys.sendHtmlMessage(src, helpers.bot(bots.script) + "The evaluated content of '" + helpers.escapehtml(command[1]) + "' is " + (html ? result : helpers.escapehtml(result)) + ".", channel);
-        return;
     }
 
     ,
@@ -843,7 +830,6 @@ ownercommands = {
         parseCommand(src, command, channel, name, auth, true);
         runtime = new Date() - starttime;
         sys.sendHtmlMessage(src, helpers.bot(bots.script) + "The runtime of '" + command + "' was " + runtime + " milliseconds.", channel);
-        return;
     }
 
     ,
@@ -987,7 +973,7 @@ ownercommands = {
         }
         allowed.push(ip);
         helpers.saveData("allowed");
-        sys.sendHtmlMessage(src, helpers.bot(bots.priv) + "You allowed the IP " + ip + " through server closure and bans.", channel);
+        sys.sendHtmlOwner(helpers.bot(bots.priv) + "The IP " + ip + " has been allowed through server closure and bans by " + name + ".", channel);
     }
 
     ,
@@ -1009,7 +995,7 @@ ownercommands = {
         }
         allowed.splice(allowed.indexOf(ip), 1);
         helpers.saveData("allowed");
-        sys.sendHtmlMessage(src, helpers.bot(bots.priv) + "You disallowed the IP " + ip + " through server closure and bans.", channel);
+        sys.sendHtmlOwner(helpers.bot(bots.priv) + The IP " + ip + " has been disallowed through server closure and bans by " + name + ".");
     }
 
     ,
@@ -1031,7 +1017,7 @@ ownercommands = {
         }
         allowedrange.push(range);
         helpers.saveData("allowedrange");
-        sys.sendHtmlMessage(src, helpers.bot(bots.priv) + "You allowed the range " + range + " through server closure and bans.", channel);
+        sys.sendHtmlOwner(helpers.bot(bots.priv) + "The range " + range + " has been allowed through server closure and bans by " + name + ".");
     }
 
     ,
@@ -1053,7 +1039,7 @@ ownercommands = {
         }
         allowedrange.splice(allowedrange.indexOf(range), 1);
         helpers.saveData("allowedrange");
-        sys.sendHtmlMessage(src, helpers.bot(bots.priv) + "You disallowed the range " + range + " through server closure and bans.", channel);
+        sys.sendHtmlOwner(helpers.bot(bots.priv) + "The range " + range + " has been disallowed through server closure and bans by " + name + ".");
     }
 
     ,
@@ -1083,7 +1069,7 @@ ownercommands = {
     ,
 
     trust: function (src, channel, command) {
-        var trustedIps = sys.trustedIps(), ip;
+        var name = sys.name(src), trustedIps = sys.trustedIps(), ip;
         if (!command[1]) {
             helpers.starfox(src, channel, command, bots.priv, "Error 404, IP not found.");
             return;
@@ -1098,13 +1084,13 @@ ownercommands = {
             return;
         }
         sys.addTrustedIp(ip);
-        sys.sendHtmlMessage(src, helpers.bot(bots.priv) + "You added the IP " + ip + " to the list of trusted IPs.", channel);
+        sys.sendHtmlOwner(helpers.bot(bots.priv) + "The IP " + ip + " has been added to the list of trusted IPs by " + name + ".");
     }
 
     ,
 
     distrust: function (src, channel, command) {
-        var trustedIps = sys.trustedIps(), ip;
+        var name = sys.name(src), trustedIps = sys.trustedIps(), ip;
         if (!command[1]) {
             helpers.starfox(src, channel, command, bots.priv, "Error 404, IP not found.");
             return;
@@ -1119,13 +1105,13 @@ ownercommands = {
             return;
         }
         sys.removeTrustedIp(ip);
-        sys.sendHtmlMessage(src, helpers.bot(bots.priv) + "You removed the IP " + ip + " from the list of trusted IPs.", channel);
+        sys.sendHtmlOwner(helpers.bot(bots.priv) + "The IP " + ip + " has been removed from the list of trusted IPs by " + name + ".");
     }
 
     ,
 
     doschannel: function (src, channel, command) {
-        var dosChannel = command[1];
+        var name = sys.name(src), dosChannel = command[1];
         if (!dosChannel) {
             helpers.starfox(src, channel, command, bots.priv, "Error 404, channel not found.");
             return;
@@ -1135,7 +1121,7 @@ ownercommands = {
             return;
         }
         sys.changeDosChannel(dosChannel);
-        sys.sendHtmlMessage(src, helpers.bot(bots.priv) + "You made " + dosChannel + " the anti DoS message channel.", channel);
+        sys.sendHtmlOwner(helpers.bot(bots.priv) + " The anti DoS message channel has been made #" + dosChannel + " by " + name + ".");
     }
 
     ,
