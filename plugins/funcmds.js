@@ -167,13 +167,20 @@ funcommands = {
         }, name = sys.name(src), random = sys.rand(0, sys.numPlayers()), rng = sys.rand(0, 11), player, ball;
         !command[1] ? player = sys.name(sys.playerIds()[random]) : player = helpers.escapehtml(command[1]);
         !command[2] ? ball = "poke" : ball = command[2];
-        ball = helpers.removeSpaces(ball.toLowerCase().replace("é", "e").replace("ball", ""));
+        ball = helpers.removespaces(ball.toLowerCase().replace("é", "e").replace("ball", ""));
         if (!helpers.isInArray(ball, Object.keys(pokeballs))) {
             helpers.starfox(src, channel, command, bots.command, "Error 400, invalid Poké Ball type.");
             return;
         }
-        sys.sendHtmlAll("<font color='" + pokeballs[ball].color + "'><timestamp/><b>" + helpers.pokeBallImage(ball) + player +
-        " has been caught in a " + pokeballs[ball].name + " by " + name + "!" + helpers.pokeBallImage(ball) + "</b></font>", channel);
+        if (rng > pokeballs[ball].rate) {
+            sys.sendHtmlAll("<font color='" + pokeballs[ball].color + "'><timestamp/><b>" + helpers.pokeBallImage(ball) + player +
+            " has been caught in a " + pokeballs[ball].name + " by " + name +
+            "!" + helpers.pokeBallImage(ball) + "</b></font>", channel);
+        } else {
+            sys.sendHtmlAll("<font color='" + pokeballs[ball].color + "'><timestamp/><b>" + helpers.pokeBallImage(ball) + name +
+            " tried to capture " + player + " in a " + pokeballs[ball].name +
+            ", but " + player + " escaped!" + helpers.pokeBallImage(ball) + "</b></font>", channel);
+        }
     }
 
     ,
