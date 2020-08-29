@@ -1202,7 +1202,7 @@ admincommands = {
         + "<b>Flood Time:</b> " + floodtime + " seconds<br>"
         + "<b>Message Allowance:</b> " + allowance + " messages<br>"
         + "Someone will be flooding if they exceed " + allowance + " messages in " + floodtime + " seconds,";
-        if (floodlevel >= 4) {
+        if (floodlevel == 4) {
             commandsmessage += " regardless of their auth level.<br>";
         } else {
             commandsmessage += " if their auth level is lower than " + AUTH_NAMES[floodlevel] + ".<br>";

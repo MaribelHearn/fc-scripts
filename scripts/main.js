@@ -122,7 +122,19 @@
         sys.sendHtmlAll(message, watch);
     };
     sys.sendHtmlOwner = function (message) {
-        sys.sendHtmlAll(message, ownerchannel);
+        if (!channel) {
+            for (var index in players) {
+                if (sys.auth(index) >= 3) {
+                    sys.sendHtmlMessage(index, message, 0);
+                }
+            }
+        } else {
+            for (var index in players) {
+                if (sys.auth(index) >= 3) {
+                    sys.sendHtmlMessage(index, message);
+                }
+            }
+        }
     };
     sys.printStackTrace = function (message) {
         try {

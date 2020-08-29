@@ -71,7 +71,7 @@ ownercommands = {
             return;
         }
         trgt ? sys.changeAuth(trgt, 0) : sys.changeDbAuth(trgtname, 0);
-        sys.sendHtmlAll(helpers.bot(bots.auth) + "<b>" + helpers.arg(trgtname) + " has been made " + helpers.arg2(AUTH_NAMES[0]) + " by " + helpers.user(name) + "!</font></b>", channel);
+        sys.sendHtmlAll(helpers.bot(bots.auth) + "<b>" + helpers.arg(trgtname) + " has been made " + helpers.arg2(AUTH_NAMES[0]) + " by " + helpers.user(name) + "!</font></b>");
     }
 
     ,
@@ -101,7 +101,7 @@ ownercommands = {
             sys.changeAuth(trgt, 1);
         }
         sys.changeDbAuth(trgtname, 1);
-        sys.sendHtmlAll(helpers.bot(bots.auth) + "<b>" + helpers.arg(trgtname) + " has been made " + helpers.arg2(AUTH_NAMES[1]) + " by " + helpers.user(name) + "!</font></b>", channel);
+        sys.sendHtmlAll(helpers.bot(bots.auth) + "<b>" + helpers.arg(trgtname) + " has been made " + helpers.arg2(AUTH_NAMES[1]) + " by " + helpers.user(name) + "!</font></b>");
     }
 
     ,
@@ -137,7 +137,7 @@ ownercommands = {
             sys.changeAuth(trgt, 2);
         }
         sys.changeDbAuth(trgtname, 2);
-        sys.sendHtmlAll(helpers.bot(bots.auth) + "<b>" + helpers.arg(trgtname) + " has been made " + helpers.arg2(AUTH_NAMES[2]) + " by " + helpers.user(name) + "!</font></b>", channel);
+        sys.sendHtmlAll(helpers.bot(bots.auth) + "<b>" + helpers.arg(trgtname) + " has been made " + helpers.arg2(AUTH_NAMES[2]) + " by " + helpers.user(name) + "!</font></b>");
     }
 
     ,
@@ -173,7 +173,7 @@ ownercommands = {
             sys.changeAuth(trgt, 3);
         }
         sys.changeDbAuth(trgtname, 3);
-        sys.sendHtmlAll(helpers.bot(bots.auth) + "<b>" + helpers.arg(trgtname) + " has been made " + helpers.arg2(AUTH_NAMES[3]) + " by " + helpers.user(name) + "!</font></b>", channel);
+        sys.sendHtmlAll(helpers.bot(bots.auth) + "<b>" + helpers.arg(trgtname) + " has been made " + helpers.arg2(AUTH_NAMES[3]) + " by " + helpers.user(name) + "!</font></b>");
     }
 
     ,
