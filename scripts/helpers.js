@@ -229,13 +229,14 @@ helpers = {
     ,
 
     floodCheck: function (src, channelname) {
+        var auth = (sys.auth(src) == 10 ? 3 : sys.auth(src));
         if (regchannels[channelname]) {
             if (regchannels[channelname].flood) {
                 return false;
             }
             if (players[src].floodcount > allowance) {
                 floodplayers.splice(floodplayers.indexOf(src), 1);
-                if (players[src].floodcount != Infinity && sys.auth(src) < floodlevel) {
+                if (players[src].floodcount != Infinity && auth < floodlevel) {
                     return true;
                 }
                 players[src].floodcount = Infinity;
@@ -244,7 +245,7 @@ helpers = {
         }
         if (players[src].floodcount > allowance) {
             floodplayers.splice(floodplayers.indexOf(src), 1);
-            if (players[src].floodcount != Infinity && sys.auth(src) < floodlevel) {
+            if (players[src].floodcount != Infinity && auth < floodlevel) {
                 return true;
             }
             players[src].floodcount = Infinity;
