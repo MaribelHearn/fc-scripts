@@ -372,26 +372,6 @@ helpers = {
 
     ,
 
-    rouletteEventMessage: function (event, ended) {
-        var eventMessage;
-        if (ended) {
-            eventMessage = "The " + this.formatEvent(event) + " has ended!";
-        } else {
-            if (event == "frenzy") {
-                eventMessage = "A <b>Shiny Frenzy</b> has begun! Shiny odds will be greatly increased for a limited amount of time!";
-            } else if (event == "fest") {
-                eventMessage = "A <b>Chainfest</b> has begun! There will be a higher probability to chain Pokémon for a short time!";
-            } else if (event == "legendary") {
-                eventMessage = "A <b>Legendary Swarm</b> has begun! There will be a lot of them for a while!";
-            } else {
-                eventMessage = "A <b>Typeframe</b> has begun! There will be many Pokémon of the <img src='Themes/Classic/types/type" + sys.typeNum(event) + ".png'> type!";
-            }
-        }
-        sys.sendHtmlAll(this.bot(bots.roulette) + eventMessage, roulettechannel);
-    }
-
-    ,
-
     /**
         --------------
         Return Helpers
@@ -948,157 +928,6 @@ helpers = {
             default:
                 return "#FF0000";
         }
-    }
-
-    ,
-
-    mode: function (src, message, channel, mode) {
-        var name = this.escapehtml(sys.name(src)), auth = sys.auth(src), color = this.color(src), length = message.length;
-        if (mode == "joke") {
-            var playerids = sys.playerIds(), random;
-            length = playerids.length;
-            random = sys.rand(0, length);
-            color = this.color(playerids[random]);
-            message = this.escapehtml(message);
-            if (sys.auth(sys.playerIds()[random]) >= 1 && sys.auth(sys.playerIds()[random]) <= 3) {
-                message = "<font color='" + color + "'><timestamp/> +<b><i>" + sys.name(playerids[random]) + ":</i></b></font> " + message;
-            } else {
-                message = "<font color='" + color + "'><timestamp/> <b>" + sys.name(playerids[random]) + ":</b></font> " + message;
-            }
-            sys.sendHtmlAll(message, channel);
-            return;
-        } else if (mode == "nightclub") {
-            message = this.escapehtml(message);
-            if (auth >= 1) {
-                message = "<span style='font-size: 16px;'><font color='#FFFFFF'><timestamp/> <b><i>" + this.rainbow(name + ":") + "</i> " + message + "</b></font></span>";
-            } else {
-                message = "<span style='font-size: 16px;'><font color='#FFFFFF'><timestamp/> <b>" + this.rainbow(name + ":") + " " + message + "</b></font></span>";
-            }
-            sys.sendHtmlAll(message, channel);
-            return;
-        } else if (mode == "rainbow" || mode == "desu" || mode == "leet" || mode == "morse") {
-            mode == "leet" || mode == "morse" ? message = helpers[mode](message) : message = "<b>" + helpers[mode](message) + "</b>";
-        } else if (mode == "nyan") {
-            var index = 1;
-            message = "Nyan";
-            while (index < length) {
-                message += " Nyan";
-                index++;
-            }
-            sys.sendHtmlAll("<font color='#FFFFFF'>:</font><div style='background:" + this.nyancolor(partyNyan) + "'><center><span style='font-size: 16px;'>" + message + "</span></center>", channel);
-            partyNyan++;
-            if (partyNyan == 7) {
-                partyNyan = 0;
-            }
-            return;
-        } else if (mode == "dennis") {
-            if (message.toLowerCase() == "/dennis") {
-                if (helpers.isLoaded("funcmds.js")) {
-                    funcommands.dennis(src, channel, ["dennis"]);
-                    return true;
-                }
-            }
-            var index = 1;
-            message = "D";
-            while (index < length) {
-                message += "D";
-                index++;
-            }
-            index = 0;
-            while (index < length) {
-                message += "E";
-                index++;
-            }
-            index = 0;
-            while (index < length) {
-                message += "N";
-                index++;
-            }
-            index = 0;
-            while (index < length) {
-                message += "N";
-                index++;
-            }
-            index = 0;
-            while (index < length) {
-                message += "I";
-                index++;
-            }
-            index = 0;
-            while (index < length) {
-                message += "S";
-                index++;
-            }
-            message += "!";
-        } else if (mode == "sparta") {
-            var index = 0;
-            message = "This.. is.. SPART";
-            while (index < length) {
-                message += "A";
-                index++;
-            }
-            message += "!";
-        } else if (mode == "luigi") {
-            var index = 1;
-            message = "SpaghE";
-            while (index < length) {
-                message += "E";
-                index++;
-            }
-            message += "tti!";
-        } else if (mode == "roflcopter") {
-            var index = 1;
-            message = "soi";
-            while (index < length) {
-                message += " soi";
-                index++;
-            }
-        } else if (mode == "asdf") {
-            var index = 1;
-            message = "asdf";
-            while(index < length) {
-                message += "asdf";
-                index++;
-            }
-        } else if (mode == "derp") {
-            var index = 0;
-            message = "";
-            while (index < length) {
-                random = sys.rand(0, 7);
-                if (random === 0) {
-                    message += " derp";
-                } else if (random == 1) {
-                    message += " herp";
-                } else if (random == 2) {
-                    message += " merp";
-                } else if (random == 3) {
-                    message += " ferp";
-                } else if (random == 4) {
-                    message += " bulbaderp";
-                } else if (random == 5) {
-                    message += " darp";
-                } else if (random == 6) {
-                    message += " durp";
-                }
-                index++;
-            }
-        } else if (mode == "cirno") {
-            var index = 1;
-            random = sys.rand(0, 2);
-            random === 0 ? message = "BAKA" : message = "&#x2788;";
-            while (index < length) {
-                random === 0 ? message += "BAKA" : message += " &#x2788;";
-                index++;
-            }
-        } else if (mode == "reverse") {
-            message = this.reverse(this.escapehtml(message));
-        }
-        if (auth >= 1) {
-            message = "<font color='" + color + "'><timestamp/> +<b><i>" + name + ":</i></b></font> " + message;
-        } else {
-            message = "<font color='" + color + "'><timestamp/> <b>" + name + ":</b></font> " + message;
-        }
-        sys.sendHtmlAll(message, channel);
     }
 
     ,
@@ -1850,6 +1679,12 @@ helpers = {
             month = month.slice(1);
         }
         return day + '-' + month + '-' + year + ", " + time;
+    }
+
+    ,
+
+    noflash: function (name) {
+        return name[0] + "\u200b" + name.substr(1);
     }
 
     ,
