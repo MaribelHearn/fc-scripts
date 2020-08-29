@@ -891,7 +891,7 @@ admincommands = {
     **/
     banneroptions: function (src, channel, command) {
         var commandsmessage = border
-        + "<h2>Owner Commands ~ Banner and Description Options</h2>"
+        + "<h2>Administrator Commands ~ Banner and Description Options</h2>"
         + "<br>"
         + "<b>" + helpers.user("/banner ") + helpers.arg("html") + "</b>: changes the banner to <b>html</b>.<br>"
         + "<b>" + helpers.user("/description ") + helpers.arg("html") + "</b>: changes the server description to <b>html</b>.<br>"
@@ -1196,7 +1196,7 @@ admincommands = {
     **/
     floodsettings: function (src, channel, command) {
         var commandsmessage = border
-        + "<h2>Owner Commands ~ Flood Settings</h2>"
+        + "<h2>Administrator Commands ~ Flood Settings</h2>"
         + "<br>"
         + "<b>Flood Level:</b> " + floodlevel + "<br>"
         + "<b>Flood Time:</b> " + floodtime + " seconds<br>"
@@ -1281,7 +1281,7 @@ admincommands = {
     **/
     rulesettings: function (src, channel, command) {
         var commandsmessage = border
-        + "<h2>Owner Commands ~ Rule Settings</h2>"
+        + "<h2>Administrator Commands ~ Rule Settings</h2>"
         + "<br>"
         + "Current server rules:<br>"
         + "<br>";
@@ -1390,7 +1390,7 @@ admincommands = {
     **/
     messagesettings: function (src, channel, command) {
         var commandsmessage = border
-        + "<h2>Owner Commands ~ Message Settings</h2>"
+        + "<h2>Administrator Commands ~ Message Settings</h2>"
         + "<br>"
         + "Current messages:<br>"
         + "<br>"
@@ -1509,7 +1509,7 @@ admincommands = {
     **/
     colorsettings: function (src, channel, command) {
         var commandsmessage = border
-        + "<h2>Owner Commands ~ " + helpers.cap(command[0].slice(0, -8)) + " Settings</h2>"
+        + "<h2>Administrator Commands ~ " + helpers.cap(command[0].slice(0, -8)) + " Settings</h2>"
         + "<br>"
         + "Current colorings:<br>"
         + "<br>"
@@ -1646,7 +1646,7 @@ admincommands = {
     **/
     listsettings: function (src, channel, command) {
         var commandsmessage = border
-        + "<h2>Owner Commands ~ List Settings</h2>"
+        + "<h2>Administrator Commands ~ List Settings</h2>"
         + "<br>"
         + "Current list colorings:<br>"
         + "<br>"

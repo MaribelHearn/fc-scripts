@@ -1571,7 +1571,7 @@ modcommands = {
     **/
     filtersettings: function (src, channel, command) {
         var commandsmessage = border
-        + "<h2>Owner Commands ~ Filter Settings</h2>"
+        + "<h2>Moderator Commands ~ Filter Settings</h2>"
         + "<br>"
         + "The following words are currently not allowed to be in a username:<br>"
         + "<br>"
