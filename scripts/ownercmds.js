@@ -995,7 +995,7 @@ ownercommands = {
         }
         allowed.splice(allowed.indexOf(ip), 1);
         helpers.saveData("allowed");
-        sys.sendHtmlOwner(helpers.bot(bots.priv) + The IP " + ip + " has been disallowed through server closure and bans by " + name + ".");
+        sys.sendHtmlOwner(helpers.bot(bots.priv) + "The IP " + ip + " has been disallowed through server closure and bans by " + name + ".");
     }
 
     ,
