@@ -46,7 +46,7 @@
     CYRILLIC = /\u0408|\u03a1|\u0430|\u0410|\u0412|\u0435|\u0415|\u041c|\u041d|\u043e|\u041e|\u0440|\u0420|\u0441|\u0421|\u0422|\u0443|\u0445|\u0425|\u0456|\u0406/;
     AUTH_NAMES = ["User", "Moderator", "Administrator", "Owner", "Invisible Owner"];
     SCRIPT_MODULES = ["usercmds.js", "modcmds.js", "admincmds.js", "ownercmds.js", "cusercmds.js", "cmodcmds.js", "cadmincmds.js", "cownercmds.js", "helpers.js", "handler.js", "tierchecks.js", "base64.js"];
-    SCRIPT_PLUGINS = ["funcmds.js", "party.js", "roulette.js", "rr.js", "safari.js"];
+    OFFICIAL_PLUGINS = ["funcmds.js", "party.js", "roulette.js", "rr.js", "safari.js"];
     SCRIPTS_FOLDER = "scripts/";
     PLUGINS_FOLDER = "plugins/";
     DATA_FOLDER = "data/";
@@ -70,12 +70,11 @@
         pluginLoaded = {};
     }
     if (helpers.isInArray("plugins", sys.dirsForDirectory(sys.cwd()))) {
-        for (var i in SCRIPT_PLUGINS) {
-            if (sys.fexists(PLUGINS_FOLDER + SCRIPT_PLUGINS[i]) && !pluginLoaded[i]) {
-                print("Loaded plugin " + SCRIPT_PLUGINS[i]);
-                sys.exec(PLUGINS_FOLDER + SCRIPT_PLUGINS[i]);
-                pluginLoaded[i] = true;
-            }
+        var plugins = sys.filesForDirectory(PLUGINS_FOLDER);
+        for (var i in plugins) {
+            print("Loaded plugin " + plugins[i]);
+            sys.exec(PLUGINS_FOLDER + plugins[i]);
+            pluginLoaded[i] = true;
         }
     }
     /**
@@ -350,6 +349,7 @@
     ,
 
     serverStartUp: function () {
+        var plugins = sys.filesForDirectory(PLUGINS_FOLDER), pluginEvent;
         serverStarting = true;
         if (sys.fexists("RelayStation.exe") && sys.os() == "windows") {
             sys.system("start RelayStation");
@@ -447,6 +447,20 @@
                 });
             }
         });
+        /**
+            --------------
+            Custom Plugins
+            --------------
+        **/
+        for (var i in plugins) {
+            if (OFFICIAL_PLUGINS.contains(plugins[i])) {
+                continue;
+            }
+            pluginEvent = plugins[i].replace(".js", "") + "Start";
+            if (global[pluginEvent]) {
+                global[pluginEvent]();
+            }
+        }
     }
 
     ,
@@ -468,7 +482,7 @@
     ,
 
     step: function () {
-        var name, number, number2;
+        var plugins = sys.filesForDirectory(PLUGINS_FOLDER), pluginEvent, name, number, number2;
         /**
             --------
             Flooding
@@ -557,6 +571,20 @@
         **/
         if (helpers.isLoaded("roulette.js")) {
             rouletteEvents();
+        }
+        /**
+            --------------
+            Custom Plugins
+            --------------
+        **/
+        for (var i in plugins) {
+            if (OFFICIAL_PLUGINS.contains(plugins[i])) {
+                continue;
+            }
+            pluginEvent = plugins[i].replace(".js", "") + "Step";
+            if (global[pluginEvent]) {
+                global[pluginEvent]();
+            }
         }
     }
 
