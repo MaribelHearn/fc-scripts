@@ -170,13 +170,13 @@ funcommands = {
         }
         if (rng > pokeballs[ball].rate) {
             for (i in channelPlayers) {
-                sys.sendHtmlAll("<font color='" + pokeballs[ball].color + "'><timestamp/>" +
+                sys.sendHtmlMessage(channelPlayers[i], "<font color='" + pokeballs[ball].color + "'><timestamp/>" +
                 "<b>" + helpers.pokeBallImage(channelPlayers[i], ball) + player + " has been caught in a " + pokeballs[ball].name +
                 " by " + name + "!" + helpers.pokeBallImage(channelPlayers[i], ball) + "</b></font>", channel);
             }
         } else {
             for (i in channelPlayers) {
-                sys.sendHtmlAll("<font color='" + pokeballs[ball].color + "'><timestamp/>" +
+                sys.sendHtmlMessage(channelPlayers[i], "<font color='" + pokeballs[ball].color + "'><timestamp/>" +
                 "<b>" + helpers.pokeBallImage(channelPlayers[i], ball) + name + " tried to capture " + player +
                 " in a " + pokeballs[ball].name + ", but " + player +
                 " escaped!" + helpers.pokeBallImage(channelPlayers[i], ball) + "</b></font>", channel);
