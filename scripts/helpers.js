@@ -377,6 +377,17 @@ helpers = {
         Return Helpers
         --------------
     **/
+    originalToID: function (name) {
+        for (var i in players) {
+            if (players[i].name == name) {
+                return i;
+            }
+        }
+        return false;
+    }
+
+    ,
+
     calcDamage: function (attack, defense, power, modifier) {
         // assumes the attacking Pokémon is level 100
         var damage = Math.floor((0.84 * (attack / defense) * power + 2) * modifier);
