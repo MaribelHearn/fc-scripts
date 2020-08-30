@@ -134,14 +134,14 @@ cusercommands = {
 
     channelonline: function (src, channel, command) {
         var DISPLAY_USER = true, HIDE_INVIS = true, onlinemessage = border + "<h2>Players Online on " + sys.channel(channel) + "</h2><br>", srcauth = sys.auth(src), lower;
-        var channelPlayers = sys.playersOfChannel(channel), auths = [], names = [], colors = [], ids = [], ips = [], clients = [], countries = [], timeZones = [], lastMessages = [], times = [];
+        var channelPlayers = sys.playersOfChannel(channel).sort(), auths = [], names = [], colors = [], ids = [], ips = [], clients = [], countries = [], timeZones = [], lastMessages = [], times = [];
         for (var i in channelPlayers) {
             ids.push(channelPlayers[i]);
             ips.push(sys.ip(ids[i]));
             auths.push(sys.auth(ids[i]));
             clients.push(sys.os(ids[i]));
             colors.push(helpers.color(ids[i]));
-            names.push(players[ids[i]].name + (sys.name(ids[i]) != players[ids[i]].name ? " (" + sys.name(ids[i]) + ")" : ""));
+            names.push(players[ids[i]].name + (sys.name(ids[i]) != players[ids[i]].name ? " (" + helpers.escapehtml(sys.name(ids[i])) + ")" : ""));
             lower = names[i].toLowerCase();
             countries.push(countryname[lower] ? FLAGS[helpers.toFlagKey(countries[i])] : "[no data]");
             timeZones.push(timezone[lower] ? timezone[lower] : "[no data]");

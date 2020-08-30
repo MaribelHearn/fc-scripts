@@ -36,7 +36,7 @@ ownercommands = {
         -------------
     **/
     authsettings: function (src, channel, command) {
-        var DISPLAY_USER = true, commandsmessage = border + "<h2>Owner Commands ~ Auth Settings</h2>";
+        var DISPLAY_USER = true, commandsmessage = border + "<h2>Owner Commands ~ Auth Settings</h2><br>";
         var auths = sys.dbAuths().sort(), authLevels = [], titles = [], names = [], lastLogins = [], index = 0, lower;
         for (var i in auths) {
             authLevels.push(sys.dbAuth(auths[i]));

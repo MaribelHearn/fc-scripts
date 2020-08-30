@@ -75,10 +75,13 @@ usercommands = {
         + "<br>"
         + "<b>" + helpers.user("/rules") + "</b>: displays the server rules.<br>"
         + "<b>" + helpers.user("/rule ") + helpers.arg("number") + "</b>: displays server rule <b>number</b>.<br>"
+        + "<b>" + helpers.user("/help ") + helpers.arg("topic") + "</b>: displays help on <b>topic</b>. <b>topic</b> can be any of the game channels: Party, Roulette or Russian Roulette (RR).<br>"
         + "<b>" + helpers.user("/online") + "</b>: shows the users who are currently online in a neat table.<br>"
         + "<b>" + helpers.user("/auth") + "</b>: shows the server authority in a neat table. Also /auths or /authlist.<br>"
         + "<b>" + helpers.user("/channels") + "</b>: shows the channels that are currently online in a neat table.<br>"
         + "<b>" + helpers.user("/battles") + "</b>: shows the battles that are currently going on in a neat table.<br>"
+        + "<b>" + helpers.userg("/rankings ") + helpers.arg("tier") + "</b>: shows your current rankings in <b>tier</b>. If <b>tier</b> is not specified, uses your current tier.<br>"
+        + "<b>" + helpers.user("/intier ") + helpers.arg("tier") + "</b>: shows unidled players currently in <b>tier</b>.<br>"
         + "<b>" + helpers.user("/mp") + "</b>: displays your own Control Panel data.<br>"
         + "<b>" + helpers.user("/myalts") + "</b>: displays info about your alts in a neat table.<br>"
         + "<b>" + helpers.user("/uptime") + "</b>: displays for how long the server has been up since its last restart.<br>"
@@ -87,7 +90,6 @@ usercommands = {
         + "<b>" + helpers.user("/scriptinfo") + "</b>: displays script information.<br>"
         + "<b>" + helpers.user("/playerinfo ") + helpers.arg("player") + "</b>: displays information about <b>player</b>, including when they were last seen. "
         + "If <b>player</b> is not specified, displays your own player info. Cannot show gradients.<br>"
-        + "<b>" + helpers.user("/help ") + helpers.arg("topic") + "</b>: displays help on <b>topic</b>. <b>topic</b> can be any of the game channels: Party, Roulette or Russian Roulette (RR).<br>"
         + "<b>" + helpers.user("/team ") + helpers.arg("number") + "</b>: displays your team with number <b>number</b>. If <b>number</b> is not specified, displays your first team.<br>"
         + "<b>" + helpers.user("/pokedex ") + helpers.arg("Pokémon") + "</b>: displays <b>Pokémon</b>'s data in a neat table. Also /pokemon.<br>"
         + "<b>" + helpers.user("/movedex ") + helpers.arg("move") + "</b>: displays data for <b>move</b> in a neat table. Also /move.<br>"
@@ -105,7 +107,14 @@ usercommands = {
     help: function (src, channel, command) {
         var helpmessage = border, topic = command[1];
         if (!topic) {
-            helpers.starfox(src, channel, command, bots.command, "Error 404, topic not found.");
+            helpmessage += "<h2>User Commands ~ Help</h2>"
+            + "<br>"
+            + "<b>" + helpers.user("/help ") + helpers.arg("roulette") + "</b>: displays Roulette help.<br>"
+            + "<b>" + helpers.user("/help ") + helpers.arg("party") + "</b>: displays Party help.<br>"
+            + "<b>" + helpers.user("/help ") + helpers.arg("russian roulette") + "</b>: displays Russian Roulette help. Also /help rr.<br>"
+            + "<br><timestamp/><br>"
+            + border2;
+            sys.sendHtmlMessage(src, helpmessage, channel);
             return;
         }
         topic = topic.toLowerCase();
@@ -226,7 +235,7 @@ usercommands = {
             auths.push(sys.auth(i));
             clients.push(sys.os(i));
             colors.push(helpers.color(i));
-            names.push(players[i].name + (sys.name(i) != players[i].name ? " (" + sys.name(i) + ")" : ""));
+            names.push(players[i].name + (sys.name(i) != players[i].name ? " (" + helpers.escapehtml(sys.name(i)) + ")" : ""));
             lower = names[index].toLowerCase();
             countries.push(countryname[lower] ? FLAGS[helpers.toFlagKey(countryname[lower])] : "[no data]");
             timeZones.push(timezone[lower] ? timezone[lower] : "[no data]");
@@ -357,6 +366,21 @@ usercommands = {
         }
         battlemessage += "<br><br><timestamp/><br>" + border2;
         sys.sendHtmlMessage(src, battlemessage, channel);
+    }
+
+    ,
+
+    intier: function (src, channel, command) {
+        var tier = command[1], list = [], i;
+        if (!tier) {
+            helpers.starfox(src, channel, command, bots.command, "Error 404, tier not found.");
+        }
+        for (i in players) {
+            if (sys.hasTier(i, tier)) {
+                list.push(players[i].name + (sys.name(i) != players[i].name ? " (" + sys.name(i) + ")" : ""));
+            }
+        }
+        sys.sendHtmlMessage(src, helpers.bot(bots.battle) + "Players currently in " + tier + ": " + list.join(", ") + ".");
     }
 
     ,
@@ -495,8 +519,8 @@ usercommands = {
         if (!player) {
             player = sys.name(src);
         }
-        if (!sys.dbExists(player)) {
-            helpers.starfox(src, channel, command, bots.command, "Error 400, you can't check the player info of " + name + " because they do not exist in the database.");
+        if (!sys.id(player) && !sys.dbExists(player)) {
+            helpers.starfox(src, channel, command, bots.command, "Error 400, you can't check the player info of " + player + " because they do not exist in the database.");
             return;
         }
         trgt = sys.id(player);
@@ -996,6 +1020,7 @@ usercommands = {
         + "<b>" + helpers.user("/color ") + helpers.arg("color") + "</b>: changes your color to <b>color</b>. <b>color</b> must be a valid color, or 'random'. Also /colour.<br>"
         + "<b>" + helpers.user("/idle") + "</b>: changes your status to idle. Also /afk or /away.<br>"
         + "<b>" + helpers.user("/unidle") + "</b>: changes your status to available. Also /(go)back.<br>"
+        + "<b>" + helpers.user("/tier ") + helpers.arg("team") + helpers.arg2("*tier") + "</b>: changes the tier of team number <b>team</b> to <b>tier</b>. If <b>team</b> is not specified, uses your first team.<br>"
         + "<b>" + helpers.user("/unregister") + "</b>: clears your password.<br>"
         + "<b>" + helpers.user("/name ") + helpers.arg("text") + "</b>: changes your username to <b>text</b>.<br>"
         + "<b>" + helpers.user("/reset") + "</b>: sets your username and color back to their original states.<br>"
@@ -1003,7 +1028,8 @@ usercommands = {
         + "<b>" + helpers.user("/resetcolor") + "</b>: sets your color back to its original state. Also /resetcolour.<br>"
         + "<b>" + helpers.user("/reverse") + "</b>: reverses your username.<br>"
         + "<b>" + helpers.user("/selfkick") + "</b>: kicks yourself from the server.<br>"
-        + "<b>" + helpers.user("/selfban") + "</b>: bans yourself from the server.<br>"
+        + "<b>" + helpers.user("/selfmute ") + helpers.arg("reason") + "</b>: mutes yourself on the server for <b>reason</b>.<br>"
+        + "<b>" + helpers.user("/selfban ") + helpers.arg("reason") + "</b>: bans yourself from the server for <b>reason</b>.<br>"
         + "<br><timestamp/><br>"
         + border2;
         sys.sendHtmlMessage(src, commandsmessage, channel);
@@ -1056,15 +1082,16 @@ usercommands = {
     ,
 
     tier: function (src, channel, command) {
-        var tierlist = sys.getTierList(), tier;
-        if (!command[1]) {
+        var tierlist = sys.getTierList(), team = (!command[1] ? 0 : command[1]), tier = command[2];
+        if (!tier) {
             helpers.starfox(src, channel, command, bots.command, "Error 404, tier not found.");
             return;
         }
-        tier = command[1];
         for (var index in tierlist) {
             if (tierlist[index] == tier) {
-                sys.changeTier(src, 0, tier);
+                sys.changeTier(src, team, tier);
+                sys.sendHtmlMessage(src, helpers.bot(bots.battle) + "You changed your " + helpers.teamOrdinal(team) +
+                " team's tier to " + tier + ".");
                 return;
             }
         }
@@ -1075,12 +1102,12 @@ usercommands = {
 
     unregister: function (src, channel, command) {
         if (sys.auth(src) > 0) {
-            helpers.starfox(src, channel, command, bots.pass, "Error 403, you may not unregister if you have authority!");
+            helpers.starfox(src, channel, command, bots.command, "Error 403, you may not unregister if you have authority!");
             return;
         }
         sys.clearPass(players[src].name);
         sys.sendNetworkCommand(src, REACTIVATE_REGISTER_BUTTON);
-        sys.sendHtmlMessage(src, helpers.bot(bots.command) + "Your password has been successfully cleared.", channel);
+        sys.sendHtmlMessage(src, helpers.bot(bots.pass) + "Your password has been successfully cleared.", channel);
     }
 
     ,
@@ -1097,53 +1124,37 @@ usercommands = {
     }
 
     ,
-    
-    selfban: function (src, channel, command) {
-        var name = sys.name(src), trgtname = name, trgt = sys.id(trgtname), reason = "Selfbanned", auth = sys.auth(src), trgtauth, trgtip;
-        if (!trgtname) {
-            helpers.starfox(src, channel, command, bots.ban, "Error 404, player not found.");
-            return;
+
+    selfmute: function (src, channel, command) {
+        var auth = sys.auth(src), lower = players[src].name.toLowerCase(), original;
+        if (auth > 0) {
+            original = mutemessages[lower];
         }
-        var lower = trgtname.toLowerCase();
-        if (!trgt) {
-            trgtauth = sys.dbAuth(trgtname);
-            trgtip = sys.dbIp(trgtname);
+        mutemessages[lower] = "~Self~ has muted themselves!";
+        modcommands.mute(src, channel, ["mute", sys.name(src), command[1]]);
+        if (auth > 0) {
+            mutemessages[lower] = original;
         } else {
-            trgtauth = sys.auth(trgt);
-            trgtip = sys.ip(trgt);
+            delete mutemessages[lower];
         }
-        
-        if (!reason) {
-            reason = "Selfbanned";
-        } else {
-            reason = helpers.escapehtml(reason);
-        }
-        
-        banlist[lower] = {};
-        banlist[lower].ip = trgtip;
-        banlist[lower].bannedby = "Self";
-        banlist[lower].reason = reason;
-        banlist[lower].time = "-";
-        banlist[lower].starttime = "-";
-        time = "forever";
-        unit = "";
-        
-        var date = helpers.date(new Date());
-        banlist[lower].date = date;
-        helpers.saveData("banlist");
-        if (banmessages[name.toLowerCase()]) {
-            if (time == "forever") {
-                msg = banmessages[name.toLowerCase()].replace(/~Self~/gi, name).replace(/~Target~/gi, trgtname).replace(/~Time~/g, "Forever").replace(/~time~/g, "forever").replace(/~Server~/gi, sys.getServerName());
-            } else {
-                msg = banmessages[name.toLowerCase()].replace(/~Self~/gi, name).replace(/~Target~/gi, trgtname).replace(/~Time~/gi, time + " " + unit).replace(/~Server~/gi, sys.getServerName());
-            }
-            sys.sendHtmlAll(helpers.bot(bots.ban) + name + " has banned themselves from the server!", channel);
-        } else {
-            sys.sendHtmlAll(helpers.bot(bots.ban) + name + " has banned themselves from the server!", channel);
-        }
-        sys.kick(src);
     }
-    
+
+    ,
+
+    selfban: function (src, channel, command) {
+        var auth = sys.auth(src), lower = players[src].name.toLowerCase(), original;
+        if (auth > 0) {
+            original = banmessages[lower];
+        }
+        banmessages[lower] = "~Self~ has banned themselves from the server!";
+        admincommands.ban(src, channel, ["ban", sys.name(src), command[1]]);
+        if (auth > 0) {
+            banmessages[lower] = original;
+        } else {
+            delete banmessages[lower];
+        }
+    }
+
     ,
 
     color: function (src, channel, command) {
@@ -1153,7 +1164,7 @@ usercommands = {
             return;
         }
         if (!sys.validColor(color) && color != "random") {
-            helpers.starfox(src, channel, command, bots.main, "Error 403, invalid " + command[0] + ".");
+            helpers.starfox(src, channel, command, bots.command, "Error 403, invalid " + command[0] + ".");
             return;
         }
         if (color == "#000000") {
@@ -1280,7 +1291,7 @@ usercommands = {
         + "<h2>User Commands ~ Message Options</h2>"
         + "<br>"
         + "<b>" + helpers.user("/me ") + helpers.arg("message") + "</b>: posts <b>message</b> between asterisks, in bold and your name color.<br>"
-        + "<b>" + helpers.user("/poke ") + helpers.arg("text/player") + "</b>: pokes <b>text</b> or <b>player</b>. If <b>player</b> is specified over <b>text</b>, they are online and you have auth, they get flashed.<br>"
+        + "<b>" + helpers.user("/poke ") + helpers.arg("player") + "</b>: pokes <b>player</b>, flashing them if they are online.<br>"
         + "<b>" + helpers.user("/imp ") + helpers.arg("text") + helpers.arg2("*message") + "</b>: posts <b>message</b> as <b>text</b>.<br>"
         + "<b>" + helpers.user("/impme ") + helpers.arg("text") + helpers.arg2("*message") + "</b>: posts <b>message</b> between asterisks and in bold in your name color as <b>text</b>.<br>"
         + "<b>" + helpers.user("/future ") + helpers.arg("text") + helpers.arg2("*time") + "</b>: posts <b>message</b> into the future, to arrive in <b>time</b>. <b>message</b> can also be a command.<br>"
@@ -1312,9 +1323,7 @@ usercommands = {
         command = command.join(DELIMITER);
         trgt = sys.id(command);
         sys.sendHtmlAll("<font color='" + color + "'><timestamp/><b>*** " + name + " pokes " + helpers.escapehtml(command) + " ***</b></font>", channel);
-        if (auth >= 1 && trgt) {
-            sys.sendHtmlMessage(trgt, helpers.bot(bots.command) + " You got flashed by " + name + "!<ping/>");
-        }
+        sys.sendHtmlMessage(trgt, "<ping/>");
     }
 
     ,
