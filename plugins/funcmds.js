@@ -162,7 +162,7 @@ funcommands = {
             "master": {"rate": -1, "name": "Master Ball", "color": "purple"}
         }, name = sys.name(src), random = sys.rand(0, sys.numPlayers()), rng = sys.rand(0, 11), player, ball, i;
         !command[1] ? player = sys.name(sys.playerIds()[random]) : player = helpers.escapehtml(command[1]);
-        !command[2] ? ball = pokeballs[["poke", "great", "ultra", "master"][sys.rand(0, 4)]] : ball = command[2];
+        !command[2] ? ball = ["poke", "great", "ultra", "master"][sys.rand(0, 4)] : ball = command[2];
         ball = helpers.removespaces(ball.toLowerCase().replace("é", "e").replace("ball", ""));
         if (!helpers.isInArray(ball, Object.keys(pokeballs))) {
             helpers.starfox(src, channel, command, bots.command, "Error 400, invalid Poké Ball type.");
