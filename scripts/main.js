@@ -237,6 +237,7 @@
     helpers.setVariable("border", "<font color='" + borderColor + "'><b>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>></b></font>");
     helpers.setVariable("border2", "<font color='" + borderColor + "'><b>&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;" +
     "&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;</b></font>");
+    helpers.setVariable("plugins", sys.filesForDirectory(PLUGINS_FOLDER));
     helpers.setVariable("players", []);
     helpers.setVariable("floodplayers", []);
     helpers.setVariable("spoilers", []);
@@ -349,7 +350,7 @@
     ,
 
     serverStartUp: function () {
-        var plugins = sys.filesForDirectory(PLUGINS_FOLDER), pluginEvent;
+        var pluginEvent;
         serverStarting = true;
         if (sys.fexists("RelayStation.exe") && sys.os() == "windows") {
             sys.system("start RelayStation");
@@ -482,7 +483,7 @@
     ,
 
     step: function () {
-        var plugins = sys.filesForDirectory(PLUGINS_FOLDER), pluginEvent, name, number, number2;
+        var pluginEvent, name, number, number2;
         /**
             --------
             Flooding
