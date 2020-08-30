@@ -20,3 +20,5 @@ By default, the official channels are not registered. You should run the `/regis
 ### Plugins
 
 There are optional script files as well; those are within a folder called `plugins`; the main files are in the folder called `scripts`. If you do not want the plugins, simply do not extract them from the zip once you have downloaded the scripts. The plugins consist of fun commands and a few small game channel scripts, including a very unfinished (and therefore not yet playable) own Safari. It is not a modification of the official side channel, but written from scratch.
+
+You can also add your own plugins. Every JavaScript file present in the `plugins` folder will be executed on startup and when the `/reload` command is used. 

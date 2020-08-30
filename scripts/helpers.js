@@ -179,7 +179,7 @@ helpers = {
         ----------------
     **/
     isLoaded: function (plugin) {
-        return pluginLoaded[SCRIPT_PLUGINS.indexOf(plugin)];
+        return pluginLoaded[OFFICIAL_PLUGINS.indexOf(plugin)];
     }
 
     ,

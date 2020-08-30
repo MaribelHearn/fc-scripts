@@ -1,0 +1,6 @@
+plugins/*.js
+!plugins/funcmds.js
+!plugins/party.js
+!plugins/roulette.js
+!plugins/rr.js
+!plugins/safari.js

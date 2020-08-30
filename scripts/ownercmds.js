@@ -341,7 +341,7 @@ ownercommands = {
         }
         message = border +
         "<h2>Contents of " + file +
-        "</h2><br>" + helpers.escapehtml(sys.getFileContent(file)) + "<br>" +
+        "</h2><br>" + helpers.escapehtml(JSON.stringify(sys.getFileContent(file)).replace("\n", "<br>")) + "<br>" +
         "<br><timestamp/><br>" + border2;
         sys.sendHtmlMessage(src, message, channel);
     }
@@ -521,8 +521,8 @@ ownercommands = {
         + "<b>" + helpers.user("/reload") + "</b>: reloads the scripts from the local files.<br>"
         + "<b>" + helpers.user("/update ") + helpers.arg("module") + "</b>: updates the <b>module</b> module. Updates the main script file by default.<br>"
         + "<b>" + helpers.user("/silentupdate ") + helpers.arg("module") + "</b>: silently updates the <b>module</b> module. Updates the main script file by default. Also /supdate.<br>"
-        + "<b>" + helpers.user("/updateplugin ") + helpers.arg("plugin") + "</b>: updates the <b>plugin</b> plugin. Updates the main script file by default.<br>"
-        + "<b>" + helpers.user("/silentupdateplugin ") + helpers.arg("plugin") + "</b>: silently updates the <b>plugin</b> plugin. Updates the main script file by default. Also /supdateplugin.<br>";
+        + "<b>" + helpers.user("/updateplugin ") + helpers.arg("plugin") + "</b>: updates the official plugin <b>plugin</b>. If <b>plugin</b> is not specified, updates all plugins. Also /updateplugins.<br>"
+        + "<b>" + helpers.user("/silentupdateplugin ") + helpers.arg("plugin") + "</b>: silently updates the official plugin <b>plugin</b>. If <b>plugin</b> is not specified, updates all plugins. Also /supdateplugin or /supdateplugins.<br>";
         if (UPDATE_KEY === "") {
             commandsmessage += "<b>" + helpers.user("/setgithubkey ") + helpers.arg("key") + "</b>: sets the GitHub API key for automatic script updates to <b>key</b>.<br>"
             + "Requires the server folder to be a clone of the <tt>fc-scripts</tt> git repository. <u>Be careful with this command!</u> Entering an invalid API key will rate limit the updates!<br>";
@@ -550,12 +550,11 @@ ownercommands = {
                 moduleLoaded[i] = true;
             }
             if (helpers.isInArray("plugins", sys.dirsForDirectory(sys.cwd()))) {
-                for (var i in SCRIPT_PLUGINS) {
-                    if (sys.fexists(PLUGINS_FOLDER + SCRIPT_PLUGINS[i])) {
-                        print("Loaded plugin " + SCRIPT_PLUGINS[i]);
-                        sys.exec(PLUGINS_FOLDER + SCRIPT_PLUGINS[i]);
-                        pluginLoaded[i] = true;
-                    }
+                var plugins = sys.filesForDirectory(PLUGINS_FOLDER);
+                for (var i in plugins) {
+                    print("Loaded plugin " + plugins[i]);
+                    sys.exec(PLUGINS_FOLDER + plugins[i]);
+                    pluginLoaded[i] = true;
                 }
             }
             sys.exec(SCRIPTS_FOLDER + "main.js");
@@ -678,20 +677,16 @@ ownercommands = {
     updateplugin: function (src, channel, command) {
         var name = sys.name(src), date = new Date(), silent = command[0].substr(0, 6), plugin, time;
         var noncmds = ["party", "rr", "roulette"];
-        if (!command[1]) {
-            helpers.starfox(src, channel, command, bots.command, "Error 404, plugin not found.");
-            return;
-        }
-        if (command[1] == "all") {
-            for (var i = 0; i < SCRIPT_PLUGINS.length; i++) {
-                this.updateplugin(src, channel, [command[0], SCRIPT_PLUGINS[i].split('.')[0]].replace(/cmds/, ""));
+        if (!command[1] || command[1] == "all") {
+            for (var i = 0; i < OFFICIAL_PLUGINS.length; i++) {
+                this.updateplugin(src, channel, [command[0], OFFICIAL_PLUGINS[i].split('.')[0]].replace(/cmds/, ""));
             }
         } else {
             plugin = command[1];
             if (!helpers.isInArray(plugin, noncmds)) {
                 plugin += "cmds";
             }
-            if (!helpers.isInArray(plugin + ".js", SCRIPT_PLUGINS)) {
+            if (!helpers.isInArray(plugin + ".js", OFFICIAL_PLUGINS)) {
                 helpers.starfox(src, channel, command, bots.main, "Error 404, plugin '" + plugin + "' not found.");
                 return;
             }
@@ -720,11 +715,17 @@ ownercommands = {
                 }
             });
         }
-        for (var i = SCRIPT_PLUGINS.length; i > 1; i--) {
+        for (var i = OFFICIAL_PLUGINS.length; i > 1; i--) {
             if (command[i]) {
                 this.updateplugin(src, channel, [command[0], command[i]]);
             }
         }
+    }
+
+    ,
+
+    updateplugins: function (src, channel, command) {
+        this.updateplugin(src, channel, command);
     }
 
     ,
@@ -736,6 +737,13 @@ ownercommands = {
     ,
 
     supdateplugin: function (src, channel, command) {
+        command[0] = "silentupdateplugin";
+        this.updateplugin(src, channel, command);
+    }
+
+    ,
+
+    supdateplugins: function (src, channel, command) {
         command[0] = "silentupdateplugin";
         this.updateplugin(src, channel, command);
     }
