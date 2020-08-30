@@ -376,11 +376,11 @@ usercommands = {
             helpers.starfox(src, channel, command, bots.command, "Error 404, tier not found.");
         }
         for (i in players) {
-            if (sys.hasTier(i, tier)) {
-                list.push(players[i].name + (sys.name(i) != players[i].name ? " (" + sys.name(i) + ")" : ""));
+            if (sys.hasTier(i, tier) && !sys.away(i)) {
+                list.push(players[i].name + (sys.name(i) != players[i].name ? " (" + helpers.escapehtml(sys.name(i)) + ")" : ""));
             }
         }
-        sys.sendHtmlMessage(src, helpers.bot(bots.battle) + "Players currently in " + tier + ": " + list.join(", ") + ".");
+        sys.sendHtmlMessage(src, helpers.bot(bots.battle) + "Unidled players currently in " + tier + ": " + list.join(", ") + ".");
     }
 
     ,
@@ -519,11 +519,14 @@ usercommands = {
         if (!player) {
             player = sys.name(src);
         }
-        if (!sys.id(player) && !sys.dbExists(player)) {
+        trgt = sys.id(player);
+        if (!trgt && !sys.dbExists(player)) {
             helpers.starfox(src, channel, command, bots.command, "Error 400, you can't check the player info of " + player + " because they do not exist in the database.");
             return;
         }
-        trgt = sys.id(player);
+        if (trgt && !sys.dbExists(player)) {
+            player = players[trgt].name;
+        }
         lastlogin = helpers.formatLastOn(src, sys.dbLastOn(player));
         if (members[player.toLowerCase()]) {
             player = members[player.toLowerCase()];
@@ -554,7 +557,8 @@ usercommands = {
         var auths = [], titles = [], names = [],  ips = [], countries = [], timeZones = [], lastLogins = [], statuses = [];
         for (var i in authList) {
             auths.push(sys.dbAuth(authList[i]));
-            names.push(authList[i]);
+            id = !sys.id(authList[i]) ? helpers.originalToID(authList[i]) : sys.id(authList[i]);
+            names.push(authList[i] + (sys.name(id) != authList[i] ? " (" + helpers.escapehtml(sys.name(id)) + ")" : ""));
             lower = names[index].toLowerCase();
             titles.push(authtitles[lower] ? authtitles[lower] : '-');
             ips.push(sys.dbIp(authList[i]));
