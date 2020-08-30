@@ -1849,14 +1849,22 @@ helpers = {
 
     ,
 
-    pokeBallImage: function (ball) {
-        var mapping = {"poke": "u", "great": "m", "ultra": "a", "master": "o"};
+    pokeBallImage: function (src, ball) {
+        var mapping;
+        if (this.isAndroidOrWeb(src)) {
+            mapping = {"poke": "USER", "great": "MOD", "ultra": "ADMIN", "master": "OWNER"};
+            return AUTHIMAGE[mapping[ball]];
+        }
+        mapping = {"poke": "u", "great": "m", "ultra": "a", "master": "o"};
         return "<img src='Themes/Classic/client/" + mapping[ball] + "Available.png'>";
     }
 
     ,
 
-    statusImage: function (status) {
+    statusImage: function (src, status) {
+        if (this.isAndroidOrWeb(src)) {
+            return STATUS[status.toUpperCase()];
+        }
         return "<img src='Themes/Classic/status/battle_status" + this.toStatusNumber(status) + ".png'>";
     }
 

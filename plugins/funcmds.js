@@ -146,40 +146,41 @@ funcommands = {
         var name = helpers.escapehtml(sys.name(src)), random = sys.rand(0, sys.numPlayers()), channelPlayers = sys.playersOfChannel(channel);
         !command[1] ? player = sys.name(sys.playerIds()[random]) : player = helpers.escapehtml(command[1]);
         for (var i in channelPlayers) {
-            if (helpers.isAndroidOrWeb(channelPlayers[i])) {
-                sys.sendHtmlMessage(channelPlayers[i], "<font color='#FF0000'><timestamp/><b>" + STATUS[command[0].toUpperCase()] + player +
-                " has been burned by " + name + "!" + STATUS[command[0].toUpperCase()] + "</b></font>", channel);
-            } else {
-                sys.sendHtmlMessage(channelPlayers[i], "<font color='#FF0000'><timestamp/><b>" + helpers.statusImage(command[0]) + player +
-                " has been burned by " + name + "!" + helpers.statusImage(command[0]) + "</b></font>", channel);
-            }
+            sys.sendHtmlMessage(channelPlayers[i], "<font color='#FF0000'><timestamp/>" +
+            "<b>" + helpers.statusImage(channelPlayers[i], command[0]) + player + " has been burned by " + name +
+            "!" + helpers.statusImage(channelPlayers[i], command[0]) + "</b></font>", channel);
         }
     }
 
     ,
 
     capture: function (src, channel, command) {
-        var pokeballs = {
-            "poke": {"rate": 8, "name": "Poké Ball", "color": "darkred"},
+        var channelPlayers = sys.playersOfChannel(channel), pokeballs = {
+            "poke": {"rate": 8, "name": "Poké Ball", "color": sys.hexColor("darkred")},
             "great": {"rate": 6, "name": "Great Ball", "color": "blue"},
-            "ultra": {"rate": 3, "name": "Ultra Ball", "color": "darkblue"},
+            "ultra": {"rate": 3, "name": "Ultra Ball", "color": sys.hexColor("darkblue")},
             "master": {"rate": -1, "name": "Master Ball", "color": "purple"}
-        }, name = sys.name(src), random = sys.rand(0, sys.numPlayers()), rng = sys.rand(0, 11), player, ball;
+        }, name = sys.name(src), random = sys.rand(0, sys.numPlayers()), rng = sys.rand(0, 11), player, ball, i;
         !command[1] ? player = sys.name(sys.playerIds()[random]) : player = helpers.escapehtml(command[1]);
-        !command[2] ? ball = "poke" : ball = command[2];
+        !command[2] ? ball = pokeballs[["poke", "great", "ultra", "master"][sys.rand(0, 4)]] : ball = command[2];
         ball = helpers.removespaces(ball.toLowerCase().replace("é", "e").replace("ball", ""));
         if (!helpers.isInArray(ball, Object.keys(pokeballs))) {
             helpers.starfox(src, channel, command, bots.command, "Error 400, invalid Poké Ball type.");
             return;
         }
         if (rng > pokeballs[ball].rate) {
-            sys.sendHtmlAll("<font color='" + pokeballs[ball].color + "'><timestamp/><b>" + helpers.pokeBallImage(ball) + player +
-            " has been caught in a " + pokeballs[ball].name + " by " + name +
-            "!" + helpers.pokeBallImage(ball) + "</b></font>", channel);
+            for (i in channelPlayers) {
+                sys.sendHtmlAll("<font color='" + pokeballs[ball].color + "'><timestamp/>" +
+                "<b>" + helpers.pokeBallImage(channelPlayers[i], ball) + player + " has been caught in a " + pokeballs[ball].name +
+                " by " + name + "!" + helpers.pokeBallImage(channelPlayers[i], ball) + "</b></font>", channel);
+            }
         } else {
-            sys.sendHtmlAll("<font color='" + pokeballs[ball].color + "'><timestamp/><b>" + helpers.pokeBallImage(ball) + name +
-            " tried to capture " + player + " in a " + pokeballs[ball].name +
-            ", but " + player + " escaped!" + helpers.pokeBallImage(ball) + "</b></font>", channel);
+            for (i in channelPlayers) {
+                sys.sendHtmlAll("<font color='" + pokeballs[ball].color + "'><timestamp/>" +
+                "<b>" + helpers.pokeBallImage(channelPlayers[i], ball) + name + " tried to capture " + player +
+                " in a " + pokeballs[ball].name + ", but " + player +
+                " escaped!" + helpers.pokeBallImage(channelPlayers[i], ball) + "</b></font>", channel);
+            }
         }
     }
 
@@ -293,13 +294,9 @@ funcommands = {
         var name = helpers.escapehtml(sys.name(src)), random = sys.rand(0, sys.numPlayers()), channelPlayers = sys.playersOfChannel(channel);
         !command[1] ? player = sys.name(sys.playerIds()[random]) : player = helpers.escapehtml(command[1]);
         for (var i in channelPlayers) {
-            if (helpers.isAndroidOrWeb(channelPlayers[i])) {
-                sys.sendHtmlMessage(channelPlayers[i], "<font color='#87CEEB'><timestamp/><b>" + STATUS[command[0].toUpperCase()] + player +
-                " has been frozen by " + name + "!" + STATUS[command[0].toUpperCase()] + "</b></font>", channel);
-            } else {
-                sys.sendHtmlMessage(channelPlayers[i], "<font color='#87CEEB'><timestamp/><b>" + helpers.statusImage(command[0]) + player +
-                " has been frozen by " + name + "!" + helpers.statusImage(command[0]) + "</b></font>", channel);
-            }
+            sys.sendHtmlMessage(channelPlayers[i], "<font color='#87CEEB'><timestamp/>" +
+            "<b>" + helpers.statusImage(channelPlayers[i], command[0]) + player + " has been frozen by " + name +
+            "!" + helpers.statusImage(channelPlayers[i], command[0]) + "</b></font>", channel);
         }
     }
 
@@ -397,13 +394,9 @@ funcommands = {
         var name = helpers.escapehtml(sys.name(src)), random = sys.rand(0, sys.numPlayers()), channelPlayers = sys.playersOfChannel(channel);
         !command[1] ? player = sys.name(sys.playerIds()[random]) : player = helpers.escapehtml(command[1]);
         for (var i in channelPlayers) {
-            if (helpers.isAndroidOrWeb(channelPlayers[i])) {
-                sys.sendHtmlMessage(channelPlayers[i], "<font color='#FFA500'><timestamp/><b>" + STATUS["PARALYZE"] + player +
-                " has been " + command[0] + "d by " + name + "!" + STATUS["PARALYZE"] + "</b></font>", channel);
-            } else {
-                sys.sendHtmlMessage(channelPlayers[i], "<font color='#FFA500'><timestamp/><b>" + helpers.statusImage("paralyze") + player +
-                " has been " + command[0] + "d by " + name + "!" + helpers.statusImage("paralyze") + "</b></font>", channel);
-            }
+            sys.sendHtmlMessage(channelPlayers[i], "<font color='#FFA500'><timestamp/>" +
+            "<b>" + helpers.statusImage(channelPlayers[i], "paralyze") + player + " has been " + command[0] + "d by " + name +
+            "!" + helpers.statusImage(channelPlayers[i], "paralyze") + "</b></font>", channel);
         }
     }
 
@@ -419,13 +412,9 @@ funcommands = {
         var name = helpers.escapehtml(sys.name(src)), random = sys.rand(0, sys.numPlayers()), channelPlayers = sys.playersOfChannel(channel);
         !command[1] ? player = sys.name(sys.playerIds()[random]) : player = helpers.escapehtml(command[1]);
         for (var i in channelPlayers) {
-            if (helpers.isAndroidOrWeb(channelPlayers[i])) {
-                sys.sendHtmlMessage(channelPlayers[i], "<font color='#800080'><timestamp/><b>" + STATUS[command[0].toUpperCase()] + player +
-                " has been poisoned by " + name + "!" + STATUS[command[0].toUpperCase()] + "</b></font>", channel);
-            } else {
-                sys.sendHtmlMessage(channelPlayers[i], "<font color='#800080'><timestamp/><b>" + helpers.statusImage(command[0]) + player +
-                " has been poisoned by " + name + "!" + helpers.statusImage(command[0]) + "</b></font>", channel);
-            }
+            sys.sendHtmlMessage(channelPlayers[i], "<font color='#800080'><timestamp/>" +
+            "<b>" + helpers.statusImage(channelPlayers[i], command[0]) + player + " has been poisoned by " + name +
+            "!" + helpers.statusImage(channelPlayers[i], command[0]) + "</b></font>", channel);
         }
     }
 
@@ -519,13 +508,9 @@ funcommands = {
         var name = helpers.escapehtml(sys.name(src)), random = sys.rand(0, sys.numPlayers()), channelPlayers = sys.playersOfChannel(channel);
         !command[1] ? player = sys.name(sys.playerIds()[random]) : player = helpers.escapehtml(command[1]);
         for (var i in channelPlayers) {
-            if (helpers.isAndroidOrWeb(channelPlayers[i])) {
-                sys.sendHtmlMessage(channelPlayers[i], "<timestamp/><b>" + STATUS[command[0].toUpperCase()] + player +
-                " has been put to sleep by " + name + "!" + STATUS[command[0].toUpperCase()] + "</b>", channel);
-            } else {
-                sys.sendHtmlMessage(channelPlayers[i], "<timestamp/><b>" + helpers.statusImage(command[0]) + player +
-                " has been put to sleep by " + name + "!" + helpers.statusImage(command[0]) + "</b>", channel);
-            }
+            sys.sendHtmlMessage(channelPlayers[i], "<timestamp/>" +
+            "<b>" + helpers.statusImage(channelPlayers[i], command[0]) + player + " has been put to sleep by " + name +
+            "!" + helpers.statusImage(channelPlayers[i], command[0]) + "</b>", channel);
         }
     }
 
