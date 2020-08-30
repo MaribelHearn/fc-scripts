@@ -61,7 +61,7 @@ helpers = {
         sys.rm("bansites.txt");
 
         // Objects
-        sys.write(DATA_FOLDER + "bots.txt", '{"attack":"AttackBot","armyof":"ArmyBot","auth":"AuthBot","ban":"BanBot","caps":"CapsBot","channel":"ChannelBot",' +
+        sys.write(DATA_FOLDER + "bots.txt", '{"attack":"AttackBot","armyof":"ArmyBot","auth":"AuthBot","ban":"BanBot","battle":"BattleBot","caps":"CapsBot","channel":"ChannelBot",' +
         '"clear":"ClearBot","command":"CommandBot","cow":"Miltank","flood":"FloodBot","fun":"FunBot","gigaban":"GigabanBot","idle":"IdleBot","kick":"KickBot",' +
         '"main":"Bot","megaban":"MegabanBot","mute":"MuteBot","name":"NameBot","party":"PartyBot","pass":"PassBot",' +
         '"priv":"PrivacyBot","reverse":"ReverseBot","rr":"RussiaBot","russia":"RussiaBot","safari":"SafariBot","script":"ScriptBot","silence":"SilenceBot",' +
@@ -2131,6 +2131,12 @@ helpers = {
             power = 120;
         }
         return power;
+    }
+
+    ,
+
+    teamOrdinal: function (team) {
+        return ({ 0:"first", 1:"second", 2:"third", 3:"fourth", 4:"fifth", 5:"sixth" }[team]);
     }
 
     ,

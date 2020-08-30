@@ -157,6 +157,9 @@ admincommands = {
         } else {
             sys.sendHtmlAll(helpers.bot(bots.ban) + name + " has banned " + trgtname + " from the server" + (time == "forever" ? "" : " for " + time + " ") + unit + "! [Reason: " + reason + "]");
         }
+        if (trgt) {
+            sys.kick(trgt);
+        }
         for (var index in mutelist) {
             if (!sys.dbIp(index)) {
                 delete mutelist[index];
@@ -1072,14 +1075,14 @@ admincommands = {
 
     stopbattles: function (src, channel, command) {
         stopbattles = true;
-        sys.sendHtmlAll(helpers.bot(bots.main) + "<b>" + helpers.user(sys.name(src)) + " has stopped battles! No battles can be started anymore!</b>");
+        sys.sendHtmlAll(helpers.bot(bots.battle) + "<b>" + helpers.user(sys.name(src)) + " has stopped battles! No battles can be started anymore!</b>");
     }
 
     ,
 
     resumebattles: function (src, channel, command) {
         stopbattles = false;
-        sys.sendHtmlAll(helpers.bot(bots.main) + "<b>" + helpers.user(sys.name(src)) + " has resumed battles! Everyone can battle again!</b>");
+        sys.sendHtmlAll(helpers.bot(bots.battle) + "<b>" + helpers.user(sys.name(src)) + " has resumed battles! Everyone can battle again!</b>");
     }
 
     ,
