@@ -1432,6 +1432,20 @@
             sys.sendHtmlAll(helpers.bot(bots.main) + title + ", Uploader: " + username + ", Views: <b>" + views + "</b>, Likes: <b><font color='green'>" + likes + "</font></b>, " +
             "Dislikes: <b><font color='red'>" + dislikes + "</font></b>, Published: " + publishedDate + " UTC.", channel);
         }
+        /**
+            --------------
+            Custom Plugins
+            --------------
+        **/
+        for (var i in plugins) {
+            if (helpers.isInArray(plugins[i], OFFICIAL_PLUGINS)) {
+                continue;
+            }
+            pluginEvent = plugins[i].replace(".js", "") + "AfterChat";
+            if (global[pluginEvent]) {
+                global[pluginEvent](src, message, channel);
+            }
+        }
     }
 
     ,
