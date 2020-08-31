@@ -2152,6 +2152,16 @@ helpers = {
 
     ,
 
+    ordinal: function (num) {
+        var str = String(num), lastDigit = str.charAt(str.length - 1);
+        if (Number(lastDigit) >= 3) {
+            lastDigit = "3";
+        }
+        return num + ({ "1":"st", "2":"nd", "3":"th" }[lastDigit]);
+    }
+
+    ,
+
     // Chuck Norris tier is at index 23
     tierOf: function (pokeId) {
         var name = sys.pokemon(pokeId), tiers = sys.getFileContent("tiers.xml").split('\n'), start = 23, pokemon,
