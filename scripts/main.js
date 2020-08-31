@@ -931,6 +931,21 @@
             }
         }
         sys.sendHtmlWatch(helpers.bot(bots.spy) + "[Server] <b><font color='" + helpers.color(src) + "'>" + sys.name(src) + "</font></b> has joined the channel " + helpers.channelLink(channelname) + ".");
+        /**
+            --------------
+            Custom Plugins
+            --------------
+        **/
+        for (var i in plugins) {
+            if (helpers.isInArray(plugins[i], OFFICIAL_PLUGINS)) {
+                continue;
+            }
+            pluginEvent = plugins[i].replace(".js", "") + "AfterChannelJoin";
+            if (global[pluginEvent]) {
+                global[pluginEvent](src, message, channel);
+                return;
+            }
+        }
     }
 
     ,
@@ -967,6 +982,21 @@
                 }
             }
             sys.sendHtmlWatch(helpers.bot(bots.spy) + "[Server] <b><font color='" + helpers.color(src) + "'>" + name + "</font></b> has left the channel " + helpers.channelLink(channelname) + ".");
+        }
+        /**
+            --------------
+            Custom Plugins
+            --------------
+        **/
+        for (var i in plugins) {
+            if (helpers.isInArray(plugins[i], OFFICIAL_PLUGINS)) {
+                continue;
+            }
+            pluginEvent = plugins[i].replace(".js", "") + "AfterChannelLeave";
+            if (global[pluginEvent]) {
+                global[pluginEvent](src, message, channel);
+                return;
+            }
         }
     }
 
@@ -1309,6 +1339,21 @@
             if (channel == mafiachannel) {
                 sys.stopEvent();
                 mafiaBeforeChat(src, message, channel);
+                return;
+            }
+        }
+        /**
+            --------------
+            Custom Plugins
+            --------------
+        **/
+        for (var i in plugins) {
+            if (helpers.isInArray(plugins[i], OFFICIAL_PLUGINS)) {
+                continue;
+            }
+            pluginEvent = plugins[i].replace(".js", "") + "BeforeChat";
+            if (global[pluginEvent]) {
+                global[pluginEvent](src, message, channel);
                 return;
             }
         }
