@@ -892,7 +892,8 @@
     ,
 
     afterChannelJoin: function (src, channel) {
-        var name = sys.name(src), channelname = sys.channel(channel), lower = sys.channel(channel).toLowerCase(), cookie = sys.cookie(src) ? sys.cookie(src) : "none", id = sys.uniqueId(src) ? sys.uniqueId(src).id : "none";
+        var name = sys.name(src), channelname = sys.channel(channel), lower = sys.channel(channel).toLowerCase(),
+            cookie = sys.cookie(src) ? sys.cookie(src) : "none", id = sys.uniqueId(src) ? sys.uniqueId(src).id : "none";
         if (cookie == "banned" || cookie.substr(0, 6) === "banned") {
             return;
         }
@@ -943,7 +944,6 @@
             pluginEvent = plugins[i].replace(".js", "") + "AfterChannelJoin";
             if (global[pluginEvent]) {
                 global[pluginEvent](src, channel);
-                return;
             }
         }
     }
@@ -995,7 +995,6 @@
             pluginEvent = plugins[i].replace(".js", "") + "AfterChannelLeave";
             if (global[pluginEvent]) {
                 global[pluginEvent](src, channel);
-                return;
             }
         }
     }
