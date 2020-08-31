@@ -942,7 +942,7 @@
             }
             pluginEvent = plugins[i].replace(".js", "") + "AfterChannelJoin";
             if (global[pluginEvent]) {
-                global[pluginEvent](src, message, channel);
+                global[pluginEvent](src, channel);
                 return;
             }
         }
@@ -994,7 +994,7 @@
             }
             pluginEvent = plugins[i].replace(".js", "") + "AfterChannelLeave";
             if (global[pluginEvent]) {
-                global[pluginEvent](src, message, channel);
+                global[pluginEvent](src, channel);
                 return;
             }
         }
