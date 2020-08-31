@@ -924,7 +924,7 @@
             ---------------
         **/
         var cauth = (helpers.cauth(name.toLowerCase(), channel) >= 1 ? helpers.cauthname(name.toLowerCase(), channel) + " " : "");
-        if (channel > 0) {
+        if (channel > 0 || players[src]) { // do not send main channel welcome on server join
             if (layout == "new") {
                 sys.sendHtmlAll(helpers.bot(bots.channel) + channelWelcomeMessage.replace(/~Player~/, cauth + name).replace(/~Channel~/, channelname), channel);
             } else {
