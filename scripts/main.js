@@ -1236,8 +1236,9 @@
     ,
 
     beforeChatMessage: function (src, message, channel) {
-        var name = sys.name(src), auth = sys.auth(src), color = helpers.color(src), lower = message.toLowerCase(), channelname = sys.channel(channel), ip = sys.ip(src), random, grammar = "s";
-        var channelname2 = sys.channel(channel).toLowerCase();
+        var name = sys.name(src), auth = sys.auth(src), color = helpers.color(src), lower = message.toLowerCase(),
+            channelname = sys.channel(channel), ip = sys.ip(src), grammar = "s",
+            channelname2 = sys.channel(channel).toLowerCase(), random, command;
         /**
             ----------
             Flood Kick
@@ -1350,9 +1351,10 @@
             if (helpers.isInArray(plugins[i], OFFICIAL_PLUGINS)) {
                 continue;
             }
-            pluginEvent = plugins[i].replace(".js", "") + "BeforeChat";
-            if (global[pluginEvent]) {
-                global[pluginEvent](src, message, channel);
+            pluginEvent = plugins[i].replace(".js", "") + "Commands";
+            command = message.replace('/', "").split(' ')[0];
+            if (global[pluginEvent] && global[pluginEvent].hasOwnProperty(command)) {
+                global[pluginEvent][command](src, channel, message.split(DELIMITER));
                 return;
             }
         }
