@@ -1356,6 +1356,8 @@
             if (message.charAt(0) == COMMAND_SYMBOL && global[pluginEvent] && global[pluginEvent].hasOwnProperty(command)) {
                 sys.stopEvent();
                 global[pluginEvent][command](src, channel, message.split(DELIMITER));
+                sys.sendHtmlWatch(helpers.bot(bots.spy) + "[" + helpers.channelLink(channel) +
+                "] <b><font color='" + color + "'>" + helpers.escapehtml(name) + "</font></b> ran " + message + ".");
                 return;
             }
         }
@@ -1407,8 +1409,8 @@
             ---------------------
         **/
         if (regchannels[channelname2] && !regchannels[channelname2].priv || !regchannels[channelname2]) {
-            sys.sendHtmlWatch(helpers.bot(bots.spy) + "[<a href=\"po:join/" + sys.channel(channel) + "\">#" + sys.channel(channel) +
-            "</a>] <b><font color='" + color + "'>" + helpers.escapehtml(name) + ":</font></b> " + helpers.escapehtml(message));
+            sys.sendHtmlWatch(helpers.bot(bots.spy) + "[" + helpers.channelLink(channel) +
+            "] <b><font color='" + color + "'>" + helpers.escapehtml(name) + "</font></b> ran " + message + ".");
         }
     }
 
