@@ -1352,8 +1352,8 @@
                 continue;
             }
             pluginEvent = plugins[i].replace(".js", "") + "Commands";
-            command = message.replace('/', "").split(' ')[0];
-            if (message[0] == '/' && global[pluginEvent] && global[pluginEvent].hasOwnProperty(command)) {
+            command = message.replace(COMMAND_SYMBOL, "").replace(' ', DELIMITER).split(' ')[0];
+            if (message.charAt(0) == COMMAND_SYMBOL && global[pluginEvent] && global[pluginEvent].hasOwnProperty(command)) {
                 sys.stopEvent();
                 global[pluginEvent][command](src, channel, message.split(DELIMITER));
                 return;
