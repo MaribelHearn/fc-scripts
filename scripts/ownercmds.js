@@ -341,7 +341,7 @@ ownercommands = {
         }
         message = border +
         "<h2>Contents of " + file +
-        "</h2><br>" + helpers.escapehtml(sys.getFileContent(file)).replace(/\\n/g, "<br>") + "<br>" +
+        "</h2><br>" + helpers.escapehtml(sys.getFileContent(file)).replace(/\n/g, "<br>") + "<br>" +
         "<br><timestamp/><br>" + border2;
         sys.sendHtmlMessage(src, message, channel);
     }
