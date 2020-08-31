@@ -80,7 +80,7 @@ usercommands = {
         + "<b>" + helpers.user("/auth") + "</b>: shows the server authority in a neat table. Also /auths or /authlist.<br>"
         + "<b>" + helpers.user("/channels") + "</b>: shows the channels that are currently online in a neat table.<br>"
         + "<b>" + helpers.user("/battles") + "</b>: shows the battles that are currently going on in a neat table.<br>"
-        + "<b>" + helpers.userg("/rankings ") + helpers.arg("tier") + "</b>: shows your current rankings in <b>tier</b>. If <b>tier</b> is not specified, uses your current tier.<br>"
+        + "<b>" + helpers.user("/ranking ") + helpers.arg("tier") + "</b>: shows your current rankings in <b>tier</b>. If <b>tier</b> is not specified, uses the tier of your first team.<br>"
         + "<b>" + helpers.user("/intier ") + helpers.arg("tier") + "</b>: shows unidled players currently in <b>tier</b>.<br>"
         + "<b>" + helpers.user("/mp") + "</b>: displays your own Control Panel data.<br>"
         + "<b>" + helpers.user("/myalts") + "</b>: displays info about your alts in a neat table.<br>"
@@ -370,6 +370,18 @@ usercommands = {
 
     ,
 
+    ranking: function (src, channel, command) {
+        var name = players[src].name, tier = command[1], i;
+        if (!tier) {
+            tier = sys.tier(src, 0);
+        }
+        sys.sendHtmlMessage(src, helpers.bot(bots.battle) + "You currently " +
+        "rank " + helpers.ordinal(sys.ranking(name, tier)) + " in " + tier +
+        " (rating: " + sys.ladderRating(src, tier) + ").");
+    }
+
+    ,
+
     intier: function (src, channel, command) {
         var tier = command[1], list = [], i;
         if (!tier) {
@@ -558,7 +570,7 @@ usercommands = {
         for (var i in authList) {
             auths.push(sys.dbAuth(authList[i]));
             id = !sys.id(authList[i]) ? helpers.originalToID(authList[i]) : sys.id(authList[i]);
-            names.push(authList[i] + (sys.name(id) != authList[i] ? " (" + helpers.escapehtml(sys.name(id)) + ")" : ""));
+            names.push(authList[i] + (id && sys.name(id) != authList[i] ? " (" + helpers.escapehtml(sys.name(id)) + ")" : ""));
             lower = names[index].toLowerCase();
             titles.push(authtitles[lower] ? authtitles[lower] : '-');
             ips.push(sys.dbIp(authList[i]));

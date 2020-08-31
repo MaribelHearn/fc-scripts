@@ -1371,9 +1371,6 @@
             parseCommand(src, message, channel, name, auth, false);
             return;
         }
-        if (message.substr(0, 2) == COMMAND_SYMBOL + COMMAND_SYMBOL) {
-            message = message.slice(1);
-        }
         /**
             ----------
             Mute Check
@@ -1411,9 +1408,14 @@
             Watch Channel Logging
             ---------------------
         **/
+        if (message.substr(0, 2) == COMMAND_SYMBOL + COMMAND_SYMBOL) {
+            sys.stopEvent();
+            message = message.slice(1);
+            sys.sendAll(name + ": " + message, channel);
+        }
         if (regchannels[channelname2] && !regchannels[channelname2].priv || !regchannels[channelname2]) {
             sys.sendHtmlWatch(helpers.bot(bots.spy) + "[" + helpers.channelLink(channel) +
-            "] <b><font color='" + color + "'>" + helpers.escapehtml(name) + "</font></b> ran " + message + ".");
+            "] <b><font color='" + color + "'>" + helpers.escapehtml(name) + "</font></b>: " + message + ".");
         }
     }
 
