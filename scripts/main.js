@@ -454,7 +454,7 @@
             --------------
         **/
         for (var i in plugins) {
-            if (OFFICIAL_PLUGINS.contains(plugins[i])) {
+            if (helpers.isInArray(plugins[i], OFFICIAL_PLUGINS)) {
                 continue;
             }
             pluginEvent = plugins[i].replace(".js", "") + "Start";
@@ -579,7 +579,7 @@
             --------------
         **/
         for (var i in plugins) {
-            if (OFFICIAL_PLUGINS.contains(plugins[i])) {
+            if (helpers.isInArray(plugins[i], OFFICIAL_PLUGINS)) {
                 continue;
             }
             pluginEvent = plugins[i].replace(".js", "") + "Step";
@@ -1359,11 +1359,9 @@
             Watch Channel Logging
             ---------------------
         **/
-        if (regchannels[channelname2]) {
-            if (!regchannels[channelname2].priv) {
-                sys.sendHtmlWatch(helpers.bot(bots.spy) + "[<a href=\"po:join/" + sys.channel(channel) + "\">#" + sys.channel(channel) +
-                "</a>] <b><font color='" + color + "'>" + helpers.escapehtml(name) + ":</font></b> " + helpers.escapehtml(message));
-            }
+        if (regchannels[channelname2] && !regchannels[channelname2].priv || !regchannels[channelname2]) {
+            sys.sendHtmlWatch(helpers.bot(bots.spy) + "[<a href=\"po:join/" + sys.channel(channel) + "\">#" + sys.channel(channel) +
+            "</a>] <b><font color='" + color + "'>" + helpers.escapehtml(name) + ":</font></b> " + helpers.escapehtml(message));
         }
     }
 
