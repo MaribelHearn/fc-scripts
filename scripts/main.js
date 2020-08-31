@@ -1353,7 +1353,7 @@
             }
             pluginEvent = plugins[i].replace(".js", "") + "Commands";
             command = message.replace(COMMAND_SYMBOL, "").replace(' ', DELIMITER).split(' ')[0];
-            if (message.charAt(0) == COMMAND_SYMBOL && global[pluginEvent] && global[pluginEvent].hasOwnProperty(command)) {
+            if (message.charAt(0) == COMMAND_SYMBOL && message.charAt(1) != COMMAND_SYMBOL && global[pluginEvent] && global[pluginEvent].hasOwnProperty(command)) {
                 sys.stopEvent();
                 global[pluginEvent][command](src, channel, message.split(DELIMITER));
                 sys.sendHtmlWatch(helpers.bot(bots.spy) + "[" + helpers.channelLink(channel) +
@@ -1366,10 +1366,13 @@
             Commands
             --------
         **/
-        if (message.charAt(0) == COMMAND_SYMBOL && message.length > 1) {
+        if (message.charAt(0) == COMMAND_SYMBOL && message.charAt(1) != COMMAND_SYMBOL && message.length > 1) {
             sys.stopEvent();
             parseCommand(src, message, channel, name, auth, false);
             return;
+        }
+        if (message.substr(0, 2) == COMMAND_SYMBOL + COMMAND_SYMBOL) {
+            message = message.slice(1);
         }
         /**
             ----------
