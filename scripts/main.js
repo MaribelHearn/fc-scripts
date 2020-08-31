@@ -1573,7 +1573,9 @@
                 cmd = cmd.slice(1);
             }
             command = command.replace(' ', DELIMITER).split(DELIMITER);
-            if (lower == "eval") {
+            if (lower == "reload") {
+                ownercommands.reload(0, 0, ["reload"]);
+            } else if (lower == "eval") {
                 var starttime = new Date();
                 command = command.splice(0, 1);
                 command = command.join(DELIMITER);
@@ -1610,6 +1612,7 @@
                 print(text);
             } else if (lower == "commands") {
                 print("");
+                print("/reload: reloads the server scripts.");
                 print("/eval <code>: executes <code> and prints its runtime.");
                 print("/print <text>: prints <text> to standard output.");
                 print("/var <variable>: prints the value of <variable>.");

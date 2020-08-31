@@ -564,6 +564,7 @@ ownercommands = {
             }
         } catch (e) {
             sys.sendHtmlOwner(helpers.bot(bots.script) + "An error occurred while reloading the scripts: " + e);
+            print("An error occurred while reloading the scripts: " + e);
         }
     }
 
