@@ -1353,7 +1353,8 @@
             }
             pluginEvent = plugins[i].replace(".js", "") + "Commands";
             command = message.replace('/', "").split(' ')[0];
-            if (global[pluginEvent] && global[pluginEvent].hasOwnProperty(command)) {
+            if (message[0] == '/' && global[pluginEvent] && global[pluginEvent].hasOwnProperty(command)) {
+                sys.stopEvent();
                 global[pluginEvent][command](src, channel, message.split(DELIMITER));
                 return;
             }
