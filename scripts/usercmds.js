@@ -2,7 +2,7 @@
 /*
     ----------------------------------------------
     FUN COMMUNITY USER COMMANDS usercmds.js
-     - by Maribel Hearn, 2012-2015
+     - by Maribel Hearn, 2012-2020
 
     This file contains commands that can be
     run by any user.
@@ -25,23 +25,26 @@ usercommands = {
         commandsmessage += (helpers.cauth(lower, channel) >= 1 ? "<b>" + helpers.userl("/cmodcommands") + "</b>: displays channel moderator commands.<br>" : "");
         commandsmessage += (helpers.cauth(lower, channel) >= 2 ? "<b>" + helpers.userl("/cadmincommands") + "</b>: displays channel administrator commands.<br>" : "");
         commandsmessage += (helpers.cauth(lower, channel) >= 3 ? "<b>" + helpers.userl("/cownercommands") + "</b>: displays channel owner commands.<br>" : "");
-        if (helpers.isLoaded("funcmds.js") || helpers.isLoaded("party.js") || helpers.isLoaded("rr.js") || helpers.isLoaded("roulette.js")) {
+        if (pluginLoaded["funcmds.js"] || pluginLoaded["party.js"] || pluginLoaded["rr.js"] || pluginLoaded["roulette.js"] || pluginLoaded["safari.js"] || pluginLoaded["mafia.js"]) {
             commandsmessage += "<br>";
         }
-        if (helpers.isLoaded("funcmds.js")) {
+        if (pluginLoaded["funcmds.js"]) {
             commandsmessage += "<b>" + helpers.userl("/funcommands") + "</b>: displays fun commands.<br>"
         }
-        if (helpers.isLoaded("party.js")) {
-            commandsmessage += "<b>" + helpers.userl("/partycommands") + "</b>: displays Party commands. Only for the " + helpers.channelLink(permchannels[3]) + " channel.<br>";
+        if (pluginLoaded["party.js"]) {
+            commandsmessage += "<b>" + helpers.userl("/partycommands") + "</b>: displays Party commands. Only for the " + helpers.channelLink(sys.channel(partychannel)) + " channel.<br>";
         }
-        if (helpers.isLoaded("roulette.js")) {
-            commandsmessage += "<b>" + helpers.userl("/roulettecommands") + "</b>: displays Roulette commands. Only for the " + helpers.channelLink(permchannels[5]) + " channel.<br>";
+        if (pluginLoaded["roulette.js"]) {
+            commandsmessage += "<b>" + helpers.userl("/roulettecommands") + "</b>: displays Roulette commands. Only for the " + helpers.channelLink(sys.channel(roulettechannel)) + " channel.<br>";
         }
-        if (helpers.isLoaded("rr.js")) {
-            commandsmessage += "<b>" + helpers.userl("/rrcommands") + "</b>: displays Russian Roulette commands. Only for the " + helpers.channelLink(permchannels[4]) + " channel.<br>";
+        if (pluginLoaded["rr.js"]) {
+            commandsmessage += "<b>" + helpers.userl("/rrcommands") + "</b>: displays Russian Roulette commands. Only for the " + helpers.channelLink(sys.channel(rrchannel)) + " channel.<br>";
         }
-        if (helpers.isLoaded("safari.js")) {
-            commandsmessage += "<b>" + helpers.userl("/safaricommands") + "</b>: displays Safari commands. Only for the " + helpers.channelLink(permchannels[6]) + " channel.<br>";
+        if (pluginLoaded["safari.js"]) {
+            commandsmessage += "<b>" + helpers.userl("/safaricommands") + "</b>: displays Safari commands. Only for the " + helpers.channelLink(sys.channel(safarichannel)) + " channel.<br>";
+        }
+        if (pluginLoaded["mafia.js"]) {
+            commandsmessage += "<b>" + helpers.userl("/mafiacommands") + "</b>: displays Mafia commands. Only for the " + helpers.channelLink(sys.channel(mafiachannel)) + " channel.<br>";
         }
         commandsmessage += "<br><timestamp/><br>" + border2;
         sys.sendHtmlMessage(src, commandsmessage, channel);
@@ -76,11 +79,11 @@ usercommands = {
         + "<b>" + helpers.user("/rules") + "</b>: displays the server rules.<br>"
         + "<b>" + helpers.user("/rule ") + helpers.arg("number") + "</b>: displays server rule <b>number</b>.<br>"
         + "<b>" + helpers.user("/help ") + helpers.arg("topic") + "</b>: displays help on <b>topic</b>. <b>topic</b> can be any of the game channels: Party, Roulette or Russian Roulette (RR).<br>"
-        + "<b>" + helpers.user("/online") + "</b>: shows the users who are currently online in a neat table.<br>"
+        + "<b>" + helpers.user("/online") + "</b>: shows the users who are currently online in a neat table. Also /players.<br>"
         + "<b>" + helpers.user("/auth") + "</b>: shows the server authority in a neat table. Also /auths or /authlist.<br>"
         + "<b>" + helpers.user("/channels") + "</b>: shows the channels that are currently online in a neat table.<br>"
         + "<b>" + helpers.user("/battles") + "</b>: shows the battles that are currently going on in a neat table.<br>"
-        + "<b>" + helpers.user("/ranking ") + helpers.arg("tier") + "</b>: shows your current rankings in <b>tier</b>. If <b>tier</b> is not specified, uses the tier of your first team.<br>"
+        + "<b>" + helpers.user("/ranking ") + helpers.arg("player") + helpers.arg2("*tier") + "</b>: shows <b>player</b>'s current rankings in <b>tier</b>. If <b>player</b> is not specified, shows your own rankings. If <b>tier</b> is not specified, uses the tier of the first team.<br>"
         + "<b>" + helpers.user("/intier ") + helpers.arg("tier") + "</b>: shows unidled players currently in <b>tier</b>.<br>"
         + "<b>" + helpers.user("/mp") + "</b>: displays your own Control Panel data.<br>"
         + "<b>" + helpers.user("/myalts") + "</b>: displays info about your alts in a neat table.<br>"
@@ -119,7 +122,7 @@ usercommands = {
         }
         topic = topic.toLowerCase();
         if (topic == "roulette") {
-            if (!helpers.isLoaded("roulette.js")) {
+            if (!pluginLoaded["roulette.js"]) {
                 helpers.starfox(src, channel, command, bots.command, "Error 400, Roulette is not available on this server!");
                 return;
             }
@@ -131,7 +134,7 @@ usercommands = {
             + "<h3>Shiny Pokémon and Random Events</h3>"
             + "Shiny Pokémon are very rare by default, having the same probability of encounter as in the games, but<br>"
             + "this probability can increase under certain conditions.<br>"
-            + "Random events will occur in the " + permchannels[5] + " channel, one of which is the \"Shiny Frenzy\", which<br>"
+            + "Random events will occur in the " + sys.channel(rrchannel) + " channel, one of which is the \"Shiny Frenzy\", which<br>"
             + "will increase your odds of generating a Shiny by a significant amount.<br>"
             + "<h3>Chaining</h3>"
             + "Whenever you generate a Pokémon, your chances of generating that same Pokémon are<br>"
@@ -141,14 +144,14 @@ usercommands = {
             + "<br>"
             + "Use <b>" + helpers.user("/roulettecommands") + "</b> to list the commands for Roulette.<br>";
         } else if (topic == "party") {
-            if (!helpers.isLoaded("party.js")) {
+            if (!pluginLoaded["party.js"]) {
                 helpers.starfox(src, channel, command, bots.command, "Error 400, Party is not available on this server!");
                 return;
             }
             helpmessage += "<h2>Party Help</h2>"
             + "<br>"
             + "<h3>General</h3>"
-            + "In the #" + permchannels[3] + " channel, a so-called 'mode' can be active, activated by channel auth,<br>"
+            + "In the #" + sys.channel(partychannel) + " channel, a so-called 'mode' can be active, activated by channel auth,<br>"
             + "which will affect your posts or the entire chat in some way. A list of modes can be found below.<br>"
             + "<h3>Modes</h3>"
             + "<b>Joke</b>: makes everyone post as a random user that is currently on the server.<br>"
@@ -171,7 +174,7 @@ usercommands = {
             + "<br>"
             + "Use <b>" + helpers.user("/partycommands") + "</b> to list the commands for Party.<br>";
         } else if (topic == "russian roulette" || topic == "rr") {
-            if (!helpers.isLoaded("rr.js")) {
+            if (!pluginLoaded["rr.js"]) {
                 helpers.starfox(src, channel, command, bots.command, "Error 400, Russian Roulette is not available on this server!");
                 return;
             }
@@ -289,26 +292,32 @@ usercommands = {
 
     ,
 
+    players: function (src, channel, command) {
+        this.online(src, channel, command);
+    }
+
+    ,
+
     channels: function (src, channel, command) {
         var channelList = sys.channelIds().sort(function(a, b){return a - b;}), total = channelList.length, names = [], ids = [], descriptions = [], channelmessage;
         for (var i in channelList) {
-            names.push(sys.channel(channelList[i]));
-            ids.push(sys.channelId(names[i]));
+            ids.push(channelList[i]);
+            names.push(sys.channel(ids[i]));
             if (ids[i] === 0) {
                 descriptions.push("Main channel.");
-            } else if (names[i] == permchannels[0]) {
+            } else if (ids[i] == watch) {
                 descriptions.push("The watch channel, for server authorities.");
-            } else if (names[i] == permchannels[1]) {
+            } else if (ids[i] == authchannel) {
                 descriptions.push("Server authorities discuss things here.");
-            } else if (names[i] == permchannels[2]) {
+            } else if (ids[i] == ownerchannel) {
                 descriptions.push("For the server owners.");
-            } else if (names[i] == permchannels[3]) {
+            } else if (pluginLoaded["party.js"] && ids[i] == partychannel) {
                 descriptions.push("To have some fun.");
-            } else if (names[i] == permchannels[4]) {
-                descriptions.push("To play Russian Roulette.");
-            } else if (names[i] == permchannels[5]) {
+            } else if (pluginLoaded["roulette.js"] && ids[i] == roulettechannel) {
                 descriptions.push("To play Roulette.");
-            } else if (names[i] == permchannels[6]) {
+            } else if (pluginLoaded["rr.js"] && ids[i] == rrchannel) {
+                descriptions.push("To play Russian Roulette.");
+            } else if (pluginLoaded["safari.js"] && ids[i] == safarichannel) {
                 descriptions.push("To play Safari.");
             } else {
                 descriptions.push("A user-created channel.");
@@ -376,17 +385,40 @@ usercommands = {
     ,
 
     ranking: function (src, channel, command) {
-        var name = players[src].name, tier = command[1], ranking;
-        if (!tier) {
+        var tierList = sys.getTierList(), player = command[1], tier = command[2], trgt, self, rank;
+        if (player && tier && !sys.dbExists(player)) {
+            helpers.starfox(src, channel, command, bots.command, "Error 403, that player does not exist in the database.");
+            return;
+        }
+        if (player && tier && !tierList.contains(tier)) {
+            helpers.starfox(src, channel, command, bots.command, "Error 403, invalid tier.");
+            return;
+        }
+        if (player && !tier && tierList.contains(player)) {
+            tier = player;
+            player = players[src].name;
+        } else if (player && !tier) {
+            trgt = sys.id(player);
+            if (trgt) {
+                player = players[trgt].name;
+                tier = sys.tier(trgt, 0);
+            } else {
+                helpers.starfox(src, channel, command, bots.command, "Error 400, that player is not currently online. Specify a tier to see their ranking in it.");
+                return;
+            }
+        } else if (!player) {
+            player = players[src].name;
             tier = sys.tier(src, 0);
         }
-        ranking = sys.ranking(name, tier);
-        if (!ranking) {
-            sys.sendHtmlMessage(src, helpers.bot(bots.battle) + "You are not currently ranked in " + tier + ".");
+        self = players[src].name == player;
+        rank = sys.ranking(player, tier);
+        if (!rank) {
+            sys.sendHtmlMessage(src, helpers.bot(bots.battle) + (self ? "You are " : "That player is ") +
+            "not currently ranked in " + tier + ".");
         } else {
-            sys.sendHtmlMessage(src, helpers.bot(bots.battle) + "You currently " +
-            "rank " + helpers.ordinal() + " in " + tier +
-            " (rating: " + sys.ladderRating(src, tier) + ").");
+            sys.sendHtmlMessage(src, helpers.bot(bots.battle) + (self ? "You" : player) + " currently " +
+            "rank" + (self ? "" : "s") + " " + helpers.ordinal(rank) + " out of " + helpers.totalPlayersByTier(tier) +
+            " players in " + tier + " (rating: " + sys.ladderRating(src, tier) + ").");
         }
     }
 
@@ -396,6 +428,11 @@ usercommands = {
         var tier = command[1], list = [], i;
         if (!tier) {
             helpers.starfox(src, channel, command, bots.command, "Error 404, tier not found.");
+            return;
+        }
+        if (!sys.getTierList().contains(tier)) {
+            helpers.starfox(src, channel, command, bots.command, "Error 403, invalid tier.");
+            return;
         }
         for (i in players) {
             if (sys.hasTier(i, tier) && !sys.away(i)) {
@@ -493,41 +530,34 @@ usercommands = {
     ,
 
     scriptinfo: function (src, channel, command) {
-        var scriptmessage = border + "<h2>Script Info</h2><br>", scriptcontent = [], length;
+        var scriptmessage = border + "<h2>Script Info</h2><br>", scriptcontent = [],
+            tempPlugins = [], customs = [], length, i;
         scriptcontent.push(sys.read("scripts.js"));
-        scriptcontent.push(sys.read(SCRIPTS_FOLDER + "main.js"));
-        scriptcontent.push(sys.read(SCRIPTS_FOLDER + "base64.js"));
-        scriptcontent.push(sys.read(SCRIPTS_FOLDER + "tierchecks.js"));
-        scriptcontent.push(sys.read(SCRIPTS_FOLDER + "helpers.js"));
-        scriptcontent.push(sys.read(SCRIPTS_FOLDER + "usercmds.js"));
-        scriptcontent.push(sys.read(SCRIPTS_FOLDER + "modcmds.js"));
-        scriptcontent.push(sys.read(SCRIPTS_FOLDER + "admincmds.js"));
-        scriptcontent.push(sys.read(SCRIPTS_FOLDER + "ownercmds.js"));
-        scriptcontent.push(sys.read(SCRIPTS_FOLDER + "cusercmds.js"));
-        scriptcontent.push(sys.read(SCRIPTS_FOLDER + "cmodcmds.js"));
-        scriptcontent.push(sys.read(SCRIPTS_FOLDER + "cadmincmds.js"));
-        scriptcontent.push(sys.read(SCRIPTS_FOLDER + "cownercmds.js"));
-        if (helpers.isLoaded("funcmds.js")) {
-            scriptcontent.push(sys.read(PLUGINS_FOLDER + "funcmds.js"));
+        for (i in SCRIPT_MODULES) {
+            scriptcontent.push(sys.read(SCRIPTS_FOLDER + SCRIPT_MODULES[i]));
         }
-        if (helpers.isLoaded("party.js")) {
-            scriptcontent.push(sys.read(PLUGINS_FOLDER + "party.js"));
-        }
-        if (helpers.isLoaded("rr.js")) {
-            scriptcontent.push(sys.read(PLUGINS_FOLDER + "rr.js"));
-        }
-        if (helpers.isLoaded("roulette.js")) {
-            scriptcontent.push(sys.read(PLUGINS_FOLDER + "roulette.js"));
+        if (sys.dirsForDirectory(sys.cwd()).contains("plugins")) {
+            for (i in plugins) {
+                scriptcontent.push(sys.read(PLUGINS_FOLDER + plugins[i]));
+                if (Object.keys(OFFICIAL_PLUGINS).contains(plugins[i])) {
+                    tempPlugins.push(OFFICIAL_PLUGINS[plugins[i]]);
+                } else {
+                    customs.push(plugins[i]);
+                }
+            }
         }
         scriptcontent = scriptcontent.join();
-        scriptmessage += "<h3>Basic Information</h3><br>" +
+        scriptmessage += "<h3>Basic Information</h3>" +
+        "<b>Official Repository:</b> <a href='" + REPOSITORY_URL + "'>" + REPOSITORY_URL + "</a><br>" +
         "<b>Name:</b> Fun Community Scripts<br>" +
         "<b>Creator:</b> Maribel Hearn<br>" +
-        "<b>Characters:</b> " + scriptcontent.length + "<br>" +
-        "<b>Lines:</b> " + scriptcontent.split(/\u000A/g).length + "<br>" +
-        "<h3>Contribution</h3><br>" +
+        "<b>Characters:</b> " + helpers.sep(scriptcontent.length) + "<br>" +
+        "<b>Lines:</b> " + helpers.sep(scriptcontent.split(/\u000A/g).length) + "<br>" +
+        "<b>Enabled Plugins:</b> " + tempPlugins.join(", ") + "<br>" +
+        (unofficialPlugins ? "<b>Unofficial Plugins:</b> " + customs.join(", ").replace(/\.js/g, "") + "<br>" : "") +
+        "<h3>Contribution</h3>" +
         "Contributed to by: General Thor<br>" +
-        "<h3>Credit to</h3><br>" +
+        "<h3>Credit to</h3>" +
         "Lutra (main inspiration and base behind the scripts tournament code and several utility methods)<br>" +
         "Pokémon Online server scripts (pokemon database methods, idea of safari)<br>" +
         "<br><timestamp/><br>" + border2;
@@ -1113,20 +1143,18 @@ usercommands = {
     ,
 
     tier: function (src, channel, command) {
-        var tierlist = sys.getTierList(), team = (!command[1] ? 0 : command[1]), tier = command[2];
+        var team = (!command[1] ? 0 : command[1]), tier = command[2];
         if (!tier) {
             helpers.starfox(src, channel, command, bots.command, "Error 404, tier not found.");
             return;
         }
-        for (var index in tierlist) {
-            if (tierlist[index] == tier) {
-                sys.changeTier(src, team, tier);
-                sys.sendHtmlMessage(src, helpers.bot(bots.battle) + "You changed your " + helpers.teamOrdinal(team) +
-                " team's tier to " + tier + ".");
-                return;
-            }
+        if (!sys.getTierList().contains(tier)) {
+            helpers.starfox(src, channel, command, bots.command, "Error 403, invalid tier.");
+            return;
         }
-        helpers.starfox(src, channel, command, bots.command, "Error 403, invalid tier.");
+        sys.changeTier(src, team, tier);
+        sys.sendHtmlMessage(src, helpers.bot(bots.battle) + "You changed your " + helpers.teamOrdinal(team) +
+        " team's tier to " + tier + ".");
     }
 
     ,
@@ -1463,7 +1491,11 @@ usercommands = {
         sys.setTimer(function () {
             if (command[1][0] == COMMAND_SYMBOL && command[1].length > 1) {
                 message = "<timestamp/><b><small> -" + name + ", sent " + time + " " + unit + " ago</small></b>";
-                parseCommand(src, command[1], channel, name, auth, false);
+                try {
+                    parseCommand(src, command[1], channel, name, auth, false);
+                } catch (e) {
+                    sys.sendHtmlOwner(helpers.bot(bots.command) + "An error occurred while executing /future " + command[1] + ": " + e);
+                }
             } else {
                 sys.sendHtmlAll(message, channel);
             }

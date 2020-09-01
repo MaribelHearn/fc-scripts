@@ -2,7 +2,7 @@
 /*
     ----------------------------------------------
     FUN COMMUNITY MOD COMMANDS modcmds.js
-     - by Maribel Hearn, 2012-2015
+     - by Maribel Hearn, 2012-2020
 
     This file contains commands that can be
     run by moderators.
@@ -18,9 +18,11 @@ modcommands = {
         + "<b>" + helpers.userl("/modinfooptions") + "</b>: displays mod info options.<br>"
         + "<b>" + helpers.userl("/nameoptions") + "</b>: displays name options.<br>"
         + "<b>" + helpers.userl("/otheroptions") + "</b>: displays other options.<br>"
-        + "<b>" + helpers.userl("/altsettings") + "</b>: displays alt settings.<br>"
-        + "<b>" + helpers.userl("/bigtextsettings") + "</b>: displays custom bigtext settings.<br>"
-        + "<b>" + helpers.userl("/customsettings") + "</b>: displays justice message customisation settings.<br>"
+        + "<b>" + helpers.userl("/altsettings") + "</b>: displays alt settings.<br>";
+        if (pluginLoaded["funcmds.js"]) {
+            commandsmessage += "<b>" + helpers.userl("/bigtextsettings") + "</b>: displays custom bigtext settings.<br>";
+        }
+        commandsmessage += "<b>" + helpers.userl("/customsettings") + "</b>: displays justice message customisation settings.<br>"
         + "<b>" + helpers.userl("/filtersettings") + "</b>: displays name filtering settings.<br>"
         + "<br><timestamp/><br>"
         + border2;
@@ -548,7 +550,7 @@ modcommands = {
         + "<b>" + helpers.user("/getcolor ") + helpers.arg("player") + "</b>: displays <b>player</b>'s color as hexadecimal color code. Also /getcolour.<br>"
         + "<b>" + helpers.user("/rangealts ") + helpers.arg("range") + "</b>: displays alts for <b>range</b>.<br>"
         + "<b>" + helpers.user("/lastmessages") + "</b>: Shows everyone's last 10 messages in a neat table. Also /lastmsgs or /lastposts.<br>"
-        + "<b>" + helpers.user("/regchannelinfo") + "</b>: lists all registered channels and their info.<br>"
+        + "<b>" + helpers.user("/regchannelinfo") + "</b>: lists all registered channels and their info. Also /regchannels.<br>"
         + "<b>" + helpers.user("/commandlist") + "</b>: lists all available commands. Also /allcommands.<br>"
         + "<br><timestamp/><br>"
         + border2;
@@ -840,6 +842,12 @@ modcommands = {
 
     ,
 
+    regchannels: function (src, channel, command) {
+        this.regchannelinfo(src, channel, command);
+    }
+
+    ,
+
     commandlist: function (src, channel, command) {
         var scriptmessage = border + "<h2>List of Commands</h2><br>", length, totallength;
         scriptmessage += "<b>User Commands:</b> " + Object.keys(usercommands).sort().join(", ") + "<br>" +
@@ -850,7 +858,6 @@ modcommands = {
         "<b>Channel Moderator Commands:</b> " + Object.keys(cmodcommands).sort().join(", ") + "<br>" +
         "<b>Channel Administrator Commands:</b> " + Object.keys(cadmincommands).sort().join(", ") + "<br>" +
         "<b>Channel Owner Commands:</b> " + Object.keys(cownercommands).sort().join(", ") + "<br>" +
-        "<b>All Commands:</b> " + allcommands.sort().join(", ") + "<br>" +
         "<b>Helpers:</b> " + Object.keys(helpers).sort().join(", ") + "<br><br>" +
         "<b>Total User Commands:</b> " + Object.keys(usercommands).length + "<br>" +
         "<b>Total Moderator Commands:</b> " + Object.keys(modcommands).length + "<br>" +
@@ -860,19 +867,19 @@ modcommands = {
         "<b>Total Channel Mod Commands:</b> " + Object.keys(cmodcommands).length + "<br>" +
         "<b>Total Channel Admin Commands:</b> " + Object.keys(cadmincommands).length + "<br>" +
         "<b>Total Channel Owner Commands:</b> " + Object.keys(cownercommands).length;
-        if (helpers.isLoaded("funcmds.js")) {
+        if (pluginLoaded["funcmds.js"]) {
             scriptmessage += "<br><b>Total Fun Commands:</b> " + Object.keys(funcommands).length;
         }
-        if (helpers.isLoaded("party.js")) {
+        if (pluginLoaded["party.js"]) {
             scriptmessage += "<br><b>Total Party Commands:</b> " + Object.keys(partycommands).length;
         }
-        if (helpers.isLoaded("rr.js")) {
+        if (pluginLoaded["rr.js"]) {
             scriptmessage += "<br><b>Total Russian Roulette Commands:</b> " + Object.keys(rrcommands).length;
         }
-        if (helpers.isLoaded("roulette.js")) {
+        if (pluginLoaded["roulette.js"]) {
             scriptmessage += "<br><b>Total Roulette Commands:</b> " + Object.keys(roulettecommands).length;
         }
-        if (helpers.isLoaded("safari.js")) {
+        if (pluginLoaded["safari.js"]) {
             scriptmessage += "<br><b>Total Safari Commands:</b> " + Object.keys(safaricommands).length;
         }
         scriptmessage += "<br><b>Total Helpers:</b> " + Object.keys(helpers).length + "<br>" +
@@ -1321,6 +1328,10 @@ modcommands = {
         ----------------
     **/
     bigtextsettings: function (src, channel, command) {
+        if (!pluginLoaded["funcmds.js"]) {
+            helpers.starfox(src, channel, command, bots.command, "Error 400, this command is only usable with the fun commands plugin.");
+            return;
+        }
         var lower = sys.name(src).toLowerCase(), auth = sys.auth(src), bigtextstemp = {}, commandsmessage;
         for (var i in bigtexts) {
             bigtextstemp[i] = bigtexts[i];
@@ -1330,12 +1341,14 @@ modcommands = {
             bigtextstemp["/" + i] = bigtextstemp[i];
             delete bigtextstemp[i];
         }
-        commandsmessage = border + "<h2>Moderator Commands ~ Bigtext Settings</h2><br>"
-        + "Current custom bigtexts:<br>"
-        + "<br>"
-        + Object.keys(bigtextstemp).join(", ") + "<br>"
-        + "<br>"
-        + "Use <b>" + helpers.user("/addcommand ") + helpers.arg("name") + helpers.arg2("*text") + helpers.arg3("*bot") + helpers.arg4("*color") + helpers.arg5("*size") +
+        commandsmessage = border + "<h2>Moderator Commands ~ Bigtext Settings</h2><br>";
+        if (Object.keys(bigtextstemp).length === 0) {
+            commandsmessage += "There are no custom bigtext commands at the moment.<br>";
+        } else {
+            commandsmessage += "Current custom bigtext commands:<br><br>" + Object.keys(bigtextstemp).join(", ") + "<br><br>";
+        }
+        commandsmessage += "Use <b>" + helpers.user("/addcommand ") + helpers.arg("" +
+        "name") + helpers.arg2("*text") + helpers.arg3("*bot") + helpers.arg4("*color") + helpers.arg5("*size") +
         "</b>: to add a custom bigtext. If <b>bot</b> is 'default', it will be the fun command bot.<br>"
         + "Use <b>" + helpers.user("/removecommand ") + helpers.arg("name") + "</b>: to remove a custom bigtext.<br>"
         + "<br><timestamp/><br>" + border2;

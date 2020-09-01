@@ -2,7 +2,7 @@
 /*
     ----------------------------------------------
     FUN COMMUNITY HELPER METHODS helpers.js
-     - by Maribel Hearn, 2012-2015,
+     - by Maribel Hearn, 2012-2020,
        with tournament methods by Lutra and
        pokemon db methods from main server
        scripts
@@ -99,27 +99,23 @@ helpers = {
         // Plugins
         var permchannels = JSON.parse(sys.read(DATA_FOLDER + "permchannels.txt"));
 
-        if (helpers.isLoaded("party.js")) {
+        if (pluginLoaded["party.js"]) {
             permchannels.push("Party");
-            sys.write(DATA_FOLDER + "partymode.txt", "none");
             sys.write(DATA_FOLDER + "permchannels.txt", JSON.stringify(permchannels));
         }
 
-        if (helpers.isLoaded("rr.js")) {
-            permchannels.push("Russian Roulette");
-            sys.write(DATA_FOLDER + "rr.txt", "{}");
-            sys.write(DATA_FOLDER + "permchannels.txt", JSON.stringify(permchannels));
-        }
-
-        if (helpers.isLoaded("roulette.js")) {
+        if (pluginLoaded["roulette.js"]) {
             permchannels.push("Roulette");
-            sys.write(DATA_FOLDER + "roulette.txt", "{}");
             sys.write(DATA_FOLDER + "permchannels.txt", JSON.stringify(permchannels));
         }
 
-        if (helpers.isLoaded("safari.js")) {
+        if (pluginLoaded["rr.js"]) {
+            permchannels.push("Russian Roulette");
+            sys.write(DATA_FOLDER + "permchannels.txt", JSON.stringify(permchannels));
+        }
+
+        if (pluginLoaded["safari.js"]) {
             permchannels.push("Safari");
-            sys.write(DATA_FOLDER + "safari.txt", "{}");
             sys.write(DATA_FOLDER + "permchannels.txt", JSON.stringify(permchannels));
         }
     }
@@ -178,12 +174,6 @@ helpers = {
         Checking Helpers
         ----------------
     **/
-    isLoaded: function (plugin) {
-        return pluginLoaded[OFFICIAL_PLUGINS.indexOf(plugin)];
-    }
-
-    ,
-
     isMutable: function (command) {
         return /sendAll|sendHtmlAll|sendHtmlMain|sendHtmlAuths|sendHtmlAuth|sendHtmlOwner/.test(command.toString());
     }
@@ -379,7 +369,7 @@ helpers = {
     **/
     originalToID: function (name) {
         for (var i in players) {
-            if (players[i].name == name) {
+            if (players[i].name == name.toLowerCase()) {
                 return i;
             }
         }
@@ -1124,27 +1114,27 @@ helpers = {
         for (var i in cownercommands) {
             array.push(i);
         }
-        if (helpers.isLoaded("safari.js")) {
+        if (pluginLoaded["safari.js"]) {
             for (var i in safaricommands) {
                 array.push(i);
             }
         }
-        if (helpers.isLoaded("roulette.js")) {
+        if (pluginLoaded["roulette.js"]) {
             for (var i in roulettecommands) {
                 array.push(i);
             }
         }
-        if (helpers.isLoaded("rr.js")) {
+        if (pluginLoaded["rr.js"]) {
             for (var i in rrcommands) {
                 array.push(i);
             }
         }
-        if (helpers.isLoaded("party.js")) {
+        if (pluginLoaded["party.js"]) {
             for (var i in partycommands) {
                 array.push(i);
             }
         }
-        if (helpers.isLoaded("funcmds.js")) {
+        if (pluginLoaded["funcmds.js"]) {
             for (var i in funcommands) {
                 array.push(i);
             }

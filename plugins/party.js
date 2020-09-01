@@ -2,7 +2,7 @@
 /*
     ----------------------------------------------
     FUN COMMUNITY PARTY COMMANDS party.js
-     - by Maribel Hearn, 2015-2015
+     - by Maribel Hearn, 2015-2020
 
     This file contains the scripts necessary
     for the Party channel, a channel in which
@@ -29,7 +29,8 @@ partycommands = {
     ,
 
     mode: function (src, channel, command) {
-        var name = helpers.escapehtml(sys.name(src)), lower = sys.name(src).toLowerCase(), channelname = sys.channel(channel).toLowerCase(), oldmode = partyMode, mode;
+        var name = helpers.escapehtml(sys.name(src)), lower = sys.name(src).toLowerCase(),
+        channelname = sys.channel(channel).toLowerCase(), oldmode = partyMode, mode;
         if (helpers.cauth(lower, channelname) === 0) {
             helpers.starfox(src, channel, command, bots.starfox, "I can't let you do that star " + sys.name(src) + "!");
             return;
@@ -49,15 +50,17 @@ partycommands = {
             }
             sys.sendHtmlAll(border + "<br>" + helpers.bot(bots.party) + "<b>" + helpers.user(name) + " has turned " + helpers.arg(mode) + " off.</b><br>" + border2, channel);
             partyMode = "none";
-            helpers.saveData("partymode");
-            regchannels[permchannels[3].toLowerCase()].topic = ["Welcome to " + permchannels[3] + "!"];
-            helpers.saveData("regchannels");
+            helpers.saveData("partyMode");
+            if (regchannels[channelname]) {
+                regchannels[channelname].topic = ["Welcome to " + sys.channel(partychannel) + "!"];
+                helpers.saveData("regchannels");
+            }
             return;
         }
         for (var index in PARTY_MODES) {
             if (PARTY_MODES[index] == command[1].toLowerCase()) {
                 partyMode = PARTY_MODES[index];
-                helpers.saveData("partymode");
+                helpers.saveData("partyMode");
                 mode = helpers.cap(PARTY_MODES[index]) + " Mode";
                 if (oldmode == "nightclub") {
                     sys.sendHtmlAll(":<div>", channel);
@@ -65,10 +68,12 @@ partycommands = {
                 sys.sendHtmlAll(border + "<br>" + helpers.bot(bots.party) + "<b>" + helpers.user(name) + " has turned " + helpers.arg(mode) + " on!</b><br>" + border2, channel);
                 if (partyMode == "nightclub") {
                     sys.sendHtmlAll("<font color='#FFFFFF'>:</font><div style='background: #000000;'>", channel);
-                    regchannels[permchannels[3].toLowerCase()].topic = ["This channel is currently in " + mode + ".<font color='#FFFFFF'>:</font><div style='background: #000000;'>"];
-                    helpers.saveData("regchannels");
-                } else {
-                    regchannels[permchannels[3].toLowerCase()].topic = ["This channel is currently in " + mode + "."];
+                    if (regchannels[channelname]) {
+                        regchannels[sys.channel(partychannel).toLowerCase()].topic = ["This channel is currently in " + mode + ".<font color='#FFFFFF'>:</font><div style='background: #000000;'>"];
+                        helpers.saveData("regchannels");
+                    }
+                } else if (regchannels[channelname]) {
+                    regchannels[sys.channel(partychannel).toLowerCase()].topic = ["This channel is currently in " + mode + "."];
                     helpers.saveData("regchannels");
                 }
                 return;
@@ -78,18 +83,20 @@ partycommands = {
     }
 };
 
-partyBeforeChat = function (src, message, channel, mode) {
-    var name = this.escapehtml(sys.name(src)), auth = sys.auth(src), color = this.color(src), length = message.length;
-    if (partyMode == "none" || message.split(' ')[0] == "/mode") {
+partyBeforeChat = function (src, message, channel) {
+    var name = helpers.escapehtml(sys.name(src)), auth = sys.auth(src), color = helpers.color(src),
+        length = message.length, mode = partyMode, playerIds, random, index;
+    if (message.split(' ')[0] == "/mode") {
+        parseCommand(src, message, channel, name, auth, false);
         return;
     }
     if (mode == "joke") {
-        var playerids = sys.playerIds(), random;
+        playerids = sys.playerIds();
         length = playerids.length;
         random = sys.rand(0, length);
-        color = this.color(playerids[random]);
-        message = this.escapehtml(message);
-        if (sys.auth(sys.playerIds()[random]) >= 1 && sys.auth(sys.playerIds()[random]) <= 3) {
+        color = helpers.color(playerids[random]);
+        message = helpers.escapehtml(message);
+        if (sys.auth(playerids[random]) >= 1 && sys.auth(playerids[random]) <= 3) {
             message = "<font color='" + color + "'><timestamp/> +<b><i>" + sys.name(playerids[random]) + ":</i></b></font> " + message;
         } else {
             message = "<font color='" + color + "'><timestamp/> <b>" + sys.name(playerids[random]) + ":</b></font> " + message;
@@ -97,37 +104,35 @@ partyBeforeChat = function (src, message, channel, mode) {
         sys.sendHtmlAll(message, channel);
         return;
     } else if (mode == "nightclub") {
-        message = this.escapehtml(message);
-        if (auth >= 1) {
-            message = "<span style='font-size: 16px;'><font color='#FFFFFF'><timestamp/> <b><i>" + this.rainbow(name + ":") + "</i> " + message + "</b></font></span>";
+        message = helpers.escapehtml(message);
+        if (auth > 0 && auth < 4) {
+            message = "<span style='font-size: 16px;'><font color='#FFFFFF'><timestamp/> +<b><i>" + helpers.rainbow(name + ":") + "</i> " + message + "</b></font></span>";
         } else {
-            message = "<span style='font-size: 16px;'><font color='#FFFFFF'><timestamp/> <b>" + this.rainbow(name + ":") + " " + message + "</b></font></span>";
+            message = "<span style='font-size: 16px;'><font color='#FFFFFF'><timestamp/> <b>" + helpers.rainbow(name + ":") + " " + message + "</b></font></span>";
         }
         sys.sendHtmlAll(message, channel);
         return;
     } else if (mode == "rainbow" || mode == "desu" || mode == "leet" || mode == "morse") {
         mode == "leet" || mode == "morse" ? message = helpers[mode](message) : message = "<b>" + helpers[mode](message) + "</b>";
     } else if (mode == "nyan") {
-        var index = 1;
+        index = 1;
         message = "Nyan";
         while (index < length) {
             message += " Nyan";
             index++;
         }
-        sys.sendHtmlAll("<font color='#FFFFFF'>:</font><div style='background:" + this.nyancolor(partyNyan) + "'><center><span style='font-size: 16px;'>" + message + "</span></center>", channel);
+        sys.sendHtmlAll("<font color='#FFFFFF'>:</font><div style='background:" + helpers.nyancolor(partyNyan) + "'><center><span style='font-size: 16px;'>" + message + "</span></center>", channel);
         partyNyan++;
         if (partyNyan == 7) {
             partyNyan = 0;
         }
         return;
     } else if (mode == "dennis") {
-        if (message.toLowerCase() == "/dennis") {
-            if (helpers.isLoaded("funcmds.js")) {
-                funcommands.dennis(src, channel, ["dennis"]);
-                return true;
-            }
+        if (pluginLoaded["funcmds.js"] && message.toLowerCase() == "/dennis") {
+            funcommands.dennis(src, channel, ["dennis"]);
+            return true;
         }
-        var index = 1;
+        index = 1;
         message = "D";
         while (index < length) {
             message += "D";
@@ -160,7 +165,7 @@ partyBeforeChat = function (src, message, channel, mode) {
         }
         message += "!";
     } else if (mode == "sparta") {
-        var index = 0;
+        index = 0;
         message = "This.. is.. SPART";
         while (index < length) {
             message += "A";
@@ -168,7 +173,7 @@ partyBeforeChat = function (src, message, channel, mode) {
         }
         message += "!";
     } else if (mode == "luigi") {
-        var index = 1;
+        index = 1;
         message = "SpaghE";
         while (index < length) {
             message += "E";
@@ -176,21 +181,21 @@ partyBeforeChat = function (src, message, channel, mode) {
         }
         message += "tti!";
     } else if (mode == "roflcopter") {
-        var index = 1;
+        index = 1;
         message = "soi";
         while (index < length) {
             message += " soi";
             index++;
         }
     } else if (mode == "asdf") {
-        var index = 1;
+        index = 1;
         message = "asdf";
         while(index < length) {
             message += "asdf";
             index++;
         }
     } else if (mode == "derp") {
-        var index = 0;
+        index = 0;
         message = "";
         while (index < length) {
             random = sys.rand(0, 7);
@@ -212,7 +217,7 @@ partyBeforeChat = function (src, message, channel, mode) {
             index++;
         }
     } else if (mode == "cirno") {
-        var index = 1;
+        index = 1;
         random = sys.rand(0, 2);
         random === 0 ? message = "BAKA" : message = "&#x2788;";
         while (index < length) {
@@ -220,9 +225,9 @@ partyBeforeChat = function (src, message, channel, mode) {
             index++;
         }
     } else if (mode == "reverse") {
-        message = this.reverse(this.escapehtml(message));
+        message = helpers.reverse(helpers.escapehtml(message));
     }
-    if (auth >= 1) {
+    if (auth > 0 && auth < 4) {
         message = "<font color='" + color + "'><timestamp/> +<b><i>" + name + ":</i></b></font> " + message;
     } else {
         message = "<font color='" + color + "'><timestamp/> <b>" + name + ":</b></font> " + message;

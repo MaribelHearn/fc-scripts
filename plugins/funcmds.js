@@ -2,12 +2,14 @@
 /*
     ----------------------------------------------
     FUN COMMUNITY FUN COMMANDS funcmds.js
-     - by Maribel Hearn, 2012-2015
+     - by Maribel Hearn, 2012-2020
 
     This file contains the notorious
     fun commands. Can be run by any user.
     ----------------------------------------------
 */
+bigtexts = sys.fexists(DATA_FOLDER + "bigtexts.txt") ? helpers.readObject("bigtexts") : {};
+
 funcommands = {
     funcommands: function (src, channel, command) {
         var commandsmessage = border
