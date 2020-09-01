@@ -185,7 +185,7 @@ cusercommands = {
                 }
                 onlinemessage += "</tr>";
             }
-            onlinemessage += "</tbody><tfoot><tr><td colspan='" + (srcauth >= 1 ? 9 : 4) + "'><b>Total Players Online:</b> " + channelPlayers.length + "</td></tr></tfoot></table>";
+            onlinemessage += "</tbody><tfoot><tr><td colspan='" + (srcauth >= 1 ? (API_KEY !== "" ? 9 : 7) : 4) + "'><b>Total Players Online:</b> " + channelPlayers.length + "</td></tr></tfoot></table>";
         }
         onlinemessage += "<br><br><timestamp/><br>" + border2;
         sys.sendHtmlMessage(src, onlinemessage, channel);
