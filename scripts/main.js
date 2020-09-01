@@ -1364,7 +1364,7 @@
             if (message.charAt(0) == COMMAND_SYMBOL && message.charAt(1) != COMMAND_SYMBOL && global[pluginEvent] && global[pluginEvent].hasOwnProperty(command)) {
                 sys.stopEvent();
                 global[pluginEvent][command](src, channel, message.split(DELIMITER));
-                sys.sendHtmlWatch(helpers.bot(bots.spy) + "[" + helpers.channelLink(channel) +
+                sys.sendHtmlWatch(helpers.bot(bots.spy) + "[" + helpers.channelLink(channelname) +
                 "] <b><font color='" + color + "'>" + helpers.escapehtml(name) + "</font></b> ran " + message + ".");
                 return;
             }
@@ -1474,8 +1474,6 @@
         **/
         var link = helpers.strip(message).substring(helpers.strip(message).indexOf(": ") + 2, helpers.strip(message).length);
         var regex = /.*(?:youtu.be\/|youtube.*v=|youtube.*\/embed\/|youtube.*\/v\/|youtube.*videos\/)([^#\&\?]*).*/;
-
-
         if (link.match(regex)) {
             try {
                 var data = helpers.htmlLinks(link, "object");
