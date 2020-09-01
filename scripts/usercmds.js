@@ -439,7 +439,11 @@ usercommands = {
                 list.push(players[i].name + (sys.name(i) != players[i].name ? " (" + helpers.escapehtml(sys.name(i)) + ")" : ""));
             }
         }
-        sys.sendHtmlMessage(src, helpers.bot(bots.battle) + "Unidled players currently in " + tier + ": " + list.join(", ") + ".");
+        if (list.length === 0) {
+            sys.sendHtmlMessage(src, helpers.bot(bots.battle) + "There are currently no unidled players in " + tier + ".");
+        } else {
+            sys.sendHtmlMessage(src, helpers.bot(bots.battle) + "Unidled players currently in " + tier + ": " + list.join(", ") + ".");
+        }
     }
 
     ,
