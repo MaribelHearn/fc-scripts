@@ -608,7 +608,7 @@ modcommands = {
             }
         }
         for (index in rangebanlist) {
-            if (index == range)) {
+            if (index == range) {
                 status += " [Range Banned]";
             }
         }
