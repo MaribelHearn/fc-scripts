@@ -179,7 +179,7 @@
                 tmp[1] === undefined ? vars = "" : vars = tmp[1].replace('(', "").replace(')', "");
                 table += "<tr><td>" + file + "</td><td>" + line + "</td><td>" + vars + "</td></tr>";
             }
-            sys.sendHtmlOwner(helpers.bot(bots.script) + errorMessage + "<br>" + table + "</table>");
+            sys.sendHtmlOwner(helpers.bot(bots.script) + helpers.escapehtml(errorMessage) + "<br>" + table + "</table>");
         } catch (e) {
             sys.sendHtmlOwner(helpers.bot(bots.script) + "An error occurred while trying to print the stack trace for another error (lol): " + e);
         }
