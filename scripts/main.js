@@ -95,7 +95,6 @@
     }
     plugins = [];
     channelPlugins = [];
-    permchannels = [];
     pluginLoaded = {"funcmds.js": false, "party.js": false, "roulette.js": false, "rr.js": false, "safari.js": false, "mafia.js": false};
     unofficialPlugins = false;
     if (sys.dirsForDirectory(sys.cwd()).contains("plugins")) {
@@ -225,10 +224,11 @@
     allowed = helpers.readObject("allowed");
     cmdcolors = helpers.readObject("cmdcolors");
     exceptions = helpers.readObject("exceptions");
+    permchannels = helpers.readObject("permchannels");
     allowedrange = helpers.readObject("allowedrange");
     namestounban = helpers.readObject("namestounban");
-    silentcommands = helpers.readObject("silentcommands");
     nameblocklist = helpers.readObject("nameblocklist");
+    silentcommands = helpers.readObject("silentcommands");
     proxylist = helpers.readData("proxylist").split('\n');
     bansites = helpers.readData("bansites").replace(/\r/g, "").split('\n');
     bots = helpers.readObject("bots");

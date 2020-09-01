@@ -99,18 +99,22 @@ helpers = {
         // Plugins
         if (pluginLoaded["party.js"]) {
             permchannels.push("Party");
+            sys.write(DATA_FOLDER + "permchannels.txt", JSON.stringify(permchannels));
         }
 
         if (pluginLoaded["roulette.js"]) {
             permchannels.push("Roulette");
+            sys.write(DATA_FOLDER + "permchannels.txt", JSON.stringify(permchannels));
         }
 
         if (pluginLoaded["rr.js"]) {
             permchannels.push("Russian Roulette");
+            sys.write(DATA_FOLDER + "permchannels.txt", JSON.stringify(permchannels));
         }
 
         if (pluginLoaded["safari.js"]) {
             permchannels.push("Safari");
+            sys.write(DATA_FOLDER + "permchannels.txt", JSON.stringify(permchannels));
         }
     }
 
