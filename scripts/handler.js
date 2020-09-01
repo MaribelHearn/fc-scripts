@@ -78,7 +78,8 @@ funCommand = function (src, channel, command, lower, name, auth, message) {
 partyCommand = function (src, channel, command, lower, name, auth, message) {
     if (pluginLoaded["party.js"] && partycommands[lower] !== undefined) {
         if (channel != partychannel) {
-            helpers.starfox(src, channel, command, bots.party, "Error 403, this command is meant to be used in the " + helpers.channelLink(sys.channel(partychannel)) + " channel.");
+            helpers.starfox(src, channel, command, bots.party, "Error 403, this command is meant to be used in " +
+            "the " + helpers.channelLink(sys.channel(partychannel)) + " channel.");
             return;
         }
         if (helpers.isMutable(partycommands[lower]) && mutedOrSilenced(src, channel, command, name, auth, message)) {
@@ -91,7 +92,8 @@ partyCommand = function (src, channel, command, lower, name, auth, message) {
 rouletteCommand = function (src, channel, command, lower, name, auth, message) {
     if (pluginLoaded["roulette.js"] && roulettecommands[lower] !== undefined) {
         if (channel != roulettechannel) {
-            helpers.starfox(src, channel, command, bots.roulette, "Error 403, this command is meant to be used in the " + helpers.channelLink(sys.channel(rrchannel)) + " channel.");
+            helpers.starfox(src, channel, command, bots.roulette, "Error 403, this command is meant to be used in " +
+            "the " + helpers.channelLink(sys.channel(roulettechannel)) + " channel.");
             return;
         }
         if (helpers.isMutable(roulettecommands[lower]) && mutedOrSilenced(src, channel, command, name, auth, message)) {
@@ -104,7 +106,8 @@ rouletteCommand = function (src, channel, command, lower, name, auth, message) {
 russianRouletteCommand = function (src, channel, command, lower, name, auth, message) {
     if (pluginLoaded["rr.js"] && rrcommands[lower] !== undefined) {
         if (channel != rrchannel) {
-            helpers.starfox(src, channel, command, bots.rr, "Error 403, this command is meant to be used in the the " + helpers.channelLink(sys.channel(roulettechannel)) + " channel.");
+            helpers.starfox(src, channel, command, bots.rr, "Error 403, this command is meant to be used in the " +
+            "the " + helpers.channelLink(sys.channel(rrchannel)) + " channel.");
             return;
         }
         if (helpers.isMutable(rrcommands[lower]) && mutedOrSilenced(src, channel, command, name, auth, message)) {
@@ -117,7 +120,8 @@ russianRouletteCommand = function (src, channel, command, lower, name, auth, mes
 safariCommand = function (src, channel, command, lower, name, auth, message) {
     if (pluginLoaded["safari.js"] && safaricommands[lower] !== undefined) {
         if (channel != safarichannel) {
-            helpers.starfox(src, channel, command, bots.roulette, "Error 403, this command is meant to be used in the " + helpers.channelLink(sys.channel(safarichannel)) + " channel.");
+            helpers.starfox(src, channel, command, bots.roulette, "Error 403, this command is meant to be used in " +
+            "the " + helpers.channelLink(sys.channel(safarichannel)) + " channel.");
             return;
         }
         if (helpers.isMutable(safaricommands[lower]) && mutedOrSilenced(src, channel, command, name, auth, message)) {
@@ -130,7 +134,8 @@ safariCommand = function (src, channel, command, lower, name, auth, message) {
 mafiaCommand = function (src, channel, command, lower, name, auth, message) {
     if (pluginLoaded["mafia.js"] && mafiacommands[lower] !== undefined) {
         if (channel != mafiachannel) {
-            helpers.starfox(src, channel, command, bots.mafia, "Error 403, this command is meant to be used in the " + helpers.channelLink(sys.channel(safarichannel)) + " channel.");
+            helpers.starfox(src, channel, command, bots.mafia, "Error 403, this command is meant to be used in " +
+            "the " + helpers.channelLink(sys.channel(safarichannel)) + " channel.");
             return;
         }
         if (helpers.isMutable(mafiacommands[lower]) && mutedOrSilenced(src, channel, command, name, auth, message)) {
