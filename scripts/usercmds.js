@@ -1355,7 +1355,7 @@ usercommands = {
         trgt = sys.id(command);
         sys.sendHtmlAll("<font color='" + color + "'><timestamp/><b>*** " + name + " pokes " + helpers.escapehtml(command) + " ***</b></font>", channel);
         if (trgt) {
-            sys.sendHtmlMessage(trgt, "<ping/>");
+            sys.sendHtmlMessage(trgt, "<ping/>", channel);
         }
     }
 
