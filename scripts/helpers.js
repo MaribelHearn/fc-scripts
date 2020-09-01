@@ -160,7 +160,7 @@ helpers = {
 
     saveData: function (dataFile) {
         var data = (typeof(global[dataFile]) == "object" ? JSON.stringify(global[dataFile]) : global[dataFile]);
-        sys.write(DATA_FOLDER + dataFile.toLowerCase() + ".txt", data);
+        sys.write(DATA_FOLDER + (dataFile.match("KEY") ? dataFile : dataFile.toLowerCase()) + ".txt", data);
     }
 
     ,
