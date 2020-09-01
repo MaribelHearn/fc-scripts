@@ -94,7 +94,7 @@
         }
     }
     plugins = [];
-    activePlugins = [];
+    channelPlugins = [];
     pluginLoaded = {"funcmds.js": false, "party.js": false, "roulette.js": false, "rr.js": false, "safari.js": false, "mafia.js": false};
     unofficialPlugins = false;
     if (sys.dirsForDirectory(sys.cwd()).contains("plugins")) {
@@ -105,7 +105,9 @@
                 print("Loaded plugin " + plugins[i]);
                 if (Object.keys(OFFICIAL_PLUGINS).contains(plugins[i])) {
                     pluginLoaded[plugins[i]] = true;
-                    activePlugins.push(plugins[i].replace(".js", ""));
+                    if (plugins[i] != "funcmds.js") {
+                        channelPlugins.push(plugins[i].replace(".js", ""));
+                    }
                 } else {
                     unofficialPlugins = true;
                 }
@@ -382,8 +384,8 @@
             watch = sys.channelId(permchannels[0]);
             authchannel = sys.channelId(permchannels[1]);
             ownerchannel = sys.channelId(permchannels[2]);
-            for (i = 0; i < activePlugins.length; i++) {
-                global[activePlugins[i] + "channel"] = sys.channelId(permchannels[i + 3]);
+            for (i = 0; i < channelPlugins.length; i++) {
+                global[channelPlugins[i] + "channel"] = sys.channelId(permchannels[i + 3]);
             }
             print("The default channels have been created.");
             serverStarting = false;
