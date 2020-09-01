@@ -528,7 +528,13 @@
             latestShaHash = sha;
             helpers.saveData("latestShaHash");
             sys.system("git pull origin master");
-            ownercommands.reload(false, 0, ["auto"]);
+            try {
+                sys.changeScript(sys.read("scripts.js"));
+                sys.sendHtmlOwner(helpers.bot(bots.script) + "The server scripts have been automatically updated! [Commit Message: " + commitmessage + "]");
+            } catch (e) {
+                print("An error occurred while reloading the scripts: " + e);
+                sys.sendHtmlOwner(helpers.bot(bots.script) + "An error occurred while reloading the scripts: " + e);
+            }
         }
         /**
             ---------------
