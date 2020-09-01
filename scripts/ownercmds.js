@@ -1230,6 +1230,11 @@ ownercommands = {
             }, 200, 0);
             sys.system("start Server.exe");
         } else {
+            if (sys.fexists("RelayStation.exe") && sys.os() == "windows") {
+                sys.system("taskkill /f /im RelayStation.exe");
+            } else if (sys.fexists("RelayStation") && sys.os() != "windows") {
+                sys.system("kill $(pidof RelayStation)");
+            }
             sys.setTimer(function () {
                 sys.system("./restart.sh");
             }, 200, 0);
