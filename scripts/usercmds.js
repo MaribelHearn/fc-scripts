@@ -417,7 +417,7 @@ usercommands = {
             "not currently ranked in " + tier + ".");
         } else {
             sys.sendHtmlMessage(src, helpers.bot(bots.battle) + (self ? "You" : player) + " currently " +
-            "rank" + (self ? "" : "s") + " " + helpers.ordinal(rank) + " out of " + helpers.totalPlayersByTier(tier) +
+            "rank" + (self ? "" : "s") + " " + helpers.ordinal(rank) + " out of " + sys.totalPlayersByTier(tier) +
             " players in " + tier + " (rating: " + sys.ladderRating(src, tier) + ").");
         }
     }
