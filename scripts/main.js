@@ -47,7 +47,7 @@
     CYRILLIC = /\u0408|\u03a1|\u0430|\u0410|\u0412|\u0435|\u0415|\u041c|\u041d|\u043e|\u041e|\u0440|\u0420|\u0441|\u0421|\u0422|\u0443|\u0445|\u0425|\u0456|\u0406/;
     AUTH_NAMES = ["User", "Moderator", "Administrator", "Owner", "Invisible Owner"];
     SCRIPT_MODULES = ["usercmds.js", "modcmds.js", "admincmds.js", "ownercmds.js", "cusercmds.js", "cmodcmds.js", "cadmincmds.js", "cownercmds.js", "helpers.js", "handler.js", "tierchecks.js", "base64.js"];
-    OFFICIAL_PLUGINS = {"funcmds.js": "Fun Commands", "party.js": "Party", "roulette.js": "Roulette", "rr.js": "Russian Roulette", "safari.js": "Safari"};
+    OFFICIAL_PLUGINS = {"funcmds.js": "Fun Commands", "party.js": "Party", "roulette.js": "Roulette", "rr.js": "Russian Roulette", "safari.js": "Safari", "mafia.js": "Mafia"};
     SCRIPTS_FOLDER = "scripts/";
     PLUGINS_FOLDER = "plugins/";
     DATA_FOLDER = "data/";
@@ -95,6 +95,7 @@
     }
     plugins = [];
     channelPlugins = [];
+    permchannels = [];
     pluginLoaded = {"funcmds.js": false, "party.js": false, "roulette.js": false, "rr.js": false, "safari.js": false, "mafia.js": false};
     unofficialPlugins = false;
     if (sys.dirsForDirectory(sys.cwd()).contains("plugins")) {
@@ -224,7 +225,6 @@
     allowed = helpers.readObject("allowed");
     cmdcolors = helpers.readObject("cmdcolors");
     exceptions = helpers.readObject("exceptions");
-    permchannels = helpers.readObject("permchannels");
     allowedrange = helpers.readObject("allowedrange");
     namestounban = helpers.readObject("namestounban");
     silentcommands = helpers.readObject("silentcommands");
