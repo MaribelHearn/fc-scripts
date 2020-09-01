@@ -603,7 +603,7 @@ modcommands = {
             }
         }
         for (index in banlist) {
-            if (index == ip)) {
+            if (index == ip) {
                 status += " [Banned]";
             }
         }
