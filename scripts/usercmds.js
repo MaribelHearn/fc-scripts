@@ -414,11 +414,11 @@ usercommands = {
         rank = sys.ranking(player, tier);
         if (!rank) {
             sys.sendHtmlMessage(src, helpers.bot(bots.battle) + (self ? "You are " : "That player is ") +
-            "not currently ranked in " + tier + ".");
+            "not currently ranked in " + tier + ".", channel);
         } else {
             sys.sendHtmlMessage(src, helpers.bot(bots.battle) + (self ? "You" : player) + " currently " +
             "rank" + (self ? "" : "s") + " " + helpers.ordinal(rank) + " out of " + sys.totalPlayersByTier(tier) +
-            " players in " + tier + " (rating: " + sys.ladderRating(src, tier) + ").");
+            " players in " + tier + " (rating: " + sys.ladderRating(src, tier) + ").", channel);
         }
     }
 
@@ -440,9 +440,9 @@ usercommands = {
             }
         }
         if (list.length === 0) {
-            sys.sendHtmlMessage(src, helpers.bot(bots.battle) + "There are currently no unidled players in " + tier + ".");
+            sys.sendHtmlMessage(src, helpers.bot(bots.battle) + "There are currently no unidled players in " + tier + ".", channel);
         } else {
-            sys.sendHtmlMessage(src, helpers.bot(bots.battle) + "Unidled players currently in " + tier + ": " + list.join(", ") + ".");
+            sys.sendHtmlMessage(src, helpers.bot(bots.battle) + "Unidled players currently in " + tier + ": " + list.join(", ") + ".", channel);
         }
     }
 
