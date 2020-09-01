@@ -61,9 +61,13 @@
     }
     for (var i in SCRIPT_MODULES) {
         if (!moduleLoaded[i]) {
-            print("Loaded module " + SCRIPT_MODULES[i]);
-            sys.exec(SCRIPTS_FOLDER + SCRIPT_MODULES[i]);
-            moduleLoaded[i] = true;
+            try {
+                sys.exec(SCRIPTS_FOLDER + SCRIPT_MODULES[i]);
+                print("Loaded module " + SCRIPT_MODULES[i]);
+                moduleLoaded[i] = true;
+            } catch (e) {
+                print("An error occurred in module " + SCRIPT_MODULES[i] + ": " + e);
+            }
         }
     }
     if (typeof(pluginLoaded) == "undefined") {
@@ -72,9 +76,13 @@
     if (helpers.isInArray("plugins", sys.dirsForDirectory(sys.cwd()))) {
         var plugins = sys.filesForDirectory(PLUGINS_FOLDER);
         for (var i in plugins) {
-            print("Loaded plugin " + plugins[i]);
-            sys.exec(PLUGINS_FOLDER + plugins[i]);
-            pluginLoaded[i] = true;
+            try {
+                sys.exec(PLUGINS_FOLDER + plugins[i]);
+                print("Loaded plugin " + plugins[i]);
+                pluginLoaded[i] = true;
+            } catch (e) {
+                print("An error occurred in plugin " + plugins[i] + ": " + e);
+            }
         }
     }
     /**
