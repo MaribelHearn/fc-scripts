@@ -390,6 +390,7 @@
             print("The default channels have been created.");
             serverStarting = false;
         }, time, 0);
+        time += 100;
         /**
             ----------------------------------
             Set Host IP, Country and Time Zone
@@ -416,15 +417,17 @@
             Custom Plugins
             --------------
         **/
-        for (var i in plugins) {
-            if (Object.keys(OFFICIAL_PLUGINS).contains(plugins[i])) {
-                continue;
+        sys.setTimer(function () {
+            for (var i in plugins) {
+                if (Object.keys(OFFICIAL_PLUGINS).contains(plugins[i])) {
+                    continue;
+                }
+                pluginEvent = plugins[i].replace(".js", "") + "Start";
+                if (global[pluginEvent]) {
+                    global[pluginEvent]();
+                }
             }
-            pluginEvent = plugins[i].replace(".js", "") + "Start";
-            if (global[pluginEvent]) {
-                global[pluginEvent]();
-            }
-        }
+        }, time, 0);
     }
 
     ,
