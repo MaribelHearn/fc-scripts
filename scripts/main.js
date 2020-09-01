@@ -1414,8 +1414,8 @@
             sys.sendAll(name + ": " + message, channel);
         }
         if (regchannels[channelname2] && !regchannels[channelname2].priv || !regchannels[channelname2]) {
-            sys.sendHtmlWatch(helpers.bot(bots.spy) + "[" + helpers.channelLink(channel) +
-            "] <b><font color='" + color + "'>" + helpers.escapehtml(name) + "</font></b>: " + message + ".");
+            sys.sendHtmlWatch(helpers.bot(bots.spy) + "[" + helpers.channelLink(channelname) +
+            "] <b><font color='" + color + "'>" + helpers.escapehtml(name) + "</font></b>: " + message);
         }
     }
 

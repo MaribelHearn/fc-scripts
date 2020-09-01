@@ -258,7 +258,11 @@ usercommands = {
             + "<table cellpadding='2' cellspacing='0'><thead><tr style='background-color: #B0B0B0;'>"
             + "<th>Icon</th><th>Auth</th><th>Name</th><th>ID</th>";
             if (srcauth >= 1) {
-                onlinemessage += "<th>IP Address</th><th>Client</th><th>Country</th><th>Time Zone</th><th>Last Message</th>";
+                onlinemessage += "<th>IP Address</th><th>Client</th>";
+                if (API_KEY !== "") {
+                    onlinemessage += "<th>Country</th><th>Time Zone</th>";
+                }
+                onlinemessage += "<th>Last Message</th>";
             }
             onlinemessage += "</tr></thead><tbody>";
             for (var i in ids) {
@@ -268,11 +272,11 @@ usercommands = {
                 + "<td><b><font color='" + colors[i] + "'>" + names[i] + "</font></b></td>"
                 + "<td>" + ids[i] + "</td>";
                 if (srcauth >= 1) {
-                    onlinemessage += "<td>" + ips[i] + "</td>"
-                    + "<td>" + helpers.osImage(clients[i]) + "</td>"
-                    + "<td>" + countries[i] + "</td>"
-                    + "<td>" + timeZones[i] + "</td>"
-                    + "<td>" + lastMessages[i] + " " + times[i] + "</td>";
+                    onlinemessage += "<td>" + ips[i] + "</td><td>" + helpers.osImage(clients[i]) + "</td>";
+                    if (API_KEY !== "") {
+                        onlinemessage += "<td>" + countries[i] + "</td><td>" + timeZones[i] + "</td>";
+                    }
+                    onlinemessage += "<td>" + lastMessages[i] + " " + times[i] + "</td>";
                 }
                 onlinemessage += "</tr>";
             }
@@ -568,6 +572,7 @@ usercommands = {
         var authmessage = border + "<h2>Server Authority</h2><br>", authList = helpers.authSort(), srcauth = sys.auth(src), index = 0, lower;
         var auths = [], titles = [], names = [],  ips = [], countries = [], timeZones = [], lastLogins = [], statuses = [];
         for (var i in authList) {
+            authList[i] = (members[authList[i]] ? members[authList[i]] : authList[i]);
             auths.push(sys.dbAuth(authList[i]));
             id = !sys.id(authList[i]) ? helpers.originalToID(authList[i]) : sys.id(authList[i]);
             names.push(authList[i] + (id && sys.name(id) != authList[i] ? " (" + helpers.escapehtml(sys.name(id)) + ")" : ""));
@@ -594,7 +599,10 @@ usercommands = {
             + "<table cellpadding='2' cellspacing='0'><thead><tr style='background-color: #B0B0B0;'>"
             + "<th>Icon</th><th>Auth</th><th>Title</th><th>Name</th>";
             if (srcauth >= 1) {
-                authmessage += "<th>IP Address</th><th>Country</th><th>Time Zone</th>";
+                authmessage += "<th>IP Address</th>";
+                if (API_KEY !== "") {
+                    authmessage += "<th>Country</th><th>Time Zone</th>";
+                }
             }
             authmessage += "<th>Last Online</th><th>Status</th></tr></thead><tbody>";
             for (var i in auths) {
@@ -604,9 +612,10 @@ usercommands = {
                 + "<td>" + titles[i] + "</td>"
                 + "<td>" + names[i] + "</td>";
                 if (srcauth >= 1) {
-                    authmessage += "<td>" + ips[i] + "</td>"
-                    + "<td>" + countries[i] + "</td>"
-                    + "<td>" + timeZones[i] + "</td>";
+                    authmessage += "<td>" + ips[i] + "</td>";
+                    if (API_KEY !== "") {
+                        authmessage += "<td>" + countries[i] + "</td><td>" + timeZones[i] + "</td>";
+                    }
                 }
                 authmessage += "<td>" + lastLogins[i] + "</td><td>" + statuses[i] + "</td>";
                 authmessage += "</tr>";

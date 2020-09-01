@@ -558,8 +558,9 @@ modcommands = {
     ,
 
     cp: function (src, channel, command) {
-        var DISPLAY_USER = true, cpmessage = border + "<h2>Control Panel</h2><br>", gigabanned = false, megabanned = false, rangebanned = false, banned = false, muted = false;
-        var name, player, auth, imageindex, status, registered, location, os, country, city, usedips, playerChannels, lastLogin, timezone2, flag, version, totalAlts;
+        var DISPLAY_USER = true, cpmessage = border + "<h2>Control Panel</h2><br>", name, player, auth,
+        imageindex, status, registered, location, os, country, city, usedips, playerChannels, lastLogin,
+        timezone2, flag, version, totalAlts, index;
         if (!command[1]) {
             helpers.starfox(src, channel, command, bots.command, "Error 404, player not found.", channel);
             return;
@@ -573,31 +574,6 @@ modcommands = {
         ip = sys.dbIp(player);
         range = sys.dbRange(player);
         id = sys.id(player);
-        for (var index in gigabanlist) {
-            if (index == player) {
-                gigabanned = true;
-            }
-        }
-        for (var index in megabanlist) {
-            if (!gigabanned && index == player) {
-                megabanned = true;
-            }
-        }
-        for (var index in rangebanlist) {
-            if (!gigabanned && !megabanned && (index == player || index == range)) {
-                rangebanned = true;
-            }
-        }
-        for (var index in banlist) {
-            if (!gigabanned && !megabanned && !rangebanned && (index == player || index == ip)) {
-                banned = true;
-            }
-        }
-        for (var index in mutelist) {
-            if (!gigabanned && !megabanned && !rangebanned && !banned && index == player) {
-                muted = true;
-            }
-        }
         alts = sys.aliases(ip);
         totalAlts = alts.length;
         if (id) {
@@ -609,41 +585,42 @@ modcommands = {
             } else if (sys.away(id)) {
                 imageindex += 4;
             }
-            status = "<font color='green'><b>Online";
-            if (gigabanned) {
-                status += " [Giga Banned]";
-            } else if (megabanned) {
-                status += " [Mega Banned]";
-            } else if (rangebanned) {
-                status += " [Range Banned]";
-            } else if (banned) {
-                status += " [Banned]";
-            } else if (muted) {
-                status += " [Muted]";
-            }
-            status += "</b></font>";
+            status = "<font color='green'><b>Online</b></font>";
             playerChannels = sys.channelsOfPlayer(id);
-            for (var index in playerChannels) {
+            for (index in playerChannels) {
                 playerChannels[index] = "<a href=\"po:join/" + sys.channel(playerChannels[index]) + "\">#" + sys.channel(playerChannels[index]) + "</a>";
             }
             playerChannels = playerChannels.join(", ");
         } else {
             auth = sys.dbAuth(player);
             imageindex = (auth > 3 ? 0 : auth) + 4;
-            status = "<font color='red'>Offline";
-            if (gigabanned) {
-                status += " [Giga Banned]";
-            } else if (megabanned) {
-                status += " [Mega Banned]";
-            } else if (rangebanned) {
-                status += " [Range Banned]";
-            } else if (banned) {
-                status += " [Banned]";
-            } else if (muted) {
+            status = "<font color='red'>Offline</font>";
+            playerChannels = "None";
+        }
+        for (index in mutelist) {
+            if (index == player) {
                 status += " [Muted]";
             }
-            status += "</font>";
-            playerChannels = "None";
+        }
+        for (index in banlist) {
+            if (index == ip)) {
+                status += " [Banned]";
+            }
+        }
+        for (index in rangebanlist) {
+            if (index == range)) {
+                status += " [Range Banned]";
+            }
+        }
+        for (index in megabanlist) {
+            if (index == player) {
+                status += " [Mega Banned]";
+            }
+        }
+        for (index in gigabanlist) {
+            if (index == player) {
+                status += " [Giga Banned]";
+            }
         }
         lastLogin = helpers.formatLastOn(src, sys.dbLastOn(player));
         if (operatingsystem[player]) {
@@ -652,12 +629,14 @@ modcommands = {
             os = "[no data]";
         }
         versions[player] ? version = ", ver. " + versions[player] : version = "";
-        if (countryname[player]) {
-            country = countryname[player];
-            flag = FLAGS[helpers.toFlagKey(countryname[player])];
-        } else {
-            country = "[no data]";
-            flag = "[no data]";
+        if (API_KEY !== "") {
+            if (countryname[player]) {
+                country = countryname[player];
+                flag = FLAGS[helpers.toFlagKey(countryname[player])];
+            } else {
+                country = "[no data]";
+                flag = "[no data]";
+            }
         }
         timezone[player] ? timezone2 = timezone[player] : timezone2 = "[no data]";
         sys.dbRegistered(player) ? registered = "<b><font color='green'>Yes</font></b>" : registered = "<font color='red'>No</font>";
@@ -674,10 +653,11 @@ modcommands = {
             cpmessage += "<br><b>IP:</b> <a href='" + helpers.mapsUrl(city, country) + "'>" + ip + "</a>";
             location = (!helpers.isAndroid(src) ? flag + " " : "") + city + ", " + country;
         }
-        cpmessage += "<br><b>Client:</b> " + os + version +
-        "<br><b>Location:</b> " + (API_KEY !== "" ? location : "[no data]") +
-        "<br><b>Time Zone:</b> " + timezone2 +
-        "<br><b>Registered:</b> " + registered +
+        cpmessage += "<br><b>Client:</b> " + os + version;
+        if (API_KEY !== "") {
+            cpmessage += "<br><b>Location:</b> " + location + "<br><b>Time Zone:</b> " + timezone2;
+        }
+        cpmessage += "<br><b>Registered:</b> " + registered +
         "<br><b>Last Online:</b> " + lastLogin +
         "<br><b>Alts:</b> " + alts +
         "<br><b>Number of Alts:</b> " + totalAlts +
