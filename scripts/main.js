@@ -338,17 +338,14 @@
         **/
         sys.setTimer(function () {
             sys.createChannel(permchannels[0]);
-            watch = sys.channelId(permchannels[0]);
         }, time, 0);
         time += 100;
         sys.setTimer(function () {
             sys.createChannel(permchannels[1]);
-            authchannel = sys.channelId(permchannels[1]);
         }, time, 0);
         time += 100;
         sys.setTimer(function () {
             sys.createChannel(permchannels[2]);
-            ownerchannel = sys.channelId(permchannels[2]);
         }, time, 0);
         time += 100;
         if (permchannels[3]) {
@@ -382,6 +379,9 @@
             time += 100;
         }
         sys.setTimer(function () {
+            watch = sys.channelId(permchannels[0]);
+            authchannel = sys.channelId(permchannels[1]);
+            ownerchannel = sys.channelId(permchannels[2]);
             for (i = 0; i < activePlugins.length; i++) {
                 global[activePlugins[i] + "channel"] = sys.channelId(permchannels[i + 3]);
             }
