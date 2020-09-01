@@ -43,7 +43,7 @@ cmodcommands = {
         var lower = sys.channel(channel).toLowerCase(), name = sys.name(src).toLowerCase(), text = command[1];
         if (!text) {
             if (regchannels[lower]) {
-                sys.sendHtmlMessage(src, helpers.bot(bots.channel) + "Current channel topic: " + helpers.escapehtml(regchannels[lower].topic.join(TOPIC_DELIMITER)), channel);
+                sys.sendHtmlMessage(src, helpers.bot(bots.channel) + "Current channel topic: " + regchannels[lower].topic.join(TOPIC_DELIMITER), channel);
             } else {
                 sys.sendHtmlMessage(src, helpers.bot(bots.channel) + "Current channel topic: Welcome to " + sys.channel(channel) + "!", channel);
             }
