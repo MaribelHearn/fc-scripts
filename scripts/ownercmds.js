@@ -555,24 +555,20 @@ ownercommands = {
             }
             try {
                 sys.exec(folder + script + ".js");
-                sys.sendHtmlOwner(helpers.bot(bots.script) + "The " + script + " script has been reloaded successfully.");
                 print("Script Check: OK");
+                sys.sendHtmlOwner(helpers.bot(bots.script) + "The " + script + " script has been reloaded successfully.");
             } catch (e) {
-                sys.sendHtmlOwner(helpers.bot(bots.script) + "An error occurred while reloading the scripts: " + e);
                 print("An error occurred while reloading the scripts: " + e);
+                sys.sendHtmlOwner(helpers.bot(bots.script) + "An error occurred while reloading the scripts: " + e);
             }
             return;
         }
         try {
             sys.changeScript(sys.read("scripts.js"));
-            if (command[0] != "auto") {
-                sys.sendHtmlOwner(helpers.bot(bots.script) + "The server scripts have been reloaded successfully.");
-            } else {
-                sys.sendHtmlOwner(helpers.bot(bots.script) + "The server scripts have been automatically updated! [Commit Message: " + commitmessage + "]");
-            }
+            sys.sendHtmlOwner(helpers.bot(bots.script) + "The server scripts have been reloaded successfully.");
         } catch (e) {
-            sys.sendHtmlOwner(helpers.bot(bots.script) + "An error occurred while reloading the scripts: " + e);
             print("An error occurred while reloading the scripts: " + e);
+            sys.sendHtmlOwner(helpers.bot(bots.script) + "An error occurred while reloading the scripts: " + e);
         }
     }
 
