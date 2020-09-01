@@ -1689,7 +1689,7 @@ helpers = {
         if (month.charAt(0) == '0') {
             month = month.slice(1);
         }
-        return day + '-' + month + '-' + year + ", " + time;
+        return day + '-' + month + '-' + year + ", " + time.replace('Z', "");
     }
 
     ,

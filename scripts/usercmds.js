@@ -280,7 +280,8 @@ usercommands = {
                 }
                 onlinemessage += "</tr>";
             }
-            onlinemessage += "</tbody><tfoot><tr><td colspan='" + (srcauth >= 1 ? 9 : 4) + "'><b>Total Players Online:</b> " + sys.numPlayers() + "</td></tr></tfoot></table>";
+            onlinemessage += "</tbody><tfoot><tr><td colspan='" + (srcauth >= 1 ? (API_KEY !== "" ? 9 : 7) : 4) +
+            "'><b>Total Players Online:</b> " + sys.numPlayers() + "</td></tr></tfoot></table>";
         }
         onlinemessage += "<br><br><timestamp/><br>" + border2;
         sys.sendHtmlMessage(src, onlinemessage, channel);
@@ -375,13 +376,18 @@ usercommands = {
     ,
 
     ranking: function (src, channel, command) {
-        var name = players[src].name, tier = command[1], i;
+        var name = players[src].name, tier = command[1], ranking;
         if (!tier) {
             tier = sys.tier(src, 0);
         }
-        sys.sendHtmlMessage(src, helpers.bot(bots.battle) + "You currently " +
-        "rank " + helpers.ordinal(sys.ranking(name, tier)) + " in " + tier +
-        " (rating: " + sys.ladderRating(src, tier) + ").");
+        ranking = sys.ranking(name, tier);
+        if (!ranking) {
+            sys.sendHtmlMessage(src, helpers.bot(bots.battle) + "You are not currently ranked in " + tier + ".");
+        } else {
+            sys.sendHtmlMessage(src, helpers.bot(bots.battle) + "You currently " +
+            "rank " + helpers.ordinal() + " in " + tier +
+            " (rating: " + sys.ladderRating(src, tier) + ").");
+        }
     }
 
     ,
@@ -620,7 +626,7 @@ usercommands = {
                 authmessage += "<td>" + lastLogins[i] + "</td><td>" + statuses[i] + "</td>";
                 authmessage += "</tr>";
             }
-            authmessage += "</tbody><tfoot><tr><td colspan='" + (srcauth >= 1 ? 9 : 4) + "'><b>Total Auth Members:</b> " + authList.length + "</td></tr></tfoot></table>";
+            authmessage += "</tbody><tfoot><tr><td colspan='" + (srcauth >= 1 ? (API_KEY !== "" ? 9 : 7) : 4) + "'><b>Total Auth Members:</b> " + authList.length + "</td></tr></tfoot></table>";
         }
         authmessage += "<br><br><timestamp/><br>" + border2;
         sys.sendHtmlMessage(src, authmessage, channel);
@@ -1348,7 +1354,9 @@ usercommands = {
         command = command.join(DELIMITER);
         trgt = sys.id(command);
         sys.sendHtmlAll("<font color='" + color + "'><timestamp/><b>*** " + name + " pokes " + helpers.escapehtml(command) + " ***</b></font>", channel);
-        sys.sendHtmlMessage(trgt, "<ping/>");
+        if (trgt) {
+            sys.sendHtmlMessage(trgt, "<ping/>");
+        }
     }
 
     ,
