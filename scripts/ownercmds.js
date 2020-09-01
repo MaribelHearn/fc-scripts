@@ -2,7 +2,7 @@
 /*
     ----------------------------------------------
     FUN COMMUNITY OWNER COMMANDS ownercmds.js
-     - by Maribel Hearn, 2012-2015
+     - by Maribel Hearn, 2012-2020
 
     This file contains commands that can be
     run by owners.
@@ -518,7 +518,7 @@ ownercommands = {
             commandsmessage += "Update frequency: " + helpers.secondsToWording(updateFrequency) + ".<br>"
         }
         commandsmessage += "<br>"
-        + "<b>" + helpers.user("/reload") + "</b>: reloads the scripts from the local files.<br>"
+        + "<b>" + helpers.user("/reload ") + helpers.arg("script") + "</b>: reloads script file <b>script</b> from the local files, which can be a module or a plugin. If <b>script</b> is not specified, reloads all scripts.<br>"
         + "<b>" + helpers.user("/update ") + helpers.arg("module") + "</b>: updates the <b>module</b> module. Updates the main script file by default.<br>"
         + "<b>" + helpers.user("/silentupdate ") + helpers.arg("module") + "</b>: silently updates the <b>module</b> module. Updates the main script file by default. Also /supdate.<br>"
         + "<b>" + helpers.user("/updateplugin ") + helpers.arg("plugin") + "</b>: updates the official plugin <b>plugin</b>. If <b>plugin</b> is not specified, updates all plugins. Also /updateplugins.<br>"
@@ -543,24 +543,32 @@ ownercommands = {
     ,
 
     reload: function (src, channel, command) {
+        var script = command[1], folder, i;
+        if (script) {
+            if (!sys.fexists(SCRIPTS_FOLDER + script + ".js") && !sys.fexists(PLUGINS_FOLDER + script + ".js")) {
+                helpers.starfox(src, channel, command, bots.command, "Error 404, that script does not exist.");
+                return;
+            } else if (sys.fexists(SCRIPTS_FOLDER + script + ".js")) {
+                folder = SCRIPTS_FOLDER;
+            } else if (sys.fexists(PLUGINS_FOLDER + script + ".js")) {
+                folder = PLUGINS_FOLDER;
+            }
+            try {
+                sys.exec(folder + script + ".js");
+                sys.sendHtmlOwner(helpers.bot(bots.script) + "The " + script + " script has been reloaded successfully.");
+                print("Script Check: OK");
+            } catch (e) {
+                sys.sendHtmlOwner(helpers.bot(bots.script) + "An error occurred while reloading the scripts: " + e);
+                print("An error occurred while reloading the scripts: " + e);
+            }
+            return;
+        }
         try {
-            for (var i in SCRIPT_MODULES) {
-                print("Loaded module " + SCRIPT_MODULES[i]);
-                sys.exec(SCRIPTS_FOLDER + SCRIPT_MODULES[i]);
-                moduleLoaded[i] = true;
-            }
-            if (helpers.isInArray("plugins", sys.dirsForDirectory(sys.cwd()))) {
-                var plugins = sys.filesForDirectory(PLUGINS_FOLDER);
-                for (var i in plugins) {
-                    print("Loaded plugin " + plugins[i]);
-                    sys.exec(PLUGINS_FOLDER + plugins[i]);
-                    pluginLoaded[i] = true;
-                }
-            }
-            sys.exec(SCRIPTS_FOLDER + "main.js");
-            print("Script Check: OK");
+            sys.changeScript(sys.read("scripts.js"));
             if (command[0] != "auto") {
                 sys.sendHtmlOwner(helpers.bot(bots.script) + "The server scripts have been reloaded successfully.");
+            } else {
+                sys.sendHtmlOwner(helpers.bot(bots.script) + "The server scripts have been automatically updated! [Commit Message: " + commitmessage + "]");
             }
         } catch (e) {
             sys.sendHtmlOwner(helpers.bot(bots.script) + "An error occurred while reloading the scripts: " + e);
@@ -589,7 +597,6 @@ ownercommands = {
                 sys.write(SCRIPTS_FOLDER + "main.js", resp);
                 try {
                     sys.changeScript(sys.read("scripts.js"));
-                    sys.exec(SCRIPTS_FOLDER + "main.js");
                 } catch (e) {
                     if (src) {
                         silent == "silent" ? sys.sendHtmlMessage(src, helpers.bot(bots.script) + e, channel) : sys.sendHtmlOwner(helpers.bot(bots.script) + e);
@@ -676,18 +683,18 @@ ownercommands = {
     ,
 
     updateplugin: function (src, channel, command) {
-        var name = sys.name(src), date = new Date(), silent = command[0].substr(0, 6), plugin, time;
-        var noncmds = ["party", "rr", "roulette"];
+        var name = sys.name(src), date = new Date(), silent = command[0].substr(0, 6), plugin, time,
+            noncmds = ["party", "rr", "roulette"], officials = Object.keys(OFFICIAL_PLUGINS), i;
         if (!command[1] || command[1] == "all") {
-            for (var i = 0; i < OFFICIAL_PLUGINS.length; i++) {
-                this.updateplugin(src, channel, [command[0], OFFICIAL_PLUGINS[i].split('.')[0]].replace(/cmds/, ""));
+            for (i = 0; i < officials.length; i++) {
+                this.updateplugin(src, channel, [command[0], officials[i].split('.')[0]].replace(/cmds/, ""));
             }
         } else {
             plugin = command[1];
             if (!helpers.isInArray(plugin, noncmds)) {
                 plugin += "cmds";
             }
-            if (!helpers.isInArray(plugin + ".js", OFFICIAL_PLUGINS)) {
+            if (!helpers.isInArray(plugin + ".js", officials)) {
                 helpers.starfox(src, channel, command, bots.main, "Error 404, plugin '" + plugin + "' not found.");
                 return;
             }
@@ -716,7 +723,7 @@ ownercommands = {
                 }
             });
         }
-        for (var i = OFFICIAL_PLUGINS.length; i > 1; i--) {
+        for (i = officials.length; i > 1; i--) {
             if (command[i]) {
                 this.updateplugin(src, channel, [command[0], command[i]]);
             }
@@ -836,7 +843,11 @@ ownercommands = {
         command = command.join(DELIMITER).replace(DELIMITER, ' ');
         command = COMMAND_SYMBOL + command;
         starttime = new Date();
-        parseCommand(src, command, channel, name, auth, true);
+        try {
+            parseCommand(src, command, channel, name, auth, true);
+        } catch (e) {
+            sys.sendHtmlOwner(helpers.bot(bots.command) + "An error occurred while executing /time " + command + ": " + e);
+        }
         runtime = new Date() - starttime;
         sys.sendHtmlMessage(src, helpers.bot(bots.script) + "The runtime of '" + command + "' was " + runtime + " milliseconds.", channel);
     }
@@ -1159,10 +1170,14 @@ ownercommands = {
         + "<b>Name:</b> " + sys.getServerName() + "<br>"
         + "<b>Host OS:</b> " + helpers.os(sys.os()) + "<br>"
         + "<b>Version:</b> " + sys.serverVersion() + "<br>"
-        + "<b>IP:</b> " + hostIp + "<br>"
-        + "<b>Hosted from:</b> " + (hostCountry ? FLAGS[helpers.toFlagKey(hostCountry)] + " " + hostCountry : "[no data]") + "<br>"
-        + "<b>" + (ports == 1 ? "Port" : "Ports") + ":</b> " + sys.serverPorts().join(", ") + "<br>"
+        + "<b>IP:</b> " + hostIp + "<br>";
+        if (API_KEY !== "") {
+            commandsmessage += "<b>Hosted from:</b> " + (hostCountry ? FLAGS[helpers.toFlagKey(hostCountry)] +
+            " " + hostCountry : "[no data]") + "<br>";
+        }
+        commandsmessage += "<b>" + (ports == 1 ? "Port" : "Ports") + ":</b> " + sys.serverPorts().join(", ") + "<br>"
         + "<b>" + (proxies == 1 ? "Proxy" : "Proxies") + ":</b> " + sys.proxyServers().join(", ") + "<br>"
+        + "<b>Plugins:</b> " + sys.listPlugins().join(", ") + "<br>"
         + "<b>Public:</b> " + serverprivate + "<br>"
         + "<b>Open:</b> " + serveropen + "<br>"
         + "<br>" + "<b>Local Date:</b> " + date + "<br>"
@@ -1390,22 +1405,22 @@ ownercommands = {
             cusercommands.registerthis(src, sys.channelId(permchannels[i]), ["registerthis"]);
             cownercommands.perm(src, sys.channelId(permchannels[i]), ["perm"]);
         }
-        cmodcommands.cclose(src, sys.channelId(permchannels[0]), ["cclose", 1]);
-        cownercommands.priv(src, sys.channelId(permchannels[0]), ["priv"]);
-        cmodcommands.cclose(src, sys.channelId(permchannels[1]), ["cclose", 1]);
-        cmodcommands.cclose(src, sys.channelId(permchannels[2]), ["cclose", 3]);
-        cownercommands.priv(src, sys.channelId(permchannels[2]), ["priv"]);
-        if (helpers.isLoaded("party.js")) {
-            cownercommands.priv(src, sys.channelId(permchannels[3]), ["priv"]);
+        cmodcommands.cclose(src, watch, ["cclose", 1]);
+        cownercommands.priv(src, watch, ["priv"]);
+        cmodcommands.cclose(src, authchannel, ["cclose", 1]);
+        cmodcommands.cclose(src, ownerchannel, ["cclose", 3]);
+        cownercommands.priv(src, ownerchannel, ["priv"]);
+        if (pluginLoaded["party.js"]) {
+            cownercommands.priv(src, partychannel, ["priv"]);
         }
-        if (helpers.isLoaded("rr.js")) {
-            cownercommands.priv(src, sys.channelId(permchannels[4]), ["priv"]);
+        if (pluginLoaded["rr.js"]) {
+            cownercommands.priv(src, roulettechannel, ["priv"]);
         }
-        if (helpers.isLoaded("roulette.js")) {
-            cownercommands.priv(src, sys.channelId(permchannels[5]), ["priv"]);
+        if (pluginLoaded["roulette.js"]) {
+            cownercommands.priv(src, rrchannel, ["priv"]);
         }
-        if (helpers.isLoaded("safari.js")) {
-            cownercommands.priv(src, sys.channelId(permchannels[6]), ["priv"]);
+        if (pluginLoaded["safari.js"]) {
+            cownercommands.priv(src, safarichannel, ["priv"]);
         }
         helpers.saveData("regchannels");
         sys.sendHtmlMessage(src, helpers.bot(bots.main) + "All permanent channels have been registered successfully and have been given their default settings.", channel);
@@ -1425,17 +1440,17 @@ ownercommands = {
         for (var i in permchannels) {
             cownercommands.unregisterthis(src, sys.channelId(permchannels[i]), ["unregisterthis"]);
         }
-        if (helpers.isLoaded("party.js")) {
-            cownercommands.unregisterthis(src, sys.channelId(permchannels[3]), ["unregisterthis"]);
+        if (pluginLoaded["party.js"]) {
+            cownercommands.unregisterthis(src, sys.channelId(sys.channel(partychannel)), ["unregisterthis"]);
         }
-        if (helpers.isLoaded("rr.js")) {
-            cownercommands.unregisterthis(src, sys.channelId(permchannels[4]), ["unregisterthis"]);
+        if (pluginLoaded["rr.js"]) {
+            cownercommands.unregisterthis(src, sys.channelId(sys.channel(roulettechannel)), ["unregisterthis"]);
         }
-        if (helpers.isLoaded("roulette.js")) {
-            cownercommands.unregisterthis(src, sys.channelId(permchannels[5]), ["unregisterthis"]);
+        if (pluginLoaded["roulette.js"]) {
+            cownercommands.unregisterthis(src, sys.channelId(sys.channel(rrchannel)), ["unregisterthis"]);
         }
-        if (helpers.isLoaded("safari.js")) {
-            cownercommands.unregisterthis(src, sys.channelId(permchannels[6]), ["unregisterthis"]);
+        if (pluginLoaded["safari.js"]) {
+            cownercommands.unregisterthis(src, sys.channelId(sys.channel(safarichannel)), ["unregisterthis"]);
         }
         helpers.saveData("regchannels");
         sys.sendHtmlMessage(src, helpers.bot(bots.main) + "All permanent channels have been unregistered successfully.", channel);
