@@ -39,7 +39,7 @@ mutedOrSilenced = function (src, channel, command, name, auth, message) {
     }
 };
 
-userCommand = function (src, channel, command, lower, name, auth, message) {
+userCommand = function (src, channel, command, lower, name, auth, cauth, message) {
     if (usercommands[lower] !== undefined) {
         if (helpers.isMutable(usercommands[lower]) && mutedOrSilenced(src, channel, command, name, auth, message)) {
             return 1;
@@ -50,7 +50,7 @@ userCommand = function (src, channel, command, lower, name, auth, message) {
     return 0;
 };
 
-channelUserCommand = function (src, channel, command, lower, name, auth, message) {
+channelUserCommand = function (src, channel, command, lower, name, auth, cauth, message) {
     if (cusercommands[lower] !== undefined) {
         if (helpers.isMutable(cusercommands[lower]) && mutedOrSilenced(src, channel, command, name, auth, message)) {
             return 1;
@@ -61,7 +61,7 @@ channelUserCommand = function (src, channel, command, lower, name, auth, message
     return 0;
 };
 
-bigtextCommand = function (src, channel, command, lower, name, auth, message) {
+bigtextCommand = function (src, channel, command, lower, name, auth, cauth, message) {
     if (pluginLoaded["funcmds.js"] && bigtexts[lower] !== undefined) {
         if (mutedOrSilenced(src, channel, command, name, auth)) {
             return 1;
@@ -72,7 +72,7 @@ bigtextCommand = function (src, channel, command, lower, name, auth, message) {
     return 0;
 };
 
-funCommand = function (src, channel, command, lower, name, auth, message) {
+funCommand = function (src, channel, command, lower, name, auth, cauth, message) {
     if (pluginLoaded["funcmds.js"] && funcommands[lower] !== undefined) {
         if (helpers.isMutable(funcommands[lower]) && mutedOrSilenced(src, channel, command, name, auth, message)) {
             return 1;
@@ -83,7 +83,7 @@ funCommand = function (src, channel, command, lower, name, auth, message) {
     return 0;
 };
 
-partyCommand = function (src, channel, command, lower, name, auth, message) {
+partyCommand = function (src, channel, command, lower, name, auth, cauth, message) {
     if (pluginLoaded["party.js"] && partycommands[lower] !== undefined) {
         if (channel != partychannel) {
             helpers.starfox(src, channel, command, bots.party, "Error 403, this command is meant to be used in " +
@@ -97,7 +97,7 @@ partyCommand = function (src, channel, command, lower, name, auth, message) {
     return 0;
 };
 
-rouletteCommand = function (src, channel, command, lower, name, auth, message) {
+rouletteCommand = function (src, channel, command, lower, name, auth, cauth, message) {
     if (pluginLoaded["roulette.js"] && roulettecommands[lower] !== undefined) {
         if (channel != roulettechannel) {
             helpers.starfox(src, channel, command, bots.roulette, "Error 403, this command is meant to be used in " +
@@ -111,7 +111,7 @@ rouletteCommand = function (src, channel, command, lower, name, auth, message) {
     return 0;
 };
 
-russianRouletteCommand = function (src, channel, command, lower, name, auth, message) {
+russianRouletteCommand = function (src, channel, command, lower, name, auth, cauth, message) {
     if (pluginLoaded["rr.js"] && rrcommands[lower] !== undefined) {
         if (channel != rrchannel) {
             helpers.starfox(src, channel, command, bots.rr, "Error 403, this command is meant to be used in the " +
@@ -125,7 +125,7 @@ russianRouletteCommand = function (src, channel, command, lower, name, auth, mes
     return 0;
 };
 
-safariCommand = function (src, channel, command, lower, name, auth, message) {
+safariCommand = function (src, channel, command, lower, name, auth, cauth, message) {
     if (pluginLoaded["safari.js"] && safaricommands[lower] !== undefined) {
         if (channel != safarichannel) {
             helpers.starfox(src, channel, command, bots.roulette, "Error 403, this command is meant to be used in " +
@@ -139,7 +139,7 @@ safariCommand = function (src, channel, command, lower, name, auth, message) {
     return 0;
 };
 
-mafiaCommand = function (src, channel, command, lower, name, auth, message) {
+mafiaCommand = function (src, channel, command, lower, name, auth, cauth, message) {
     if (pluginLoaded["mafia.js"] && mafiacommands[lower] !== undefined) {
         if (channel != mafiachannel) {
             helpers.starfox(src, channel, command, bots.mafia, "Error 403, this command is meant to be used in " +
@@ -192,7 +192,7 @@ channelOwnerCommand = function (src, channel, command, lower, name, auth, cauth,
     return 0;
 };
 
-modCommand = function (src, channel, command, lower, name, auth, message) {
+modCommand = function (src, channel, command, lower, name, auth, cauth, message) {
     if (modcommands[lower] !== undefined) {
         if (auth < 1) {
             helpers.starfox(src, channel, command, bots.starfox, noPermissionMessage.replace(/~Player~/, name));
@@ -205,7 +205,7 @@ modCommand = function (src, channel, command, lower, name, auth, message) {
     return 0;
 };
 
-adminCommand = function (src, channel, command, lower, name, auth, message) {
+adminCommand = function (src, channel, command, lower, name, auth, cauth, message) {
     if (admincommands[lower] !== undefined) {
         if (auth < 2) {
             helpers.starfox(src, channel, command, bots.starfox, noPermissionMessage.replace(/~Player~/, name));
@@ -218,7 +218,7 @@ adminCommand = function (src, channel, command, lower, name, auth, message) {
     return 0;
 };
 
-ownerCommand = function (src, channel, command, lower, name, auth, message) {
+ownerCommand = function (src, channel, command, lower, name, auth, cauth, message) {
     if (ownercommands[lower] !== undefined) {
         if (auth < 3) {
             helpers.starfox(src, channel, command, bots.starfox, noPermissionMessage.replace(/~Player~/, name));
@@ -235,7 +235,7 @@ executeCommand = function (src, channel, command, name, lower, auth, cauth, mess
     var commands = ["user", "channelUser", "bigtext", "fun", "party", "roulette", "russianRoulette", "safari",
     "mafia", "channelMod", "channelAdmin", "channelOwner", "mod", "admin", "owner"], done = 0, i;
     for (i in commands) {
-        done = global[commands[i] + "Command"](src, channel, command, lower, name, auth, message);
+        done = global[commands[i] + "Command"](src, channel, command, lower, name, auth, cauth, message);
         if (done > 0) { // 0 = not found, 1 = starfox/mute, 2 = done
             break;
         }

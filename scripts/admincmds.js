@@ -1574,17 +1574,17 @@ admincommands = {
         --------------
     **/
     colorsettings: function (src, channel, command) {
-        var commandsmessage = border
-        + "<h2>Administrator Commands ~ " + helpers.cap(command[0].slice(0, -8)) + " Settings</h2>"
+        var spelling = command[0].slice(0, -8), commandsmessage = border
+        + "<h2>Administrator Commands ~ " + helpers.cap(spelling) + " Settings</h2>"
         + "<br>"
-        + "Current colorings:<br>"
+        + "Current " + spelling + "ings:<br>"
         + "<br>"
-        + "<b>Border " + command[0].slice(0, -8) + ":</b> " + borderColor + "<br>"
-        + "<b>Server topic " + command[0].slice(0, -8) + ":</b> " + serverTopicColor + "<br>"
-        + "<b>Channel topic " + command[0].slice(0, -8) + ":</b> " + channelTopicColor + "<br>"
-        + "<b>Command " + command[0].slice(0, -8) + "s:</b> " + cmdcolors.join(", ") + "<br>"
+        + "<b>Border " + spelling + ":</b> " + borderColor + "<br>"
+        + "<b>Server topic " + spelling + ":</b> " + serverTopicColor + "<br>"
+        + "<b>Channel topic " + spelling + ":</b> " + channelTopicColor + "<br>"
+        + "<b>Command " + spelling + "s:</b> " + cmdcolors.join(", ") + "<br>"
         + "<br>"
-        + "Use <b>" + helpers.user("/bordercolor ") + helpers.arg("color") + "</b> to change the border color to <b>color</b>. If <b>color</b> is 'none', removes the borders entirely. Also /bordercolour.<br>"
+        + "Use <b>" + helpers.user("/bordercolor ") + helpers.arg("color") + "</b> to change the command border color to <b>color</b>. If <b>color</b> is 'none', removes the borders entirely. Also /bordercolour.<br>"
         + "Use <b>" + helpers.user("/servertopiccolor ") + helpers.arg("color") + "</b> to change the color of 'Server Topic' in the server topic message to to <b>color</b>. Also /servertopiccolour.<br>"
         + "Use <b>" + helpers.user("/channeltopiccolor ") + helpers.arg("color") + "</b> to change the color of 'Channel Topic' in the channel topic message to to <b>color</b>. Also /channeltopiccolour.<br>"
         + "Use <b>" + helpers.user("/commandcolor ") + helpers.arg("number") + helpers.arg2("*color") + "</b> to change command color <b>number</b> to <b>color</b>.<br>"
@@ -1641,18 +1641,19 @@ admincommands = {
     ,
 
     servertopiccolor: function (src, channel, command) {
-        var name = sys.name(src), color = command[1];
+        var name = sys.name(src), spelling = command[0].slice(11), color = command[1];
         if (!color) {
-            helpers.starfox(src, channel, command, bots.command, "Error 404, " + command[0].slice(11) + " not found.");
+            helpers.starfox(src, channel, command, bots.command, "Error 404, " + spelling + " not found.");
             return;
         }
         if (!sys.validColor(color)) {
-            helpers.starfox(src, channel, command, bots.command, "Error 403, invalid " + command[0].slice(11) + ".");
+            helpers.starfox(src, channel, command, bots.command, "Error 403, invalid " + spelling + ".");
             return;
         }
         serverTopicColor = sys.hexColor(color);
         helpers.saveData("serverTopicColor");
-        sys.sendHtmlAuths(helpers.bot(bots.main) + "The server topic " + command[0].slice(11) + " has been changed to " + color + " by " + name + ".", channel);
+        sys.sendHtmlAuths(helpers.bot(bots.main) + "The server topic " + spelling +
+        " has been changed to " + color + " by " + name + ".", channel);
     }
 
     ,
@@ -1664,18 +1665,19 @@ admincommands = {
     ,
 
     channeltopiccolor: function (src, channel, command) {
-        var name = sys.name(src), color = command[1];
+        var name = sys.name(src), spelling = command[0].slice(12), color = command[1];
         if (!color) {
-            helpers.starfox(src, channel, command, bots.command, "Error 404, " + command[0].slice(12) + " not found.");
+            helpers.starfox(src, channel, command, bots.command, "Error 404, " + spelling + " not found.");
             return;
         }
         if (!sys.validColor(color)) {
-            helpers.starfox(src, channel, command, bots.command, "Error 403, invalid " + command[0].slice(12) + ".");
+            helpers.starfox(src, channel, command, bots.command, "Error 403, invalid " + spelling + ".");
             return;
         }
         channelTopicColor = sys.hexColor(color);
         helpers.saveData("channelTopicColor");
-        sys.sendHtmlAuths(helpers.bot(bots.main) + "The channel topic " + command[0].slice(12) + " has been changed to " + color + " by " + name + ".", channel);
+        sys.sendHtmlAuths(helpers.bot(bots.main) + "The channel topic " + spelling +
+        " has been changed to " + color + " by " + name + ".", channel);
     }
 
     ,
@@ -1687,7 +1689,7 @@ admincommands = {
     ,
 
     commandcolor: function (src, channel, command) {
-        var name = sys.name(src);
+        var name = sys.name(src), spelling = command[0].slice(7);
         if (!command[1]) {
             helpers.starfox(src, channel, command, bots.command, "Error 404, number not found.");
             return;
@@ -1697,16 +1699,17 @@ admincommands = {
             return;
         }
         if (!command[2]) {
-            helpers.starfox(src, channel, command, bots.command, "Error 404, " + command[0].slice(7) + " not found.");
+            helpers.starfox(src, channel, command, bots.command, "Error 404, " + spelling + " not found.");
             return;
         }
         if (!sys.validColor(command[2])) {
-            helpers.starfox(src, channel, command, bots.command, "Error 403, invalid " + command[0].slice(7) + ".");
+            helpers.starfox(src, channel, command, bots.command, "Error 403, invalid " + spelling + ".");
             return;
         }
         cmdcolors[command[1]] = sys.hexColor(command[2]);
         helpers.saveData("cmdcolors");
-        sys.sendHtmlAuths(helpers.bot(bots.main) + "Command " + command[0].slice(7) + " " + command[1] + " has been changed to " + command[2] + " by " + name + ".", channel);
+        sys.sendHtmlAuths(helpers.bot(bots.main) + "Command " + spelling + " " + command[1] +
+        " has been changed to " + command[2] + " by " + name + ".", channel);
     }
 
     ,

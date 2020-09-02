@@ -16,15 +16,16 @@ usercommands = {
         -------------
     **/
     commands: function (src, channel, command) {
-        var lower = sys.name(src).toLowerCase(), auth = sys.auth(src), commandsmessage = border + "<h2>Commands</h2><br>" +
+        var name = players[src].name, auth = sys.auth(src), cauth = helpers.cauth(name, channel),
+            commandsmessage = border + "<h2>Commands</h2><br>" +
         "<b>" + helpers.userl("/usercommands") + "</b>: displays user commands.<br>";
         commandsmessage += (auth >= 1 ? "<b>" + helpers.userl("/modcommands") + "</b>: displays moderator commands.<br>" : "");
         commandsmessage += (auth >= 2 ? "<b>" + helpers.userl("/admincommands") + "</b>: displays administrator commands.<br>" : "");
         commandsmessage += (auth >= 3 ? "<b>" + helpers.userl("/ownercommands") + "</b>: displays owner commands.<br>" : "");
         commandsmessage += "<b>" + helpers.userl("/cusercommands") + "</b>: displays channel user commands.<br>";
-        commandsmessage += (helpers.cauth(lower, channel) >= 1 ? "<b>" + helpers.userl("/cmodcommands") + "</b>: displays channel moderator commands.<br>" : "");
-        commandsmessage += (helpers.cauth(lower, channel) >= 2 ? "<b>" + helpers.userl("/cadmincommands") + "</b>: displays channel administrator commands.<br>" : "");
-        commandsmessage += (helpers.cauth(lower, channel) >= 3 ? "<b>" + helpers.userl("/cownercommands") + "</b>: displays channel owner commands.<br>" : "");
+        commandsmessage += (cauth >= 1 ? "<b>" + helpers.userl("/cmodcommands") + "</b>: displays channel moderator commands.<br>" : "");
+        commandsmessage += (cauth >= 2 ? "<b>" + helpers.userl("/cadmincommands") + "</b>: displays channel administrator commands.<br>" : "");
+        commandsmessage += (cauth >= 3 ? "<b>" + helpers.userl("/cownercommands") + "</b>: displays channel owner commands.<br>" : "");
         if (pluginLoaded["funcmds.js"] || pluginLoaded["party.js"] || pluginLoaded["rr.js"] || pluginLoaded["roulette.js"] || pluginLoaded["safari.js"] || pluginLoaded["mafia.js"]) {
             commandsmessage += "<br>";
         }
