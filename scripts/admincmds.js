@@ -2,7 +2,7 @@
 /*
     ----------------------------------------------
     FUN COMMUNITY ADMIN COMMANDS admincmds.js
-     - by Maribel Hearn, 2012-2015
+     - by Maribel Hearn, 2012-2020
 
     This file contains commands that can be
     run by administrators.
@@ -75,10 +75,6 @@ admincommands = {
             return;
         }
         var lower = trgtname.toLowerCase();
-        if (helpers.muteCheck(name)) {
-            helpers.muteMessage(src, channel);
-            return;
-        }
         if (sys.dbIp(trgtname) === undefined) {
             helpers.starfox(src, channel, command, bots.ban, "Error 400, you can't ban " + trgtname + " because they do not exist in the database.");
             return;
@@ -187,10 +183,6 @@ admincommands = {
 
     ipban: function (src, channel, command) {
         var name = sys.name(src), trgtip = command[1], reason = command[2], auth = sys.auth(src), aliases;
-        if (helpers.muteCheck(name)) {
-            helpers.muteMessage(src, channel);
-            return;
-        }
         if (!trgtip) {
             helpers.starfox(src, channel, command, bots.ban, "Error 404, IP not found.");
             return;
@@ -1002,7 +994,7 @@ admincommands = {
             helpers.starfox(src, channel, command, bots.command, "Error 404, text not found.", channel);
             return;
         }
-        if (term.length < 2) {
+        if (term.length < 2 && sys.dbAll().length > DBSEARCH_THRESHOLD) {
             helpers.starfox(src, channel, command, bots.command, "Error 403, invalid text. Looking for one specific character can cause a lot of lag, so you must specify more.");
             return;
         }

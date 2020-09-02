@@ -14,24 +14,7 @@
 */
 
 helpers = {
-    initData: function () {
-        sys.mkdir("data");
-
-        // Booleans
-        sys.write(DATA_FOLDER + "open.txt", "true");
-
-        // Numbers
-        sys.write(DATA_FOLDER + "allowance.txt", 8);
-        sys.write(DATA_FOLDER + "floodtime.txt", 10);
-        sys.write(DATA_FOLDER + "floodlevel.txt", 1);
-        sys.write(DATA_FOLDER + "maxplayers.txt", 0);
-        sys.write(DATA_FOLDER + "updatefrequency.txt", 3600);
-
-        // Strings
-        sys.write(DATA_FOLDER + "API_KEY.txt", "");
-        sys.write(DATA_FOLDER + "GOOGLE_KEY.txt", "");
-        sys.write(DATA_FOLDER + "UPDATE_KEY.txt", "");
-        sys.write(DATA_FOLDER + "latestshahash.txt", "");
+    initCustoms: function () {
         sys.write(DATA_FOLDER + "botcolor.txt", "#318739");
         sys.write(DATA_FOLDER + "botsymbol.txt", "±");
         sys.write(DATA_FOLDER + "servertopic.txt", "Welcome to " + sys.getServerName() + "!");
@@ -44,10 +27,43 @@ helpers = {
         sys.write(DATA_FOLDER + "channelwelcomemessage.txt", "Please welcome ~Player~ to ~Channel~!");
         sys.write(DATA_FOLDER + "channelleavemessage.txt", "~Player~ has left ~Channel~!");
         sys.write(DATA_FOLDER + "nopermissionmessage.txt", "Can't let you do that, Star ~Player~!");
-
-        // Arrays
-        sys.write(DATA_FOLDER + "allowed.txt", '["127.0.0.1"]');
         sys.write(DATA_FOLDER + "cmdcolors.txt", '["#4169E1","#008000","#FF0000","#FFA500","#FFD700","#0000FF"]');
+        sys.write(DATA_FOLDER + "listcolors.txt", '{"mute":"#1E90FF","ban":"#FF6900","rangeban":"#008000","megaban":"#800080","gigaban":"#AA0000"}');
+        sys.write(DATA_FOLDER + "bots.txt", '{"attack":"AttackBot","armyof":"ArmyBot","auth":"AuthBot","ban":"BanBot",' +
+        '"battle":"BattleBot","caps":"CapsBot","channel":"ChannelBot","clear":"ClearBot","command":"CommandBot",' +
+        '"cow":"Miltank","flood":"FloodBot","fun":"FunBot","gigaban":"GigabanBot","idle":"IdleBot","kick":"KickBot",' +
+        '"main":"Bot","megaban":"MegabanBot","mute":"MuteBot","name":"NameBot","party":"PartyBot","pass":"PassBot",' +
+        '"priv":"PrivacyBot","reverse":"ReverseBot","rr":"RussiaBot","russia":"RussiaBot","safari":"SafariBot",' +
+        '"script":"ScriptBot","silence":"SilenceBot","spy":"WatchBot","starfox":"Wolf","status":"StatusBot",' +
+        '"tour":"TourBot","topic":"TopicBot","warn":"WarnBot","welcome":"WelcomeBot","roulette": "RouletteBot"}');
+        sys.write(DATA_FOLDER + "authtitles.txt", "{}");
+        sys.write(DATA_FOLDER + "selfkickmessages.txt", "{}");
+        sys.write(DATA_FOLDER + "kickmessages.txt", "{}");
+        sys.write(DATA_FOLDER + "mutemessages.txt", "{}");
+        sys.write(DATA_FOLDER + "banmessages.txt", "{}");
+        sys.write(DATA_FOLDER + "rangebanmessages.txt", "{}");
+        if (pluginLoaded["funcmds.js"]) {
+            sys.write(DATA_FOLDER + "bigtexts.txt", "{}");
+        } else {
+            sys.rm(DATA_FOLDER + "bigtexts.txt");
+        }
+    }
+
+    ,
+
+    initData: function () {
+        sys.mkdir("data");
+        sys.write(DATA_FOLDER + "open.txt", "true");
+        sys.write(DATA_FOLDER + "allowance.txt", 8);
+        sys.write(DATA_FOLDER + "floodtime.txt", 10);
+        sys.write(DATA_FOLDER + "floodlevel.txt", 1);
+        sys.write(DATA_FOLDER + "maxplayers.txt", 0);
+        sys.write(DATA_FOLDER + "updatefrequency.txt", 3600);
+        sys.write(DATA_FOLDER + "API_KEY.txt", "");
+        sys.write(DATA_FOLDER + "GOOGLE_KEY.txt", "");
+        sys.write(DATA_FOLDER + "UPDATE_KEY.txt", "");
+        sys.write(DATA_FOLDER + "latestshahash.txt", "");
+        sys.write(DATA_FOLDER + "allowed.txt", '["127.0.0.1"]');
         sys.write(DATA_FOLDER + "exceptions.txt", "[]");
         sys.write(DATA_FOLDER + "permchannels.txt", '["Watch","Auth Channel","Owner Channel"]');
         sys.write(DATA_FOLDER + "allowedrange.txt", '["192.168"]');
@@ -59,14 +75,6 @@ helpers = {
         sys.write(DATA_FOLDER + "bansites.txt", sys.read("bansites.txt"));
         sys.rm("proxy_list.txt");
         sys.rm("bansites.txt");
-
-        // Objects
-        sys.write(DATA_FOLDER + "bots.txt", '{"attack":"AttackBot","armyof":"ArmyBot","auth":"AuthBot","ban":"BanBot","battle":"BattleBot","caps":"CapsBot","channel":"ChannelBot",' +
-        '"clear":"ClearBot","command":"CommandBot","cow":"Miltank","flood":"FloodBot","fun":"FunBot","gigaban":"GigabanBot","idle":"IdleBot","kick":"KickBot",' +
-        '"main":"Bot","megaban":"MegabanBot","mute":"MuteBot","name":"NameBot","party":"PartyBot","pass":"PassBot",' +
-        '"priv":"PrivacyBot","reverse":"ReverseBot","rr":"RussiaBot","russia":"RussiaBot","safari":"SafariBot","script":"ScriptBot","silence":"SilenceBot",' +
-        '"spy":"WatchBot","starfox":"Wolf","status":"StatusBot","tour":"TourBot","topic":"TopicBot","warn":"WarnBot","welcome":"WelcomeBot",' +
-        '"roulette": "RouletteBot"}');
         sys.write(DATA_FOLDER + "rules.txt", '{"rules":["No spamming (including challenge spamming), trolling, flaming, bashing or advertising.",' +
         '"No abusing commands or auth powers.","Do not talk about inappropriate or obscene subjects, nor mention words that refer to such.",' +
         '"No asking for auth.","Do not attempt to circumvent the rules."],' +
@@ -75,28 +83,18 @@ helpers = {
         '"Anything inappropriate or obscene will result in a mute, or ban after multiple occasions.",' +
         '"You may get auth when recognized for coming on a lot, chat activity, good behaviour and maybe even contribution. Asking for it will not get you any further.",' +
         '"Taking the rules too literally is no use when you know you are supposed to be punished anyway. Do not try to find loopholes in the rules, it will result in even more punishment."]}');
-        sys.write(DATA_FOLDER + "listcolors.txt", '{"mute":"#1E90FF","ban":"#FF6900","rangeban":"#008000","megaban":"#800080","gigaban":"#AA0000"}');
         sys.write(DATA_FOLDER + "regchannels.txt", "{}");
         sys.write(DATA_FOLDER + "banlist.txt", "{}");
         sys.write(DATA_FOLDER + "mutelist.txt", "{}");
-        sys.write(DATA_FOLDER + "bigtexts.txt", "{}");
         sys.write(DATA_FOLDER + "timezone.txt", "{}");
         sys.write(DATA_FOLDER + "cityname.txt", "{}");
         sys.write(DATA_FOLDER + "versions.txt", "{}");
         sys.write(DATA_FOLDER + "members.txt", "{}");
-        sys.write(DATA_FOLDER + "banmessages.txt", "{}");
         sys.write(DATA_FOLDER + "operatingsystem.txt", "{}");
-        sys.write(DATA_FOLDER + "kickmessages.txt", "{}");
-        sys.write(DATA_FOLDER + "mutemessages.txt", "{}");
-        sys.write(DATA_FOLDER + "authtitles.txt", "{}");
         sys.write(DATA_FOLDER + "megabanlist.txt", "{}");
         sys.write(DATA_FOLDER + "gigabanlist.txt", "{}");
         sys.write(DATA_FOLDER + "countryname.txt", "{}");
         sys.write(DATA_FOLDER + "rangebanlist.txt", "{}");
-        sys.write(DATA_FOLDER + "selfkickmessages.txt", "{}");
-        sys.write(DATA_FOLDER + "rangebanmessages.txt", "{}");
-
-        // Plugins
         permchannels = ["Watch","Auth Channel","Owner Channel"];
         if (pluginLoaded["party.js"]) {
             permchannels.push("Party");
@@ -114,6 +112,38 @@ helpers = {
             permchannels.push("Safari");
             sys.write(DATA_FOLDER + "permchannels.txt", JSON.stringify(permchannels));
         }
+    }
+
+    ,
+
+    initCustomGlobals: function () {
+        botcolor = helpers.readData("botcolor");
+        botsymbol = helpers.readData("botsymbol");
+        servertopic = helpers.readData("servertopic");
+        botsymbolcolor = helpers.readData("botsymbolcolor");
+        borderColor = helpers.readData("bordercolor");
+        serverTopicColor = helpers.readData("servertopiccolor");
+        channelTopicColor = helpers.readData("channeltopiccolor");
+        welcomeMessage = helpers.readData("welcomemessage");
+        leaveMessage = helpers.readData("leavemessage");
+        channelWelcomeMessage = helpers.readData("channelwelcomemessage");
+        channelLeaveMessage = helpers.readData("channelleavemessage");
+        noPermissionMessage = helpers.readData("nopermissionmessage");
+        cmdcolors = helpers.readObject("cmdcolors");
+        listcolors = helpers.readObject("listcolors");
+        bots = helpers.readObject("bots");
+        authtitles = helpers.readObject("authtitles");
+        selfkickmessages = helpers.readObject("selfkickmessages");
+        kickmessages = helpers.readObject("kickmessages");
+        mutemessages = helpers.readObject("mutemessages");
+        banmessages = helpers.readObject("banmessages");
+        rangebanmessages = helpers.readObject("rangebanmessages");
+        helpers.setVariable("border", "<font color='" + borderColor + "'><b>" +
+        ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>></b></font>");
+        helpers.setVariable("border2", "<font color='" + borderColor + "'><b>" +
+        "&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;" +
+        "&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;" +
+        "&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;</b></font>");
     }
 
     ,
@@ -261,6 +291,12 @@ helpers = {
 
     ,
 
+    closeCheck: function (src, name, lower) {
+        return regchannels[lower].close > sys.auth(src) && regchannels[lower].close > helpers.cauth(name.toLowerCase(), sys.channelId(lower));
+    }
+
+    ,
+
     /**
         --------------
         Method Helpers
@@ -365,7 +401,7 @@ helpers = {
     **/
     originalToID: function (name) {
         for (var i in players) {
-            if (players[i].name == name.toLowerCase()) {
+            if (players[i].name.toLowerCase() == name.toLowerCase()) {
                 return i;
             }
         }

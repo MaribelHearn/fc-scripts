@@ -134,10 +134,6 @@ modcommands = {
 
     warn: function (src, channel, command) {
         var name = sys.name(src), trgtname = command[1], reason = command[2];
-        if (helpers.muteCheck(name)) {
-            helpers.muteMessage(src, channel);
-            return;
-        }
         !reason ? reason = "Unknown" : reason = helpers.escapehtml(reason);
         sys.sendHtmlAll(helpers.bot(bots.warn) + "CAUTION! " + name + " warned " + trgtname + "! [Reason: " + reason + "]", channel);
     }
@@ -148,10 +144,6 @@ modcommands = {
         var reason = command[2], name = sys.name(src), lower = name.toLowerCase(), trgtname = command[1], trgt = sys.id(trgtname), auth = sys.auth(src), msg;
         if (!trgtname) {
             helpers.starfox(src, channel, command, bots.kick, "Error 404, player not found.");
-            return;
-        }
-        if (helpers.muteCheck(name)) {
-            helpers.muteMessage(src, channel);
             return;
         }
         if (!trgt) {
@@ -168,9 +160,9 @@ modcommands = {
         }
         if (kickmessages[lower]) {
             msg = kickmessages[lower].replace(/~Self~/gi, name).replace(/~Target~/gi, sys.name(trgt)).replace(/~Server~/gi, sys.getServerName());
-            sys.sendHtmlAll(helpers.bot(bots.kick) + msg + " [Reason: " + reason + "]", 0);
+            sys.sendHtmlAll(helpers.bot(bots.kick) + msg + " [Reason: " + reason + "]");
         } else {
-            sys.sendHtmlAll(helpers.bot(bots.kick) + sys.name(trgt) + " has been kicked from the server by " + name + "! [Reason: " + reason + "]", 0);
+            sys.sendHtmlAll(helpers.bot(bots.kick) + sys.name(trgt) + " has been kicked from the server by " + name + "! [Reason: " + reason + "]");
         }
         sys.kick(trgt);
     }
@@ -188,10 +180,6 @@ modcommands = {
             srcip = sys.ip(src), trgtauth, trgtip, lower, msg;
         if (!trgtname) {
             helpers.starfox(src, channel, command, bots.mute, "Error 404, player not found.");
-            return;
-        }
-        if (helpers.muteCheck(name)) {
-            helpers.muteMessage(src, channel);
             return;
         }
         if (sys.dbIp(command[1]) === undefined) {
@@ -274,9 +262,9 @@ modcommands = {
             } else {
                 msg = mutemessages[name.toLowerCase()].replace(/~Self~/gi, name).replace(/~Target~/gi, trgtname).replace(/~Time~/gi, time + " " + unit).replace(/~Server~/gi, sys.getServerName());
             }
-            sys.sendHtmlAll(helpers.bot(bots.mute) + msg + " [Reason: " + reason + "]", channel);
+            sys.sendHtmlAll(helpers.bot(bots.mute) + msg + " [Reason: " + reason + "]");
         } else {
-            sys.sendHtmlAll(helpers.bot(bots.mute) + name + " has muted " + trgtname + (time == "forever" ? "" : " for " + time + " ") + unit + "! [Reason: " + reason + "]", channel);
+            sys.sendHtmlAll(helpers.bot(bots.mute) + name + " has muted " + trgtname + (time == "forever" ? "" : " for " + time + " ") + unit + "! [Reason: " + reason + "]");
         }
     }
 
@@ -289,30 +277,33 @@ modcommands = {
     ,
 
     unmute: function (src, channel, command) {
-        var name = sys.name(src), trgtname = command[1], trgt = sys.id(trgtname), srcip = sys.ip(src), trgtip;
-        if (!sys.dbIp(command[1])) {
+        var name = sys.name(src), srcip = sys.ip(src), trgtname = command[1], lower, trgt, trgtip;
+        if (!sys.dbIp(trgtname)) {
             helpers.starfox(src, channel, command, bots.mute, "Error 400, you can't unmute " + trgtname + " because they do not exist in the database!");
             return;
         }
-        !trgt ? trgtip = sys.dbIp(command[1]) : trgtip = sys.ip(trgt);
-        if (!helpers.muteCheck(trgtname)) {
-            helpers.starfox(src, channel, command, bots.mute, "Error 400, you can't unmute " + trgtname + " because they aren't muted!");
+        lower = trgtname.toLowerCase();
+        trgtname = (members[lower] ? members[lower] : lower);
+        if (!mutelist[lower]) {
+            helpers.starfox(src, channel, command, bots.ban, "Error 400, you can't unban " + trgtname + " because they aren't banned!");
             return;
         }
+        trgt = sys.id(lower);
+        !trgt ? trgtip = sys.dbIp(lower) : trgtip = sys.ip(trgt);
         for (var index in mutelist) {
             if (!sys.dbIp(index)) {
+                sys.sendHtmlAuths(helpers.bot(bots.mute) + player + " has been automatically unmuted because they no longer exist in the database.");
                 delete mutelist[index];
                 continue;
             }
             if (sys.dbIp(index) == trgtip) {
                 delete mutelist[index];
-            helpers.saveData("mutelist");
+                helpers.saveData("mutelist");
+                sys.sendHtmlAll(helpers.bot(bots.mute) + trgtname + " has been unmuted by " + name + "!");
+                return;
             }
         }
-        if (members[trgtname]) {
-            trgtname = members[trgtname];
-        }
-        sys.sendHtmlAll(helpers.bot(bots.mute) + trgtname + " has been unmuted by " + name + "!", channel);
+        helpers.starfox(src, channel, command, bots.mute, "Error 400, you can't unmute " + trgtname + " because they aren't muted!");
     }
 
     ,
@@ -337,6 +328,10 @@ modcommands = {
 
     mutelist: function (src, channel, command) {
         var names = [], ips = [], muters = [], reasons = [], times = [], timesLeft = [], dates = [], silences = [], mutelistmessage;
+        if (mutelist.isEmpty()) {
+            helpers.starfox(src, channel, command, bots.mute, "The mute list is currently empty.");
+            return;
+        }
         for (var i in mutelist) {
             names.push(members[i] ? members[i] : i);
             ips.push(mutelist[i].ip);
@@ -388,6 +383,10 @@ modcommands = {
 
     banlist: function (src, channel, command) {
         var names = [], ips = [], banners = [], reasons = [], times = [], timesLeft = [], dates = [], banlistmessage;
+        if (banlist.isEmpty()) {
+            helpers.starfox(src, channel, command, bots.ban, "The ban list is currently empty.");
+            return;
+        }
         for (var i in banlist) {
             names.push(members[i] ? members[i] : i);
             ips.push(banlist[i].ip);
@@ -429,6 +428,10 @@ modcommands = {
 
     rangebanlist: function (src, channel, command) {
         var names = [], ranges = [], banners = [], reasons = [], dates = [], rangebanlistmessage;
+        if (rangebanlist.isEmpty()) {
+            helpers.starfox(src, channel, command, bots.ban, "The range ban list is currently empty.");
+            return;
+        }
         for (var i in rangebanlist) {
             names.push(members[i] ? members[i] : i);
             ranges.push(rangebanlist[i].range);
@@ -466,6 +469,10 @@ modcommands = {
 
     megabanlist: function (src, channel, command) {
         var names = [], banners = [], reasons = [], dates = [], megabanlistmessage;
+        if (megabanlist.isEmpty()) {
+            helpers.starfox(src, channel, command, bots.megaban, "The mega ban list is currently empty.");
+            return;
+        }
         for (var i in megabanlist) {
             names.push(members[i] ? members[i] : i);
             banners.push(megabanlist[i].banner);
@@ -501,6 +508,10 @@ modcommands = {
 
     gigabanlist: function (src, channel, command) {
         var names = [], banners = [], reasons = [], pseudos = [], dates = [], gigabanlistmessage;
+        if (gigabanlist.isEmpty()) {
+            helpers.starfox(src, channel, command, bots.gigaban, "The giga ban list is currently empty.");
+            return;
+        }
         for (var i in gigabanlist) {
             names.push(members[i] ? members[i] : i);
             banners.push(gigabanlist[i].banner);
@@ -547,7 +558,6 @@ modcommands = {
         + "<br>"
         + "<b>" + helpers.user("/cp ") + helpers.arg("player") + "</b>: displays Control Panel and location data for <b>player</b>. Also /whois.<br>"
         + "<b>" + helpers.user("/recall ") + helpers.arg("player") + "</b>: recalls <b>player</b>'s country and time zone data. Will be erased again after one minute.<br>"
-        + "<b>" + helpers.user("/getcolor ") + helpers.arg("player") + "</b>: displays <b>player</b>'s color as hexadecimal color code. Also /getcolour.<br>"
         + "<b>" + helpers.user("/rangealts ") + helpers.arg("range") + "</b>: displays alts for <b>range</b>.<br>"
         + "<b>" + helpers.user("/lastmessages") + "</b>: Shows everyone's last 10 messages in a neat table. Also /lastmsgs or /lastposts.<br>"
         + "<b>" + helpers.user("/regchannelinfo") + "</b>: lists all registered channels and their info. Also /regchannels.<br>"
@@ -560,27 +570,38 @@ modcommands = {
     ,
 
     cp: function (src, channel, command) {
-        var DISPLAY_USER = true, cpmessage = border + "<h2>Control Panel</h2><br>", name, player, auth,
-        imageindex, status, registered, location, os, country, city, usedips, playerChannels, lastLogin,
-        timezone2, flag, version, totalAlts, index;
-        if (!command[1]) {
+        var DISPLAY_USER = true, cpmessage = border + "<h2>Control Panel</h2><br>", trgtname = command[1],
+        player, id, exists, name, auth, imageindex, status, registered, location, os, country, city,
+        lower, usedips, playerChannels, lastLogin, timezone2, flag, version, totalAlts, index;
+        if (!trgtname) {
             helpers.starfox(src, channel, command, bots.command, "Error 404, player not found.", channel);
             return;
         }
-        player = command[1].toLowerCase();
-        members[player] ? name = members[player].name : name = player;
-        if (!sys.dbIp(player)) {
+        id = sys.id(trgtname);
+        exists = sys.dbExists(trgtname);
+        lower = trgtname.toLowerCase();
+        members[lower] ? name = members[lower] : name = lower;
+        if (!exists && !id) {
             helpers.starfox(src, channel, command, bots.command, "Error 400, you can't cp " + name + " because they do not exist in the database.");
             return;
         }
-        ip = sys.dbIp(player);
-        range = sys.dbRange(player);
-        id = sys.id(player);
+        if (id && player != players[id].name) {
+            name = players[id].name;
+        } else if (!id) {
+            id = helpers.originalToID(lower);
+            if (id) {
+                trgtname = sys.name(src);
+                lower = trgtname.toLowerCase();
+            }
+        }
+        player = name.toLowerCase();
         alts = sys.aliases(ip);
         totalAlts = alts.length;
+        sys.sendMessage(src, "id = " + id + ", player = " + player + ", name = " + name + ", lower = " + lower + ", trgtname = " + trgtname);
         if (id) {
-            auth = sys.auth(id);
             ip = sys.ip(id);
+            auth = sys.auth(id);
+            range = sys.range(id);
             imageindex = (auth > 3 ? 0 : auth);
             if (sys.battling(id)) {
                 imageindex += 8;
@@ -594,7 +615,9 @@ modcommands = {
             }
             playerChannels = playerChannels.join(", ");
         } else {
+            ip = sys.dbIp(player);
             auth = sys.dbAuth(player);
+            range = sys.dbRange(player);
             imageindex = (auth > 3 ? 0 : auth) + 4;
             status = "<font color='red'>Offline</font>";
             playerChannels = "None";
@@ -605,12 +628,12 @@ modcommands = {
             }
         }
         for (index in banlist) {
-            if (index == ip) {
+            if (index == player || index == ip) {
                 status += " [Banned]";
             }
         }
         for (index in rangebanlist) {
-            if (index == range) {
+            if (index == player || index == range) {
                 status += " [Range Banned]";
             }
         }
@@ -624,7 +647,7 @@ modcommands = {
                 status += " [Giga Banned]";
             }
         }
-        lastLogin = helpers.formatLastOn(src, sys.dbLastOn(player));
+        lastLogin = helpers.formatLastOn(src, sys.dbLastOn(sys.dbExists(player) ? player : name));
         if (operatingsystem[player]) {
             os = (helpers.isAndroid(src) ? helpers.osName(operatingsystem[player]) : helpers.os(operatingsystem[player]));
         } else {
@@ -647,8 +670,9 @@ modcommands = {
             player = members[player];
         }
         !cityname[player.toLowerCase()] ? city = "[no data]" : city = cityname[player.toLowerCase()];
-        cpmessage += (!helpers.isAndroid(src) ? helpers.authimage(src, imageindex) + " " : "") + player + " " + status +
-        "<br><b>Auth:</b> " + helpers.authName(sys.dbAuth(player), DISPLAY_USER);
+        cpmessage += (!helpers.isAndroid(src) ? helpers.authimage(src, imageindex) +
+        " " : "") + player + " " + (id && players[id].name != lower ? " (" + lower + ")" : "") + " " + status +
+        "<br><b>Auth:</b> " + helpers.authName(auth, DISPLAY_USER);
         if (city == "[no data]") {
             cpmessage += "<br><b>IP:</b> " + ip;
         } else {
@@ -677,6 +701,10 @@ modcommands = {
     ,
 
     recall: function (src, channel, command) {
+        if (API_KEY === "") {
+            helpers.starfox(src, channel, command, bots.command, "Error 400, this command is currently disabled.");
+            return;
+        }
         if (!command[1]) {
             helpers.starfox(src, channel, command, bots.command, "Error 404, player not found.");
             return;
@@ -684,10 +712,6 @@ modcommands = {
         var player = command[1].toLowerCase();
         if (!sys.dbIp(player)) {
             helpers.starfox(src, channel, command, bots.command, "Error 400, you can't recall " + player + "'s data because they don't exist in the database!");
-            return;
-        }
-        if (API_KEY === "") {
-            helpers.starfox(src, channel, command, bots.command, "Error 404, API key not found. See the readme file for help.");
             return;
         }
         var ip = sys.dbIp(player);
@@ -715,29 +739,6 @@ modcommands = {
                 }, 60000, 0);
             }
         });
-    }
-
-    ,
-
-    getcolor: function (src, channel, command) {
-        var trgtname = command[1], trgt;
-        if (!trgtname) {
-            helpers.starfox(src, channel, command, bots.command, "Error 404, player not found.");
-            return;
-        }
-        trgt = sys.id(trgtname);
-        if (!trgt) {
-            helpers.starfox(src, channel, command, bots.command, "Error 400, that player is not currently online!");
-            return;
-        }
-        trgtname = sys.name(trgt);
-        sys.sendHtmlMessage(src, helpers.bot(bots.command) + trgtname + "'s " + command[0].slice(3) + " is " + helpers.color(trgt) + ".", channel);
-    }
-
-    ,
-
-    getcolour: function (src, channel, command) {
-        this.getcolor(src, channel, command);
     }
 
     ,
@@ -907,7 +908,7 @@ modcommands = {
         + "<b>" + helpers.user("/changename ") + helpers.arg("player") + helpers.arg2("*name") + "</b>: changes <b>player</b>'s name to <b>name</b>.<br>"
         + "<b>" + helpers.user("/ify ") + helpers.arg("front/behind/replace") + helpers.arg2("*text") + helpers.arg3("*self") + "</b>: puts <b>text</b> in front or behind everyone else's names,"
         + " or replaces the names by <b>text</b> with a number. If <b>self</b> is specified, the command affects yourself as well.<br>"
-        + "<b>" + helpers.user("/resetall") + "</b>: sets all players' usernames back to their original states.<br>"
+        + "<b>" + helpers.user("/resetall") + "</b>: sets all players' usernames and colors back to their original states.<br>"
         + "<br><timestamp/><br>"
         + border2;
         sys.sendHtmlMessage(src, commandsmessage, channel);
@@ -917,10 +918,6 @@ modcommands = {
 
     changename: function (src, channel, command) {
         var name = sys.name(src), auth = sys.auth(src);
-        if (helpers.muteCheck(name)) {
-            helpers.muteMessage(src, channel);
-            return;
-        }
         if (regchannels[sys.channel(channel).toLowerCase()].silence > auth) {
             helpers.silenceMessage(src, channel);
             return;
@@ -947,10 +944,6 @@ modcommands = {
 
     ify: function (src, channel, command) {
         var name = sys.name(src), auth = sys.auth(src), playerids = sys.playerIds(), n = 0, option = command[1], text, self;
-        if (helpers.muteCheck(name)) {
-            helpers.muteMessage(src, channel);
-            return;
-        }
         if (!option) {
             helpers.starfox(src, channel, command, bots.command, "Error 404, option not found.");
             return;
@@ -987,16 +980,9 @@ modcommands = {
 
     resetall: function (src, channel, command) {
         var name = sys.name(src), auth = sys.auth(src);
-        if (helpers.muteCheck(name)) {
-            helpers.muteMessage(src, channel);
-            return;
-        }
-        if (regchannels[sys.channel(channel).toLowerCase()].silence > auth) {
-            helpers.silenceMessage(src, channel);
-            return;
-        }
         for (var index in players) {
             sys.changeName(index, players[index].name);
+            sys.changeColor(src, players[src].color);
         }
         sys.sendHtmlAll(helpers.bot(bots.name) + "<b>" + helpers.user(name) + " has set everyone's name back to its original state.</b>", channel);
     }
@@ -1015,7 +1001,6 @@ modcommands = {
         + "<b>" + helpers.user("/servertopic ") + helpers.arg("text") + "</b>: changes the server topic to <b>text</b>.<br>"
         + "<b>" + helpers.user("/clear") + "</b>: clears the chat. Also /chatclear and /clearchat.<br>"
         + "<b>" + helpers.user("/fullclear") + "</b>: actually clears the entire chat. Takes a long time, so prepare for lag.<br>"
-        + "<b>" + helpers.user("/flash ") + helpers.arg("player") + "</b>: flashes <b>player</b>.<br>"
         + "<b>" + helpers.user("/html ") + helpers.arg("message") + "</b>: send the HTML-message <b>message</b>.<br>"
         + "<br><timestamp/><br>"
         + border2;
@@ -1039,10 +1024,6 @@ modcommands = {
 
     clear: function (src, channel, command) {
         var name = sys.name(src);
-        if (helpers.muteCheck(name)) {
-            helpers.starfox(src, channel, command, bots.mute, "Error 403, you are muted on the server.", channel);
-            return;
-        }
         var clearmessage = "<br>";
         for (var index = 0; index < 100; index++) {
             clearmessage += "<br>";
@@ -1068,10 +1049,6 @@ modcommands = {
 
     fullclear: function (src, channel, command) {
         var name = sys.name(src);
-        if (helpers.muteCheck(name)) {
-            helpers.starfox(src, channel, command, bots.mute, "Error 403, you are muted on the server.", channel);
-            return;
-        }
         var starttime = new Date();
         for (var index = 0; index < 2998; index++) {
             sys.sendHtmlAll("", channel);
@@ -1092,39 +1069,8 @@ modcommands = {
 
     ,
 
-    flash: function (src, channel, command) {
-        if (!command[1]) {
-            helpers.starfox(src, channel, command, bots.command, "Error 404, player not found.");
-            return;
-        }
-        var name = sys.name(src);
-        var trgt = sys.id(command[1]);
-        if (!trgt) {
-            helpers.starfox(src, channel, command, bots.command, "Error 400, " + command[1] + " is not currently on the server!", channel);
-            return;
-        }
-        sys.sendHtmlMessage(trgt, helpers.bot(bots.command) + " You got flashed by " + name + "!<ping/>");
-        sys.sendHtmlMessage(src, helpers.bot(bots.command) + "You flashed " + command[1] + "!", channel);
-    }
-
-    ,
-
     html: function (src, channel, command) {
         var name = sys.name(src), auth = sys.auth(src), color = helpers.color(src);
-        if (helpers.muteCheck(name)) {
-            helpers.muteMessage(src, channel);
-            return;
-        }
-        if (helpers.cmuteCheck(players[src].name, sys.channel(channel).toLowerCase())) {
-            sys.sendHtmlMessage(src, helpers.bot(bots.mute) + "Sorry, you are muted on this channel.", channel);
-            return;
-        }
-        if (regchannels[sys.channel(channel).toLowerCase()]) {
-            if (regchannels[sys.channel(channel).toLowerCase()].silence > auth) {
-                helpers.silenceMessage(src, channel);
-                return;
-            }
-        }
         if (!command[1]) {
             helpers.starfox(src, channel, command, bots.command, "Error 404, message not found.");
             return;
@@ -1343,7 +1289,7 @@ modcommands = {
         }
         commandsmessage = border + "<h2>Moderator Commands ~ Bigtext Settings</h2><br>";
         if (Object.keys(bigtextstemp).length === 0) {
-            commandsmessage += "There are no custom bigtext commands at the moment.<br>";
+            commandsmessage += "There are no custom bigtext commands at the moment.<br><br>";
         } else {
             commandsmessage += "Current custom bigtext commands:<br><br>" + Object.keys(bigtextstemp).join(", ") + "<br><br>";
         }

@@ -2,7 +2,7 @@
 /*
     ----------------------------------------------
     FUN COMMUNITY CUSER COMMANDS cusercmds.js
-     - by Maribel Hearn, 2012-2015
+     - by Maribel Hearn, 2012-2020
 
     This file contains commands that can be
     run by channel users.
@@ -83,6 +83,10 @@ cusercommands = {
             lower = channelname.toLowerCase();
         }
         if (regchannels[lower]) {
+            if (helpers.closeCheck(src, players[src].name, lower)) {
+                helpers.starfox(src, channel, command, bots.channel, "Error 403, that channel is closed for your auth level.");
+                return;
+            }
             reg = true;
             stay = regchannels[lower].stay;
             priv = regchannels[lower].priv;

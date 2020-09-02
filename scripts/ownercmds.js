@@ -543,33 +543,30 @@ ownercommands = {
     ,
 
     reload: function (src, channel, command) {
-        var script = command[1], folder, i;
-        if (script) {
+        var script = command[1], folder, type;
+        if (script && script != "main") {
             if (!sys.fexists(SCRIPTS_FOLDER + script + ".js") && !sys.fexists(PLUGINS_FOLDER + script + ".js")) {
                 helpers.starfox(src, channel, command, bots.command, "Error 404, that script does not exist.");
                 return;
             } else if (sys.fexists(SCRIPTS_FOLDER + script + ".js")) {
                 folder = SCRIPTS_FOLDER;
+                type = "module";
             } else if (sys.fexists(PLUGINS_FOLDER + script + ".js")) {
                 folder = PLUGINS_FOLDER;
+                type = "plugin";
             }
             try {
                 sys.exec(folder + script + ".js");
-                print("Script Check: OK");
-                sys.sendHtmlOwner(helpers.bot(bots.script) + "The " + script + " script has been reloaded successfully.");
+                print("Loaded " + type + " " + script + ".js");
+                sys.sendHtmlOwner(helpers.bot(bots.script) + "The " + script + " " + type + " has been reloaded.");
             } catch (e) {
-                print("An error occurred while reloading the scripts: " + e);
-                sys.sendHtmlOwner(helpers.bot(bots.script) + "An error occurred while reloading the scripts: " + e);
+                print("An error occurred while reloading the " + script + " " + type + ": " + e);
+                sys.sendHtmlOwner(helpers.bot(bots.script) + "An error occurred while reloading the " + script + " " + type + ": " + e);
             }
             return;
         }
-        try {
-            sys.changeScript(sys.read("scripts.js"));
-            sys.sendHtmlOwner(helpers.bot(bots.script) + "The server scripts have been reloaded successfully.");
-        } catch (e) {
-            print("An error occurred while reloading the scripts: " + e);
-            sys.sendHtmlOwner(helpers.bot(bots.script) + "An error occurred while reloading the scripts: " + e);
-        }
+        sys.changeScript(sys.read("scripts.js"));
+        sys.sendHtmlOwner(helpers.bot(bots.script) + "The server scripts have been reloaded.");
     }
 
     ,
@@ -1248,48 +1245,15 @@ ownercommands = {
             sys.sendHtmlMessage(src, message, channel);
             return;
         }
-        sys.write(DATA_FOLDER + "allowance.txt", 8);
-        sys.write(DATA_FOLDER + "floodtime.txt", 10);
-        sys.write(DATA_FOLDER + "floodlevel.txt", 1);
-        sys.write(DATA_FOLDER + "botcolor.txt", "#318739");
-        sys.write(DATA_FOLDER + "botsymbol.txt", "±");
-        sys.write(DATA_FOLDER + "servertopic.txt", "Welcome to " + sys.getServerName() + "!");
-        sys.write(DATA_FOLDER + "botsymbolcolor.txt", "#318739");
-        sys.write(DATA_FOLDER + "bordercolor.txt", "#00008B");
-        sys.write(DATA_FOLDER + "servertopiccolor.txt", "#FF0000");
-        sys.write(DATA_FOLDER + "channeltopiccolor.txt", "#FFA500");
-        sys.write(DATA_FOLDER + "welcomemsg.txt", "Please welcome ~Player~ to ~Server~!");
-        sys.write(DATA_FOLDER + "channelwelcomemsg.txt", "Please welcome ~Player~ to ~Channel~!");
-        sys.write(DATA_FOLDER + "nopermissionmsg.txt", "Can't let you do that, Star ~Player~!");
-        sys.write(DATA_FOLDER + "allowed.txt", '["127.0.0.1"]');
-        sys.write(DATA_FOLDER + "cmdcolors.txt", '["#4169E1","#008000","#FF0000","#FFA500","#FFD700","#0000FF"]');
-        sys.write(DATA_FOLDER + "exceptions.txt", '["cofagrigus"]');
-        sys.write(DATA_FOLDER + "allowedrange.txt", '["192.168"]');
-        sys.write(DATA_FOLDER + "silentcmds.txt", '["future","spoiler","seval","sseval","skick",' +
-        '"invisibleowner","invisible","invis","silentupdate","silenteval","secretsilenteval","silentkick","supdate","silentupdateplugin", "supdateplugin"]');
-        sys.write(DATA_FOLDER + "nameblocklist.txt", '["fuck","bitch","gay","fag","sex","condom",' +
-        '"vagina","dildo","vibrator","orgasm","cunt","cock","dick","asshole","blow","slut","pussy","rape","penis",' +
-        '"horny","intercourse","nigger","nigga","shit","cum","bastard","anus","porn","fap","hitler",":","masturbat","rapist"]');
-        sys.write(DATA_FOLDER + "bots.txt", '{"attack":"AttackBot","armyof":"ArmyBot","auth":"AuthBot","ban":"BanBot","caps":"CapsBot","channel":"ChannelBot",' +
-        '"clear":"ClearBot","command":"CommandBot","flood":"FloodBot","fun":"FunBot","gigaban":"GigabanBot","idle":"IdleBot","kick":"KickBot",' +
-        '"main":"Bot","megaban":"MegabanBot","mute":"MuteBot","name":"NameBot","party":"PartyBot","pass":"PassBot",' +
-        '"priv":"PrivacyBot","reverse":"ReverseBot","rr":"RussiaBot","russia":"RussiaBot","script":"ScriptBot","silence":"SilenceBot",' +
-        '"spy":"WatchBot","starfox":"Wolf","status":"StatusBot","tour":"TourBot","topic":"TopicBot","warn":"WarnBot","welcome":"WelcomeBot",' +
-        '"roulette": "RouletteBot"}');
-        sys.write(DATA_FOLDER + "bigtexts.txt", "{}");
-        sys.write(DATA_FOLDER + "banmsg.txt", "{}");
-        sys.write(DATA_FOLDER + "kickmsg.txt", "{}");
-        sys.write(DATA_FOLDER + "mutemsg.txt", "{}");
-        sys.write(DATA_FOLDER + "authtitles.txt", "{}");
-        sys.write(DATA_FOLDER + "selfkickmsg.txt", "{}");
-        sys.write(DATA_FOLDER + "rangebanmsg.txt", "{}");
+        helpers.initCustoms();
+        helpers.initCustomGlobals();
         sys.sendHtmlMessage(src, helpers.bot(bots.main) + "Your data has been soft reset successfully.", channel);
     }
 
     ,
 
     hardreset: function (src, channel, command) {
-        var confirmation = command[1], dataFiles = sys.filesForDirectory(DATA_FOLDER), message;
+        var confirmation = command[1], dataFiles = sys.filesForDirectory(DATA_FOLDER), message, i;
         if (!confirmation || confirmation != "confirm") {
             message = helpers.bot(bots.main) + "Are you sure you want to do a hard reset? Doing this will erase ALL your data! ";
             message += (helpers.isAndroid(src) ? "Type '/hardreset confirm' if you are sure." : "<a href='po:send//hardreset confirm'>Click here if you are sure.</a>");
@@ -1298,7 +1262,7 @@ ownercommands = {
         }
         sys.write("bansites.txt", sys.read(DATA_FOLDER + "bansites.txt"));
         sys.write("proxy_list.txt", sys.read(DATA_FOLDER + "proxylist.txt"));
-        for (var i in dataFiles) {
+        for (i in dataFiles) {
             sys.rm(DATA_FOLDER + dataFiles[i]);
         }
         sys.rmdir("data");
@@ -1317,12 +1281,13 @@ ownercommands = {
         var commandsmessage = border
         + "<h2>Owner Commands ~ Silent Settings</h2>"
         + "<br>"
-        + "The following commands will currently bypass logging in " + helpers.channelLink(permchannels[0]) + ":<br>"
+        + "The following commands will currently bypass logging in " + helpers.channelLink(sys.channel(watch)) + ":<br>"
         + "<br>"
         + silentcommands.join(", ") + "<br>"
         + "<br>"
         + "Use <b>" + helpers.user("/addsilentcommand ") + helpers.arg("command") + "</b> to make <b>command</b> a silent command. Also /addsc.<br>"
         + "Use <b>" + helpers.user("/removesilentcommand ") + helpers.arg("command") + "</b> to make <b>command</b> from the list of silent commands. Also /removesc.<br>"
+        + "Use <b>" + helpers.user("/resetsilentcommands") + "</b> to reset the silent commands to their defaults. Also /resetscs or /resetsc.<br>"
         + "<br><timestamp/><br>"
         + border2;
         sys.sendHtmlMessage(src, commandsmessage, channel);
@@ -1332,7 +1297,7 @@ ownercommands = {
 
     addsilentcommand: function (src, channel, command) {
         var sc = command[1];
-        if (!sc || !helpers.isInArray(sc, allcommands)) {
+        if (!sc || !allcommands.contains(sc)) {
             helpers.starfox(src, channel, command, bots.command, "Error 404, command not found.");
             return;
         }
@@ -1351,15 +1316,15 @@ ownercommands = {
 
     removesilentcommand: function (src, channel, command) {
         var sc = command[1];
-        if (!sc || !helpers.isInArray(sc, allcommands)) {
+        if (!sc || !allcommands.contains(sc)) {
             helpers.starfox(src, channel, command, bots.command, "Error 404, command not found.");
             return;
         }
-        if (!helpers.isInArray(sc, silentcommands)) {
+        if (!silentcommands.contains(sc)) {
             helpers.starfox(src, channel, command, bots.command, "Error 400, that command is not a silent command.");
             return;
         }
-        silentcommands.splice(silentcommands.indexOf(sc), 1);
+        silentcommands.remove(sc);
         helpers.saveData("silentcommands");
         sys.sendHtmlMessage(src, helpers.bot(bots.command) + "The command '/" + sc + "' is no longer a silent command.", channel);
     }
@@ -1368,6 +1333,28 @@ ownercommands = {
 
     removesc: function (src, channel, command) {
         this.removesilentcommand(src, channel, command);
+    }
+
+    ,
+
+    resetsilentcommands: function (src, channel, command) {
+        sys.write(DATA_FOLDER + "silentcommands.txt", '["future","spoiler","seval","sseval","skick",' +
+        '"invisibleowner","invisible","invis","silentupdate","silenteval","secretsilenteval","silentkick",' +
+        '"supdate","silentupdateplugin", "supdateplugin"]');
+        silentcommands = helpers.readObject("silentcommands");
+        sys.sendHtmlMessage(src, helpers.bot(bots.command) + "The silent commands have been reset to their defaults.", channel);
+    }
+
+    ,
+
+    resetscs: function (src, channel, command) {
+        this.resetsilentcommands(src, channel, command);
+    }
+
+    ,
+
+    resetsc: function (src, channel, command) {
+        this.resetsilentcommands(src, channel, command);
     }
 
     ,
