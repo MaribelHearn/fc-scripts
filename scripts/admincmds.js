@@ -1436,7 +1436,7 @@ admincommands = {
 
     ,
 
-    welcomemsg: function (src, channel, command) {
+    welcomemessage: function (src, channel, command) {
         var name = sys.name(src), message = command[1];
         if (!message) {
             sys.sendHtmlMessage(src, helpers.bot(bots.main) + "The current welcome message is: " + welcomeMessage + ".", channel);
@@ -1449,7 +1449,13 @@ admincommands = {
 
     ,
 
-    leavemsg: function (src, channel, command) {
+    welcomemsg: function (src, channel, command) {
+        this.welcomemessage(src, channel,command);
+    }
+
+    ,
+
+    leavemessage: function (src, channel, command) {
         var name = sys.name(src), message = command[1];
         if (!message) {
             sys.sendHtmlMessage(src, helpers.bot(bots.main) + "The current leave message is: " + leaveMessage + ".", channel);
@@ -1462,7 +1468,13 @@ admincommands = {
 
     ,
 
-    channelwelcomemsg: function (src, channel, command) {
+    leavemsg: function (src, channel, command) {
+        this.leavemessage(src, channel,command);
+    }
+
+    ,
+
+    cwelcomemessage: function (src, channel, command) {
         var name = sys.name(src), message = command[1];
         if (!message) {
             sys.sendHtmlMessage(src, helpers.bot(bots.main) + "The current channel welcome message is: " + channelWelcomeMessage + ".", channel);
@@ -1475,7 +1487,13 @@ admincommands = {
 
     ,
 
-    channelleavemsg: function (src, channel, command) {
+    cwelcomemsg: function (src, channel, command) {
+        this.cwelcomemessage(src, channel,command);
+    }
+
+    ,
+
+    cleavemessage: function (src, channel, command) {
         var name = sys.name(src), message = command[1];
         if (!message) {
             sys.sendHtmlMessage(src, helpers.bot(bots.main) + "The current channel leave message is: " + channelLeaveMessage + ".", channel);
@@ -1484,6 +1502,12 @@ admincommands = {
         channelLeaveMessage = message;
         helpers.saveData("channelLeaveMessage");
         sys.sendHtmlAll(helpers.bot(bots.main) + "The channel leave message has been changed to '" + channelLeaveMessage + "' by " + name + ".", channel);
+    }
+
+    ,
+
+    cleavemsg: function (src, channel, command) {
+        this.cleavemessage(src, channel,command);
     }
 
     ,
@@ -1526,15 +1550,21 @@ admincommands = {
 
     ,
 
-    nopermissionmsg: function (src, channel, command) {
+    nopermissionmessage: function (src, channel, command) {
         var name = sys.name(src), message = command[1];
         if (!message) {
             sys.sendHtmlMessage(src, helpers.bot(bots.main) + "The current no permission message is: " + noPermissionMessage + ".", channel);
             return;
         }
-        nopermissionmsg = message;
+        noPermissionMessage = message;
         helpers.saveData("noPermissionMessage");
         sys.sendHtmlAuths(helpers.bot(bots.main) + "The no permission message has been changed to '" + noPermissionMessage + "' by " + name + ".", channel);
+    }
+
+    ,
+
+    nopermissionmsg: function (src, channel, command) {
+        this.nopermissionmessage(src, channel, command);
     }
 
     ,
