@@ -892,7 +892,7 @@
             Welcome Message
             ---------------
         **/
-        var cauth = (helpers.cauth(name, channel) >= 1 && sys.dbAuth(name) < 4 ? helpers.cauthname(name.toLowerCase(), channel) + " " : "");
+        var cauth = (helpers.cauth(name, channel) >= 1 && sys.dbAuth(name) < 4 ? helpers.cauthname(name, channel) + " " : "");
         if (channel > 0 || players[src]) { // do not send main channel welcome on server join
             if (layout == "new") {
                 sys.sendHtmlAll(helpers.bot(bots.channel) + channelWelcomeMessage.replace(/~Player~/, cauth + name).replace(/~Channel~/, channelname), channel);
@@ -930,8 +930,9 @@
             Leave Message
             -------------
         **/
-        var name = sys.name(src), lower = players[src].name.toLowerCase(), cauth = (helpers.cauthname(lower, channel) === "" ? "" : helpers.cauthname(lower, channel) + " "), channelname = sys.channel(channel);
-        var cookie = sys.cookie(src) ? sys.cookie(src) : "none", id = sys.uniqueId(src) ? sys.uniqueId(src).id : "none";
+        var name = sys.name(src), lower = players[src].name.toLowerCase(), cookie = sys.cookie(src) ? sys.cookie(src) : "none",
+            cauth = (helpers.cauth(lower, channel) >= 1 && sys.dbAuth(lower) < 4 ? helpers.cauthname(lower, channel) + " " : ""),
+            channelname = sys.channel(channel), id = sys.uniqueId(src) ? sys.uniqueId(src).id : "none";
         if (pluginLoaded["party.js"]) {
             if (channel == partychannel && partyMode == "nightclub") {
                 sys.sendHtmlWatch(helpers.bot(bots.spy) + "[Server] <b><font color='" + helpers.color(src) + "'>" + name + "</font></b> has left the channel " + helpers.channelLink(channelname) + ".");
