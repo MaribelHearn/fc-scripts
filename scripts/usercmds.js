@@ -1177,7 +1177,7 @@ usercommands = {
 
     unregister: function (src, channel, command) {
         if (sys.auth(src) > 0) {
-            helpers.starfox(src, channel, command, bots.command, "Error 403, you may not unregister if you have authority!");
+            helpers.starfox(src, channel, command, bots.command, "Error 403, you may not clear your password if you have authority!");
             return;
         }
         sys.clearPass(players[src].name);

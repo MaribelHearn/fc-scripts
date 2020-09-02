@@ -430,7 +430,7 @@ cmodcommands = {
             }
             regchannels[lower].silence = level;
             helpers.saveData("regchannels");
-            sys.sendHtmlAll(helpers.bot(bots.silence) + silenceMessage.replace(/~Player~/g, name).replace(/~Channel~/g, channelName) + ". [Silence Level: " + level + "]", channel);
+            sys.sendHtmlAll(helpers.bot(bots.silence) + silenceMessage.replace(/~Player~/gi, name).replace(/~Channel~/gi, channelName) + ". [Silence Level: " + level + "]", channel);
             return;
         }
         helpers.starfox(src, channel, command, bots.silence, "Error 400, this channel isn't registered!");
@@ -449,7 +449,7 @@ cmodcommands = {
             } else if (regchannels[lower].silence <= cauth) {
                 regchannels[lower].silence = 0;
                 helpers.saveData("regchannels");
-                sys.sendHtmlAll(helpers.bot(bots.silence) + unsilenceMessage.replace(/~Player~/g, name), channel);
+                sys.sendHtmlAll(helpers.bot(bots.silence) + unsilenceMessage.replace(/~Player~/gi, name), channel);
             }
             return;
         }
