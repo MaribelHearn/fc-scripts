@@ -1388,7 +1388,7 @@
         }
         if (regchannels[channelname2] && !regchannels[channelname2].priv || !regchannels[channelname2]) {
             sys.sendHtmlWatch(helpers.bot(bots.spy) + "[" + helpers.channelLink(channelname) +
-            "] <b><font color='" + color + "'>" + helpers.escapehtml(name) + "</font></b>: " + message);
+            "] <b><font color='" + color + "'>" + helpers.escapehtml(name) + "</font></b>: " + helpers.escapehtml(message));
         }
     }
 
