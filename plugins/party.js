@@ -32,7 +32,7 @@ partycommands = {
         var name = helpers.escapehtml(sys.name(src)), lower = sys.name(src).toLowerCase(),
         channelname = sys.channel(channel).toLowerCase(), oldmode = partyMode, mode;
         if (helpers.cauth(lower, channelname) === 0) {
-            helpers.starfox(src, channel, command, bots.starfox, "I can't let you do that star " + sys.name(src) + "!");
+            helpers.starfox(src, channel, command, bots.starfox, noPermissionMessage.replace(/~Player~/gi, sys.name(src)));
             return;
         }
         if (!command[1]) {

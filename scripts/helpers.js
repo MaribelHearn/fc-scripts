@@ -26,8 +26,8 @@ helpers = {
         sys.write(DATA_FOLDER + "leavemessage.txt", "~Player~ has left ~Server~!");
         sys.write(DATA_FOLDER + "channelwelcomemessage.txt", "Please welcome ~Player~ to ~Channel~!");
         sys.write(DATA_FOLDER + "channelleavemessage.txt", "~Player~ has left ~Channel~!");
-        sys.write(DATA_FOLDER + "silencemessage.txt", "The server has been silenced!");
-        sys.write(DATA_FOLDER + "unsilencemessage.txt", "The server has been unsilenced! Everyone can talk again!");
+        sys.write(DATA_FOLDER + "silencemessage.txt", "This channel has been silenced by ~Player~!");
+        sys.write(DATA_FOLDER + "unsilencemessage.txt", "This channel has been unsilenced by ~Player~! Everyone can talk again!");
         sys.write(DATA_FOLDER + "nopermissionmessage.txt", "Can't let you do that, Star ~Player~!");
         sys.write(DATA_FOLDER + "cmdcolors.txt", '["#4169E1","#008000","#FF0000","#FFA500","#FFD700","#0000FF"]');
         sys.write(DATA_FOLDER + "listcolors.txt", '{"mute":"#1E90FF","ban":"#FF6900","rangeban":"#008000","megaban":"#800080","gigaban":"#AA0000"}');
@@ -1125,54 +1125,59 @@ helpers = {
     ,
 
     allCommands: function () {
-        var array = [];
-        for (var i in usercommands) {
+        var array = [], i;
+        for (i in usercommands) {
             array.push(i);
         }
-        for (var i in modcommands) {
+        for (i in modcommands) {
             array.push(i);
         }
-        for (var i in admincommands) {
+        for (i in admincommands) {
             array.push(i);
         }
-        for (var i in ownercommands) {
+        for (i in ownercommands) {
             array.push(i);
         }
-        for (var i in cusercommands) {
+        for (i in cusercommands) {
             array.push(i);
         }
-        for (var i in cmodcommands) {
+        for (i in cmodcommands) {
             array.push(i);
         }
-        for (var i in cadmincommands) {
+        for (i in cadmincommands) {
             array.push(i);
         }
-        for (var i in cownercommands) {
+        for (i in cownercommands) {
             array.push(i);
         }
         if (pluginLoaded["safari.js"]) {
-            for (var i in safaricommands) {
+            for (i in safaricommands) {
                 array.push(i);
             }
         }
         if (pluginLoaded["roulette.js"]) {
-            for (var i in roulettecommands) {
+            for (i in roulettecommands) {
                 array.push(i);
             }
         }
         if (pluginLoaded["rr.js"]) {
-            for (var i in rrcommands) {
+            for (i in rrcommands) {
                 array.push(i);
             }
         }
         if (pluginLoaded["party.js"]) {
-            for (var i in partycommands) {
+            for (i in partycommands) {
                 array.push(i);
             }
         }
         if (pluginLoaded["funcmds.js"]) {
-            for (var i in funcommands) {
+            for (i in funcommands) {
                 array.push(i);
+            }
+        }
+        for (i in array) {
+            if (array[i].substr(0, 4) == "this") {
+                array.splice(i, 1);
             }
         }
         return array;

@@ -329,7 +329,7 @@ modcommands = {
     mutelist: function (src, channel, command) {
         var names = [], ips = [], muters = [], reasons = [], times = [], timesLeft = [], dates = [], silences = [], mutelistmessage;
         if (mutelist.isEmpty()) {
-            helpers.starfox(src, channel, command, bots.mute, "The mute list is currently empty.");
+            sys.sendHtmlMessage(src, helpers.bot(bots.mute) + "The mute list is currently empty.", channel);
             return;
         }
         for (var i in mutelist) {
@@ -384,7 +384,7 @@ modcommands = {
     banlist: function (src, channel, command) {
         var names = [], ips = [], banners = [], reasons = [], times = [], timesLeft = [], dates = [], banlistmessage;
         if (banlist.isEmpty()) {
-            helpers.starfox(src, channel, command, bots.ban, "The ban list is currently empty.");
+            sys.sendHtmlMessage(src, helpers.bot(bots.ban) + "The ban list is currently empty.", channel);
             return;
         }
         for (var i in banlist) {
@@ -429,7 +429,7 @@ modcommands = {
     rangebanlist: function (src, channel, command) {
         var names = [], ranges = [], banners = [], reasons = [], dates = [], rangebanlistmessage;
         if (rangebanlist.isEmpty()) {
-            helpers.starfox(src, channel, command, bots.ban, "The range ban list is currently empty.");
+            sys.sendHtmlMessage(src, helpers.bot(bots.ban) + "The range ban list is currently empty.", channel);
             return;
         }
         for (var i in rangebanlist) {
@@ -470,7 +470,7 @@ modcommands = {
     megabanlist: function (src, channel, command) {
         var names = [], banners = [], reasons = [], dates = [], megabanlistmessage;
         if (megabanlist.isEmpty()) {
-            helpers.starfox(src, channel, command, bots.megaban, "The mega ban list is currently empty.");
+            sys.sendHtmlMessage(src, helpers.bot(bots.megaban) + "The mega ban list is currently empty.", channel);
             return;
         }
         for (var i in megabanlist) {
@@ -509,7 +509,7 @@ modcommands = {
     gigabanlist: function (src, channel, command) {
         var names = [], banners = [], reasons = [], pseudos = [], dates = [], gigabanlistmessage;
         if (gigabanlist.isEmpty()) {
-            helpers.starfox(src, channel, command, bots.gigaban, "The giga ban list is currently empty.");
+            sys.sendHtmlMessage(src, helpers.bot(bots.gigaban) + "The giga ban list is currently empty.", channel);
             return;
         }
         for (var i in gigabanlist) {
