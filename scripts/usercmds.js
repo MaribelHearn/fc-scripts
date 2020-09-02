@@ -92,7 +92,7 @@ usercommands = {
         + "<b>" + helpers.user("/serverinfo") + "</b>: displays server information.<br>"
         + "<b>" + helpers.user("/scriptinfo") + "</b>: displays script information.<br>"
         + "<b>" + helpers.user("/playerinfo ") + helpers.arg("player") + "</b>: displays information about <b>player</b>, including when they were last seen. "
-        + "If <b>player</b> is not specified, displays your own player info. Cannot show gradients.<br>"
+        + "If <b>player</b> is not specified, displays your own player info.<br>"
         + "<b>" + helpers.user("/team ") + helpers.arg("number") + "</b>: displays your team with number <b>number</b>. If <b>number</b> is not specified, displays your first team.<br>"
         + "<b>" + helpers.user("/pokedex ") + helpers.arg("Pokémon") + "</b>: displays <b>Pokémon</b>'s data in a neat table. Also /pokemon.<br>"
         + "<b>" + helpers.user("/movedex ") + helpers.arg("move") + "</b>: displays data for <b>move</b> in a neat table. Also /move.<br>"
@@ -546,7 +546,7 @@ usercommands = {
                 if (Object.keys(OFFICIAL_PLUGINS).contains(plugins[i])) {
                     tempPlugins.push(OFFICIAL_PLUGINS[plugins[i]]);
                 } else {
-                    customs.push(plugins[i]);
+                    customs.push(helpers.cap(plugins[i]));
                 }
             }
         }
@@ -577,7 +577,7 @@ usercommands = {
         }
         trgt = sys.id(player);
         if (!trgt && !sys.dbExists(player)) {
-            helpers.starfox(src, channel, command, bots.command, "Error 400, you can't check the player info of " + player + " because they do not exist in the database.");
+            helpers.starfox(src, channel, command, bots.command, "Error 404, that player does not exist.");
             return;
         }
         if (trgt && !sys.dbExists(player)) {
@@ -594,7 +594,7 @@ usercommands = {
             infomessage += helpers.authimage(src, imageindex) + " " + player + " " + status +
             "<br><b>Auth:</b> " + helpers.authName(sys.dbAuth(player), true, true) +
             "<br><b>Avatar:</b> <img src='trainer:" + sys.avatar(trgt) + "'>" +
-            "<br><b>Trainer Info:</b> " + sys.info(trgt) + "";
+            "<br><b>Color:</b> " + helpers.color(trgt);
         } else {
             auth = (sys.dbAuth(player) >= 4 ? 4 : sys.dbAuth(player) + 4);
             status = "<font color='red'>Offline</font>";
@@ -681,8 +681,7 @@ usercommands = {
     ,
 
     mp: function (src, channel, command) {
-        command[1] = players[src].name;
-        modcommands.cp(src, channel, command);
+        modcommands.cp(src, channel, ["cp", sys.name(src)]);
     }
 
     ,

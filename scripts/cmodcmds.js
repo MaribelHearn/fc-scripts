@@ -2,7 +2,7 @@
 /*
     ----------------------------------------------
     FUN COMMUNITY CMOD COMMANDS cmodcmds.js
-     - by Maribel Hearn, 2012-2015
+     - by Maribel Hearn, 2012-2020
 
     This file contains commands that can be
     run by channel moderators.
@@ -275,6 +275,10 @@ cmodcommands = {
             return;
         }
         list = regchannels[lower].mutelist;
+        if (list.isEmpty()) {
+            helpers.starfox(src, channel, command, bots.channel, "The channel mute list is currently empty.");
+            return;
+        }
         for (var i in list) {
             names.push(members[i] ? members[i] : i);
             ips.push(list[i].ip);
@@ -317,6 +321,10 @@ cmodcommands = {
             return;
         }
         list = regchannels[lower].banlist;
+        if (list.isEmpty()) {
+            helpers.starfox(src, channel, command, bots.channel, "The channel ban list is currently empty.");
+            return;
+        }
         for (var i in list) {
             names.push(members[i] ? members[i] : i);
             ips.push(list[i].ip);
@@ -324,7 +332,7 @@ cmodcommands = {
             reasons.push(list[i].reason);
             dates.push(list[i].date);
         }
-        banlistmessage = border + "<h2>Ban List</h2><br>";
+        banlistmessage = border + "<h2>" + sys.channel(channel) + " Ban List</h2><br>";
         if (helpers.isAndroid(src)) {
             banlistmessage += "<tt>";
             for (var i in names) {
@@ -400,10 +408,6 @@ cmodcommands = {
     silence: function (src, channel, command) {
         var name = sys.name(src), cauth = helpers.cauth(name.toLowerCase(), channel), lower = sys.channel(channel).toLowerCase(), strength = command[1], silencemessage = helpers.bot(bots.silence);
         if (regchannels[lower]) {
-            if (helpers.muteCheck(name)) {
-                helpers.muteMessage(src, channel);
-                return;
-            }
             if (!strength) {
                 strength = cauth;
             }

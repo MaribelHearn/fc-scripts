@@ -51,12 +51,20 @@
     SCRIPTS_FOLDER = "scripts/";
     PLUGINS_FOLDER = "plugins/";
     DATA_FOLDER = "data/";
+    DBSEARCH_THRESHOLD = 100;
     MAX_POKEMON = 803; // Marshadow is 802
     /**
         -------------------------
         Additional Object Methods
         -------------------------
     **/
+    Object.defineProperty(Object.prototype, "isEmpty", {
+        configurable: true,
+        enumerable: false,
+        value: function (value) {
+            return Object.keys(this).length === 0;
+        }
+    });
     Object.defineProperty(Array.prototype, "contains", {
         configurable: true,
         enumerable: false,
@@ -112,6 +120,7 @@
                     unofficialPlugins = true;
                 }
             } catch (e) {
+                sys.sendHtmlOwner(helpers.bot(bots.script) + "An error occurred in plugin " + plugins[i] + ": " + e);
                 print("An error occurred in plugin " + plugins[i] + ": " + e);
             }
         }
@@ -202,27 +211,15 @@
         Global Variables
         ----------------
     **/
+    helpers.initCustomGlobals();
     open = helpers.readBoolean("open");
     latestShaHash = helpers.readData("latestshahash");
-    botcolor = helpers.readData("botcolor");
-    botsymbol = helpers.readData("botsymbol");
-    servertopic = helpers.readData("servertopic");
-    botsymbolcolor = helpers.readData("botsymbolcolor");
-    borderColor = helpers.readData("bordercolor");
-    serverTopicColor = helpers.readData("servertopiccolor");
-    channelTopicColor = helpers.readData("channeltopiccolor");
-    welcomeMessage = helpers.readData("welcomemessage");
-    leaveMessage = helpers.readData("leavemessage");
-    channelWelcomeMessage = helpers.readData("channelwelcomemessage");
-    channelLeaveMessage = helpers.readData("channelleavemessage");
-    noPermissionMessage = helpers.readData("nopermissionmessage");
     updateFrequency = helpers.readNumber("updatefrequency");
     allowance = helpers.readNumber("allowance");
     floodtime = helpers.readNumber("floodtime");
     floodlevel = helpers.readNumber("floodlevel");
     maxplayers = helpers.readNumber("maxplayers");
     allowed = helpers.readObject("allowed");
-    cmdcolors = helpers.readObject("cmdcolors");
     exceptions = helpers.readObject("exceptions");
     permchannels = helpers.readObject("permchannels");
     allowedrange = helpers.readObject("allowedrange");
@@ -231,7 +228,6 @@
     silentcommands = helpers.readObject("silentcommands");
     proxylist = helpers.readData("proxylist").split('\n');
     bansites = helpers.readData("bansites").replace(/\r/g, "").split('\n');
-    bots = helpers.readObject("bots");
     rules = helpers.readObject("rules");
     banlist = helpers.readObject("banlist");
     mutelist = helpers.readObject("mutelist");
@@ -239,19 +235,12 @@
     cityname = helpers.readObject("cityname");
     versions = helpers.readObject("versions");
     members = helpers.readObject("members");
-    listcolors = helpers.readObject("listcolors");
-    banmessages = helpers.readObject("banmessages");
     operatingsystem = helpers.readObject("operatingsystem");
-    kickmessages = helpers.readObject("kickmessages");
-    mutemessages = helpers.readObject("mutemessages");
-    authtitles = helpers.readObject("authtitles");
     regchannels = helpers.readObject("regchannels");
     megabanlist = helpers.readObject("megabanlist");
     gigabanlist = helpers.readObject("gigabanlist");
     countryname = helpers.readObject("countryname");
     rangebanlist = helpers.readObject("rangebanlist");
-    selfkickmessages = helpers.readObject("selfkickmessages");
-    rangebanmessages = helpers.readObject("rangebanmessages");
     helpers.setVariable("stopbattles", false);
     helpers.setVariable("megabancheck", false);
     helpers.setVariable("gigabancheck", false);
@@ -263,9 +252,6 @@
     helpers.setVariable("hostCountry", "");
     helpers.setVariable("hostCity", "");
     helpers.setVariable("hostTimeZone", "");
-    helpers.setVariable("border", "<font color='" + borderColor + "'><b>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>></b></font>");
-    helpers.setVariable("border2", "<font color='" + borderColor + "'><b>&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;" +
-    "&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;</b></font>");
     helpers.setVariable("players", []);
     helpers.setVariable("floodplayers", []);
     helpers.setVariable("spoilers", []);
@@ -294,8 +280,7 @@
     bansites.splice(bansites.indexOf(""), 1);
     bansites.splice(bansites.lastIndexOf(""), 1);
     allcommands = helpers.allCommands();
-}
-).call(null);
+}).call(null);
 
 ({
 
@@ -310,11 +295,16 @@
     ,
 
     switchError: function (script) {
+        print("An error occurred while reloading the scripts; the old script was kept.");
+        sys.sendHtmlOwner("An error occurred while reloading the scripts; the old script was kept.");
     }
 
     ,
 
     warning: function (warning) {
+        if (!serverStarting) {
+            sys.printStackTrace(warning);
+        }
     }
 
     ,
@@ -845,7 +835,7 @@
             -----------------------
         **/
         if (regchannels[lower]) {
-            if (regchannels[lower].close > auth && regchannels[lower].close > helpers.cauth(name.toLowerCase(), channel)) {
+            if (helpers.closeCheck(src, name, lower)) {
                 sys.stopEvent();
                 sys.sendHtmlMessage(src, helpers.bot(bots.channel) + "This channel is closed for your auth level.");
                 return;
@@ -1181,7 +1171,7 @@
 
     afterChannelCreated: function (channel, channelname, creator) {
         var lower = sys.channel(channel).toLowerCase();
-        if (channel > 1) {
+        if (channel > 1 && global.hasOwnProperty("watch")) {
             sys.sendHtmlWatch(helpers.bot(bots.spy) + "[Server] " +
             "<b><font color='" + (creator ? helpers.color(creator) : "#FFA500") +
             "'>" + (creator ? sys.name(creator) : "~~Server~~") + "</font></b> " +
@@ -1510,11 +1500,9 @@
             **/
             if (message == "Announcement changed.") {
                 sys.stopEvent();
-                return;
             }
             if (message == "The description of the server changed.") {
                 sys.stopEvent();
-                return;
             }
             /**
                 --------------------------
@@ -1524,15 +1512,16 @@
             if (/Script Check: Fatal script error on line \d+\:/.test(message)) {
                 sys.stopEvent();
                 var errorMessage = message.split("changeScript");
-                sys.sendHtmlOwner(helpers.bot(bots.script) + errorMessage[0]);
-                return;
+                print(errorMessage[0]);
+                if (!serverStarting) {
+                    sys.sendHtmlOwner(helpers.bot(bots.script) + errorMessage[0]);
+                }
             }
             if (/Script Error line \d+\:/.test(message) || /Script Warning:/.test(message) || /Script Warning in/.test(message)) {
-                sys.stopEvent();
                 if (!serverStarting) {
+                    sys.stopEvent();
                     sys.printStackTrace(message);
                 }
-                return;
             }
         }
     }

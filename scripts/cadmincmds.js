@@ -2,14 +2,14 @@
 /*
     ----------------------------------------------
     FUN COMMUNITY CADMIN COMMANDS cadmincmds.js
-     - by Maribel Hearn, 2012-2015
-    
+     - by Maribel Hearn, 2012-2020
+
     This file contains commands that can be
     run by channel administrators.
     ----------------------------------------------
 */
 
-cadmincommands = {    
+cadmincommands = {
     cadmincommands: function (src, channel, command) {
         var commandsmessage = border
         + "<h2>Channel Administrator Commands</h2>"
@@ -20,9 +20,9 @@ cadmincommands = {
         + border2;
         sys.sendHtmlMessage(src, commandsmessage, channel);
     }
-    
+
     ,
-    
+
     cban: function (src, channel, command) {
         var trgtname = command[1], lower = sys.channel(channel).toLowerCase(), reason = command[2];
         if (!trgtname) {
@@ -63,9 +63,9 @@ cadmincommands = {
         }
         sys.sendHtmlAll(helpers.bot(bots.channel) + trgtname + " has been banned from this channel by " + sys.name(src) + "! [Reason: " + reason + "]", channel);
     }
-    
+
     ,
-    
+
     cunban: function (src, channel, command) {
         var trgtname = command[1], lower = sys.channel(channel).toLowerCase(), name;
         if (!trgtname) {
@@ -74,11 +74,11 @@ cadmincommands = {
         }
         name = command[1].toLowerCase();
         if (!sys.dbExists(name)) {
-            helpers.starfox(src, channel, command, bots.channel, "Error 400, you can't unban " + trgtname + " because they don't exist in the database.");
+            helpers.starfox(src, channel, command, bots.channel, "Error 400, you can't channel unban " + trgtname + " because they don't exist in the database.");
             return;
         }
         if (!regchannels[lower].banlist[name]) {
-            helpers.starfox(src, channel, command, bots.channel, "Error 400, you can't unban " + trgtname + " because they aren't banned!");
+            helpers.starfox(src, channel, command, bots.channel, "Error 400, you can't channel unban " + trgtname + " because they aren't banned!");
             return;
         }
         for (var index in regchannels[lower].banlist) {
