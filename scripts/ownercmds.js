@@ -904,6 +904,8 @@ ownercommands = {
         var starttime = new Date();
         try {
             eval(command);
+            runtime = new Date() - starttime;
+            sys.sendHtmlMessage(src, helpers.bot(bots.script) + "The eval runtime was " + runtime + " milliseconds.", channel);
         }
         catch (error) {
             sys.sendHtmlMessage(src, helpers.bot(bots.script) + "An error occurred: " + error, channel);
