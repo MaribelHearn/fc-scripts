@@ -1523,6 +1523,15 @@
                     sys.printStackTrace(message);
                 }
             }
+            /**
+                ---------------------
+                Overactivity Messages
+                ---------------------
+            **/
+            if (message.substr(0, 3) == "IP ") {
+                sys.stopEvent();
+                sys.sendHtmlAll(helpers.bot(bots.spy) + "[Server] " + message, sys.channelId(sys.dosChannel()));
+            }
         }
     }
 
