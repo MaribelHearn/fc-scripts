@@ -243,17 +243,16 @@ executeCommand = function (src, channel, command, name, lower, auth, cauth, mess
     return done;
 };
 
-watchChannelLogging = function (message, channel, name, lower, color) {
-    var channelname = sys.channel(channel).toLowerCase();
-    if (regchannels[channelname]) {
-        if (!regchannels[channelname].priv && !silentcommands.contains(lower)) {
-            sys.sendHtmlWatch(helpers.bot(bots.spy) + "[" + helpers.channelLink(sys.channel(channel)) +
+watchChannelLogging = function (message, channel, name, lower, color, channelName) {
+    if (regchannels[channelName.toLowerCase()]) {
+        if (!regchannels[channelName.toLowerCase()].priv && !silentcommands.contains(lower)) {
+            sys.sendHtmlWatch(helpers.bot(bots.spy) + "[" + helpers.channelLink(channelName) +
             "] <b><font color='" + color + "'>" + helpers.escapehtml(name) +
             "</font></b> ran /" + helpers.escapehtml(message.slice(1)) + ".");
         }
     } else {
         if (!silentcommands.contains(lower)) {
-            sys.sendHtmlWatch(helpers.bot(bots.spy) + "[" + helpers.channelLink(sys.channel(channel)) +
+            sys.sendHtmlWatch(helpers.bot(bots.spy) + "[" + helpers.channelLink(channelName) +
             "] <b><font color='" + color + "'>" + helpers.escapehtml(name) +
             "</font></b> ran /" + helpers.escapehtml(message.slice(1)) + ".");
         }
@@ -261,8 +260,8 @@ watchChannelLogging = function (message, channel, name, lower, color) {
 };
 
 parseCommand = function (src, message, channel, name, auth) {
-    var cauth = helpers.cauth(players[src].name.toLowerCase(), channel),
-    color = helpers.color(src), lower = "", starfox = 0, command, cmd;
+    var cauth = helpers.cauth(players[src].name.toLowerCase(), channel), channelName = sys.channel(channel),
+        color = helpers.color(src), lower = "", starfox = 0, command, cmd;
     filterLastMessage(src, message, channel);
     command = message.replace(COMMAND_SYMBOL, "");
     cmd = command;
@@ -276,6 +275,6 @@ parseCommand = function (src, message, channel, name, auth) {
         helpers.starfox(src, channel, command, bots.command, "Error 404, command '" + helpers.escapehtml(lower) + "' not found.");
     }
     if (starfox == 2) { // 0 = not found, 1 = starfox/mute, 2 = command successfully executed
-        watchChannelLogging(message, channel, name, lower, color);
+        watchChannelLogging(message, channel, name, lower, color, channelName);
     }
 };
