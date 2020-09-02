@@ -29,6 +29,12 @@ helpers = {
         sys.write(DATA_FOLDER + "silencemessage.txt", "This channel has been silenced by ~Player~!");
         sys.write(DATA_FOLDER + "unsilencemessage.txt", "This channel has been unsilenced by ~Player~! Everyone can talk again!");
         sys.write(DATA_FOLDER + "nopermissionmessage.txt", "Can't let you do that, Star ~Player~!");
+        sys.write(DATA_FOLDER + "border.txt", "<font color='" + borderColor + "'><b>" +
+        ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>></b></font>");
+        sys.write(DATA_FOLDER + "border2.txt", "<font color='" + borderColor + "'><b>" +
+        "&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;" +
+        "&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;" +
+        "&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;</b></font>");
         sys.write(DATA_FOLDER + "cmdcolors.txt", '["#4169E1","#008000","#FF0000","#FFA500","#FFD700","#0000FF"]');
         sys.write(DATA_FOLDER + "listcolors.txt", '{"mute":"#1E90FF","ban":"#FF6900","rangeban":"#008000","megaban":"#800080","gigaban":"#AA0000"}');
         sys.write(DATA_FOLDER + "bots.txt", '{"attack":"AttackBot","armyof":"ArmyBot","auth":"AuthBot","ban":"BanBot",' +
@@ -142,12 +148,8 @@ helpers = {
         mutemessages = helpers.readObject("mutemessages");
         banmessages = helpers.readObject("banmessages");
         rangebanmessages = helpers.readObject("rangebanmessages");
-        helpers.setVariable("border", "<font color='" + borderColor + "'><b>" +
-        ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>></b></font>");
-        helpers.setVariable("border2", "<font color='" + borderColor + "'><b>" +
-        "&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;" +
-        "&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;" +
-        "&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;</b></font>");
+        helpers.setVariable("border", helpers.readData("border"));
+        helpers.setVariable("border2", helpers.readData("border2"));
     }
 
     ,

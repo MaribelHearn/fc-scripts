@@ -1403,7 +1403,7 @@ admincommands = {
         + "<b>~Server~</b> will be replaced by the server name.<br>"
         + "<b>~Channel~</b> will be replaced by the channel name.<br>"
         + "<br>"
-        + "Use <b>" + helpers.user("/layout") + "</b> to toggle the layout of certain messages between the old one and the new one.<br>"
+        + "Use <b>" + helpers.user("/layout") + "</b> to temporarily toggle the layout of certain messages between the old one and the new one.<br>"
         + "Use <b>" + helpers.user("/welcomemessage ") + helpers.arg("text") + "</b> to change the welcome message to <b>text</b>. Also /welcomemsg.<br>"
         + "Use <b>" + helpers.user("/leavemessage ") + helpers.arg("text") + "</b> to change the leave message to <b>text</b>. Also /leavemsg.<br>"
         + "Use <b>" + helpers.user("/cwelcomemessage ") + helpers.arg("text") + "</b> to change the channel welcome message to <b>text</b>. Also /cwelcomemsg.<br>"
@@ -1422,9 +1422,8 @@ admincommands = {
         var name = sys.name(src);
         if (layout == "old") {
             layout = "new";
-            border = "<font color='" + borderColor + "'><b>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>></b></font>";
-            border2 = "<font color='" + borderColor + "'><b>&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;" +
-            "&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;</b></font>";
+            border = helpers.readData("border");
+            border2 = helpers.readData("border2");
             sys.sendHtmlAll(helpers.bot(bots.main) + "<b>" + helpers.user(name) + " changed certain messages to the new layout!</b>", channel);
         } else {
             layout = "old";
@@ -1585,7 +1584,7 @@ admincommands = {
         + "<b>Channel topic " + command[0].slice(0, -8) + ":</b> " + channelTopicColor + "<br>"
         + "<b>Command " + command[0].slice(0, -8) + "s:</b> " + cmdcolors.join(", ") + "<br>"
         + "<br>"
-        + "Use <b>" + helpers.user("/bordercolor ") + helpers.arg("color") + "</b> to change the border color to <b>color</b>. Also /bordercolour.<br>"
+        + "Use <b>" + helpers.user("/bordercolor ") + helpers.arg("color") + "</b> to change the border color to <b>color</b>. If <b>color</b> is 'none', removes the borders entirely. Also /bordercolour.<br>"
         + "Use <b>" + helpers.user("/servertopiccolor ") + helpers.arg("color") + "</b> to change the color of 'Server Topic' in the server topic message to to <b>color</b>. Also /servertopiccolour.<br>"
         + "Use <b>" + helpers.user("/channeltopiccolor ") + helpers.arg("color") + "</b> to change the color of 'Channel Topic' in the channel topic message to to <b>color</b>. Also /channeltopiccolour.<br>"
         + "Use <b>" + helpers.user("/commandcolor ") + helpers.arg("number") + helpers.arg2("*color") + "</b> to change command color <b>number</b> to <b>color</b>.<br>"
@@ -1604,21 +1603,33 @@ admincommands = {
     ,
 
     bordercolor: function (src, channel, command) {
-        var name = sys.name(src), color = command[1];
+        var name = sys.name(src), spelling = command[0].slice(6), color = command[1];
         if (!color) {
-            helpers.starfox(src, channel, command, bots.command, "Error 404, " + command[0].slice(6) + " not found.");
+            helpers.starfox(src, channel, command, bots.command, "Error 404, " + spelling + " not found.");
             return;
         }
-        if (!sys.validColor(color)) {
-            helpers.starfox(src, channel, command, bots.command, "Error 403, invalid " + command[0].slice(6) + ".");
+        if (color == "none") {
+            border = "<br>";
+            border2 = "";
+            sys.sendHtmlAuths(helpers.bot(bots.main) + "The command borders have been removed by " + name + ".", channel);
+        } else if (!sys.validColor(color)) {
+            helpers.starfox(src, channel, command, bots.command, "Error 403, invalid " + spelling + ".");
             return;
+        } else {
+            borderColor = sys.hexColor(color);
+            border = "<font color='" + sys.hexColor(color) +
+            "'><b>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>></b></font>";
+            border2 = "<font color='" + sys.hexColor(color) +
+            "'><b>&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;" +
+            "&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;" +
+            "&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;" +
+            "&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;" +
+            "&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;</b></font>";
+            sys.sendHtmlAuths(helpers.bot(bots.main) + "The command border " + spelling + " has been changed to " + color + " by " + name + ".", channel);
         }
-        borderColor = sys.hexColor(color);
+        helpers.saveData("border");
+        helpers.saveData("border2");
         helpers.saveData("borderColor");
-        border = "<font color='" + sys.hexColor(color) + "'><b>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>></b></font>";
-        border2 = "<font color='" + sys.hexColor(color) + "'><b>&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;" +
-        "&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;</b></font>";
-        sys.sendHtmlAuths(helpers.bot(bots.main) + "The border " + command[0].slice(6) + " has been changed to " + color + " by " + name + ".", channel);
     }
 
     ,
