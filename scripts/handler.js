@@ -32,7 +32,7 @@ mutedOrSilenced = function (src, channel, command, name, auth, message) {
         return true;
     }
     if (regchannels[sys.channel(channel).toLowerCase()]) {
-        if (regchannels[sys.channel(channel).toLowerCase()].silence > auth) {
+        if (regchannels[sys.channel(channel).toLowerCase()].silence > helpers.cauth(name, channel)) {
             helpers.silenceMessage(src, channel);
             return true;
         }

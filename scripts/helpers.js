@@ -26,6 +26,8 @@ helpers = {
         sys.write(DATA_FOLDER + "leavemessage.txt", "~Player~ has left ~Server~!");
         sys.write(DATA_FOLDER + "channelwelcomemessage.txt", "Please welcome ~Player~ to ~Channel~!");
         sys.write(DATA_FOLDER + "channelleavemessage.txt", "~Player~ has left ~Channel~!");
+        sys.write(DATA_FOLDER + "silencemessage.txt", "The server has been silenced!");
+        sys.write(DATA_FOLDER + "unsilencemessage.txt", "The server has been unsilenced! Everyone can talk again!");
         sys.write(DATA_FOLDER + "nopermissionmessage.txt", "Can't let you do that, Star ~Player~!");
         sys.write(DATA_FOLDER + "cmdcolors.txt", '["#4169E1","#008000","#FF0000","#FFA500","#FFD700","#0000FF"]');
         sys.write(DATA_FOLDER + "listcolors.txt", '{"mute":"#1E90FF","ban":"#FF6900","rangeban":"#008000","megaban":"#800080","gigaban":"#AA0000"}');
@@ -129,6 +131,8 @@ helpers = {
         channelWelcomeMessage = helpers.readData("channelwelcomemessage");
         channelLeaveMessage = helpers.readData("channelleavemessage");
         noPermissionMessage = helpers.readData("nopermissionmessage");
+        silenceMessage = helpers.readData("silencemessage");
+        unsilenceMessage = helpers.readData("unsilencemessage");
         cmdcolors = helpers.readObject("cmdcolors");
         listcolors = helpers.readObject("listcolors");
         bots = helpers.readObject("bots");
