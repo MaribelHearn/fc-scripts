@@ -1389,24 +1389,28 @@ admincommands = {
         + "<br>"
         + "Current messages:<br>"
         + "<br>"
-        + "<b>Welcome message: </b>" + welcomeMessage + "<br>"
-        + "<b>Leave message: </b>" + leaveMessage + "<br>"
+        + "<b>Server welcome message: </b>" + welcomeMessage + "<br>"
+        + "<b>Server leave message: </b>" + leaveMessage + "<br>"
         + "<b>Channel welcome message: </b>" + channelWelcomeMessage + "<br>"
         + "<b>Channel leave message: </b>" + channelLeaveMessage + "<br>"
+        + "<b>Silence message: </b>" + silenceMessage + "<br>"
+        + "<b>Unsilence message: </b>" + unsilenceMessage + "<br>"
         + "<b>No permission message: </b>" + noPermissionMessage + "<br>"
         + "<br>"
-        + "Syntax for the messages:<br>"
+        + "Syntax for the messages other than silencing:<br>"
         + "<br>"
         + "<b>~Player~</b> will be replaced by someone's username.<br>"
         + "<b>~Server~</b> will be replaced by the server name.<br>"
         + "<b>~Channel~</b> will be replaced by the channel name.<br>"
         + "<br>"
         + "Use <b>" + helpers.user("/layout") + "</b> to toggle the layout of certain messages between the old one and the new one.<br>"
-        + "Use <b>" + helpers.user("/welcomemsg ") + helpers.arg("text") + "</b> to change the welcome message to <b>text</b>.<br>"
-        + "Use <b>" + helpers.user("/leavemsg ") + helpers.arg("text") + "</b> to change the leave message to <b>text</b>.<br>"
-        + "Use <b>" + helpers.user("/channelwelcomemsg ") + helpers.arg("text") + "</b> to change the channel welcome message to <b>text</b>.<br>"
-        + "Use <b>" + helpers.user("/channelleavemsg ") + helpers.arg("text") + "</b> to change the channel leave message to <b>text</b>.<br>"
-        + "Use <b>" + helpers.user("/nopermissionmsg ") + helpers.arg("text") + "</b> to change the message someone gets when trying to use a command for higher auth to <b>text</b>.<br>"
+        + "Use <b>" + helpers.user("/welcomemessage ") + helpers.arg("text") + "</b> to change the welcome message to <b>text</b>. Also /welcomemsg.<br>"
+        + "Use <b>" + helpers.user("/leavemessage ") + helpers.arg("text") + "</b> to change the leave message to <b>text</b>. Also /leavemsg.<br>"
+        + "Use <b>" + helpers.user("/cwelcomemessage ") + helpers.arg("text") + "</b> to change the channel welcome message to <b>text</b>. Also /cwelcomemsg.<br>"
+        + "Use <b>" + helpers.user("/cleavemessage ") + helpers.arg("text") + "</b> to change the channel leave message to <b>text</b>. Also /cleavemsg.<br>"
+        + "Use <b>" + helpers.user("/silencemessage ") + helpers.arg("text") + "</b> to change the silence message to <b>text</b>. Also /silencemsg.<br>"
+        + "Use <b>" + helpers.user("/unsilencemessage ") + helpers.arg("text") + "</b> to change the unsilence message to <b>text</b>. Also /unsilencemsg.<br>"
+        + "Use <b>" + helpers.user("/nopermissionmessage ") + helpers.arg("text") + "</b> to change the message someone gets when trying to use a command for higher auth to <b>text</b>. Also /nopermissionmsg.<br>"
         + "<br><timestamp/><br>"
         + border2;
         sys.sendHtmlMessage(src, commandsmessage, channel);
@@ -1480,6 +1484,44 @@ admincommands = {
         channelLeaveMessage = message;
         helpers.saveData("channelLeaveMessage");
         sys.sendHtmlAll(helpers.bot(bots.main) + "The channel leave message has been changed to '" + channelLeaveMessage + "' by " + name + ".", channel);
+    }
+
+    ,
+
+    silencemessage: function (src, channel, command) {
+        var name = sys.name(src), message = command[1];
+        if (!message) {
+            sys.sendHtmlMessage(src, helpers.bot(bots.main) + "The current silence message is: " + silenceMessage + ".", channel);
+            return;
+        }
+        silenceMessage = message;
+        helpers.saveData("silenceMessage");
+        sys.sendHtmlAll(helpers.bot(bots.main) + "The silence message has been changed to '" + silenceMessage + "' by " + name + ".", channel);
+    }
+
+    ,
+
+    silencemsg: function (src, channel, command) {
+        this.silencemessage(src, channel, command);
+    }
+
+    ,
+
+    unsilencemessage: function (src, channel, command) {
+        var name = sys.name(src), message = command[1];
+        if (!message) {
+            sys.sendHtmlMessage(src, helpers.bot(bots.main) + "The current unsilence message is: " + unsilenceMessage + ".", channel);
+            return;
+        }
+        unsilenceMessage = message;
+        helpers.saveData("unsilenceMessage");
+        sys.sendHtmlAll(helpers.bot(bots.main) + "The unsilence message has been changed to '" + unsilenceMessage + "' by " + name + ".", channel);
+    }
+
+    ,
+
+    unsilencemsg: function (src, channel, command) {
+        this.unsilencemessage(src, channel, command);
     }
 
     ,

@@ -27,7 +27,7 @@ cmodcommands = {
         + "<b>" + helpers.user("/cbanlist") + "</b>: displays the current channel's ban list in a neat table.<br>"
         + "<b>" + helpers.user("/cclose ") + helpers.arg("auth") + "</b>: closes the current channel for any player below level <b>auth</b>.<br>"
         + "<b>" + helpers.user("/copen") + "</b>: opens the current channel.<br>"
-        + "<b>" + helpers.user("/silence ") + helpers.arg("level") + "</b>: sets the silence level of the current channel to <b>level</b>. <b>level</b> is 1, 2 or 3 and cannot exceed your channel auth level. "
+        + "<b>" + helpers.user("/csilence ") + helpers.arg("level") + "</b>: sets the silence level of the current channel to <b>level</b>. <b>level</b> is 1, 2 or 3 and cannot exceed your channel auth level. "
         + "If <b>level</b> is not specified, uses your channel auth level.<br>"
         + "<b>" + helpers.user("/unsilence") + "</b>: removes the silence level of the current channel.<br>"
         + "<b>" + helpers.user("/caps") + "</b>: allows or disallows excessive usage of caps on the current channel.<br>"
@@ -405,67 +405,55 @@ cmodcommands = {
 
     ,
 
-    silence: function (src, channel, command) {
-        var name = sys.name(src), cauth = helpers.cauth(name.toLowerCase(), channel), lower = sys.channel(channel).toLowerCase(), strength = command[1], silencemessage = helpers.bot(bots.silence);
+    csilence: function (src, channel, command) {
+        var name = sys.name(src), cauth = helpers.cauth(name.toLowerCase(), channel),
+            channelName = sys.channel(channel), lower = channelName.toLowerCase(), level = command[1];
         if (regchannels[lower]) {
-            if (!strength) {
-                strength = cauth;
+            if (!level) {
+                level = cauth;
             }
-            if (isNaN(strength) || strength < 1 || strength > 3) {
+            if (isNaN(level) || level < 1 || level > 3) {
                 helpers.starfox(src, channel, command, bots.silence, "Error 403, invalid silence level.");
                 return;
             }
-            if (strength > cauth) {
-                helpers.starfox(src, channel, command, bots.silence, "Error 403, you may not silence with a silence level higher than your auth level.");
+            if (level > cauth) {
+                helpers.starfox(src, channel, command, bots.silence, "Error 403, you may not use a silence level higher than your auth level.");
                 return;
             }
-            if (regchannels[sys.channel(channel).toLowerCase()].silence > cauth) {
-                helpers.starfox(src, channel, command, bots.silence, "Error 403, you can't lower the silence when the silence level is higher than your auth level!");
+            if (regchannels[lower].silence > cauth) {
+                helpers.starfox(src, channel, command, bots.silence, "Error 403, you may not lower the silence level when it is higher than your auth level!");
                 return;
             }
-            if (strength == regchannels[sys.channel(channel).toLowerCase()].silence) {
+            if (level == regchannels[lower].silence) {
                 helpers.starfox(src, channel, command, bots.silence, "Error 400, this channel already has silence level " + strength + "!");
                 return;
             }
-            regchannels[sys.channel(channel).toLowerCase()].silence = strength;
-            if (bots.silence == "Achmed the Dead Terrorist") {
-                silencemessage += "SILENCE! I KILL YOU! ";
-            }
-            silencemessage += "This channel has been silenced by " + name + ". [Silence Level: " + strength + "]";
+            regchannels[lower].silence = level;
             helpers.saveData("regchannels");
-            sys.sendHtmlAll(silencemessage, channel);
-        } else {
-            helpers.starfox(src, channel, command, bots.silence, "Error 400, this channel isn't registered!");
+            sys.sendHtmlAll(helpers.bot(bots.silence) + silenceMessage.replace(/~Player~/g, name).replace(/~Channel~/g, channelName) + ". [Silence Level: " + level + "]", channel);
             return;
         }
+        helpers.starfox(src, channel, command, bots.silence, "Error 400, this channel isn't registered!");
     }
 
     ,
 
-    unsilence: function (src, channel, command) {
-        var name = sys.name(src), cauth = helpers.cauth(name.toLowerCase(), channel), lower = sys.channel(channel).toLowerCase(), unsilencemessage = helpers.bot(bots.silence);
+    cunsilence: function (src, channel, command) {
+        var name = sys.name(src), cauth = helpers.cauth(name.toLowerCase(), channel),
+            lower = sys.channel(channel).toLowerCase();
         if (regchannels[lower]) {
             if (regchannels[lower].silence > cauth) {
-                helpers.starfox(src, channel, command, bots.silence, "Error 403, you can't unsilence this channel because the silence level is higher than your auth level!");
-                return;
-            }
-            if (regchannels[lower].silence === 0) {
-                helpers.starfox(src, channel, command, bots.silence, "Error 400, you can't unsilence when there is no silence in this channel!");
-                return;
-            }
-            if (regchannels[lower].silence <= cauth) {
+                helpers.starfox(src, channel, command, bots.silence, "Error 403, you may not unsilence this channel because the silence level is higher than your auth level!");
+            } else if (regchannels[lower].silence === 0) {
+                helpers.starfox(src, channel, command, bots.silence, "Error 400, this channel isn't silenced!");
+            } else if (regchannels[lower].silence <= cauth) {
                 regchannels[lower].silence = 0;
-                if (bots.silence == "Achmed the Dead Terrorist") {
-                    unsilencemessage += "UNSILENCE! I WON'T KILL YOU! ";
-                }
-                unsilencemessage += "This channel has been unsilenced by " + name + ".";
                 helpers.saveData("regchannels");
-                sys.sendHtmlAll(unsilencemessage, channel);
+                sys.sendHtmlAll(helpers.bot(bots.silence) + unsilenceMessage.replace(/~Player~/g, name), channel);
             }
-        } else {
-            helpers.starfox(src, channel, command, bots.silence, "Error 400, this channel isn't registered!");
             return;
         }
+        helpers.starfox(src, channel, command, bots.silence, "Error 400, this channel isn't registered!");
     }
 
     ,
