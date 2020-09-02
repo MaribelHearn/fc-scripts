@@ -92,7 +92,7 @@ usercommands = {
         + "<b>" + helpers.user("/serverinfo") + "</b>: displays server information.<br>"
         + "<b>" + helpers.user("/scriptinfo") + "</b>: displays script information.<br>"
         + "<b>" + helpers.user("/playerinfo ") + helpers.arg("player") + "</b>: displays information about <b>player</b>, including when they were last seen. "
-        + "If <b>player</b> is not specified, displays your own player info.<br>"
+        + "If <b>player</b> is not specified, displays your own player info. Also /player.<br>"
         + "<b>" + helpers.user("/team ") + helpers.arg("number") + "</b>: displays your team with number <b>number</b>. If <b>number</b> is not specified, displays your first team.<br>"
         + "<b>" + helpers.user("/pokedex ") + helpers.arg("Pokémon") + "</b>: displays <b>Pokémon</b>'s data in a neat table. Also /pokemon.<br>"
         + "<b>" + helpers.user("/movedex ") + helpers.arg("move") + "</b>: displays data for <b>move</b> in a neat table. Also /move.<br>"
@@ -571,39 +571,52 @@ usercommands = {
     ,
 
     playerinfo: function (src, channel, command) {
-        var infomessage = border + "<h2>Player Info</h2><br>", player = command[1], trgt, auth, imageindex, status, lastlogin;
+        var infomessage = border + "<h2>Player Info</h2><br>", player = command[1],
+            trgt, auth, imageindex, status, lastlogin, nonMatching;
         if (!player) {
             player = sys.name(src);
         }
         trgt = sys.id(player);
-        if (!trgt && !sys.dbExists(player)) {
-            helpers.starfox(src, channel, command, bots.command, "Error 404, that player does not exist.");
-            return;
+        if (!sys.dbExists(player)) {
+            if (trgt) {
+                nonMatching = true;
+                original = players[trgt].name;
+            } else {
+                helpers.starfox(src, channel, command, bots.command, "Error 404, that player does not exist.");
+                return;
+            }
         }
-        if (trgt && !sys.dbExists(player)) {
-            player = players[trgt].name;
-        }
-        lastlogin = helpers.formatLastOn(src, sys.dbLastOn(player));
-        if (members[player.toLowerCase()]) {
-            player = members[player.toLowerCase()];
-        }
+        lastlogin = helpers.formatLastOn(src, sys.dbLastOn(original ? original : player));
         if (trgt) {
+            player = players[trgt].name;
             auth = (sys.auth(trgt) >= 4 ? 0 : sys.auth(trgt));
             imageindex = helpers.imageIndex(trgt);
             status = "<font color='green'><b>Online</b></font>";
-            infomessage += helpers.authimage(src, imageindex) + " " + player + " " + status +
-            "<br><b>Auth:</b> " + helpers.authName(sys.dbAuth(player), true, true) +
+            infomessage += helpers.authimage(src, imageindex) +
+            " " + (nonMatching ? original + " (" + sys.name(trgt) + ")" : player) +
+            " " + status + "<br><b>Auth:</b> " + helpers.authName(sys.dbAuth(player), true, true) +
             "<br><b>Avatar:</b> <img src='trainer:" + sys.avatar(trgt) + "'>" +
             "<br><b>Color:</b> " + helpers.color(trgt);
         } else {
+            trgt = helpers.originalToID(player);
+            player = (members[player] ? members[player] : player);
             auth = (sys.dbAuth(player) >= 4 ? 4 : sys.dbAuth(player) + 4);
-            status = "<font color='red'>Offline</font>";
-            infomessage += helpers.authimage(src, imageindex) + " " + player + " " + status +
-            "<br><b>Auth:</b> " + helpers.authName(sys.dbAuth(player), true, true);
+            status = ( trgt ? "<font color='green'><b>Online</b></font>" : "<font color='red'>Offline</font>");
+            infomessage += helpers.authimage(src, imageindex) +
+            " " + player + (trgt && player != sys.name(trgt) ? " (" + sys.name(trgt) + ")" : "") +
+            " " + status + "<br><b>Auth:</b> " + helpers.authName(sys.dbAuth(player), true, true) +
+            (trgt ? "<br><b>Avatar:</b> <img src='trainer:" + sys.avatar(trgt) + "'>" +
+            "<br><b>Color:</b> " + helpers.color(trgt) : "");
         }
         infomessage += "<br><b>Last Online:</b> " + lastlogin +
         "<br><br><timestamp/><br>" + border2;
         sys.sendHtmlMessage(src, infomessage, channel);
+    }
+
+    ,
+
+    player: function (src, channel, command) {
+        this.playerinfo(src, channel, command);
     }
 
     ,

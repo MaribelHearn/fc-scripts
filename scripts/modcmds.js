@@ -557,10 +557,9 @@ modcommands = {
         + "<h2>Moderator Commands ~ Info Options</h2>"
         + "<br>"
         + "<b>" + helpers.user("/cp ") + helpers.arg("player") + "</b>: displays Control Panel and location data for <b>player</b>. Also /whois.<br>"
-        + "<b>" + helpers.user("/recall ") + helpers.arg("player") + "</b>: recalls <b>player</b>'s country and time zone data. Will be erased again after one minute.<br>"
         + "<b>" + helpers.user("/rangealts ") + helpers.arg("range") + "</b>: displays alts for <b>range</b>.<br>"
-        + "<b>" + helpers.user("/lastmessages") + "</b>: Shows everyone's last 10 messages in a neat table. Also /lastmsgs or /lastposts.<br>"
-        + "<b>" + helpers.user("/regchannelinfo") + "</b>: lists all registered channels and their info. Also /regchannels.<br>"
+        + "<b>" + helpers.user("/lastmessages") + "</b>: Shows everyone's last 10 messages in a neat table. Also /lastposts or /lastmsgs.<br>"
+        + "<b>" + helpers.user("/regchannels") + "</b>: lists all registered channels and their info. Also /regchannelinfo.<br>"
         + "<b>" + helpers.user("/commandlist") + "</b>: lists all available commands. Also /allcommands.<br>"
         + "<br><timestamp/><br>"
         + border2;
@@ -597,7 +596,6 @@ modcommands = {
         player = name.toLowerCase();
         alts = sys.aliases(ip);
         totalAlts = alts.length;
-        sys.sendMessage(src, "id = " + id + ", player = " + player + ", name = " + name + ", lower = " + lower + ", trgtname = " + trgtname);
         if (id) {
             ip = sys.ip(id);
             auth = sys.auth(id);
@@ -671,7 +669,7 @@ modcommands = {
         }
         !cityname[player.toLowerCase()] ? city = "[no data]" : city = cityname[player.toLowerCase()];
         cpmessage += (!helpers.isAndroid(src) ? helpers.authimage(src, imageindex) +
-        " " : "") + player + " " + (id && players[id].name != lower ? " (" + lower + ")" : "") + " " + status +
+        " " : "") + player + " " + (id && players[id].name.toLowerCase() != lower ? " (" + lower + ")" : "") + " " + status +
         "<br><b>Auth:</b> " + helpers.authName(auth, DISPLAY_USER);
         if (city == "[no data]") {
             cpmessage += "<br><b>IP:</b> " + ip;
@@ -696,49 +694,6 @@ modcommands = {
 
     whois: function (src, channel, command) {
         this.cp(src, channel, command);
-    }
-
-    ,
-
-    recall: function (src, channel, command) {
-        if (API_KEY === "") {
-            helpers.starfox(src, channel, command, bots.command, "Error 400, this command is currently disabled.");
-            return;
-        }
-        if (!command[1]) {
-            helpers.starfox(src, channel, command, bots.command, "Error 404, player not found.");
-            return;
-        }
-        var player = command[1].toLowerCase();
-        if (!sys.dbIp(player)) {
-            helpers.starfox(src, channel, command, bots.command, "Error 400, you can't recall " + player + "'s data because they don't exist in the database!");
-            return;
-        }
-        var ip = sys.dbIp(player);
-        sys.webCall(helpers.countryRetrievalUrl(ip), function (resp) {
-            resp = JSON.parse(resp);
-            countryname[player] = helpers.countrydata(resp.countryName);
-            cityname[player] = helpers.citydata(resp.cityName);
-            timezone[player] = helpers.timezonedata(resp.countryName, resp.timeZone);
-            helpers.saveData("countryname");
-            helpers.saveData("cityname");
-            helpers.saveData("timezone");
-            if (members[player]) {
-                player = members[player];
-            }
-            sys.sendHtmlMessage(src, helpers.bot(bots.command) + player + "'s country and time zone data has been recalled.", channel);
-            if (sys.dbAuth(player) < 1) {
-                sys.setTimer(function () {
-                    delete countryname[player.toLowerCase()];
-                    delete cityname[player.toLowerCase()];
-                    delete timezone[player.toLowerCase()];
-                    helpers.saveData("countryname");
-                    helpers.saveData("cityname");
-                    helpers.saveData("timezone");
-                    sys.sendHtmlMessage(src, helpers.bot(bots.command) + player + "'s country and time zone data has been deleted.", channel);
-                }, 60000, 0);
-            }
-        });
     }
 
     ,
@@ -815,7 +770,7 @@ modcommands = {
 
     ,
 
-    regchannelinfo: function (src, channel, command) {
+    regchannels: function (src, channel, command) {
         var message = border + "<h2>Registered Channels</h2><br>";
         if (helpers.isAndroid(src)) {
             message += "<tt>";
@@ -843,8 +798,8 @@ modcommands = {
 
     ,
 
-    regchannels: function (src, channel, command) {
-        this.regchannelinfo(src, channel, command);
+    regchannelinfo: function (src, channel, command) {
+        this.regchannels(src, channel, command);
     }
 
     ,
