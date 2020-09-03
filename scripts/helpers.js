@@ -1527,7 +1527,7 @@ helpers = {
     ,
 
     arg5: function (string) {
-        return "<font color='" + (layout == "new" ? cmdcolors[4] : "orange") + "'>" + this.escapehtml(string) + "</font>";
+        return "<font color='" + (layout == "new" ? cmdcolors[5] : "orange") + "'>" + this.escapehtml(string) + "</font>";
     }
 
     ,

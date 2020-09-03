@@ -594,8 +594,6 @@ modcommands = {
             }
         }
         player = name.toLowerCase();
-        alts = sys.aliases(ip);
-        totalAlts = alts.length;
         if (id) {
             ip = sys.ip(id);
             auth = sys.auth(id);
@@ -645,6 +643,8 @@ modcommands = {
                 status += " [Giga Banned]";
             }
         }
+        alts = sys.aliases(ip);
+        totalAlts = alts.length;
         lastLogin = helpers.formatLastOn(src, sys.dbLastOn(sys.dbExists(player) ? player : name));
         if (operatingsystem[player]) {
             os = (helpers.isAndroid(src) ? helpers.osName(operatingsystem[player]) : helpers.os(operatingsystem[player]));
