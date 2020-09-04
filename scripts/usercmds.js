@@ -320,6 +320,8 @@ usercommands = {
                 descriptions.push("To play Russian Roulette.");
             } else if (pluginLoaded["safari.js"] && ids[i] == safarichannel) {
                 descriptions.push("To play Safari.");
+            } else if (pluginLoaded["mafia.js"] && ids[i] == mafiachannel) {
+                descriptions.push("To play Mafia.");
             } else {
                 descriptions.push("A user-created channel.");
             }

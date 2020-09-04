@@ -226,9 +226,8 @@ rouletteEventMessage = function (event, ended) {
 
 rouletteEvents = function () {
     var randomEvent;
-
-    // only trigger events when at least one person is in the channel
-    if (sys.playersOfChannel(roulettechannel).length !== 0) {
+    // only trigger events when the channel exists and at least one person is in the channel
+    if (!serverStarting && sys.playersOfChannel(roulettechannel).length !== 0) {
         rouletteStep += 1;
 
         // if the waiting time's up and there is no event going, start a new event
