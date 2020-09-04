@@ -3,7 +3,7 @@
     ----------------------------------------------
     FUN COMMUNITY SAFARI safari.js
      - by Maribel Hearn, 2015-2015
-    
+
     This file contains the scripts necessary
     for Safari, a game based on the in-game
     Safari Zone in which you try to catch as
@@ -53,7 +53,7 @@ safaricommands = {
         var commandsmessage = border
         + "<h2>Safari Commands</h2>"
         + "<br>"
-        + "<b>" + helpers.user("/start") + "</b>: to join the Safari game. Allows you to choose a starter by clicking (on Android, use /choose).<br>"
+        + "<b>" + helpers.user("/startgame") + "</b>: to join the Safari game. Allows you to choose a starter by clicking (on Android, use /choose).<br>"
         + "<b>" + helpers.user("/choose ") + helpers.arg("Pokémon") + "</b>: makes you join the Safari game with <b>Pokémon</b>, assuming <b>Pokémon</b> is a valid starter.<br>"
         + "<b>" + helpers.user("/catch ") + helpers.arg("ball") + "</b>: try to catch the current wild Pokémon in <b>ball</b>.<br>"
         + "<b>" + helpers.user("/pokeball") + "</b>: try to catch the current wild Pokémon in a Poké Ball.<br>"
@@ -68,10 +68,10 @@ safaricommands = {
         + border2;
         sys.sendHtmlMessage(src, commandsmessage, channel);
     }
-    
+
     ,
-    
-    start: function (src, channel, command) {
+
+    startgame: function (src, channel, command) {
         var name = sys.name(src), lower = name.toLowerCase(), startermessage = "";
         if (safari[lower]) {
             helpers.starfox(src, channel, command, bots.safari, "Error 400, you have already joined the Safari game!");
@@ -85,9 +85,9 @@ safaricommands = {
         safari[lower] = {};
         sys.sendHtmlMessage(src, startermessage, channel);
     }
-    
+
     ,
-    
+
     choose: function (src, channel, command) {
         var name = sys.name(src), lower = name.toLowerCase(), starter = command[1], starterNum;
         if (!safari[lower]) {
@@ -122,9 +122,9 @@ safaricommands = {
         starter = sys.pokemon(starterNum);
         sys.sendHtmlAll(helpers.bot(bots.safari) + name + " has joined the Safari game! They are starting with <b><font color='" + helpers.typecolor(starterNum) + "'>" + starter + "</font></b>!", safarichannel);
     }
-    
+
     ,
-    
+
     spawn: function (src, channel, command) {
         var name = sys.name(src), lower = name.toLowerCase(), channelname = sys.channel(channel).toLowerCase(), pokemon = command[1], pokeNum, shine;
         if (helpers.cauth(lower, channelname) === 0) {
@@ -152,15 +152,15 @@ safaricommands = {
         sys.sendHtmlAll(helpers.bot(bots.safari) + "A wild " + (shine ? "<b><font color='#FFA500'>Shiny</font></b> " : "") +
         "<b><font color='" + helpers.typecolor(pokeNum) + "'>" + pokemon + "</font></b> appeared!<br>" + helpers.pokeImage(pokeNum, shine), safarichannel);
     }
-    
+
     ,
-    
+
     wild: function (src, channel, command) {
         this.spawn(src, channel, command);
     }
-    
+
     ,
-    
+
     "catch": function (src, channel, command) {
         var random = sys.rand(0, 100), pokemon = sys.pokemon(currentWild), name = sys.name(src), lower = name.toLowerCase(), ball = command[1], ballName, multiplier, catchRate;
         if (!safari[lower]) {
@@ -229,75 +229,75 @@ safaricommands = {
             sys.sendHtmlAll(helpers.bot(bots.safari) + "The wild " + pokemon + " broke out of " + name + "'s " + helpers.itemImage(sys.itemNum(ballName)) + " " + ballName + "!", safarichannel);
         }
     }
-    
+
     ,
-    
+
     pokeball: function (src, channel, command) {
         this["catch"](src, channel, ["catch", command[0]]);
     }
-    
+
     ,
-    
+
     great: function (src, channel, command) {
         this["catch"](src, channel, ["catch", command[0]]);
     }
-    
+
     ,
-    
+
     greatball: function (src, channel, command) {
         this["catch"](src, channel, ["catch", command[0]]);
     }
-    
+
     ,
-    
+
     ultra: function (src, channel, command) {
         this["catch"](src, channel, ["catch", command[0]]);
     }
-    
+
     ,
-    
+
     ultraball: function (src, channel, command) {
         this["catch"](src, channel, ["catch", command[0]]);
     }
-    
+
     ,
-    
+
     master: function (src, channel, command) {
         this["catch"](src, channel, ["catch", command[0]]);
     }
-    
+
     ,
-    
+
     masterball: function (src, channel, command) {
         this["catch"](src, channel, ["catch", command[0]]);
     }
-    
+
     ,
-    
+
     repeat: function (src, channel, command) {
         this["catch"](src, channel, ["catch", command[0]]);
     }
-    
+
     ,
-    
+
     repeatball: function (src, channel, command) {
         this["catch"](src, channel, ["catch", command[0]]);
     }
-    
+
     ,
-    
+
     timer: function (src, channel, command) {
         this["catch"](src, channel, ["catch", command[0]]);
     }
-    
+
     ,
-    
+
     timerball: function (src, channel, command) {
         this["catch"](src, channel, ["catch", command[0]]);
     }
-    
+
     ,
-    
+
     pay: function (src, channel, command) {
         var name = sys.name(src), trgtname = command[1], lower, money;
         if (!trgtname) {
@@ -329,9 +329,9 @@ safaricommands = {
         helpers.saveData("safari");
         sys.sendHtmlAll(helpers.bot(bots.safari) + name + " paid " + POKEDOLLAR + money + " to " + (members[lower] ? members[lower] : trgtname) + "!", safarichannel);
     }
-    
+
     ,
-    
+
     pokemart: function (src, channel, command) {
         var pokemartmessage = border + "<h2>Poké Mart</h2><br>", lower = sys.name(src).toLowerCase();
         if (!safari[lower]) {
@@ -361,9 +361,9 @@ safaricommands = {
         pokemartmessage += "<br><br><timestamp/><br>" + border2;
         sys.sendHtmlMessage(src, pokemartmessage, channel);
     }
-    
+
     ,
-    
+
     buy: function (src, channel, command) {
         var lower = sys.name(src).toLowerCase(), item = command[1], quantity, price, grammar;
         if (!safari[lower]) {
@@ -395,9 +395,9 @@ safaricommands = {
         sys.sendHtmlMessage(src, helpers.bot(bots.safari) + "You bought " + quantity + " " + safariHelpers.displayName(item) + grammar +
         " for " + POKEDOLLAR + POKEMART_PRICES[item] + ". You now have " + POKEDOLLAR + safari[lower].money + "!", channel);
     }
-    
+
     ,
-    
+
     sell: function (src, channel, command) {
         var lower = sys.name(src).toLowerCase(), item = command[1], quantity, price, grammar;
         if (!safari[lower]) {
@@ -429,9 +429,9 @@ safaricommands = {
         sys.sendHtmlMessage(src, helpers.bot(bots.safari) + "You sold " + quantity + " " + safariHelpers.displayName(item) + grammar +
         " for " + POKEDOLLAR + price + ". You now have " + POKEDOLLAR + safari[lower].money + "!", channel);
     }
-    
+
     ,
-    
+
     bag: function (src, channel, command) {
         var bagmessage = border + "<h2>Bag</h2><br>", lower = sys.name(src).toLowerCase(), items;
         if (!safari[lower]) {
@@ -462,9 +462,9 @@ safaricommands = {
         bagmessage += "<br><br><timestamp/><br>" + border2;
         sys.sendHtmlMessage(src, bagmessage, channel);
     }
-    
+
     ,
-    
+
     box: function (src, channel, command) {
         var boxmessage = border + "<h2>Box</h2><br>", lower = sys.name(src).toLowerCase(), counter = 0, pokemon;
         if (!safari[lower]) {
@@ -508,9 +508,9 @@ safariHelpers = {
         }
         return RATE_MULTIPLIERS[ball];
     }
-    
+
     ,
-    
+
     displayName: function (ball) {
         return (ball == "poke" || ball == "poké" ? "Poké Ball" : helpers.cap(ball.toLowerCase().replace("ball", "")) + " Ball");
     }

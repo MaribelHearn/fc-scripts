@@ -143,7 +143,7 @@ mafiaCommand = function (src, channel, command, lower, name, auth, cauth, messag
     if (pluginLoaded["mafia.js"] && mafiacommands[lower] !== undefined) {
         if (channel != mafiachannel) {
             helpers.starfox(src, channel, command, bots.mafia, "Error 403, this command is meant to be used in " +
-            "the " + helpers.channelLink(sys.channel(safarichannel)) + " channel.");
+            "the " + helpers.channelLink(sys.channel(mafiachannel)) + " channel.");
             return 1;
         } else if (!(helpers.isMutable(mafiacommands[lower]) && mutedOrSilenced(src, channel, command, name, auth, message))) {
             mafiacommands[lower](src, channel, command);

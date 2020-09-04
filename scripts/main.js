@@ -46,8 +46,10 @@
     DASH = /\u058A|\u05BE|\u1400|\u1806|\u2010-\u2015|\u2053|\u207B|\u208B|\u2212|\u2E17|\u2E1A|\u301C|\u3030|\u30A0|[\uFE31-\uFE32]|\uFE58|\uFE63|\uFF0D/;
     CYRILLIC = /\u0408|\u03a1|\u0430|\u0410|\u0412|\u0435|\u0415|\u041c|\u041d|\u043e|\u041e|\u0440|\u0420|\u0441|\u0421|\u0422|\u0443|\u0445|\u0425|\u0456|\u0406/;
     AUTH_NAMES = ["User", "Moderator", "Administrator", "Owner", "Invisible Owner"];
-    SCRIPT_MODULES = ["usercmds.js", "modcmds.js", "admincmds.js", "ownercmds.js", "cusercmds.js", "cmodcmds.js", "cadmincmds.js", "cownercmds.js", "helpers.js", "handler.js", "tierchecks.js", "base64.js"];
-    OFFICIAL_PLUGINS = {"funcmds.js": "Fun Commands", "party.js": "Party", "roulette.js": "Roulette", "rr.js": "Russian Roulette", "safari.js": "Safari", "mafia.js": "Mafia"};
+    SCRIPT_MODULES = ["usercmds.js", "modcmds.js", "admincmds.js", "ownercmds.js", "cusercmds.js",
+    "cmodcmds.js", "cadmincmds.js", "cownercmds.js", "helpers.js", "handler.js", "tierchecks.js", "base64.js"];
+    OFFICIAL_PLUGINS = {"funcmds.js": "Fun Commands", "party.js": "Party", "roulette.js": "Roulette", "rr.js": "Russian Roulette",
+    "safari.js": "Safari", "mafia.js": "Mafia", "mafiastats.js": "Mafia Stats", "mafiachecker.js": "Mafia Checker"};
     SCRIPTS_FOLDER = "scripts/";
     PLUGINS_FOLDER = "plugins/";
     DATA_FOLDER = "data/";
@@ -103,7 +105,8 @@
     }
     plugins = [];
     channelPlugins = [];
-    pluginLoaded = {"funcmds.js": false, "party.js": false, "roulette.js": false, "rr.js": false, "safari.js": false, "mafia.js": false};
+    pluginLoaded = {"funcmds.js": false, "party.js": false, "roulette.js": false, "rr.js": false,
+    "safari.js": false, "mafia.js": false, "mafiastats.js": false, "mafiachecker.js": false};
     unofficialPlugins = false;
     if (sys.dirsForDirectory(sys.cwd()).contains("plugins")) {
         plugins = sys.filesForDirectory(PLUGINS_FOLDER);
@@ -113,14 +116,13 @@
                 print("Loaded plugin " + plugins[i]);
                 if (Object.keys(OFFICIAL_PLUGINS).contains(plugins[i])) {
                     pluginLoaded[plugins[i]] = true;
-                    if (plugins[i] != "funcmds.js") {
+                    if (!["funcmds.js", "mafiastats.js", "mafiachecker.js"].contains(plugins[i])) {
                         channelPlugins.push(plugins[i].replace(".js", ""));
                     }
                 } else {
                     unofficialPlugins = true;
                 }
             } catch (e) {
-                sys.sendHtmlOwner(helpers.bot(bots.script) + "An error occurred in plugin " + plugins[i] + ": " + e);
                 print("An error occurred in plugin " + plugins[i] + ": " + e);
             }
         }
@@ -1309,13 +1311,13 @@
             Mafia
             -----
         **/
-        if (pluginLoaded["mafia.js"]) {
+        /*if (pluginLoaded["mafia.js"]) {
             if (channel == mafiachannel) {
                 sys.stopEvent();
                 mafiaBeforeChat(src, message, channel);
                 return;
             }
-        }
+        }*/
         /**
             --------------
             Custom Plugins

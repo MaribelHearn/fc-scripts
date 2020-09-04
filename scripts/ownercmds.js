@@ -285,7 +285,7 @@ ownercommands = {
     ,
 
     ls: function (src, channel, command) {
-        var dir = command[1], message, dirs, files;
+        var dir = command[1], index = 0, message, dirs, files;
         if (!dir) {
             dir = sys.cwd();
         } else {
@@ -304,18 +304,14 @@ ownercommands = {
                 return;
             }
         }
-        message = border
-        + "<h2>Contents of " + dir + "</h2>"
-        + "<br>";
-        dirs = sys.dirsForDirectory(dir);
-        files = sys.filesForDirectory(dir);
-        for (subdir in dirs) {
-            message += dirs[subdir] + "/<br>";
-        }
+        message = border + "<h2>Contents of " + dir + "</h2>" + "<br><table>";
+        dirs = (sys.dirsForDirectory(dir).length > 0 ? (sys.dirsForDirectory(dir).join("/\\") + "/").split('\\') : []);
+        files = dirs.concat(sys.filesForDirectory(dir));
         for (file in files) {
-            message += files[file] + "<br>";
+            message += (index === 0 ? "<tr>" : "") + "<td>" + files[file] + "</td>" + (index == 2 ? "</tr>" : "");
+            index = (index + 1) % 3;
         }
-        message += "<br><timestamp/><br>" + border2;
+        message += "</table><br><br><timestamp/><br>" + border2;
         sys.sendHtmlMessage(src, message, channel);
     }
 
