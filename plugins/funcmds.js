@@ -351,14 +351,16 @@ funcommands = {
 
     morse: function (src, channel, command) {
         var name = sys.name(src), auth = sys.auth(src), color = helpers.color(src),
-            charset = "abcdefghijklmnopqrstuvwxyz0123456789 ", text, message;
+            charset = "abcdefghijklmnopqrstuvwxyz0123456789 ", text;
         var morse = [".-", "-...", "-.-.", "-..", ".", "..-.", "--.", "....", "..", ".---", "-.-", ".-..", "--", "-.", "---", ".--.", "--.-", ".-.",
         "...", "-", "..-", "...-", ".--", "-..-", "-.--", "--..", ".----", "..---", "...--", "....-", ".....", "-....", "--...", "---..", "----.", "-----", ""];
         if (!command[1]) {
             helpers.starfox(src, channel, command, bots.command, "Error 404, text not found.");
             return;
         }
-        text = command[1].toLowerCase().split("");
+        command = command.splice(0, 1);
+        command = command.join(DELIMITER);
+        text = command.toLowerCase().split("");
         for (var i in text) {
             if (!charset.contains(text[i])) {
                 helpers.starfox(src, channel, command, bots.command, "Error 403, invalid text. You may use only letters, numbers and spaces.");
@@ -366,9 +368,13 @@ funcommands = {
             }
             text[i] = morse[charset.indexOf(text[i])];
         }
-        text = text.join(" ");
-        message = "<font color='" + color + "'><timestamp/>" + (auth >= 1 && auth <= 3 ? "+<b><i>" + name + " MORSE:</i></b></font> " : "<b>" + name + " MORSE:</b></font> ") + text;
-        sys.sendHtmlAll(message, channel);
+        text = text.join(' ');
+        if (auth >= 1 && auth <= 3) {
+            sys.sendHtmlAll("<font color='" + color + "'><timestamp/>+<b><i>" + name + " MORSE:</i></b></font> " + text, channel);
+        } else {
+            sys.sendHtmlAll("<font color='" + color + "'><timestamp/><b>" + name + " MORSE:</b></font> " + text, channel);
+        }
+
     }
 
     ,

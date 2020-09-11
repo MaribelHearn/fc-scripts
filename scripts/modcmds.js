@@ -1270,15 +1270,7 @@ modcommands = {
             return;
         }
         text = helpers.escapehtml(command[2]);
-        if (!command[3]) {
-            helpers.starfox(src, channel, command, bots.command, "Error 404, bot not found.");
-            return;
-        }
-        bot == "default" ? bot = bots.fun : bot = helpers.escapehtml(command[3]);
-        if (!command[4]) {
-            helpers.starfox(src, channel, command, bots.command, "Error 404, color not found.");
-            return;
-        }
+        bot = (command[3] && command[3] != "default" ?  helpers.escapehtml(command[3]) : bots.fun);
         color = (command[4] ? command[4] : "#000000");
         size = (command[5] ? command[5] : 32);
         if (isNaN(size)) {

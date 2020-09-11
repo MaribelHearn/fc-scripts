@@ -61,6 +61,9 @@
         Additional Object Methods
         -------------------------
     **/
+    String.prototype.contains = function (char) {
+        return this.indexOf(char) > -1;
+    };
     Object.defineProperty(Object.prototype, "isEmpty", {
         configurable: true,
         enumerable: false,
@@ -874,16 +877,19 @@
         "'>Server Topic:</font></b> " + servertopic, channel);
         if (regchannels[lower]) {
             sys.sendHtmlMessage(src, "<b><font color='" + (layout == "new" ? channelTopicColor : "indigo") +
-            "'>Channel Topic:</font></b> " + regchannels[lower].topic.join(TOPIC_DELIMITER), channel);
+            "'>Channel " + (layout == "new" ? "Topic" : "Description") +
+            ":</font></b> " + regchannels[lower].topic.join(TOPIC_DELIMITER), channel);
         } else {
             if (pluginLoaded["party.js"] && channel == partychannel && partyMode != "none") {
                 sys.sendHtmlMessage(src, "<b><font color='" + (layout == "new" ? channelTopicColor : "indigo") +
-                "'>Channel Topic:</font></b> This channel is currently in " + helpers.cap(partyMode) + " Mode" +
+                "'>Channel " + (layout == "new" ? "Topic" : "Description") +
+                ":</font></b> This channel is currently in " + helpers.cap(partyMode) + " Mode" +
                 "." + (partyMode == "nightclub" ? "<font color='#FFFFFF'>:</font>" +
                 "<div style='background: #000000;'>" : ""), channel);
             } else {
                 sys.sendHtmlMessage(src, "<b><font color='" + (layout == "new" ? channelTopicColor : "indigo") +
-                "'>Channel Topic:</font></b> Welcome to " + channelname + "!", channel);
+                "'>Channel " + (layout == "new" ? "Topic" : "Description") +
+                ":</font></b> Welcome to " + channelname + "!", channel);
             }
         }
         if (pluginLoaded["party.js"] && channel == partychannel && partyMode == "nightclub") {
