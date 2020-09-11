@@ -1537,14 +1537,14 @@ helpers = {
             array = [], toggle = 0, i;
         for (i = 0; i < text.length; i++) {
             array.push("<font color='" + colors[toggle] + "'>" + text.charAt(i) + "</font>");
-            z = (z + 1) % colors.length;
+            toggle = (toggle + 1) % colors.length;
         }
         return array.join("");
     }
 
     ,
 
-    duoColor: function (given_text, colorX, colorY) {
+    duoColor: function (text, colorX, colorY) {
         var array = [], toggle = false, i;
         for (i = 0; i < text.length; i++) {
             array.push("<font color='" + (toggle ? colorY : colorX) + "';>" + text.charAt(i) + "</font>");
@@ -1555,14 +1555,18 @@ helpers = {
 
     ,
 
-    desu: function (given_text) {
+    desu: function (text) {
         return this.duoColor(text, "#008000", "#FF0000");
     }
 
     ,
 
     leet: function (text) {
-        return text.toLowerCase().replace(/a/gi, "4").replace(/e/gi, "3").replace(/g/gi, "9").replace(/l/gi, "1").replace(/o/gi, "0").replace(/s/gi, "5").replace(/t/gi, "7").replace(/z/gi, "2");
+        var charset = ['o', 'l', 'z', 'e', 'a', 's', '6', 't', 'b', 'g'], i;
+        for (i = 0; i < charset.length; i++) {
+            text = text.replace(new RegExp(charset[i], "gi"), i);
+        }
+        return text.toLowerCase();
     }
 
     ,
