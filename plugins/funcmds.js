@@ -459,10 +459,10 @@ funcommands = {
             num++;
         }
         text = helpers.escapehtml(text);
-        if (auth < 1) {
-            message = "<font color='" + color + "'><timestamp/><b>" + name + " RANDOM" + arg + ":</b></font> " + text;
-        } else {
+        if (auth >= 1 || auth <= 3) {
             message = "<font color='" + color + "'><timestamp/>+<b><i>" + name + " RANDOM" + arg + ":</i></b></font> " + text;
+        } else {
+        message = "<font color='" + color + "'><timestamp/><b>" + name + " RANDOM" + arg + ":</b></font> " + text;
         }
         sys.sendHtmlAll(message, channel);
     }

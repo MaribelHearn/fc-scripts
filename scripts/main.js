@@ -54,6 +54,7 @@
     PLUGINS_FOLDER = "plugins/";
     DATA_FOLDER = "data/";
     DBSEARCH_THRESHOLD = 100;
+    MAX_IMAGE_HEIGHT = 350;
     MAX_POKEMON = 803; // Marshadow is 802
     /**
         -------------------------
@@ -1440,26 +1441,56 @@
             YouTube Bot
             -----------
         **/
-        var link = helpers.strip(message).substring(helpers.strip(message).indexOf(": ") + 2, helpers.strip(message).length);
-        var regex = /.*(?:youtu.be\/|youtube.*v=|youtube.*\/embed\/|youtube.*\/v\/|youtube.*videos\/)([^#\&\?]*).*/;
-        if (link.match(regex)) {
-            try {
-                var data = helpers.htmlLinks(link, "object");
-            } catch (error) {
-                sys.sendHtmlOwner(helpers.bot(bots.main) + "An error occurred: " + error);
-                return;
+        if (GOOGLE_KEY !== "") {
+            var link = helpers.strip(message).substring(helpers.strip(message).indexOf(": ") + 2, helpers.strip(message).length).trim(),
+                regex = /.*(?:youtu.be\/|youtube.*v=|youtube.*\/embed\/|youtube.*\/v\/|youtube.*videos\/)([^#\&\?]*).*/,
+                image, ext, base64, array, size, x, y;
+            if (link.match(regex)) {
+                try {
+                    var data = helpers.htmlLinks(link, "object");
+                } catch (error) {
+                    sys.sendHtmlOwner(helpers.bot(bots.main) + "An error occurred: " + error);
+                    return;
+                }
+
+                var title = data.items[0].snippet.title;
+                var username = data.items[0].snippet.channelTitle;
+                var views = helpers.sep(data.items[0].statistics.viewCount);
+                var likes = helpers.sep(data.items[0].statistics.likeCount);
+                var dislikes = helpers.sep(data.items[0].statistics.dislikeCount);
+                var publishedDate = helpers.correctDateNotation(data.items[0].snippet.publishedAt);
+
+                sys.sendHtmlAll(helpers.bot(bots.main) + title + ", Uploader: " + username + ", Views: <b>" + views + "</b>, Likes: <b><font color='green'>" + likes + "</font></b>, " +
+                "Dislikes: <b><font color='red'>" + dislikes + "</font></b>, Published: " + publishedDate + " UTC.", channel);
             }
-
-            var title = data.items[0].snippet.title;
-            var username = data.items[0].snippet.channelTitle;
-            var views = helpers.sep(data.items[0].statistics.viewCount);
-            var likes = helpers.sep(data.items[0].statistics.likeCount);
-            var dislikes = helpers.sep(data.items[0].statistics.dislikeCount);
-            var publishedDate = helpers.correctDateNotation(data.items[0].snippet.publishedAt);
-
-            sys.sendHtmlAll(helpers.bot(bots.main) + title + ", Uploader: " + username + ", Views: <b>" + views + "</b>, Likes: <b><font color='green'>" + likes + "</font></b>, " +
-            "Dislikes: <b><font color='red'>" + dislikes + "</font></b>, Published: " + publishedDate + " UTC.", channel);
         }
+        /**
+            ---------
+            Image Bot
+            ---------
+        **/
+        /*regex = /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/;
+        array = message.split(' ');
+        if (sys.os() == "linux") {
+            for (i in array) {
+                link = helpers.strip(array[i]).substring(helpers.strip(array[i]).indexOf(": ") + 1, helpers.strip(array[i]).length).trim();
+                ext = link.substr(-4);
+                if (regex.test(link) && [".png", ".jpg", ".gif", ".ico"].contains(ext)) {
+                    sys.system("wget -O " + DATA_FOLDER + "temp_img" + ext + " " + link +
+                    " && identify " + DATA_FOLDER + "temp_img" + ext + " > " + DATA_FOLDER + "temp_id.txt");
+                    size = sys.read(DATA_FOLDER + "temp_id.txt").split(' ')[2];
+                    x = Number(size.split('x')[0]); y = Number(size.split('x')[1]);
+                    if (y > MAX_IMAGE_HEIGHT) {
+                        sys.system("convert -size " + size + " " + DATA_FOLDER + "temp_img" + ext +
+                        " -resize " + (x / 2) + "x" + (y / 2) + " " + DATA_FOLDER + "temp_img" + ext);
+                    }
+                    sys.system("base64 " + DATA_FOLDER + "temp_img" + ext + " > " + DATA_FOLDER + "temp_base64.txt");
+                    base64 = sys.read(DATA_FOLDER + "temp_base64.txt");
+                    sys.sendHtmlAll(helpers.bot(bots.main) + "<a href='" + link +
+                    "'><img src='data:image/png;base64," + base64 + "'></a>", channel);
+                }
+            }
+        }*/
         /**
             --------------
             Custom Plugins
