@@ -1532,76 +1532,31 @@ helpers = {
 
     ,
 
-    rainbow: function (given_text) {
-        var x = [], y = 0, z = 0;
-        while (y < given_text.length) {
-            x[y] = given_text.charAt(y);
-            if(z === 0) {x[y] = "<font color='#FF0000'>"+x[y]+"</font>";z = 1;}
-            else if(z == 1) {x[y] = "<font color='#FFA500'>"+x[y]+"</font>";z = 2;}
-            else if(z == 2) {x[y] = "<font color='#FFD700'>"+x[y]+"</font>";z = 3;}
-            else if(z == 3) {x[y] = "<font color='#008000'>"+x[y]+"</font>";z = 4;}
-            else if(z == 4) {x[y] = "<font color='#0000FF'>"+x[y]+"</font>";z = 5;}
-            else if(z == 5) {x[y] = "<font color='#4B0082'>"+x[y]+"</font>";z = 6;}
-            else if(z == 6) {x[y] = "<font color='#800080'>"+x[y]+"</font>";z = 0;}
-            y++;
+    rainbow: function (text) {
+        var colors = ["#FF0000", "#FFA500", "#FFD700", "#008000", "#0000FF", "#4B0082", "#800080"],
+            array = [], toggle = 0, i;
+        for (i = 0; i < text.length; i++) {
+            array.push("<font color='" + colors[toggle] + "'>" + text.charAt(i) + "</font>");
+            z = (z + 1) % colors.length;
         }
-        var a = 0;var text = "";
-        while (a < given_text.length) {
-            text = text + x[a];
-            a++;
-        }
-        return text;
-    }
-
-    ,
-
-    desu: function (given_text) {
-        var x = [], y = 0, z = 0;
-        var f = sys.rand(0, 2);
-        if(f === 0) {
-            while (y < given_text.length) {
-                x[y] = given_text.charAt(y);
-                if(z === 0) {x[y] = "<font color='green'>"+x[y]+"</font>";z = 1;}
-                else if(z == 1) {x[y] = "<font color='red'>"+x[y]+"</font>";z = 0;}
-                y++;
-            }
-        }
-        else{
-            while (y < given_text.length) {
-                x[y] = given_text.charAt(y);
-                if(z === 0) {x[y] = "<font color='red'>"+x[y]+"</font>";z = 1;}
-                else if(z == 1) {x[y] = "<font color='green'>"+x[y]+"</font>";z = 0;}
-                y++;
-            }
-        }
-        var a = 0;var text = "";
-        while (a < given_text.length) {
-            text = text + x[a];
-            a++;
-        }
-        return text;
+        return array.join("");
     }
 
     ,
 
     duoColor: function (given_text, colorX, colorY) {
-        var x = [], y = 0, z = 0, a = 0, text = "";
-        while (y < given_text.length) {
-            x[y] = given_text.charAt(y);
-            if (z === 0) {
-                x[y] = "<font color='" + colorX + "'>" + this.escapehtml(x[y]) + "</font>";
-                z = 1;
-            } else if (z == 1) {
-                x[y] = "<font color='" + colorY + "'>" + this.escapehtml(x[y]) + "</font>";
-                z = 0;
-            }
-            y++;
+        var array = [], toggle = false, i;
+        for (i = 0; i < text.length; i++) {
+            array.push("<font color='" + (toggle ? colorY : colorX) + "';>" + text.charAt(i) + "</font>");
+            toggle = !toggle;
         }
-        while (a < given_text.length) {
-            text = text + x[a];
-            a++;
-        }
-        return text;
+        return array.join("");
+    }
+
+    ,
+
+    desu: function (given_text) {
+        return this.duoColor(text, "#008000", "#FF0000");
     }
 
     ,

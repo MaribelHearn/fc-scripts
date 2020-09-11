@@ -125,12 +125,13 @@ funcommands = {
             helpers.starfox(src, channel, command, bots.command, "Error 403, the size may not be larger than 32 px.");
             return;
         }
-        if (helpers.isInArray(allcommands, title.toLowerCase())) {
+        if (allcommands.contains(title.toLowerCase())) {
             helpers.starfox(src, channel, command, bots.command, "Error 403, the title may not be the same as one of an existing command.");
             return;
         }
         sys.sendHtmlAll(helpers.bot(bot) + "<b>" + helpers.user(helpers.escapehtml(name)) +
-        " has used the " + helpers.arg(title) + " command.</b><br><span style='font-size:" + size + "px'><font color='" + color + "'>" + text + "</font></span>", channel);
+        " has used the " + helpers.arg(title) + " command.</b><br><span style='font-size:" + size +
+        "px'><font color='" + color + "'>" + text + "</font></span>", channel);
     }
 
     ,
@@ -349,7 +350,8 @@ funcommands = {
     ,
 
     morse: function (src, channel, command) {
-        var name = sys.name(src), color = helpers.color(src), charset = "abcdefghijklmnopqrstuvwxyz0123456789 ", text, message;
+        var name = sys.name(src), auth = sys.auth(src), color = helpers.color(src),
+            charset = "abcdefghijklmnopqrstuvwxyz0123456789 ", text, message;
         var morse = [".-", "-...", "-.-.", "-..", ".", "..-.", "--.", "....", "..", ".---", "-.-", ".-..", "--", "-.", "---", ".--.", "--.-", ".-.",
         "...", "-", "..-", "...-", ".--", "-..-", "-.--", "--..", ".----", "..---", "...--", "....-", ".....", "-....", "--...", "---..", "----.", "-----", ""];
         if (!command[1]) {
@@ -358,14 +360,14 @@ funcommands = {
         }
         text = command[1].toLowerCase().split("");
         for (var i in text) {
-            if (charset.indexOf(text[i]) < 0) {
+            if (!charset.contains(text[i])) {
                 helpers.starfox(src, channel, command, bots.command, "Error 403, invalid text. You may use only letters, numbers and spaces.");
                 return;
             }
             text[i] = morse[charset.indexOf(text[i])];
         }
         text = text.join(" ");
-        message = "<font color='" + color + "'><timestamp/>" + (sys.auth(src) >= 1 ? "+<b><i>" + name + " MORSE:</i></b></font> " : "<b>" + name + " MORSE:</b></font> ") + text;
+        message = "<font color='" + color + "'><timestamp/>" + (auth >= 1 && auth <= 3 ? "+<b><i>" + name + " MORSE:</i></b></font> " : "<b>" + name + " MORSE:</b></font> ") + text;
         sys.sendHtmlAll(message, channel);
     }
 
@@ -459,10 +461,10 @@ funcommands = {
             num++;
         }
         text = helpers.escapehtml(text);
-        if (auth >= 1 || auth <= 3) {
+        if (auth >= 1 && auth <= 3) {
             message = "<font color='" + color + "'><timestamp/>+<b><i>" + name + " RANDOM" + arg + ":</i></b></font> " + text;
         } else {
-        message = "<font color='" + color + "'><timestamp/><b>" + name + " RANDOM" + arg + ":</b></font> " + text;
+            message = "<font color='" + color + "'><timestamp/><b>" + name + " RANDOM" + arg + ":</b></font> " + text;
         }
         sys.sendHtmlAll(message, channel);
     }
