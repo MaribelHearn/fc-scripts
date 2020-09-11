@@ -1279,18 +1279,14 @@ modcommands = {
             helpers.starfox(src, channel, command, bots.command, "Error 404, color not found.");
             return;
         }
-        color = command[4];
-        if (!command[5]) {
-            helpers.starfox(src, channel, command, bots.command, "Error 404, size not found.");
-            return;
-        }
-        size = command[5];
+        color = (command[4] ? command[4] : "#000000");
+        size = (command[5] ? command[5] : 32);
         if (isNaN(size)) {
             helpers.starfox(src, channel, command, bots.command, "Error 400, the size must be a number.");
             return;
         }
         if (size > 32) {
-            helpers.starfox(src, channel, command, bots.command, "Error 403, the size may not be larger than 32 px.");
+            helpers.starfox(src, channel, command, bots.command, "Error 403, the size may not be larger than 32px.");
             return;
         }
         lower = title.toLowerCase();
