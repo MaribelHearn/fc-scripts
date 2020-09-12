@@ -11,7 +11,8 @@
     in the Party channel.
     ----------------------------------------------
 */
-PARTY_MODES = ["joke", "nightclub", "desu", "rainbow", "nyan", "dennis", "cirno", "sparta", "luigi", "roflcopter", "derp", "asdf", "leet", "morse", "reverse"];
+PARTY_MODES = ["joke", "nightclub", "desu", "rainbow", "nyan", "dennis", "cirno",
+"sparta", "luigi", "roflcopter", "derp", "asdf", "leet", "morse", "reverse"];
 partyMode = sys.fexists(DATA_FOLDER + "partymode.txt") ? helpers.readData("partymode") : "none";
 helpers.setVariable("partyNyan", 0);
 
@@ -180,7 +181,7 @@ partyBeforeChat = function (src, message, channel) {
     } else if (mode == "cirno") {
         message = "";
         for (i = 0; i < length; i++) {
-            message += (sys.rand(0, 2) === 0 ? "BAKA" : " &#x2788;";
+            message += (sys.rand(0, 2) === 0 ? "BAKA" : " &#x2788;");
         }
     } else if (mode == "reverse") {
         message = helpers.reverse(helpers.escapehtml(message));
