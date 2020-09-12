@@ -1556,7 +1556,8 @@ helpers = {
     ,
 
     desu: function (text) {
-        return this.duoColor(text, "#008000", "#FF0000");
+        var firstColor = ["#008000", "#FF0000"][sys.rand(0, 2)];
+        return this.duoColor(text, firstColor, (firstColor == "#008000" ? "#FF0000" : "#008000"));
     }
 
     ,
@@ -1572,43 +1573,16 @@ helpers = {
     ,
 
     morse: function (text) {
-        text = text.replace(/a/gi, ".- ");
-        text = text.replace(/b/gi, "-... ");
-        text = text.replace(/c/gi, "-.-. ");
-        text = text.replace(/d/gi, "-.. ");
-        text = text.replace(/e/gi, ". ");
-        text = text.replace(/f/gi, "..-. ");
-        text = text.replace(/g/gi, "--. ");
-        text = text.replace(/h/gi, ".... ");
-        text = text.replace(/i/gi, ".. ");
-        text = text.replace(/j/gi, ".--- ");
-        text = text.replace(/k/gi, "-.- ");
-        text = text.replace(/l/gi, ".-.. ");
-        text = text.replace(/m/gi, "-- ");
-        text = text.replace(/n/gi, "-. ");
-        text = text.replace(/o/gi, "--- ");
-        text = text.replace(/p/gi, ".--. ");
-        text = text.replace(/q/gi, "--.- ");
-        text = text.replace(/r/gi, ".-. ");
-        text = text.replace(/s/gi, "... ");
-        text = text.replace(/t/gi, "- ");
-        text = text.replace(/u/gi, "..- ");
-        text = text.replace(/v/gi, "...- ");
-        text = text.replace(/w/gi, ".-- ");
-        text = text.replace(/x/gi, "-..- ");
-        text = text.replace(/y/gi, "-.-- ");
-        text = text.replace(/z/gi, "--.. ");
-        text = text.replace(/0/g, "----- ");
-        text = text.replace(/1/g, ".---- ");
-        text = text.replace(/2/g, "..--- ");
-        text = text.replace(/3/g, "...-- ");
-        text = text.replace(/4/g, "....- ");
-        text = text.replace(/5/g, "..... ");
-        text = text.replace(/6/g, "-.... ");
-        text = text.replace(/7/g, "--... ");
-        text = text.replace(/8/g, "---.. ");
-        text = text.replace(/9/g, "----. ");
-        return text;
+        var charset = "abcdefghijklmnopqrstuvwxyz0123456789 ", morse = [".-", "-...", "-.-.", "-..", ".", "..-.", "--.", "....",
+        "..", ".---", "-.-", ".-..", "--", "-.", "---", ".--.", "--.-", ".-.", "...", "-", "..-", "...-", ".--", "-..-", "-.--",
+        "--..", ".----", "..---", "...--", "....-", ".....", "-....", "--...", "---..", "----.", "-----", ""], newText = [], i;
+        text = text.toLowerCase();
+        for (i = 0; i < text.length; i++) {
+            if (charset.contains(text[i])) {
+                newText.push(morse[charset.indexOf(text[i])]);
+            }
+        }
+        return newText.join(" ");
     }
 
     ,

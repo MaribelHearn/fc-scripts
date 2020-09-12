@@ -47,7 +47,6 @@ funcommands = {
         + "<b>" + helpers.user("/meme ") + helpers.arg("Pokémon") + helpers.arg2("*text1") + helpers.arg3("*text2") + helpers.arg4("*title") + helpers.arg5("*color") +
         "</b>: posts an image macro of <b>Pokémon</b>, called <b>title</b>, with captions in <b>color</b> saying <b>text1</b> and <b>text2</b> at the top and the bottom.<br>"
         + "<b>" + helpers.user("/merp") + "</b>: posts an image of Dunsparce. Merpsparce. Merpaderp.<br>"
-        + "<b>" + helpers.user("/morse ") + helpers.arg("text") + "</b>: translates <b>text</b> to Morse Code.<br>"
         + "<b>" + helpers.user("/nuke ") + helpers.arg("player") + "</b>: nukes <b>player</b>. If <b>player</b> is not specified, nukes a random user.<br>"
         + "<b>" + helpers.user("/paralyze ") + helpers.arg("player") + "</b>: paralyzes <b>player</b>. If <b>player</b> is not specified, paralyzes a random user. Also /paralyse.<br>"
         + "<b>" + helpers.user("/poison ") + helpers.arg("player") + "</b>: poisons <b>player</b>. If <b>player</b> is not specified, poisons a random user.<br>"
@@ -349,45 +348,15 @@ funcommands = {
 
     ,
 
-    morse: function (src, channel, command) {
-        var name = sys.name(src), auth = sys.auth(src), color = helpers.color(src),
-            charset = "abcdefghijklmnopqrstuvwxyz0123456789 ", text;
-        var morse = [".-", "-...", "-.-.", "-..", ".", "..-.", "--.", "....", "..", ".---", "-.-", ".-..", "--", "-.", "---", ".--.", "--.-", ".-.",
-        "...", "-", "..-", "...-", ".--", "-..-", "-.--", "--..", ".----", "..---", "...--", "....-", ".....", "-....", "--...", "---..", "----.", "-----", ""];
-        if (!command[1]) {
-            helpers.starfox(src, channel, command, bots.command, "Error 404, text not found.");
-            return;
-        }
-        command = command.splice(0, 1);
-        command = command.join(DELIMITER);
-        text = command.toLowerCase().split("");
-        for (var i in text) {
-            if (!charset.contains(text[i])) {
-                helpers.starfox(src, channel, command, bots.command, "Error 403, invalid text. You may use only letters, numbers and spaces.");
-                return;
-            }
-            text[i] = morse[charset.indexOf(text[i])];
-        }
-        text = text.join(' ');
-        if (auth >= 1 && auth <= 3) {
-            sys.sendHtmlAll("<font color='" + color + "'><timestamp/>+<b><i>" + name + " MORSE:</i></b></font> " + text, channel);
-        } else {
-            sys.sendHtmlAll("<font color='" + color + "'><timestamp/><b>" + name + " MORSE:</b></font> " + text, channel);
-        }
-
-    }
-
-    ,
-
     nuke: function (src, channel, command) {
         var name = sys.name(src), random = sys.rand(0, sys.numPlayers()), text, nukemessage;
         !command[1] ? player = sys.name(sys.playerIds()[random]) : player = command[1];
         text = player + " has been nuked by " + name + "!";
         nukemessage = "<font color='#800080'><timestamp/></font><b><font size='6' color='#FF0000'>☢</font>" + helpers.duoColor(text, "#800080", "#FF0000");
-        if (text.length / 2 != parseInt(text.length / 2)) {
-            sys.sendHtmlAll(nukemessage + "<font size='6' color='#FF0000'>☢</font></b>", channel);
-        } else {
+        if (text.length % 2 === 0) {
             sys.sendHtmlAll(nukemessage + "<font size='6' color='#800080'>☢</font></b>", channel);
+        } else {
+            sys.sendHtmlAll(nukemessage + "<font size='6' color='#FF0000'>☢</font></b>", channel);
         }
     }
 
@@ -424,55 +393,21 @@ funcommands = {
     ,
 
     random: function (src, channel, command) {
-        var name = sys.name(src), auth = sys.auth(src), color = helpers.color(src);
-        var wordamount = Math.ceil(Math.random() * 5), num = 0, number = 94, message, arg;
-        var letteramount = [], space = [], letter = [], letters = [];
-        var text = "", list = "!\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~";
-        if (!command[1]) {
-            arg = "";
-        } else {
-            arg = command[1].toUpperCase();
-        }
-        if (arg != "LETTERS" && arg != "NUMBERS") {
-            arg = "";
-        } else {
-            arg = " " + arg;
-        }
-        while (num < wordamount) {
-            space[num] = " ";
-            num++;
-        }
-        num = 0;
-        while (num < wordamount) {
-            letters[num] = Math.floor(Math.random() * 10);
-            num++;
-        }
-        if (command[1] == "letters") {
-            list = "abcdefghijklmopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
-            number = 53;
-        } else if (command[1] == "numbers") {
-            list = "1234567890";
-            number = 11;
-        }
-        num = 0;
-        while (num < wordamount) {
-            var num2 = 0;
-            while (num2 < letters[num]) {
-                letteramount[num] = Math.floor(Math.random() * number);
-                letter[num] = list.charAt(letteramount[num]);
-                text = text + letter[num];
-                num2++;
+        var name = sys.name(src), auth = sys.auth(src), color = helpers.color(src), MAX_WORDS = 10, MAX_WORD_LENGTH = 5,
+            RANDOM_TEXT = '!"#$%&\'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~',
+            words = Math.ceil(Math.random() * MAX_WORDS), wordlengths = [], text = "", i, j;
+        for (i = 0; i < words; i++) {
+            wordlengths.push(rand(MAX_WORD_LENGTH));
+            for (j = 0; j < wordlengths[j]; j++) {
+                text += RANDOM_TEXT.charAt(rand(RANDOM_TEXT.length));
             }
-            text = text + space[num];
-            num++;
+            text += ' ';
         }
-        text = helpers.escapehtml(text);
         if (auth >= 1 && auth <= 3) {
-            message = "<font color='" + color + "'><timestamp/>+<b><i>" + name + " RANDOM" + arg + ":</i></b></font> " + text;
+            sys.sendHtmlAll("<font color='" + color + "'><timestamp/>+<b><i>" + name + " RANDOM:</i></b></font> " + text, channel);
         } else {
-            message = "<font color='" + color + "'><timestamp/><b>" + name + " RANDOM" + arg + ":</b></font> " + text;
+            sys.sendHtmlAll("<font color='" + color + "'><timestamp/><b>" + name + " RANDOM:</b></font> " + text, channel);
         }
-        sys.sendHtmlAll(message, channel);
     }
 
     ,
