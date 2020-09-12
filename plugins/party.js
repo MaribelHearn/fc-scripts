@@ -85,7 +85,7 @@ partycommands = {
 
 partyBeforeChat = function (src, message, channel) {
     var name = helpers.escapehtml(sys.name(src)), auth = sys.auth(src), color = helpers.color(src),
-        length = message.length, mode = partyMode, playerIds, random, index;
+        length = message.length, mode = partyMode, playerIds, random, derps, i;
     if (message.split(' ')[0] == "/mode") {
         parseCommand(src, message, channel, name, auth, false);
         return;
@@ -105,7 +105,7 @@ partyBeforeChat = function (src, message, channel) {
         return;
     } else if (mode == "nightclub") {
         message = helpers.escapehtml(message);
-        if (auth > 0 && auth < 4) {
+        if (auth >= 1 && auth <= 3) {
             message = "<span style='font-size: 16px;'><font color='#FFFFFF'><timestamp/> +<b><i>" + helpers.rainbow(name + ":") + "</i> " + message + "</b></font></span>";
         } else {
             message = "<span style='font-size: 16px;'><font color='#FFFFFF'><timestamp/> <b>" + helpers.rainbow(name + ":") + " " + message + "</b></font></span>";
@@ -115,69 +115,48 @@ partyBeforeChat = function (src, message, channel) {
     } else if (mode == "rainbow" || mode == "desu" || mode == "leet" || mode == "morse") {
         mode == "leet" || mode == "morse" ? message = helpers[mode](message) : message = "<b>" + helpers[mode](message) + "</b>";
     } else if (mode == "nyan") {
-        index = 1;
         message = "Nyan";
-        while (index < length) {
+        for (i = 1; i < length; i++) {
             message += " Nyan";
-            index++;
         }
         sys.sendHtmlAll("<font color='#FFFFFF'>:</font><div style='background:" + helpers.nyancolor(partyNyan) + "'><center><span style='font-size: 16px;'>" + message + "</span></center>", channel);
-        partyNyan++;
-        if (partyNyan == 7) {
-            partyNyan = 0;
-        }
+        partyNyan = (partyNyan + 1) % 7;
         return;
     } else if (mode == "dennis") {
         if (pluginLoaded["funcmds.js"] && message.toLowerCase() == "/dennis") {
             funcommands.dennis(src, channel, ["dennis"]);
             return true;
         }
-        index = 1;
         message = "D";
-        while (index < length) {
+        for (i = 1; i < length; i++) {
             message += "D";
-            index++;
         }
-        index = 0;
-        while (index < length) {
+        for (i = 0; i < length; i++) {
             message += "E";
-            index++;
         }
-        index = 0;
-        while (index < length) {
+        for (i = 0; i < length; i++) {
             message += "N";
-            index++;
         }
-        index = 0;
-        while (index < length) {
+        for (i = 0; i < length; i++) {
             message += "N";
-            index++;
         }
-        index = 0;
-        while (index < length) {
+        for (i = 0; i < length; i++) {
             message += "I";
-            index++;
         }
-        index = 0;
-        while (index < length) {
+        for (i = 0; i < length; i++) {
             message += "S";
-            index++;
         }
         message += "!";
     } else if (mode == "sparta") {
-        index = 0;
         message = "This.. is.. SPART";
-        while (index < length) {
+        for (i = 0; i < length; i++) {
             message += "A";
-            index++;
         }
         message += "!";
     } else if (mode == "luigi") {
-        index = 1;
-        message = "SpaghE";
-        while (index < length) {
+        message = "Spagh";
+        for (i = 0; i < length; i++) {
             message += "E";
-            index++;
         }
         message += "tti!";
     } else if (mode == "roflcopter") {
@@ -188,41 +167,20 @@ partyBeforeChat = function (src, message, channel) {
             index++;
         }
     } else if (mode == "asdf") {
-        index = 1;
-        message = "asdf";
-        while(index < length) {
+        message = "";
+        for (i = 0; i < length; i++) {
             message += "asdf";
-            index++;
         }
     } else if (mode == "derp") {
-        index = 0;
+        derps = ["derp", "herp", "merp", "ferp", "bulbaderp", "darp", "durp"];
         message = "";
-        while (index < length) {
-            random = sys.rand(0, 7);
-            if (random === 0) {
-                message += " derp";
-            } else if (random == 1) {
-                message += " herp";
-            } else if (random == 2) {
-                message += " merp";
-            } else if (random == 3) {
-                message += " ferp";
-            } else if (random == 4) {
-                message += " bulbaderp";
-            } else if (random == 5) {
-                message += " darp";
-            } else if (random == 6) {
-                message += " durp";
-            }
-            index++;
+        for (i = 0; i < length; i++) {
+            message += derps[sys.rand(0, derps.length)] + " ";
         }
     } else if (mode == "cirno") {
-        index = 1;
-        random = sys.rand(0, 2);
-        random === 0 ? message = "BAKA" : message = "&#x2788;";
-        while (index < length) {
-            random === 0 ? message += "BAKA" : message += " &#x2788;";
-            index++;
+        message = "";
+        for (i = 0; i < length; i++) {
+            message += (sys.rand(0, 2) === 0 ? "BAKA" : " &#x2788;";
         }
     } else if (mode == "reverse") {
         message = helpers.reverse(helpers.escapehtml(message));
