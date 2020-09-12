@@ -393,20 +393,20 @@ funcommands = {
     ,
 
     random: function (src, channel, command) {
-        var name = sys.name(src), auth = sys.auth(src), color = helpers.color(src), MAX_WORDS = 10, MAX_WORD_LENGTH = 5,
-            RANDOM_TEXT = '!"#$%&\'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~',
-            words = Math.ceil(Math.random() * MAX_WORDS), wordlengths = [], text = "", i, j;
+        var name = sys.name(src), auth = sys.auth(src), color = helpers.color(src), MAX_WORDS = 10, MAX_WORD_LENGTH = 6,
+            RANDOM_TEXT = "!\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~",
+            words = sys.rand(0, MAX_WORDS) + 1, wordlengths = [], message = "", i, j;
         for (i = 0; i < words; i++) {
-            wordlengths.push(rand(MAX_WORD_LENGTH));
+            wordlengths.push(sys.rand(0, MAX_WORD_LENGTH));
             for (j = 0; j < wordlengths[j]; j++) {
-                text += RANDOM_TEXT.charAt(rand(RANDOM_TEXT.length));
+                message += RANDOM_TEXT.charAt(sys.rand(0, RANDOM_TEXT.length));
             }
-            text += ' ';
+            message += ' ';
         }
         if (auth >= 1 && auth <= 3) {
-            sys.sendHtmlAll("<font color='" + color + "'><timestamp/>+<b><i>" + name + " RANDOM:</i></b></font> " + text, channel);
+            sys.sendHtmlAll("<font color='" + color + "'><timestamp/>+<b><i>" + name + " RANDOM:</i></b></font> " + helpers.escapehtml(message), channel);
         } else {
-            sys.sendHtmlAll("<font color='" + color + "'><timestamp/><b>" + name + " RANDOM:</b></font> " + text, channel);
+            sys.sendHtmlAll("<font color='" + color + "'><timestamp/><b>" + name + " RANDOM:</b></font> " + helpers.escapehtml(message), channel);
         }
     }
 
