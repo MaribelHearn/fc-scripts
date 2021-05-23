@@ -496,6 +496,7 @@ funcommands = {
         var name = sys.name(src), number = sys.rand(0, 1338);
         sys.sendAll(name + ": " + number + " / 0 = ...", channel);
         sys.sendHtmlAll(helpers.bot(bots.kick) + name + " divided by zero! OH SHI-", channel);
+        sys.sendHtmlAll(helpers.bot(bots.kick) + name + " got killed in the explosion.", channel);
         sys.kick(src);
     }
 
