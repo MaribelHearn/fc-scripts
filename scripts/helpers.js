@@ -79,10 +79,6 @@ helpers = {
         sys.write(DATA_FOLDER + "silentcommands.txt", '["future","spoiler","seval","sseval","skick",' +
         '"invisibleowner","invisible","invis","silentupdate","silenteval","secretsilenteval","silentkick","supdate","silentupdateplugin", "supdateplugin"]');
         sys.write(DATA_FOLDER + "nameblocklist.txt", "[]");
-        sys.write(DATA_FOLDER + "proxylist.txt", sys.read("proxy_list.txt"));
-        sys.write(DATA_FOLDER + "bansites.txt", sys.read("bansites.txt"));
-        sys.rm("proxy_list.txt");
-        sys.rm("bansites.txt");
         sys.write(DATA_FOLDER + "rules.txt", '{"rules":["No spamming (including challenge spamming), trolling, flaming, bashing or advertising.",' +
         '"No abusing commands or auth powers.","Do not talk about inappropriate or obscene subjects, nor mention words that refer to such.",' +
         '"No asking for auth.","Do not attempt to circumvent the rules."],' +

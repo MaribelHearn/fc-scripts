@@ -455,13 +455,13 @@ funcommands = {
     ,
 
     kill: function (src, channel, command) {
-        var name = helpers.escapehtml(sys.name(src)), random = sys.rand(0, sys.numPlayers()), player, reason;
-        !command[1] ? player = sys.name(sys.playerIds()[random]) : player = helpers.escapehtml(command[1]);
+        var name = sys.name(src), random = sys.rand(0, sys.numPlayers()), player, reason;
+        !command[1] ? player = sys.name(sys.playerIds()[random]) : player = command[1];
         if (player == "Chuck Norris") {
             helpers.starfox(src, channel, command, bots.command, "You tried.");
             return;
         }
-        !command[2] ? reason = "Unknown" : reason = helpers.escapehtml(command[2]);
+        !command[2] ? reason = "Unknown" : reason = command[2];
         sys.sendHtmlAll(helpers.bot(bots.attack) + "<b>" + helpers.user(name) + " killed " + helpers.arg(player) + "! [Reason: " + helpers.arg2(reason) + "]</b>", channel);
     }
 

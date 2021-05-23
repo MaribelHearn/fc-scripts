@@ -1258,8 +1258,6 @@ ownercommands = {
             sys.sendHtmlMessage(src, message, channel);
             return;
         }
-        sys.write("bansites.txt", sys.read(DATA_FOLDER + "bansites.txt"));
-        sys.write("proxy_list.txt", sys.read(DATA_FOLDER + "proxylist.txt"));
         for (i in dataFiles) {
             sys.rm(DATA_FOLDER + dataFiles[i]);
         }

@@ -8,6 +8,15 @@
     constants, variables, functions and
     contains the event handlers.
     ----------------------------------------------
+    - auto-remove expired channel auth
+    - prevent repeated /cuser
+    - no flags if no API?
+    - add server silence?
+    - allcommands alts?
+    - "got killed in the explosion" message?
+    if I want to bother:
+    - full auth name customisation
+    - silent muting commands and functionality
 */
 
 (load = function () {
@@ -233,7 +242,6 @@
     nameblocklist = helpers.readObject("nameblocklist");
     silentcommands = helpers.readObject("silentcommands");
     proxylist = helpers.readData("proxylist").split('\n');
-    bansites = helpers.readData("bansites").replace(/\r/g, "").split('\n');
     rules = helpers.readObject("rules");
     banlist = helpers.readObject("banlist");
     mutelist = helpers.readObject("mutelist");
@@ -281,10 +289,11 @@
     helpers.setVariable("flingPowerList", {});
     helpers.setVariable("berryPowerList", {});
     helpers.setVariable("berryTypeList", {});
-    tour[0] = {};
-    tour[0].tourmode = 0;
+    bansites = sys.read("bansites.txt").replace(/\r/g, "").split('\n');
     bansites.splice(bansites.indexOf(""), 1);
     bansites.splice(bansites.lastIndexOf(""), 1);
+    tour[0] = {};
+    tour[0].tourmode = 0;
     allcommands = helpers.allCommands();
 }).call(null);
 
