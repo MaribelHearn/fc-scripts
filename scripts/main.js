@@ -551,9 +551,9 @@
             **/
             for (var i in banlist) {
                 if (banlist[i].ip == ip) {
-                    sys.stopEvent();
                     sys.sendMessage(src, "You are banned!");
                     sys.sendHtmlWatch(helpers.bot(bots.spy) + "[Server] Banned user <b><font color='" + color + "'>" + name + "</font></b> tried to enter the server.");
+                    sys.stopEvent();
                     return;
                 }
             }
@@ -564,9 +564,9 @@
             **/
             for (var i in rangebanlist) {
                 if (rangebanlist[i].range == range) {
-                    sys.stopEvent();
                     sys.sendMessage(src, "You are banned!");
                     sys.sendHtmlWatch(helpers.bot(bots.spy) + "[Server] Range banned user <b><font color='" + color + "'>" + name + "</font></b> tried to enter the server.");
+                    sys.stopEvent();
                     return;
                 }
             }
@@ -576,9 +576,9 @@
                 --------------------
             **/
             if (!open) {
-                sys.stopEvent();
                 sys.sendMessage(src, "Sorry, the server is closed for maintenance at the moment.");
                 sys.sendHtmlWatch(helpers.bot(bots.spy) + "[Server] <b><font color='" + color + "'>" + name + "</font></b> tried to enter the server during closure.");
+                sys.stopEvent();
                 return;
             }
             /**
@@ -589,9 +589,9 @@
             name = name.toLowerCase();
             for (var index in nameblocklist) {
                 if (name.indexOf(nameblocklist[index]) != -1 && !helpers.isInArray(name, exceptions) && auth < 3) {
-                    sys.stopEvent();
                     sys.sendMessage(src, helpers.bot(bots.welcome) + "Your name contains a banned word: " + nameblocklist[index] + ". Please change your name and try entering again.");
                     sys.sendHtmlWatch(helpers.bot(bots.spy) + "[Server] <b><font color='" + color + "'>" + name + "</font></b> tried to enter the server with a banned word in their username.");
+                    sys.stopEvent();
                     return;
                 }
             }
@@ -601,10 +601,10 @@
                 -----------------------
             **/
             if (helpers.bannedchars(name)[0] && auth < 3) {
-                sys.stopEvent();
                 sys.sendHtmlMessage(src, helpers.bot(bots.welcome) + "Your name contains " + helpers.bannedchars(name)[1] + ". Please change your name and try entering again.");
                 sys.sendHtmlWatch(helpers.bot(bots.spy) + "[Server] <b><font color='" + color + "'>" + name +
                 "</font></b> tried to enter the server with " + helpers.bannedchars(name)[1] + " in their username.");
+                sys.stopEvent();
                 return;
             }
         }
