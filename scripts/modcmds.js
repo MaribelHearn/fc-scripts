@@ -176,7 +176,7 @@ modcommands = {
     ,
 
     mute: function (src, channel, command, time, unit) {
-        var name = sys.name(src), original = players[src].name, trgtname = command[1], trgt = sys.id(trgtname), reason = command[2], auth = sys.auth(src),
+        var name = helpers.escapehtml(sys.name(src)), original = players[src].name, trgtname = helpers.escapehtml(command[1]), trgt = sys.id(trgtname), reason = command[2], auth = sys.auth(src),
             srcip = sys.ip(src), trgtauth, trgtip, lower, msg;
         if (!trgtname) {
             helpers.starfox(src, channel, command, bots.mute, "Error 404, player not found.");
@@ -277,7 +277,7 @@ modcommands = {
     ,
 
     unmute: function (src, channel, command) {
-        var name = sys.name(src), srcip = sys.ip(src), trgtname = command[1], lower, trgt, trgtip;
+        var name = helpers.escapehtml(sys.name(src)), srcip = sys.ip(src), trgtname = helpers.escapehtml(command[1]), lower, trgt, trgtip;
         if (!sys.dbIp(trgtname)) {
             helpers.starfox(src, channel, command, bots.mute, "Error 400, you can't unmute " + trgtname + " because they do not exist in the database!");
             return;
@@ -314,14 +314,14 @@ modcommands = {
             helpers.starfox(src, channel, command, bots.mute, "Error 404, player not found.");
             return;
         }
-        var name = sys.name(src), lower = command[1].toLowerCase();
+        var name = helpers.escapehtml(sys.name(src)), lower = helpers.escapehtml(command[1]).toLowerCase();
         if (!reason) {
             reason = "Unknown";
         }
-        mutelist[lower].reason = reason;
+        mutelist[lower].reason = helpers.escapehtml(reason);
         helpers.saveData("mutelist");
-        if (members[lower])lower = members[lower];
-        sys.sendHtmlAll(helpers.bot(bots.mute) + name + " has changed the mute reason of " + lower + " to '" + reason + "'!", channel);
+        if (members[lower]) lower = members[lower];
+        sys.sendHtmlAll(helpers.bot(bots.mute) + name + " has changed the mute reason of " + lower + " to '" + helpers.escapehtml(reason) + "'!", channel);
     }
 
     ,
@@ -355,7 +355,7 @@ modcommands = {
             + "<th>Name</th><th>IP Address</th><th>Muter</th><th>Reason</th><th>Muted for</th><th>Time left</th><th>Date of muting</th><th>Silent</th></tr></thead><tbody>";
             for (var i in names) {
                 mutelistmessage += "<tr style='background-color: " + Qt.lighter(listcolors.mute, 1.55) + ";'>"
-                + "<td>" + names[i] + "</td>"
+                + "<td>" + helpers.escapehtml(names[i]) + "</td>"
                 + "<td>" + ips[i] + "</td>"
                 + "<td>" + muters[i] + "</td>"
                 + "<td>" + reasons[i] + "</td>"
@@ -409,7 +409,7 @@ modcommands = {
             + "<th>Name</th><th>IP Address</th><th>Banner</th><th>Reason</th><th>Banned for</th><th>Time left</th><th>Date of banning</th></tr></thead><tbody>";
             for (var i in names) {
                 banlistmessage += "<tr style='background-color: " + Qt.lighter(listcolors.ban, 1.55) + ";'>"
-                + "<td>" + names[i] + "</td>"
+                + "<td>" + helpers.escapehtml(names[i]) + "</td>"
                 + "<td>" + ips[i] + "</td>"
                 + "<td>" + banners[i] + "</td>"
                 + "<td>" + reasons[i] + "</td>"
@@ -452,8 +452,8 @@ modcommands = {
             + "<th>Name</th><th>IP Range</th><th>Banner</th><th>Reason</th><th>Date of banning</th></tr></thead><tbody>";
             for (var i in names) {
                 rangebanlistmessage += "<tr style='background-color: " + Qt.lighter(listcolors.rangeban, 1.55) + ";'>"
-                + "<td>" + names[i] + "</td>"
-                + "<td>" + ranges[i] + "</td>"
+                + "<td>" + helpers.escapehtml(names[i]) + "</td>"
+                + "<td>" + helpers.escapehtml(ranges[i]) + "</td>"
                 + "<td>" + banners[i] + "</td>"
                 + "<td>" + reasons[i] + "</td>"
                 + "<td>" + dates[i] + "</td>"
@@ -492,8 +492,8 @@ modcommands = {
             + "<th>Name</th><th>Banner</th><th>Reason</th><th>Date of banning</th></tr></thead><tbody>";
             for (var i in names) {
                 megabanlistmessage += "<tr style='background-color: " + Qt.lighter(listcolors.megaban, 1.55) + ";'>"
-                + "<td>" + names[i] + "</td>"
-                + "<td>" + banners[i] + "</td>"
+                + "<td>" + helpers.escapehtml(names[i]) + "</td>"
+                + "<td>" + helpers.escapehtml(banners[i]) + "</td>"
                 + "<td>" + reasons[i] + "</td>"
                 + "<td>" + dates[i] + "</td>"
                 + "</tr>";
@@ -532,8 +532,8 @@ modcommands = {
             + "<th>Name</th><th>Banner</th><th>Reason</th><th>Pseudo</th><th>Date of banning</th></tr></thead><tbody>";
             for (var i in names) {
                 gigabanlistmessage += "<tr style='background-color: " + Qt.lighter(listcolors.gigaban, 1.55) + ";'>"
-                + "<td>" + names[i] + "</td>"
-                + "<td>" + banners[i] + "</td>"
+                + "<td>" + helpers.escapehtml(names[i]) + "</td>"
+                + "<td>" + helpers.escapehtml(banners[i]) + "</td>"
                 + "<td>" + reasons[i] + "</td>"
                 + "<td>" + pseudos[i] + "</td>"
                 + "<td>" + dates[i] + "</td>"

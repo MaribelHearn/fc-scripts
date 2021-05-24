@@ -69,11 +69,12 @@ admincommands = {
     ,
 
     ban: function (src, channel, command) {
-        var name = sys.name(src), trgtname = command[1], trgt = sys.id(trgtname), reason = command[2], auth = sys.auth(src), trgtauth, trgtip;
+        var name = helpers.escapehtml(sys.name(src)), trgtname = command[1], trgt = sys.id(trgtname), reason = command[2], auth = sys.auth(src), trgtauth, trgtip;
         if (!trgtname) {
             helpers.starfox(src, channel, command, bots.ban, "Error 404, player not found.");
             return;
         }
+        trgtname = helpers.escapehtml(trgtname);
         var lower = trgtname.toLowerCase();
         if (sys.dbIp(trgtname) === undefined) {
             helpers.starfox(src, channel, command, bots.ban, "Error 400, you can't ban " + trgtname + " because they do not exist in the database.");
@@ -262,7 +263,7 @@ admincommands = {
             msg = banmessages[name.toLowerCase()].replace(/~Self~/gi, name).replace(/~Target~/gi, trgtip).replace(/~Time~/gi, time + unit).replace(/~Server~/gi, sys.getServerName());
             sys.sendHtmlAll(helpers.bot(bots.ban) + msg + " [Reason: " + reason + "]", channel);
         } else {
-            sys.sendHtmlAll(helpers.bot(bots.ban) + name + " has IP banned " + trgtip + " from the server " + time + unit + "! [Reason: " + reason + "]", channel);
+            sys.sendHtmlAll(helpers.bot(bots.ban) + helpers.escapehtml(name) + " has IP banned " + trgtip + " from the server " + time + unit + "! [Reason: " + reason + "]", channel);
         }
         for (var index in mutelist) {
             if (!sys.dbIp(index)) {
@@ -282,12 +283,12 @@ admincommands = {
     ,
 
     unban: function (src, channel, command) {
-        var name = sys.name(src), ip;
+        var name = helpers.escapehtml(sys.name(src)), ip;
         if (!command[1]) {
             helpers.starfox(src, channel, command, bots.ban, "Error 404, player not found.");
             return;
         }
-        var trgtname = command[1], lower = trgtname.toLowerCase();
+        var trgtname = helpers.escapehtml(command[1]), lower = trgtname.toLowerCase();
         if (!sys.dbIp(lower)) {
             helpers.starfox(src, channel, command, bots.ban, "Error 400, you can't unban " + trgtname + " because they don't exist in the database!");
             return;
@@ -333,7 +334,7 @@ admincommands = {
         }
         delete banlist[trgtip];
         helpers.saveData("banlist");
-        sys.sendHtmlAll(helpers.bot(bots.ban) + trgtip + " has been IP unbanned by " + name + "!");
+        sys.sendHtmlAll(helpers.bot(bots.ban) + trgtip + " has been IP unbanned by " + helpers.escapehtml(name) + "!");
     }
 
     ,
@@ -342,7 +343,7 @@ admincommands = {
         var name = sys.name(src);
         banlist = {};
         helpers.saveData("banlist");
-        sys.sendHtmlAll(helpers.bot(bots.ban) + "The ban list has been cleared by " + name + "!");
+        sys.sendHtmlAll(helpers.bot(bots.ban) + "The ban list has been cleared by " + helpers.escapehtml(name) + "!");
     }
 
     ,
@@ -356,12 +357,12 @@ admincommands = {
         if (command[2] === undefined || command[2] === null || command[2] === "" || !command[2]) {
             reason = "None given.";
         } else {
-            reason = command[2];
+            reason = helpers.escapehtml(command[2]);
         }
         var banner = sys.name(src), banned = command[1], srcauth = sys.auth(src), lower = command[1].toLowerCase();
         banlist[banned.toLowerCase()].reason = reason;
         helpers.saveData("banlist");
-        sys.sendHtmlAll(helpers.bot(bots.ban) + banner + " has changed the ban reason of " + command[1] + " to '" + reason + "'!");
+        sys.sendHtmlAll(helpers.bot(bots.ban) + helpers.escapehtml(banner) + " has changed the ban reason of " + helpers.escapehtml(banned) + " to '" + reason + "'!");
     }
 
     ,
@@ -373,7 +374,7 @@ admincommands = {
             sys.sendHtmlMessage(src, helpers.bot(bots.ban) + "Your current ban message is" + msg, channel);
             return;
         }
-        banmessages[lower] = message;
+        banmessages[lower] = helpers.escapehtml(message);
         helpers.saveData("banmessages");
         sys.sendHtmlMessage(src, helpers.bot(bots.ban) + "Your ban message has been changed successfully.", channel);
     }
@@ -386,17 +387,17 @@ admincommands = {
             helpers.starfox(src, channel, command, bots.megaban, "Error 404, player not found.");
             return;
         }
-        trgt = sys.id(command[1]);
+        lower = command[1].toLowerCase();
+        members[lower] ? trgtname = members[lower] : trgtname = helpers.escapehtml(command[1]);
+        trgt = sys.id(trgtname);
         if (!trgt) {
-            helpers.starfox(src, channel, command, bots.megaban, "Error 400, you can't mega ban " + command[1] + " since they are not online!");
+            helpers.starfox(src, channel, command, bots.megaban, "Error 400, you can't mega ban " + trgtname + " since they are not online!");
             return;
         }
         if (sys.os(trgt) !== "android" && sys.version(trgt) < 2402 || sys.os(trgt) === "android" && sys.version(trgt) < 37) {
             helpers.starfox(src, channel, command, bots.megaban, "Error 400, mega bans don't work on this player.");
             return;
         }
-        lower = command[1].toLowerCase();
-        members[lower] ? trgtname = members[lower] : trgtname = command[1];
         command[2] ? reason = helpers.escapehtml(command[2]) : reason = "Unknown";
         megabanlist[lower] = {};
         megabanlist[lower].banner = sys.name(src);
@@ -404,7 +405,7 @@ admincommands = {
         megabanlist[lower].date = helpers.date(new Date());
         sys.setCookie(trgt, "banned " + trgtname);
         helpers.saveData("megabanlist");
-        sys.sendHtmlAuths(helpers.bot(bots.megaban) + name + " has mega banned " + trgtname + " from the server! [Reason: " + reason + "]");
+        sys.sendHtmlAuths(helpers.bot(bots.megaban) + helpers.escapehtml(name) + " has mega banned " + helpers.escapehtml(trgtname) + " from the server! [Reason: " + reason + "]");
         sys.kick(trgt);
     }
 
@@ -423,28 +424,28 @@ admincommands = {
             return;
         }
         lower = command[1].toLowerCase();
-        members[lower] ? trgtname = members[lower] : trgtname = command[1];
+        members[lower] ? trgtname = members[lower] : trgtname = helpers.escapehtml(command[1]);
         namestounban.push(lower);
         delete megabanlist[lower];
         helpers.saveData("namestounban");
         helpers.saveData("megabanlist");
-        sys.sendHtmlAuths(helpers.bot(bots.megaban) + trgtname + " has been mega unbanned by " + name + ". It will take effect once they enter the server again.");
+        sys.sendHtmlAuths(helpers.bot(bots.megaban) + trgtname + " has been mega unbanned by " + helpers.escapehtml(name) + ". It will take effect once they enter the server again.");
     }
 
     ,
 
     megabanreason: function (src, channel, command) {
-        var name = sys.name(src), lower, reason;
-        if (!command[1]) {
+        var name = sys.name(src), trgtname = command[1], lower, reason;
+        if (!trgtname) {
             helpers.starfox(src, channel, command, bots.megaban, "Error 404, player not found.");
             return;
         }
-        members[command[1]] ? trgtname = members[command[1]] : trgtname = command[1];
         lower = trgtname.toLowerCase();
-        command[2] ? reason = command[2] : reason = "Unknown";
+        members[lower] ? trgtname = members[lower] : trgtname = helpers.escapehtml(trgtname);
+        command[2] ? reason = helpers.escapehtml(command[2]) : reason = "Unknown";
         megabanlist[lower].reason = reason;
         helpers.saveData("megabanlist");
-        sys.sendHtmlAuths(helpers.bot(bots.megaban) + name + " has changed the mega ban reason of " + trgtname + " to '" + reason + "'.");
+        sys.sendHtmlAuths(helpers.bot(bots.megaban) + helpers.escapehtml(name) + " has changed the mega ban reason of " + trgtname + " to '" + reason + "'.");
     }
 
     ,
@@ -457,7 +458,7 @@ admincommands = {
         megabanlist = {};
         helpers.saveData("megabanlist");
         helpers.saveData("namestounban");
-        sys.sendHtmlAuths(helpers.bot(bots.megaban) + "The mega ban list has been cleared by " + name + "!");
+        sys.sendHtmlAuths(helpers.bot(bots.megaban) + "The mega ban list has been cleared by " + helpers.escapehtml(name) + "!");
     }
 
     ,
@@ -468,6 +469,8 @@ admincommands = {
             helpers.starfox(src, channel, command, bots.gigaban, "Error 404, player not found.");
             return;
         }
+        lower = trgtname.toLowerCase();
+        members[lower] ? trgtname = members[lower] : trgtname = helpers.escapehtml(trgtname);
         trgt = sys.id(trgtname);
         if (!trgt) {
             helpers.starfox(src, channel, command, bots.gigaban, "Error 400, you can't giga ban " + trgtname + " since they are not online!");
@@ -479,8 +482,6 @@ admincommands = {
         }
         id = sys.uniqueId(trgt).id;
         pseudo = !sys.uniqueId(trgt).isUnique;
-        lower = command[1].toLowerCase();
-        members[lower] ? trgtname = members[lower] : trgtname = command[1];
         command[2] ? reason = helpers.escapehtml(command[2]) : reason = "Unknown";
         gigabanlist[lower] = {};
         gigabanlist[lower].id = id;
@@ -489,7 +490,7 @@ admincommands = {
         gigabanlist[lower].pseudo = pseudo;
         gigabanlist[lower].date = helpers.date(new Date());
         helpers.saveData("gigabanlist");
-        sys.sendHtmlAuths(helpers.bot(bots.gigaban) + name + " has giga banned " + trgtname + " from the server! [Reason: " + reason + "]");
+        sys.sendHtmlAuths(helpers.bot(bots.gigaban) + helpers.escapehtml(name) + " has giga banned " + trgtname + " from the server! [Reason: " + reason + "]");
         sys.kick(trgt);
     }
 
@@ -508,16 +509,14 @@ admincommands = {
             return;
         }
         lower = trgtname.toLowerCase();
-        if (members[lower]) {
-            trgtname = members[lower];
-        }
+        members[lower] ? trgtname = members[lower] : trgtname = helpers.escapehtml(command[1]);
         if (!gigabanlist[lower]) {
             helpers.starfox(src, channel, command, bots.gigaban, "Error 400, you can't giga unban " + trgtname + " because they aren't giga banned!");
             return;
         }
         delete gigabanlist[lower];
         helpers.saveData("gigabanlist");
-        sys.sendHtmlAuths(helpers.bot(bots.gigaban) + name + " has giga unbanned " + trgtname + " from the server.");
+        sys.sendHtmlAuths(helpers.bot(bots.gigaban) + helpers.escapehtml(name) + " has giga unbanned " + trgtname + " from the server.");
     }
 
     ,
@@ -529,18 +528,15 @@ admincommands = {
             return;
         }
         lower = trgtname.toLowerCase();
-        if (members[lower]) {
-            trgtname = members[lower];
-        }
+        members[lower] ? trgtname = members[lower] : trgtname = helpers.escapehtml(trgtname);
         if (!gigabanlist[lower]) {
             helpers.starfox(src, channel, command, bots.gigaban, "Error 400, you can't change the giga ban reason " + trgtname + " because they aren't giga banned!");
             return;
         }
-        lower = trgtname.toLowerCase();
-        command[2] ? reason = command[2] : reason = "Unknown";
+        command[2] ? reason = helpers.escapehtml(command[2]) : reason = "Unknown";
         gigabanlist[lower].reason = reason;
         helpers.saveData("gigabanlist");
-        sys.sendHtmlAuths(helpers.bot(bots.gigaban) + name + " has changed the giga ban reason of " + trgtname + " to '" + reason + "'!");
+        sys.sendHtmlAuths(helpers.bot(bots.gigaban) + helpers.escapehtml(name) + " has changed the giga ban reason of " + trgtname + " to '" + reason + "'!");
     }
 
     ,
@@ -548,13 +544,19 @@ admincommands = {
     cleargigabanlist: function (src, channel, command) {
         gigabanlist = {};
         helpers.saveData("gigabanlist");
-        sys.sendHtmlAuths(helpers.bot(bots.gigaban) + "The giga ban list has been cleared by " + name + "!");
+        sys.sendHtmlAuths(helpers.bot(bots.gigaban) + "The giga ban list has been cleared by " + helpers.escapehtml(name) + "!");
     }
 
     ,
 
     rangeban: function (src, channel, command) {
-        var reason = command[2], name = sys.name(src), trgtname = command[1], lower = trgtname.toLowerCase(), auth = sys.auth(src), ip, msg;
+        var reason = command[2], name = sys.name(src), trgtname = command[1], auth = sys.auth(src), lower, ip, msg;
+        if (!trgtname) {
+            helpers.starfox(src, channel, command, bots.gigaban, "Error 404, player not found.");
+            return;
+        }
+        lower = trgtname.toLowerCase();
+        members[lower] ? trgtname = members[lower] : trgtname = helpers.escapehtml(trgtname);
         if (!sys.dbIp(lower)) {
             helpers.starfox(src, channel, command, bots.ban, "Error 400, you can't range ban " + trgtname + " because they don't exist in the database.");
             return;
@@ -580,7 +582,6 @@ admincommands = {
         var date = helpers.date(new Date()), trgt = sys.id(trgtname);
         rangebanlist[lower].date = date;
         helpers.saveData("rangebanlist");
-        if (members[lower])trgtname = members[lower];
         if (rangebanmessages[name.toLowerCase()]) {
             msg = rangebanmessages[name.toLowerCase()].replace(/~Self~/gi, name).replace(/~Target~/gi, trgtname).replace(/~Server~/gi, sys.getServerName());
             sys.sendHtmlAll(helpers.bot(bots.ban) + msg + " [Reason: " + reason + "]");
@@ -601,7 +602,7 @@ admincommands = {
                 delete mutelist[index];
                 if (members[index])index = members[index];
                 helpers.saveData("mutelist");
-                sys.sendHtmlMessage(src, helpers.bot(bots.mute) + index + " has been automatically unmuted.", channel);
+                sys.sendHtmlMessage(src, helpers.bot(bots.mute) + helpers.escapehtml(index) + " has been automatically unmuted.", channel);
             }
         }
         for (var index in banlist) {
@@ -615,7 +616,7 @@ admincommands = {
                 delete banlist[index];
                 if (members[index])index = members[index];
                 helpers.saveData("banlist");
-                sys.sendHtmlMessage(src, helpers.bot(bots.ban) + index + " has been automatically unbanned.", channel);
+                sys.sendHtmlMessage(src, helpers.bot(bots.ban) + helpers.escapehtml(index) + " has been automatically unbanned.", channel);
                 continue;
             }
         }
@@ -630,7 +631,13 @@ admincommands = {
     ,
 
     rangeunban: function (src, channel, command) {
-        var name = sys.name(src), trgtname = command[1], lower = command[1].toLowerCase();
+        var name = sys.name(src), trgtname = command[1], lower;
+        if (!trgtname) {
+            helpers.starfox(src, channel, command, bots.gigaban, "Error 404, player not found.");
+            return;
+        }
+        lower = trgtname.toLowerCase();
+        members[lower] ? trgtname = members[lower] : trgtname = helpers.escapehtml(trgtname);
         if (!sys.dbIp(lower)) {
             helpers.starfox(src, channel, command, bots.ban, "Error 400, you can't range unban " + trgtname + " because they don't exist in the database.");
             return;
@@ -654,7 +661,7 @@ admincommands = {
         if (members[trgtname]) {
             trgtname = members[trgtname];
         }
-        sys.sendHtmlAll(helpers.bot(bots.ban) + trgtname + " has been range unbanned by " + name + "!");
+        sys.sendHtmlAll(helpers.bot(bots.ban) + trgtname + " has been range unbanned by " + helpers.escapehtml(name) + "!");
     }
 
     ,
@@ -702,7 +709,7 @@ admincommands = {
             msg = rangebanmessages[name.toLowerCase()].replace(/~Self~/gi, name).replace(/~Target~/gi, range).replace(/~Server~/gi, sys.getServerName());
             sys.sendHtmlAll(helpers.bot(bots.ban) + msg + " [Reason: " + reason + "]");
         } else {
-            sys.sendHtmlAll(helpers.bot(bots.ban) + name + " has range banned " + range + " from the server! [Reason: " + reason + "]");
+            sys.sendHtmlAll(helpers.bot(bots.ban) + helpers.escapehtml(name) + " has range banned " + range + " from the server! [Reason: " + reason + "]");
         }
         for (var index in mutelist) {
             if (!sys.dbIp(index)) {
@@ -713,7 +720,7 @@ admincommands = {
                 delete mutelist[index];
                 if (members[index])index = members[index];
                 helpers.saveData("mutelist");
-                sys.sendHtmlMessage(src, helpers.bot(bots.mute) + index + " has been automatically unmuted.", channel);
+                sys.sendHtmlMessage(src, helpers.bot(bots.mute) + helpers.escapehtml(index) + " has been automatically unmuted.", channel);
                 continue;
             }
         }
@@ -728,7 +735,7 @@ admincommands = {
                 delete banlist[index];
                 if (members[index])index = members[index];
                 helpers.saveData("banlist");
-                sys.sendHtmlMessage(src, helpers.bot(bots.ban) + index + " has been automatically unbanned.", channel);
+                sys.sendHtmlMessage(src, helpers.bot(bots.ban) + helpers.escapehtml(index) + " has been automatically unbanned.", channel);
                 continue;
             }
         }
@@ -752,7 +759,7 @@ admincommands = {
         }
         delete rangebanlist[range];
         helpers.saveData("rangebanlist");
-        sys.sendHtmlAll(helpers.bot(bots.ban) + range + " has been range unbanned by " + name + "!");
+        sys.sendHtmlAll(helpers.bot(bots.ban) + range + " has been range unbanned by " + helpers.escapehtml(name) + "!");
     }
 
     ,
@@ -766,12 +773,12 @@ admincommands = {
         if (!command[2]) {
             reason = "None given.";
         } else {
-            reason = command[2];
+            reason = helpers.escapehtml(command[2]);
         }
         var banner = sys.name(src), banned = command[1], srcauth = sys.auth(src), lower = command[1].toLowerCase();
         rangebanlist[banned.toLowerCase()].reason = reason;
         helpers.saveData("rangebanlist");
-        sys.sendHtmlAll(helpers.bot(bots.ban) + banner + " has changed the range ban reason of " + command[1] + " to '" + reason + "'!");
+        sys.sendHtmlAll(helpers.bot(bots.ban) + helpers.escapehtml(banner) + " has changed the range ban reason of " + helpers.escapehtml(banned) + " to '" + reason + "'!");
     }
 
     ,
@@ -780,7 +787,7 @@ admincommands = {
         var name = sys.name(src);
         rangebanlist = {};
         helpers.saveData("rangebanlist");
-        sys.sendHtmlAll(helpers.bot(bots.ban) + "The range ban list has been cleared by " + name + "!");
+        sys.sendHtmlAll(helpers.bot(bots.ban) + "The range ban list has been cleared by " + helpers.escapehtml(name) + "!");
     }
 
     ,
@@ -792,7 +799,7 @@ admincommands = {
             sys.sendHtmlMessage(src, helpers.bot(bots.ban) + "Your current range ban message is" + msg, channel);
             return;
         }
-        rangebanmessages[lower] = message;
+        rangebanmessages[lower] = helpers.escapehtml(message);
         helpers.saveData("rangebanmessages");
         sys.sendHtmlMessage(src, helpers.bot(bots.ban) + "Your range ban message has been changed successfully.", channel);
     }
@@ -906,7 +913,7 @@ admincommands = {
             return;
         }
         sys.changeAnnouncement(banner);
-        sys.sendHtmlAuths(helpers.bot(bots.main) + sys.name(src) + " has changed the banner!");
+        sys.sendHtmlAuths(helpers.bot(bots.main) + helpers.escapehtml(sys.name(src)) + " has changed the banner!");
     }
 
     ,
@@ -918,7 +925,7 @@ admincommands = {
             return;
         }
         sys.changeDescription(description);
-        sys.sendHtmlAuths(helpers.bot(bots.main) + sys.name(src) + " has changed the description!");
+        sys.sendHtmlAuths(helpers.bot(bots.main) + helpers.escapehtml(sys.name(src)) + " has changed the description!");
     }
 
     ,
