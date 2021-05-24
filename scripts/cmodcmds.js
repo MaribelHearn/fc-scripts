@@ -27,7 +27,7 @@ cmodcommands = {
         + "<b>" + helpers.user("/cbanlist") + "</b>: displays the current channel's ban list in a neat table.<br>"
         + "<b>" + helpers.user("/cclose ") + helpers.arg("auth") + "</b>: closes the current channel for any player below level <b>auth</b>.<br>"
         + "<b>" + helpers.user("/copen") + "</b>: opens the current channel.<br>"
-        + "<b>" + helpers.user("/csilence ") + helpers.arg("level") + "</b>: sets the silence level of the current channel to <b>level</b>. <b>level</b> is 1, 2 or 3 and cannot exceed your channel auth level. "
+        + "<b>" + helpers.user("/silence ") + helpers.arg("level") + "</b>: sets the silence level of the current channel to <b>level</b>. <b>level</b> is 1, 2 or 3 and cannot exceed your channel auth level. "
         + "If <b>level</b> is not specified, uses your channel auth level.<br>"
         + "<b>" + helpers.user("/unsilence") + "</b>: removes the silence level of the current channel.<br>"
         + "<b>" + helpers.user("/caps") + "</b>: allows or disallows excessive usage of caps on the current channel.<br>"
@@ -405,7 +405,7 @@ cmodcommands = {
 
     ,
 
-    csilence: function (src, channel, command) {
+    silence: function (src, channel, command) {
         var name = sys.name(src), cauth = helpers.cauth(name.toLowerCase(), channel),
             channelName = sys.channel(channel), lower = channelName.toLowerCase(), level = command[1];
         if (regchannels[lower]) {
@@ -430,7 +430,7 @@ cmodcommands = {
             }
             regchannels[lower].silence = level;
             helpers.saveData("regchannels");
-            sys.sendHtmlAll(helpers.bot(bots.silence) + silenceMessage.replace(/~Player~/gi, name).replace(/~Channel~/gi, channelName) + ". [Silence Level: " + level + "]", channel);
+            sys.sendHtmlAll(helpers.bot(bots.silence) + silenceMessage.replace(/~Player~/gi, name).replace(/~Channel~/gi, channelName) + " [Silence Level: " + level + "]", channel);
             return;
         }
         helpers.starfox(src, channel, command, bots.silence, "Error 400, this channel isn't registered!");
@@ -438,7 +438,7 @@ cmodcommands = {
 
     ,
 
-    cunsilence: function (src, channel, command) {
+    unsilence: function (src, channel, command) {
         var name = sys.name(src), cauth = helpers.cauth(name.toLowerCase(), channel),
             lower = sys.channel(channel).toLowerCase();
         if (regchannels[lower]) {
