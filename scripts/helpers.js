@@ -29,15 +29,15 @@ helpers = {
             "channelleavemessage": "~Player~ has left ~Channel~!",
             "silencemessage": "This channel has been silenced by ~Player~!",
             "unsilencemessage": "This channel has been unsilenced by ~Player~! Everyone can talk again!",
-            "nopermissionmessage", "Can't let you do that, Star ~Player~!",
-            "border", "<font color='#00008B'><b>" +
+            "nopermissionmessage": "Can't let you do that, Star ~Player~!",
+            "border": "<font color='#00008B'><b>" +
                 ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>></b></font>",
-            "border2", "<font color='#00008B'><b>" +
+            "border2": "<font color='#00008B'><b>" +
                 "&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;" +
                 "&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;" +
                 "&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;</b></font>",
-            "cmdcolors", '["#4169E1","#008000","#FF0000","#FFA500","#FFD700","#0000FF"]',
-            "listcolors", '{"mute":"#1E90FF","ban":"#FF6900","rangeban":"#008000","megaban":"#800080","gigaban":"#AA0000"}',
+            "cmdcolors": '["#4169E1","#008000","#FF0000","#FFA500","#FFD700","#0000FF"]',
+            "listcolors": '{"mute":"#1E90FF","ban":"#FF6900","rangeban":"#008000","megaban":"#800080","gigaban":"#AA0000"}',
             "bots": '{"attack":"AttackBot","armyof":"ArmyBot","auth":"AuthBot","ban":"BanBot",' +
                 '"battle":"BattleBot","caps":"CapsBot","channel":"ChannelBot","clear":"ClearBot","command":"CommandBot",' +
                 '"cow":"Miltank","flood":"FloodBot","fun":"FunBot","gigaban":"GigabanBot","idle":"IdleBot","kick":"KickBot",' +
@@ -45,10 +45,10 @@ helpers = {
                 '"priv":"PrivacyBot","reverse":"ReverseBot","rr":"RussiaBot","russia":"RussiaBot","safari":"SafariBot",' +
                 '"script":"ScriptBot","silence":"SilenceBot","spy":"WatchBot","starfox":"Wolf","status":"StatusBot",' +
                 '"tour":"TourBot","topic":"TopicBot","warn":"WarnBot","welcome":"WelcomeBot","roulette": "RouletteBot"}',
-            "allowance": "8",
-            "floodtime": "10",
-            "floodlevel": "1",
-            "updatefrequency": "3600",
+            "allowance": 8,
+            "floodtime": 10,
+            "floodlevel": 1,
+            "updatefrequency": 3600,
             "allowed": '["127.0.0.1"]',
             "allowedrange": '["192.168"]',
             "permchannels": '["Watch", "Auth Channel", "Owner Channel"]',
@@ -70,11 +70,11 @@ helpers = {
             return values[dataFile];
         }
         switch (type) {
-            case "string": return "";
             case "number": return "0";
             case "boolean": return "true";
             case "array": return "[]";
             case "object": return "{}";
+            default: return "";
         }
     }
 
