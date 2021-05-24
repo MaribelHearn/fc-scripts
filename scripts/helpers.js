@@ -14,42 +14,103 @@
 */
 
 helpers = {
+    defaultValue: function (dataFile, type) {
+        var values = {
+            "botcolor": "#318739",
+            "botsymbol": "±",
+            "botsymbolcolor": "#318739",
+            "servertopic": "Welcome to ~Server~!",
+            "bordercolor": "#00008B",
+            "servertopiccolor": "#FF0000",
+            "channeltopiccolor": "#FFA500",
+            "welcomemessage": "Please welcome ~Player~ to ~Server~!",
+            "leavemessage": "~Player~ has left ~Server~!",
+            "channelwelcomemessage": "Please welcome ~Player~ to ~Channel~!",
+            "channelleavemessage": "~Player~ has left ~Channel~!",
+            "silencemessage": "This channel has been silenced by ~Player~!",
+            "unsilencemessage": "This channel has been unsilenced by ~Player~! Everyone can talk again!",
+            "nopermissionmessage", "Can't let you do that, Star ~Player~!",
+            "border", "<font color='#00008B'><b>" +
+                ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>></b></font>",
+            "border2", "<font color='#00008B'><b>" +
+                "&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;" +
+                "&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;" +
+                "&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;</b></font>",
+            "cmdcolors", '["#4169E1","#008000","#FF0000","#FFA500","#FFD700","#0000FF"]',
+            "listcolors", '{"mute":"#1E90FF","ban":"#FF6900","rangeban":"#008000","megaban":"#800080","gigaban":"#AA0000"}',
+            "bots": '{"attack":"AttackBot","armyof":"ArmyBot","auth":"AuthBot","ban":"BanBot",' +
+                '"battle":"BattleBot","caps":"CapsBot","channel":"ChannelBot","clear":"ClearBot","command":"CommandBot",' +
+                '"cow":"Miltank","flood":"FloodBot","fun":"FunBot","gigaban":"GigabanBot","idle":"IdleBot","kick":"KickBot",' +
+                '"main":"Bot","megaban":"MegabanBot","mute":"MuteBot","name":"NameBot","party":"PartyBot","pass":"PassBot",' +
+                '"priv":"PrivacyBot","reverse":"ReverseBot","rr":"RussiaBot","russia":"RussiaBot","safari":"SafariBot",' +
+                '"script":"ScriptBot","silence":"SilenceBot","spy":"WatchBot","starfox":"Wolf","status":"StatusBot",' +
+                '"tour":"TourBot","topic":"TopicBot","warn":"WarnBot","welcome":"WelcomeBot","roulette": "RouletteBot"}',
+            "allowance": "8",
+            "floodtime": "10",
+            "floodlevel": "1",
+            "updatefrequency": "3600",
+            "allowed": '["127.0.0.1"]',
+            "allowedrange": '["192.168"]',
+            "permchannels": '["Watch", "Auth Channel", "Owner Channel"]',
+            "silentcommands": '["future", "spoiler", "seval", "sseval", "skick", "invisibleowner", "invisible", "invis",' +
+                '"silentupdate", "silenteval", "secretsilenteval", "silentkick", "supdate", "silentupdateplugin", "supdateplugin"]',
+            "rules": '{"rules":["No spamming (including challenge spamming), trolling, flaming, bashing or advertising. "' +
+                '"No abusing commands or auth powers.", "Do not talk about inappropriate or obscene subjects, "' +
+                '"nor mention words that refer to such.", "No asking for auth.", "Do not attempt to circumvent the rules."],' +
+                '"explanations":["These things cause disorder in the chat. You can get kicked, muted or banned depending on how "' +
+                '"severely you are breaking this rule.","This should make sense without any explanation. "' +
+                '"Commands exist to be used for what they are meant for, not for mistakes to be exploited. "' +
+                '"The same goes for auths; do what you should do and not beyond that.",' +
+                '"Anything inappropriate or obscene will result in a mute, or ban after multiple occasions.",' +
+                '"You may get auth when recognized for coming on a lot, chat activity, good behaviour and maybe even contribution. "' +
+                '"Asking for it will not get you any further.","Taking the rules too literally is no use when you know you are "' +
+                '"supposed to be punished anyway. Do not try to find loopholes in the rules, it will result in even more punishment."]}'
+        };
+        if (values.hasOwnProperty(dataFile)) {
+            return values[dataFile];
+        }
+        switch (type) {
+            case "string": return "";
+            case "number": return "0";
+            case "boolean": return "true";
+            case "array": return "[]";
+            case "object": return "{}";
+        }
+    }
+
+    ,
+
     initCustoms: function () {
-        sys.write(DATA_FOLDER + "botcolor.txt", "#318739");
-        sys.write(DATA_FOLDER + "botsymbol.txt", "±");
-        sys.write(DATA_FOLDER + "servertopic.txt", "Welcome to " + sys.getServerName() + "!");
-        sys.write(DATA_FOLDER + "botsymbolcolor.txt", "#318739");
-        sys.write(DATA_FOLDER + "bordercolor.txt", "#00008B");
-        sys.write(DATA_FOLDER + "servertopiccolor.txt", "#FF0000");
-        sys.write(DATA_FOLDER + "channeltopiccolor.txt", "#FFA500");
-        sys.write(DATA_FOLDER + "welcomemessage.txt", "Please welcome ~Player~ to ~Server~!");
-        sys.write(DATA_FOLDER + "leavemessage.txt", "~Player~ has left ~Server~!");
-        sys.write(DATA_FOLDER + "channelwelcomemessage.txt", "Please welcome ~Player~ to ~Channel~!");
-        sys.write(DATA_FOLDER + "channelleavemessage.txt", "~Player~ has left ~Channel~!");
-        sys.write(DATA_FOLDER + "silencemessage.txt", "This channel has been silenced by ~Player~!");
-        sys.write(DATA_FOLDER + "unsilencemessage.txt", "This channel has been unsilenced by ~Player~! Everyone can talk again!");
-        sys.write(DATA_FOLDER + "nopermissionmessage.txt", "Can't let you do that, Star ~Player~!");
-        sys.write(DATA_FOLDER + "border.txt", "<font color='" + borderColor + "'><b>" +
-        ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>></b></font>");
-        sys.write(DATA_FOLDER + "border2.txt", "<font color='" + borderColor + "'><b>" +
-        "&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;" +
-        "&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;" +
-        "&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;</b></font>");
-        sys.write(DATA_FOLDER + "cmdcolors.txt", '["#4169E1","#008000","#FF0000","#FFA500","#FFD700","#0000FF"]');
-        sys.write(DATA_FOLDER + "listcolors.txt", '{"mute":"#1E90FF","ban":"#FF6900","rangeban":"#008000","megaban":"#800080","gigaban":"#AA0000"}');
-        sys.write(DATA_FOLDER + "bots.txt", '{"attack":"AttackBot","armyof":"ArmyBot","auth":"AuthBot","ban":"BanBot",' +
-        '"battle":"BattleBot","caps":"CapsBot","channel":"ChannelBot","clear":"ClearBot","command":"CommandBot",' +
-        '"cow":"Miltank","flood":"FloodBot","fun":"FunBot","gigaban":"GigabanBot","idle":"IdleBot","kick":"KickBot",' +
-        '"main":"Bot","megaban":"MegabanBot","mute":"MuteBot","name":"NameBot","party":"PartyBot","pass":"PassBot",' +
-        '"priv":"PrivacyBot","reverse":"ReverseBot","rr":"RussiaBot","russia":"RussiaBot","safari":"SafariBot",' +
-        '"script":"ScriptBot","silence":"SilenceBot","spy":"WatchBot","starfox":"Wolf","status":"StatusBot",' +
-        '"tour":"TourBot","topic":"TopicBot","warn":"WarnBot","welcome":"WelcomeBot","roulette": "RouletteBot"}');
-        sys.write(DATA_FOLDER + "authtitles.txt", "{}");
-        sys.write(DATA_FOLDER + "selfkickmessages.txt", "{}");
-        sys.write(DATA_FOLDER + "kickmessages.txt", "{}");
-        sys.write(DATA_FOLDER + "mutemessages.txt", "{}");
-        sys.write(DATA_FOLDER + "banmessages.txt", "{}");
-        sys.write(DATA_FOLDER + "rangebanmessages.txt", "{}");
+        var dataFiles = {
+            "botcolor": "string",
+            "botsymbol": "string",
+            "servertopic": "string",
+            "botsymbolcolor": "string",
+            "bordercolor": "string",
+            "servertopiccolor": "string",
+            "channeltopiccolor": "string",
+            "welcomemessage": "string",
+            "leavemessage": "string",
+            "channelwelcomemessage": "string",
+            "channelleavemessage": "string",
+            "silencemessage": "string",
+            "unsilencemessage": "string",
+            "nopermissionmessage": "string",
+            "border": "string",
+            "border2": "string",
+            "cmdcolors": "array",
+            "listcolors": "object",
+            "bots": "object",
+            "authtitles": "object",
+            "selfkickmessages": "object",
+            "kickmessages": "object",
+            "mutemessages": "object",
+            "banmessages": "object",
+            "rangebanmessages": "object"
+        }, dataFile;
+        for (dataFile in dataFiles) {
+            sys.write(DATA_FOLDER + dataFile + ".txt", this.defaultValue(dataFile, dataFiles[dataFile]));
+        }
         if (pluginLoaded["funcmds.js"]) {
             sys.write(DATA_FOLDER + "bigtexts.txt", "{}");
         } else {
@@ -60,46 +121,40 @@ helpers = {
     ,
 
     initData: function () {
+        var dataFiles = {
+            "open": "boolean",
+            "allowance": "number",
+            "floodtime": "number",
+            "floodlevel": "number",
+            "maxplayers": "number",
+            "updatefrequency": "number",
+            "API_KEY": "string",
+            "GOOGLE_KEY": "string",
+            "UPDATE_KEY": "string",
+            "latestshahash": "string",
+            "allowed": "array",
+            "exceptions": "array",
+            "permchannels": "array",
+            "allowedrange": "array",
+            "namestounban": "array",
+            "silentcommands": "array",
+            "nameblocklist": "array",
+            "rules": "object",
+            "regchannels": "object",
+            "banlist": "object",
+            "mutelist": "object",
+            "timezone": "object",
+            "operatingsystem": "object",
+            "megabanlist": "object",
+            "gigabanlist": "object",
+            "countryname": "object",
+            "rangebanlist": "object"
+        }, dataFile;
         sys.mkdir("data");
-        sys.write(DATA_FOLDER + "open.txt", "true");
-        sys.write(DATA_FOLDER + "allowance.txt", 8);
-        sys.write(DATA_FOLDER + "floodtime.txt", 10);
-        sys.write(DATA_FOLDER + "floodlevel.txt", 1);
-        sys.write(DATA_FOLDER + "maxplayers.txt", 0);
-        sys.write(DATA_FOLDER + "updatefrequency.txt", 3600);
-        sys.write(DATA_FOLDER + "API_KEY.txt", "");
-        sys.write(DATA_FOLDER + "GOOGLE_KEY.txt", "");
-        sys.write(DATA_FOLDER + "UPDATE_KEY.txt", "");
-        sys.write(DATA_FOLDER + "latestshahash.txt", "");
-        sys.write(DATA_FOLDER + "allowed.txt", '["127.0.0.1"]');
-        sys.write(DATA_FOLDER + "exceptions.txt", "[]");
-        sys.write(DATA_FOLDER + "permchannels.txt", '["Watch","Auth Channel","Owner Channel"]');
-        sys.write(DATA_FOLDER + "allowedrange.txt", '["192.168"]');
-        sys.write(DATA_FOLDER + "namestounban.txt", "[]");
-        sys.write(DATA_FOLDER + "silentcommands.txt", '["future","spoiler","seval","sseval","skick",' +
-        '"invisibleowner","invisible","invis","silentupdate","silenteval","secretsilenteval","silentkick","supdate","silentupdateplugin", "supdateplugin"]');
-        sys.write(DATA_FOLDER + "nameblocklist.txt", "[]");
-        sys.write(DATA_FOLDER + "rules.txt", '{"rules":["No spamming (including challenge spamming), trolling, flaming, bashing or advertising.",' +
-        '"No abusing commands or auth powers.","Do not talk about inappropriate or obscene subjects, nor mention words that refer to such.",' +
-        '"No asking for auth.","Do not attempt to circumvent the rules."],' +
-        '"explanations":["These things cause disorder in the chat. You can get kicked, muted or banned depending on how severely you are breaking this rule.",' +
-        '"This should make sense without any explanation. Commands exist to be used for what they are meant for, not for mistakes to be exploited. The same goes for auths; do what you should do and not beyond that.",' +
-        '"Anything inappropriate or obscene will result in a mute, or ban after multiple occasions.",' +
-        '"You may get auth when recognized for coming on a lot, chat activity, good behaviour and maybe even contribution. Asking for it will not get you any further.",' +
-        '"Taking the rules too literally is no use when you know you are supposed to be punished anyway. Do not try to find loopholes in the rules, it will result in even more punishment."]}');
-        sys.write(DATA_FOLDER + "regchannels.txt", "{}");
-        sys.write(DATA_FOLDER + "banlist.txt", "{}");
-        sys.write(DATA_FOLDER + "mutelist.txt", "{}");
-        sys.write(DATA_FOLDER + "timezone.txt", "{}");
-        sys.write(DATA_FOLDER + "cityname.txt", "{}");
-        sys.write(DATA_FOLDER + "versions.txt", "{}");
-        sys.write(DATA_FOLDER + "members.txt", "{}");
-        sys.write(DATA_FOLDER + "operatingsystem.txt", "{}");
-        sys.write(DATA_FOLDER + "megabanlist.txt", "{}");
-        sys.write(DATA_FOLDER + "gigabanlist.txt", "{}");
-        sys.write(DATA_FOLDER + "countryname.txt", "{}");
-        sys.write(DATA_FOLDER + "rangebanlist.txt", "{}");
-        permchannels = ["Watch","Auth Channel","Owner Channel"];
+        for (dataFile in dataFiles) {
+            sys.write(DATA_FOLDER + dataFile + ".txt", this.defaultValue(dataFile, dataFiles[dataFile]));
+        }
+        permchannels = JSON.parse(this.defaultValue(permChannels));
         if (pluginLoaded["party.js"]) {
             permchannels.push("Party");
             sys.write(DATA_FOLDER + "permchannels.txt", JSON.stringify(permchannels));
@@ -116,66 +171,70 @@ helpers = {
             permchannels.push("Safari");
             sys.write(DATA_FOLDER + "permchannels.txt", JSON.stringify(permchannels));
         }
-    }
-
-    ,
-
-    initCustomGlobals: function () {
-        botcolor = helpers.readData("botcolor");
-        botsymbol = helpers.readData("botsymbol");
-        servertopic = helpers.readData("servertopic");
-        botsymbolcolor = helpers.readData("botsymbolcolor");
-        borderColor = helpers.readData("bordercolor");
-        serverTopicColor = helpers.readData("servertopiccolor");
-        channelTopicColor = helpers.readData("channeltopiccolor");
-        welcomeMessage = helpers.readData("welcomemessage");
-        leaveMessage = helpers.readData("leavemessage");
-        channelWelcomeMessage = helpers.readData("channelwelcomemessage");
-        channelLeaveMessage = helpers.readData("channelleavemessage");
-        noPermissionMessage = helpers.readData("nopermissionmessage");
-        silenceMessage = helpers.readData("silencemessage");
-        unsilenceMessage = helpers.readData("unsilencemessage");
-        cmdcolors = helpers.readObject("cmdcolors");
-        listcolors = helpers.readObject("listcolors");
-        bots = helpers.readObject("bots");
-        authtitles = helpers.readObject("authtitles");
-        selfkickmessages = helpers.readObject("selfkickmessages");
-        kickmessages = helpers.readObject("kickmessages");
-        mutemessages = helpers.readObject("mutemessages");
-        banmessages = helpers.readObject("banmessages");
-        rangebanmessages = helpers.readObject("rangebanmessages");
-        helpers.setVariable("border", helpers.readData("border"));
-        helpers.setVariable("border2", helpers.readData("border2"));
+        this.initCustoms();
     }
 
     ,
 
     readData: function (dataFile) {
+        if (!sys.fexists(DATA_FOLDER + dataFile + ".txt")) {
+            sys.write(DATA_FOLDER + dataFile + ".txt", this.defaultValue(dataFile));
+            print("Missing data file " + dataFile + ".txt created");
+            return "";
+        }
         return sys.read(DATA_FOLDER + dataFile + ".txt");
     }
 
     ,
 
     readNumber: function (dataFile) {
+        if (!sys.fexists(DATA_FOLDER + dataFile + ".txt")) {
+            sys.write(DATA_FOLDER + dataFile + ".txt", this.defaultValue(dataFile));
+            print("Missing data file " + dataFile + ".txt created");
+            return 0;
+        }
         return parseInt(this.readData(dataFile));
     }
 
     ,
 
     readBoolean: function (dataFile) {
+        if (!sys.fexists(DATA_FOLDER + dataFile + ".txt")) {
+            sys.write(DATA_FOLDER + dataFile + ".txt", this.defaultValue(dataFile));
+            print("Missing data file " + dataFile + ".txt created");
+            return true;
+        }
         return this.readData(dataFile) == "true" ? true : false;
     }
 
     ,
 
-    readObject: function (dataFile) {
-        var data;
-
+    readArray: function (dataFile) {
+        if (!sys.fexists(DATA_FOLDER + dataFile + ".txt")) {
+            sys.write(DATA_FOLDER + dataFile + ".txt", this.defaultValue(dataFile));
+            print("Missing data file " + dataFile + ".txt created");
+            return [];
+        }
         try {
-            data = JSON.parse(this.readData(dataFile));
-            return data;
-        } catch (e) {
-            print("JSON file " + dataFile + " failed to load: " + e);
+            return JSON.parse(this.readData(dataFile));
+        } catch (err) {
+            print("JSON data file " + dataFile + ".txt failed to parse: " + err);
+            return [];
+        }
+    }
+
+    ,
+
+    readObject: function (dataFile) {
+        if (!sys.fexists(DATA_FOLDER + dataFile + ".txt")) {
+            sys.write(DATA_FOLDER + dataFile + ".txt", this.defaultValue(dataFile));
+            print("Missing data file " + dataFile + ".txt created");
+            return {};
+        }
+        try {
+            return JSON.parse(this.readData(dataFile));
+        } catch (err) {
+            print("JSON data file " + dataFile + ".txt failed to parse: " + err);
             return {};
         }
     }
@@ -193,6 +252,107 @@ helpers = {
         if (typeof(global[variable]) == "undefined") {
             global[variable] = data;
         }
+    }
+
+    ,
+
+    initCustomGlobals: function () {
+        botcolor = this.readData("botcolor");
+        botsymbol = this.readData("botsymbol");
+        servertopic = this.readData("servertopic");
+        botsymbolcolor = this.readData("botsymbolcolor");
+        borderColor = this.readData("bordercolor");
+        serverTopicColor = this.readData("servertopiccolor");
+        channelTopicColor = this.readData("channeltopiccolor");
+        welcomeMessage = this.readData("welcomemessage");
+        leaveMessage = this.readData("leavemessage");
+        channelWelcomeMessage = this.readData("channelwelcomemessage");
+        channelLeaveMessage = this.readData("channelleavemessage");
+        noPermissionMessage = this.readData("nopermissionmessage");
+        silenceMessage = this.readData("silencemessage");
+        unsilenceMessage = this.readData("unsilencemessage");
+        cmdcolors = this.readArray("cmdcolors");
+        listcolors = this.readObject("listcolors");
+        bots = this.readObject("bots");
+        authtitles = this.readObject("authtitles");
+        selfkickmessages = this.readObject("selfkickmessages");
+        kickmessages = this.readObject("kickmessages");
+        mutemessages = this.readObject("mutemessages");
+        banmessages = this.readObject("banmessages");
+        rangebanmessages = this.readObject("rangebanmessages");
+        this.setVariable("border", this.readData("border"));
+        this.setVariable("border2", this.readData("border2"));
+    }
+
+    ,
+
+    initServerGlobals: function () {
+        open = this.readBoolean("open");
+        latestShaHash = this.readData("latestshahash");
+        updateFrequency = this.readNumber("updatefrequency");
+        allowance = this.readNumber("allowance");
+        floodtime = this.readNumber("floodtime");
+        floodlevel = this.readNumber("floodlevel");
+        maxplayers = this.readNumber("maxplayers");
+        allowed = this.readArray("allowed");
+        exceptions = this.readArray("exceptions");
+        permchannels = this.readArray("permchannels");
+        allowedrange = this.readArray("allowedrange");
+        namestounban = this.readArray("namestounban");
+        nameblocklist = this.readArray("nameblocklist");
+        silentcommands = this.readArray("silentcommands");
+        rules = this.readObject("rules");
+        banlist = this.readObject("banlist");
+        mutelist = this.readObject("mutelist");
+        timezone = this.readObject("timezone");
+        cityname = this.readObject("cityname");
+        versions = this.readObject("versions");
+        members = this.readObject("members");
+        operatingsystem = this.readObject("operatingsystem");
+        regchannels = this.readObject("regchannels");
+        megabanlist = this.readObject("megabanlist");
+        gigabanlist = this.readObject("gigabanlist");
+        countryname = this.readObject("countryname");
+        rangebanlist = this.readObject("rangebanlist");
+    }
+
+    ,
+
+    initTempVars: function () {
+        this.setVariable("stopbattles", false);
+        this.setVariable("megabancheck", false);
+        this.setVariable("gigabancheck", false);
+        this.setVariable("serverStarting", false);
+        this.setVariable("timer", 0);
+        this.setVariable("currentSpoiler", 0);
+        this.setVariable("layout", "new");
+        this.setVariable("hostIp", "");
+        this.setVariable("hostCountry", "");
+        this.setVariable("hostCity", "");
+        this.setVariable("hostTimeZone", "");
+        this.setVariable("players", []);
+        this.setVariable("floodplayers", []);
+        this.setVariable("spoilers", []);
+        this.setVariable("tour", {});
+        this.setVariable("battles", {});
+        this.setVariable("heightList", {});
+        this.setVariable("weightList", {});
+        this.setVariable("movepoolList", {});
+        this.setVariable("powerList", {});
+        this.setVariable("categoryList", {});
+        this.setVariable("accList", {});
+        this.setVariable("ppList", {});
+        this.setVariable("moveEffList", {});
+        this.setVariable("moveFlagList", {});
+        this.setVariable("movePriorityList", {});
+        this.setVariable("moveRangeList", {});
+        this.setVariable("abilityList", {});
+        this.setVariable("pokemonWithAbilityList", {});
+        this.setVariable("itemList", {});
+        this.setVariable("berryList", {});
+        this.setVariable("flingPowerList", {});
+        this.setVariable("berryPowerList", {});
+        this.setVariable("berryTypeList", {});
     }
 
     ,

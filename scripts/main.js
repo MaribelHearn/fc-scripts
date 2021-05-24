@@ -227,68 +227,8 @@
         ----------------
     **/
     helpers.initCustomGlobals();
-    open = helpers.readBoolean("open");
-    latestShaHash = helpers.readData("latestshahash");
-    updateFrequency = helpers.readNumber("updatefrequency");
-    allowance = helpers.readNumber("allowance");
-    floodtime = helpers.readNumber("floodtime");
-    floodlevel = helpers.readNumber("floodlevel");
-    maxplayers = helpers.readNumber("maxplayers");
-    allowed = helpers.readObject("allowed");
-    exceptions = helpers.readObject("exceptions");
-    permchannels = helpers.readObject("permchannels");
-    allowedrange = helpers.readObject("allowedrange");
-    namestounban = helpers.readObject("namestounban");
-    nameblocklist = helpers.readObject("nameblocklist");
-    silentcommands = helpers.readObject("silentcommands");
-    proxylist = helpers.readData("proxylist").split('\n');
-    rules = helpers.readObject("rules");
-    banlist = helpers.readObject("banlist");
-    mutelist = helpers.readObject("mutelist");
-    timezone = helpers.readObject("timezone");
-    cityname = helpers.readObject("cityname");
-    versions = helpers.readObject("versions");
-    members = helpers.readObject("members");
-    operatingsystem = helpers.readObject("operatingsystem");
-    regchannels = helpers.readObject("regchannels");
-    megabanlist = helpers.readObject("megabanlist");
-    gigabanlist = helpers.readObject("gigabanlist");
-    countryname = helpers.readObject("countryname");
-    rangebanlist = helpers.readObject("rangebanlist");
-    helpers.setVariable("stopbattles", false);
-    helpers.setVariable("megabancheck", false);
-    helpers.setVariable("gigabancheck", false);
-    helpers.setVariable("serverStarting", false);
-    helpers.setVariable("timer", 0);
-    helpers.setVariable("currentSpoiler", 0);
-    helpers.setVariable("layout", "new");
-    helpers.setVariable("hostIp", "");
-    helpers.setVariable("hostCountry", "");
-    helpers.setVariable("hostCity", "");
-    helpers.setVariable("hostTimeZone", "");
-    helpers.setVariable("players", []);
-    helpers.setVariable("floodplayers", []);
-    helpers.setVariable("spoilers", []);
-    helpers.setVariable("tour", {});
-    helpers.setVariable("battles", {});
-    helpers.setVariable("heightList", {});
-    helpers.setVariable("weightList", {});
-    helpers.setVariable("movepoolList", {});
-    helpers.setVariable("powerList", {});
-    helpers.setVariable("categoryList", {});
-    helpers.setVariable("accList", {});
-    helpers.setVariable("ppList", {});
-    helpers.setVariable("moveEffList", {});
-    helpers.setVariable("moveFlagList", {});
-    helpers.setVariable("movePriorityList", {});
-    helpers.setVariable("moveRangeList", {});
-    helpers.setVariable("abilityList", {});
-    helpers.setVariable("pokemonWithAbilityList", {});
-    helpers.setVariable("itemList", {});
-    helpers.setVariable("berryList", {});
-    helpers.setVariable("flingPowerList", {});
-    helpers.setVariable("berryPowerList", {});
-    helpers.setVariable("berryTypeList", {});
+    helpers.initServerGlobals();
+    helpers.initTempVars();
     bansites = sys.read("bansites.txt").replace(/\r/g, "").split('\n');
     bansites.splice(bansites.indexOf(""), 1);
     bansites.splice(bansites.lastIndexOf(""), 1);
@@ -883,7 +823,7 @@
             ------------------------
         **/
         sys.sendHtmlMessage(src, "<b><font color='" + (layout == "new" ? serverTopicColor : "maroon") +
-        "'>Server Topic:</font></b> " + servertopic, channel);
+        "'>Server Topic:</font></b> " + servertopic.replace("~Server~", sys.getServerName()), channel);
         if (regchannels[lower]) {
             sys.sendHtmlMessage(src, "<b><font color='" + (layout == "new" ? channelTopicColor : "indigo") +
             "'>Channel " + (layout == "new" ? "Topic" : "Description") +
