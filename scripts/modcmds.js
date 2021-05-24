@@ -1037,9 +1037,9 @@ modcommands = {
             return;
         }
         if (auth === 0 || auth >= 4) {
-            sys.sendHtmlAll("<font color='" + color + "'><timestamp/><b>" + sys.name(src) + ":</b></font> " + command, channel);
+            sys.sendHtmlAll("<font color='" + color + "'><timestamp/><b>" + helpers.escapehtml(sys.name(src)) + ":</b></font> " + command, channel);
         } else {
-            sys.sendHtmlAll("<font color='" + color + "'><timestamp/>+<b><i>" + sys.name(src) + ":</i></b></font> " + command, channel);
+            sys.sendHtmlAll("<font color='" + color + "'><timestamp/>+<b><i>" + helpers.escapehtml(sys.name(src)) + ":</i></b></font> " + command, channel);
         }
     }
 

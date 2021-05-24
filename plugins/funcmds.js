@@ -83,9 +83,9 @@ funcommands = {
 
     attack: function (src, channel, command) {
         var name = sys.name(src), random = sys.rand(0, sys.numPlayers()), player, move;
-        !command[1] ? player = sys.name(sys.playerIds()[random]) : player = helpers.escapehtml(command[1]);
-        !command[2] ? move = move = sys.move(sys.rand(1, 610)) : move = helpers.escapehtml(command[2]);
-        sys.sendHtmlAll(helpers.bot(bots.attack) + "<b>" + helpers.user(helpers.escapehtml(name)) + " used " + helpers.arg2(move) + " on " + helpers.arg(player) + "!</b>", channel);
+        !command[1] ? player = sys.name(sys.playerIds()[random]) : player = command[1];
+        !command[2] ? move = move = sys.move(sys.rand(1, 610)) : move = command[2];
+        sys.sendHtmlAll(helpers.bot(bots.attack) + "<b>" + helpers.user(name) + " used " + helpers.arg2(move) + " on " + helpers.arg(player) + "!</b>", channel);
     }
 
     ,
@@ -513,7 +513,7 @@ funcommands = {
 
     flyaway: function (src, channel, command) {
         var name = sys.name(src);
-        sys.sendHtmlAll(helpers.bot(bots.kick) + name + " flew away!", channel);
+        sys.sendHtmlAll(helpers.bot(bots.kick) + helpers.escapehtml(name) + " flew away!", channel);
         sys.kick(src);
     }
 
@@ -522,7 +522,7 @@ funcommands = {
     see: function (src, channel, command) {
         var name = sys.name(src), text;
         !command[1] ? text = "Dennis" : text = command[1];
-        sys.sendHtmlAll(helpers.bot(bots.kick) + name + " saw " + text + " behind them and left the server!", channel);
+        sys.sendHtmlAll(helpers.bot(bots.kick) + helpers.escapehtml(name) + " saw " + helpers.escapehtml(text) + " behind them and left the server!", channel);
         sys.kick(src);
     }
 };
