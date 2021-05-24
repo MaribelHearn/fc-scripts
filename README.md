@@ -9,7 +9,7 @@ The Fun Community scripts, or FC scripts for short, were used on my server Fun C
 
 ### How to use
 
-Click 'Download ZIP' to download this repository, then extract the content of the `fc-scripts-master` folder from the ZIP into your server folder. The scripts will initialise the data that they use when you open your server, for which they will create a folder called `data`, and with that, immediately work on server startup. Be careful if you touch this folder; you might break the scripts! If you by any chance already have a folder called `data` in your server folder, make sure you either rename or delete it before running your server with the scripts for the first time, or else they won't initialise and, therefore, won't work. Also, the scripts will move the `bansites.txt` and `proxy_list.txt` files (copied from the official server scripts) to that folder on initialisation, so don't be astonished by their sudden disappearance.
+Click 'Download ZIP' to download this repository, then extract the content of the `fc-scripts-master` folder from the ZIP into your server folder. The scripts will initialise the data that they use when you open your server, for which they will create a folder called `data`, and with that, immediately work on server startup. Be careful if you touch this folder; you might break the scripts! If you by any chance already have a folder called `data` in your server folder, make sure you either rename or delete it before running your server with the scripts for the first time, or else they won't initialise and, therefore, won't work.
 
 If you wish for the scripts to automatically update, `git` has to be installed on your computer and this repository has to be cloned in your server folder. After having done so, this feature can be enabled by using `/setgithubkey <API key>` to add a GitHub API key. To change how often the script will attempt to automatically update, use `/updatefrequency <number of seconds>`. To disable automatic updating again, use `/removegithubkey`.
 
@@ -21,4 +21,4 @@ By default, the official channels are not registered. You should run the `/regis
 
 There are optional script files as well; those are within a folder called `plugins`; the main files are in the folder called `scripts`. If you do not want the plugins, simply do not extract them from the zip once you have downloaded the scripts. The plugins consist of fun commands and a few small game channel scripts, including a very unfinished (and therefore not yet playable) own Safari. It is not a modification of the official side channel, but written from scratch.
 
-You can also add your own plugins. Every JavaScript file present in the `plugins` folder will be executed on startup and when the `/reload` command is used. 
+You can also add your own plugins. Every JavaScript file present in the `plugins` folder will be executed on startup and when the `/reload` command is used.
