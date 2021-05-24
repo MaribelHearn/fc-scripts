@@ -986,6 +986,9 @@
             helpers.saveData("operatingsystem");
             helpers.saveData("versions");
         }
+        if (!players[src]) {
+            sys.sendHtmlWatch(helpers.bot(bots.spy) + "[Server] IP " + ip + " has disconnected from the server.");
+        }
         delete players[src];
     }
 
