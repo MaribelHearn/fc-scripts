@@ -74,7 +74,7 @@ funcommands = {
                 chance /= 2;
             }
         }
-        sys.sendHtmlAll(helpers.bot(bots.armyof) + "<b>" + helpers.user(helpers.escapehtml(name)) +
+        sys.sendHtmlAll(helpers.bot(bots.armyof) + "<b>" + helpers.user(name) +
         " has used the " + helpers.arg("A Army Of " + (chance == 1 ? "<b><font color='#FFA500'>Shiny</font></b>" +
         " " : "") + sys.pokemon(pokeNum)) + " command.</b><br>" + sprites, channel);
     }
@@ -112,7 +112,7 @@ funcommands = {
     bigtext: function (src, channel, command) {
         var name = sys.name(src), text, title, bot, color, size;
         !command[1] ? text = "Some text." : text = helpers.escapehtml(command[1]);
-        !command[2] ? title = "Big Text" : title = helpers.escapehtml(command[2]);
+        !command[2] ? title = "Big Text" : title = command[2];
         !command[3] || command[3] == "default" ? bot = bots.fun : bot = helpers.escapehtml(command[3]);
         !command[4] || !sys.validColor(command[4]) ? color = "#000000" : color = sys.hexColor(command[4]);
         !command[5] ? size = 32 : size = command[5];
@@ -128,7 +128,7 @@ funcommands = {
             helpers.starfox(src, channel, command, bots.command, "Error 403, the title may not be the same as one of an existing command.");
             return;
         }
-        sys.sendHtmlAll(helpers.bot(bot) + "<b>" + helpers.user(helpers.escapehtml(name)) +
+        sys.sendHtmlAll(helpers.bot(bot) + "<b>" + helpers.user(name) +
         " has used the " + helpers.arg(title) + " command.</b><br><span style='font-size:" + size +
         "px'><font color='" + color + "'>" + text + "</font></span>", channel);
     }
@@ -137,7 +137,7 @@ funcommands = {
 
     bulbaderp: function (src, channel, command) {
         var name = sys.name(src);
-        sys.sendHtmlAll(helpers.bot(bots.fun) + "<b>" + helpers.user(helpers.escapehtml(name)) +
+        sys.sendHtmlAll(helpers.bot(bots.fun) + "<b>" + helpers.user(name) +
         " has used the " + helpers.arg("Bulbaderp") + " command.</b><br><img src='pokemon:1&gen=5'><b>" + helpers.desu("Bulbaderp!") + "</b>", channel);
     }
 
@@ -189,7 +189,7 @@ funcommands = {
 
     combobreaker: function (src, channel, command) {
         var name = sys.name(src);
-        sys.sendHtmlAll(helpers.bot(bots.fun) + "<b>" + helpers.user(helpers.escapehtml(name)) +
+        sys.sendHtmlAll(helpers.bot(bots.fun) + "<b>" + helpers.user(name) +
         " has used the " + helpers.arg("Combobreaker") +
         " command.</b><br><span style='font-size: 32px;'>C-C-C-COMBOBREAKER!!!</span>", channel);
     }
@@ -211,14 +211,14 @@ funcommands = {
     ,
 
     cow: function (src, channel, command) {
-        sys.sendHtmlAll(helpers.bot(bots.cow) + "You can call it a 'cow' if you want, the question remains. <b><small>- " + helpers.user(helpers.escapehtml(sys.name(src))) + "</small></b>", channel);
+        sys.sendHtmlAll(helpers.bot(bots.cow) + "You can call it a 'cow' if you want, the question remains. <b><small>- " + helpers.user(sys.name(src)) + "</small></b>", channel);
     }
 
     ,
 
     darp: function (src, channel, command) {
         var name = sys.name(src);
-        sys.sendHtmlAll(helpers.bot(bots.fun) + "<b>" + helpers.user(helpers.escapehtml(name)) +
+        sys.sendHtmlAll(helpers.bot(bots.fun) + "<b>" + helpers.user(name) +
         " has used the " + helpers.arg("Darp") + " command.</b><br><img src='pokemon:129&gen=5'><b>" + helpers.desu("Harpadarp!") + "</b>", channel);
     }
 
@@ -226,7 +226,7 @@ funcommands = {
 
     dennis: function (src, channel, command) {
         var name = sys.name(src), number = (sys.rand(0, 2) == 1 ? 269 : 250);
-        sys.sendHtmlAll(helpers.bot(bots.fun) + "<b>" + helpers.user(helpers.escapehtml(name)) +
+        sys.sendHtmlAll(helpers.bot(bots.fun) + "<b>" + helpers.user(name) +
         " has used the " + helpers.arg("Dennis") + " command.</b><br><b>DDDDDDDEEEEEEENNNNNNNNNNNNNNIIIIIIISSSSSSS!!!</b><img src='trainer:" + number + "'>", channel);
     }
 
@@ -234,7 +234,7 @@ funcommands = {
 
     derp: function (src, channel, command) {
         var name = sys.name(src);
-        sys.sendHtmlAll(helpers.bot(bots.fun) + "<b>" + helpers.user(helpers.escapehtml(name)) +
+        sys.sendHtmlAll(helpers.bot(bots.fun) + "<b>" + helpers.user(name) +
         " has used the " + helpers.arg("Derp") + " command.</b><br><img src='pokemon:618&gen=5'><b>" + helpers.desu("Herpaderp!") + "</b>", channel);
     }
 
@@ -242,7 +242,7 @@ funcommands = {
 
     durp: function (src, channel, command) {
         var name = sys.name(src);
-        sys.sendHtmlAll(helpers.bot(bots.fun) + "<b>" + helpers.user(helpers.escapehtml(name)) +
+        sys.sendHtmlAll(helpers.bot(bots.fun) + "<b>" + helpers.user(name) +
         " has used the " + helpers.arg("Durp") + " command.</b><br><img src='pokemon:349&gen=5'><b>" + helpers.desu("Hurpadurp!") + "</b>", channel);
     }
 
@@ -281,7 +281,7 @@ funcommands = {
         var name = sys.name(src), pokenum;
         pokenum = sys.rand(0, 2);
         pokenum == 1 ? pokenum = 399 : pokenum = 400;
-        sys.sendHtmlAll(helpers.bot(bots.fun) + "<b>" + helpers.user(helpers.escapehtml(name)) +
+        sys.sendHtmlAll(helpers.bot(bots.fun) + "<b>" + helpers.user(name) +
         " has used the " + helpers.arg("Ferp") + " command.</b><br><img src='pokemon:" + pokenum + "&gen=5" +
         "'><b>" + helpers.desu("Ferpaderp!") + "</b>", channel);
     }
@@ -302,7 +302,7 @@ funcommands = {
 
     herp: function (src, channel, command) {
         var name = sys.name(src);
-        sys.sendHtmlAll(helpers.bot(bots.fun) + "<b>" + helpers.user(helpers.escapehtml(name)) +
+        sys.sendHtmlAll(helpers.bot(bots.fun) + "<b>" + helpers.user(name) +
         " has used the " + helpers.arg("Herp") + " command.</b><br><img src='pokemon:507&gen=5'><b>" + helpers.desu("Derpaherp!") + "</b>", channel);
     }
 
@@ -318,7 +318,7 @@ funcommands = {
 
     hurrdurr: function (src, channel, command) {
         var name = sys.name(src);
-        sys.sendHtmlAll(helpers.bot(bots.fun) + "<b>" + helpers.user(helpers.escapehtml(name)) +
+        sys.sendHtmlAll(helpers.bot(bots.fun) + "<b>" + helpers.user(name) +
         " has used the " + helpers.arg("Hurr Durr") + " command.</b><br><span style='font-size:32px'>HURR DURR!</span><br>" +
         "<img src='pokemon:532&gen=5'><img src='pokemon:534&gen=5'><img src='pokemon:533&gen=5'></b>", channel);
     }
@@ -326,11 +326,11 @@ funcommands = {
     ,
 
     meme: function (src, channel, command) {
-        var name = helpers.escapehtml(sys.name(src)), text1, text2, pokenum, title, color;
+        var name = sys.name(src), text1, text2, pokenum, title, color;
         !sys.pokeNum(command[1]) ? pokenum = 129 : pokenum = sys.pokeNum(command[1]);
         !command[2] ? text1 = "I DIDN'T SPECIFY TEXT" : text1 = helpers.escapehtml(command[2]);
         !command[3] ? text2 = "BETTER DO IT NEXT TIME" : text2 = helpers.escapehtml(command[3]);
-        !command[4] ? title = sys.pokemon(pokenum) : title = helpers.escapehtml(command[4]);
+        !command[4] ? title = sys.pokemon(pokenum) : title = command[4];
         !command[5] ? color = "black" : color = command[5];
         text1 = text1.replace(/\(asterisk\)/g, "*");text1 = text1.replace(/\[asterisk\]/g, "*");
         text2 = text2.replace(/\(asterisk\)/g, "*");text2 = text2.replace(/\[asterisk\]/g, "*");
@@ -342,7 +342,7 @@ funcommands = {
 
     merp: function (src, channel, command) {
         var name = sys.name(src);
-        sys.sendHtmlAll(helpers.bot(bots.fun) + "<b>" + helpers.user(helpers.escapehtml(name)) +
+        sys.sendHtmlAll(helpers.bot(bots.fun) + "<b>" + helpers.user(name) +
         " has used the " + helpers.arg("Merp") + " command.</b><br><img src='pokemon:206&gen=5'><b>" + helpers.desu("Merpaderp!") + "</b>", channel);
     }
 
@@ -393,9 +393,9 @@ funcommands = {
     ,
 
     random: function (src, channel, command) {
-        var name = sys.name(src), auth = sys.auth(src), color = helpers.color(src), MAX_WORDS = 10, MAX_WORD_LENGTH = 6,
+        var name = helpers.escapehtml(sys.name(src)), auth = sys.auth(src), color = helpers.color(src), MAX_WORDS = 10,
             RANDOM_TEXT = "!\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~",
-            words = sys.rand(0, MAX_WORDS) + 1, wordlengths = [], message = "", i, j;
+            MAX_WORD_LENGTH = 6, words = sys.rand(0, MAX_WORDS) + 1, wordlengths = [], message = "", i, j;
         for (i = 0; i < words; i++) {
             wordlengths.push(sys.rand(0, MAX_WORD_LENGTH));
             for (j = 0; j < wordlengths[j]; j++) {
@@ -416,13 +416,13 @@ funcommands = {
         var name = sys.name(src), playerids = sys.playerIds(), random = sys.rand(0, sys.numPlayers()), random2 = sys.rand(0, sys.numPlayers()), name1, name2;
         !players[playerids[random]] ? name1 = sys.name(playerids[random]) : name1 = players[playerids[random]].name;
         !players[playerids[random2]] ? name2 = sys.name(playerids[random2]) : name2 = players[playerids[random2]].name;
-        sys.sendHtmlAll("<font color='" + helpers.color(src) + "'><timestamp/><b>*** " + name + " supports " + name1 + " x " + name2 + " *** (random)</b></font>", channel);
+        sys.sendHtmlAll("<font color='" + helpers.color(src) + "'><timestamp/><b>*** " + helpers.escapehtml(name) + " supports " + helpers.escapehtml(name1) + " x " + helpers.escapehtml(name2) + " *** (random)</b></font>", channel);
     }
 
     ,
 
     russia: function (src, channel, command) {
-        var name = helpers.escapehtml(sys.name(src)), verb, russiaverb, noun, russianoun;
+        var name = sys.name(src), verb, russiaverb, noun, russianoun;
         !command[1] ? verb = "drive" : verb = helpers.escapehtml(command[1]);
         !command[2] ? noun = "a car" : noun = helpers.escapehtml(command[2]);
         if (verb.indexOf(" ") != -1) {
@@ -469,7 +469,7 @@ funcommands = {
 
     wtfboom: function (src, channel, command) {
         var name = sys.name(src);
-        sys.sendHtmlAll(helpers.bot(bots.fun) + "<b>" + helpers.user(helpers.escapehtml(name)) +
+        sys.sendHtmlAll(helpers.bot(bots.fun) + "<b>" + helpers.user(name) +
         " has used the " + helpers.arg("Wtfboom") + " command.</b><br><span style='font-size: 24px;'><font color='#808080'>WHAT THE FU-" +
         "BOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOM</font></span>", channel);
     }
@@ -486,14 +486,14 @@ funcommands = {
 
     die: function (src, channel, command) {
         var name = sys.name(src);
-        sys.sendHtmlAll(helpers.bot(bots.kick) + name + " died. rip", channel);
+        sys.sendHtmlAll(helpers.bot(bots.kick) + helpers.escapehtml(name) + " died. rip", channel);
         sys.kick(src);
     }
 
     ,
 
     dividebyzero: function (src, channel, command) {
-        var name = sys.name(src), number = sys.rand(0, 1338);
+        var name = helpers.escapehtml(sys.name(src)), number = sys.rand(0, 1338);
         sys.sendAll(name + ": " + number + " / 0 = ...", channel);
         sys.sendHtmlAll(helpers.bot(bots.kick) + name + " divided by zero! OH SHI-", channel);
         sys.sendHtmlAll(helpers.bot(bots.kick) + name + " got killed in the explosion.", channel);
