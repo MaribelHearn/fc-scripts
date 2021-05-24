@@ -92,8 +92,8 @@ funcommands = {
 
     attract: function (src, channel, command) {
         var name = helpers.escapehtml(sys.name(src)), random = sys.rand(0, sys.numPlayers());
-        !command[1] ? player = sys.name(sys.playerIds()[random]) : player = helpers.escapehtml(command[1]);
-        sys.sendHtmlAll("<font color='#FF00FF'><timestamp/><b><font size='6'>♥</font> " + player + " has been attracted by " + name + "! <font size='6'>♥</font</b></font>", channel);
+        !command[1] ? player = sys.name(sys.playerIds()[random]) : player = command[1];
+        sys.sendHtmlAll("<font color='#FF00FF'><timestamp/><b><font size='6'>♥</font> " + helpers.escapehtml(player) + " has been attracted by " + name + "! <font size='6'>♥</font</b></font>", channel);
     }
 
     ,
@@ -145,10 +145,10 @@ funcommands = {
 
     burn: function (src, channel, command) {
         var name = helpers.escapehtml(sys.name(src)), random = sys.rand(0, sys.numPlayers()), channelPlayers = sys.playersOfChannel(channel);
-        !command[1] ? player = sys.name(sys.playerIds()[random]) : player = helpers.escapehtml(command[1]);
+        !command[1] ? player = sys.name(sys.playerIds()[random]) : player = command[1];
         for (var i in channelPlayers) {
             sys.sendHtmlMessage(channelPlayers[i], "<font color='#FF0000'><timestamp/>" +
-            "<b>" + helpers.statusImage(channelPlayers[i], command[0]) + player + " has been burned by " + name +
+            "<b>" + helpers.statusImage(channelPlayers[i], command[0]) + helpers.escapehtml(player) + " has been burned by " + name +
             "!" + helpers.statusImage(channelPlayers[i], command[0]) + "</b></font>", channel);
         }
     }
@@ -204,8 +204,8 @@ funcommands = {
 
     confuse: function (src, channel, command) {
         var name = helpers.escapehtml(sys.name(src)), random = sys.rand(0, sys.numPlayers());
-        !command[1] ? player = sys.name(sys.playerIds()[random]) : player = helpers.escapehtml(command[1]);
-        sys.sendHtmlAll("<font color='#8A2BE2'><timestamp/><b><font size='6'>@</font> " + player + " has been confused by " + name + "! <font size='6'>@</font</b></font>", channel);
+        !command[1] ? player = sys.name(sys.playerIds()[random]) : player = command[1];
+        sys.sendHtmlAll("<font color='#8A2BE2'><timestamp/><b><font size='6'>@</font> " + helpers.escapehtml(player) + " has been confused by " + name + "! <font size='6'>@</font</b></font>", channel);
     }
 
     ,
@@ -290,10 +290,10 @@ funcommands = {
 
     freeze: function (src, channel, command) {
         var name = helpers.escapehtml(sys.name(src)), random = sys.rand(0, sys.numPlayers()), channelPlayers = sys.playersOfChannel(channel);
-        !command[1] ? player = sys.name(sys.playerIds()[random]) : player = helpers.escapehtml(command[1]);
+        !command[1] ? player = sys.name(sys.playerIds()[random]) : player = command[1];
         for (var i in channelPlayers) {
             sys.sendHtmlMessage(channelPlayers[i], "<font color='#87CEEB'><timestamp/>" +
-            "<b>" + helpers.statusImage(channelPlayers[i], command[0]) + player + " has been frozen by " + name +
+            "<b>" + helpers.statusImage(channelPlayers[i], command[0]) + helpers.escapehtml(player) + " has been frozen by " + name +
             "!" + helpers.statusImage(channelPlayers[i], command[0]) + "</b></font>", channel);
         }
     }
@@ -349,9 +349,9 @@ funcommands = {
     ,
 
     nuke: function (src, channel, command) {
-        var name = sys.name(src), random = sys.rand(0, sys.numPlayers()), text, nukemessage;
+        var name = helpers.escapehtml(sys.name(src)), random = sys.rand(0, sys.numPlayers()), text, nukemessage;
         !command[1] ? player = sys.name(sys.playerIds()[random]) : player = command[1];
-        text = player + " has been nuked by " + name + "!";
+        text = helpers.escapehtml(player) + " has been nuked by " + name + "!";
         nukemessage = "<font color='#800080'><timestamp/></font><b><font size='6' color='#FF0000'>☢</font>" + helpers.duoColor(text, "#800080", "#FF0000");
         if (text.length % 2 === 0) {
             sys.sendHtmlAll(nukemessage + "<font size='6' color='#800080'>☢</font></b>", channel);
@@ -364,10 +364,10 @@ funcommands = {
 
     paralyze: function (src, channel, command) {
         var name = helpers.escapehtml(sys.name(src)), random = sys.rand(0, sys.numPlayers()), channelPlayers = sys.playersOfChannel(channel);
-        !command[1] ? player = sys.name(sys.playerIds()[random]) : player = helpers.escapehtml(command[1]);
+        !command[1] ? player = sys.name(sys.playerIds()[random]) : player = command[1];
         for (var i in channelPlayers) {
             sys.sendHtmlMessage(channelPlayers[i], "<font color='#FFA500'><timestamp/>" +
-            "<b>" + helpers.statusImage(channelPlayers[i], "paralyze") + player + " has been " + command[0] + "d by " + name +
+            "<b>" + helpers.statusImage(channelPlayers[i], "paralyze") + helpers.escapehtml(player) + " has been " + command[0] + "d by " + name +
             "!" + helpers.statusImage(channelPlayers[i], "paralyze") + "</b></font>", channel);
         }
     }
@@ -382,10 +382,10 @@ funcommands = {
 
     poison: function (src, channel, command) {
         var name = helpers.escapehtml(sys.name(src)), random = sys.rand(0, sys.numPlayers()), channelPlayers = sys.playersOfChannel(channel);
-        !command[1] ? player = sys.name(sys.playerIds()[random]) : player = helpers.escapehtml(command[1]);
+        !command[1] ? player = sys.name(sys.playerIds()[random]) : player = command[1];
         for (var i in channelPlayers) {
             sys.sendHtmlMessage(channelPlayers[i], "<font color='#800080'><timestamp/>" +
-            "<b>" + helpers.statusImage(channelPlayers[i], command[0]) + player + " has been poisoned by " + name +
+            "<b>" + helpers.statusImage(channelPlayers[i], command[0]) + helpers.escapehtml(player) + " has been poisoned by " + name +
             "!" + helpers.statusImage(channelPlayers[i], command[0]) + "</b></font>", channel);
         }
     }
@@ -444,10 +444,10 @@ funcommands = {
 
     sleep: function (src, channel, command) {
         var name = helpers.escapehtml(sys.name(src)), random = sys.rand(0, sys.numPlayers()), channelPlayers = sys.playersOfChannel(channel);
-        !command[1] ? player = sys.name(sys.playerIds()[random]) : player = helpers.escapehtml(command[1]);
+        !command[1] ? player = sys.name(sys.playerIds()[random]) : player = command[1];
         for (var i in channelPlayers) {
             sys.sendHtmlMessage(channelPlayers[i], "<timestamp/>" +
-            "<b>" + helpers.statusImage(channelPlayers[i], command[0]) + player + " has been put to sleep by " + name +
+            "<b>" + helpers.statusImage(channelPlayers[i], command[0]) + helpers.escapehtml(player) + " has been put to sleep by " + name +
             "!" + helpers.statusImage(channelPlayers[i], command[0]) + "</b>", channel);
         }
     }
@@ -478,7 +478,7 @@ funcommands = {
 
     selfpunch: function (src, channel, command) {
         var name = sys.name(src);
-        sys.sendHtmlAll(helpers.bot(bots.kick) + name + " has punched themselves from the server!", channel);
+        sys.sendHtmlAll(helpers.bot(bots.kick) + helpers.escapehtml(name) + " has punched themselves from the server!", channel);
         sys.kick(src);
     }
 
@@ -503,7 +503,7 @@ funcommands = {
     ,
 
     explod: function (src, channel, command) {
-        var name = sys.name(src);
+        var name = helpers.escapehtml(sys.name(src));
         sys.sendHtmlAll("<span style='font-size:24px;color:grey'>WHAT THE FU-BOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO" +
         "OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOM</span><br><font color='grey'><timestamp/><b>" + name + " explod.</b></font>", channel);
         sys.kick(src);
