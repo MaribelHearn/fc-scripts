@@ -1191,7 +1191,7 @@ usercommands = {
     ,
 
     selfkick: function (src, channel, command) {
-        var name = sys.name(src), lower = name.toLowerCase();
+        var name = helpers.escapehtml(sys.name(src)), lower = name.toLowerCase();
         if (selfkickmessages[lower]) {
             msg = selfkickmessages[lower].replace(/~Self~/gi, name).replace(/~Server~/gi, sys.getServerName());
             sys.sendHtmlAll(helpers.bot(bots.kick) + msg, channel);
@@ -1390,7 +1390,7 @@ usercommands = {
         var name = sys.name(src), color = helpers.color(src);
         command.splice(0, 1);
         command = command.join(DELIMITER);
-        sys.sendHtmlAll("<font color='" + color + "'><timestamp/><b>*** " + name + " " + helpers.escapehtml(command) + " ***</b></font>", channel);
+        sys.sendHtmlAll("<font color='" + color + "'><timestamp/><b>*** " + helpers.escapehtml(name) + " " + helpers.escapehtml(command) + " ***</b></font>", channel);
     }
 
     ,
@@ -1400,7 +1400,7 @@ usercommands = {
         command.splice(0, 1);
         command = command.join(DELIMITER);
         trgt = sys.id(command);
-        sys.sendHtmlAll("<font color='" + color + "'><timestamp/><b>*** " + name + " pokes " + helpers.escapehtml(command) + " ***</b></font>", channel);
+        sys.sendHtmlAll("<font color='" + color + "'><timestamp/><b>*** " + helpers.escapehtml(name) + " pokes " + helpers.escapehtml(command) + " ***</b></font>", channel);
         if (trgt) {
             sys.sendHtmlMessage(trgt, "<ping/>", channel);
         }
@@ -1441,7 +1441,7 @@ usercommands = {
         } else {
             message = "<font color='" + color + "'><timestamp/> +<b><i>" + helpers.escapehtml(command[1]) + ":</i></b></font> " + helpers.escapehtml(command[2]);
         }
-        sys.sendHtmlAll(message + " <small><b>-Imp by " + name + "</b></small>", channel);
+        sys.sendHtmlAll(message + " <small><b>-Imp by " + helpers.escapehtml(name) + "</b></small>", channel);
     }
 
     ,
@@ -1457,13 +1457,13 @@ usercommands = {
             return;
         }
         var message = "<font color='" + color + "'><timestamp/> <b>*** " + helpers.escapehtml(command[1]) + " " + helpers.escapehtml(command[2]) + " ***</b></font>";
-        sys.sendHtmlAll(message + " <small><b>-Imp by " + name + "</b></small>", channel);
+        sys.sendHtmlAll(message + " <small><b>-Imp by " + helpers.escapehtml(name) + "</b></small>", channel);
     }
 
     ,
 
     future: function (src, channel, command) {
-        var name = sys.name(src), auth = sys.auth(src), color = helpers.color(src), message, lower, time, unit, derp;
+        var name = helpers.escapehtml(sys.name(src)), auth = sys.auth(src), color = helpers.color(src), message, lower, time, unit, derp;
         var units = ["s", "m", "h", "d", "seconds", "minutes", "hours", "days", "second", "minute", "hour", "day"];
         if (!command[1]) {
             helpers.starfox(src, channel, command, bots.command, "Error 404, message not found.");
@@ -1525,7 +1525,7 @@ usercommands = {
     ,
 
     quote: function (src, channel, command) {
-        var name = sys.name(src), auth = sys.auth(src), quote;
+        var name = sys.name(src), auth = sys.auth(src), text, author, quote;
         if (!command[1]) {
             helpers.starfox(src, channel, command, bots.command, "Error 404, text not found.");
             return;
@@ -1534,15 +1534,16 @@ usercommands = {
             helpers.starfox(src, channel, command, bots.command, "Error 404, author not found.");
             return;
         }
-        command[1] = helpers.escapehtml(command[1]);command[2] = helpers.escapehtml(command[2]);
-        quote = "<blockquote>\"" + command[1] + "\"</blockquote><br> - " + command[2] + "<br>";
-        sys.sendHtmlAll(helpers.bot(bots.main) + name + " posted the following quote:<br>" + quote, channel);
+        text = helpers.escapehtml(command[1]);
+        author = helpers.escapehtml(command[2]);
+        quote = "<blockquote>\"" + text + "\"</blockquote><br> - " + author + "<br>";
+        sys.sendHtmlAll(helpers.bot(bots.main) + helpers.escapehtml(name) + " posted the following quote:<br>" + quote, channel);
     }
 
     ,
 
     spoiler: function (src, channel, command) {
-        var name = sys.name(src), auth = sys.auth(src), text = command[1], channelPlayers = sys.playersOfChannel(channel), origin;
+        var name = helpers.escapehtml(sys.name(src)), auth = sys.auth(src), text = command[1], channelPlayers = sys.playersOfChannel(channel), origin;
         if (!text) {
             helpers.starfox(src, channel, command, bots.command, "Error 404, text not found.");
             return;
