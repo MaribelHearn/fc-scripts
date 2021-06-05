@@ -113,7 +113,7 @@ helpers = {
         }
         if (pluginLoaded["funcmds.js"]) {
             sys.write(DATA_FOLDER + "bigtexts.txt", "{}");
-        } else {
+        } else if (sys.fexists(DATA_FOLDER + "bigtexts.txt")) {
             sys.rm(DATA_FOLDER + "bigtexts.txt");
         }
     }
