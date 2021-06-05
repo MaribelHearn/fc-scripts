@@ -156,7 +156,7 @@ helpers = {
             defaultVal = this.defaultValue(dataFile, dataFiles[dataFile]);
             sys.write(DATA_FOLDER + dataFile + ".txt", (typeof(defaultVal) == "object" ? JSON.stringify(defaultVal) : defaultVal));
         }
-        permchannels = JSON.parse(this.defaultValue("permchannels"));
+        permchannels = this.defaultValue("permchannels");
         if (pluginLoaded["party.js"]) {
             permchannels.push("Party");
             sys.write(DATA_FOLDER + "permchannels.txt", JSON.stringify(permchannels));
