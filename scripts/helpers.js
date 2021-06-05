@@ -152,7 +152,7 @@ helpers = {
         }, dataFile;
         sys.mkdir("data");
         for (dataFile in dataFiles) {
-            sys.write(DATA_FOLDER + dataFile + ".txt", this.defaultValue(dataFile, dataFiles[dataFile]));
+            sys.write(DATA_FOLDER + dataFile + ".txt", JSON.stringify(this.defaultValue(dataFile, dataFiles[dataFile])));
         }
         permchannels = JSON.parse(this.defaultValue("permchannels"));
         if (pluginLoaded["party.js"]) {
