@@ -153,7 +153,7 @@ helpers = {
         sys.mkdir("data");
         for (dataFile in dataFiles) {
             default = this.defaultValue(dataFile, dataFiles[dataFile]);
-            sys.write(DATA_FOLDER + dataFile + ".txt", (typeof default == "object" ? JSON.stringify(default) : default));
+            sys.write(DATA_FOLDER + dataFile + ".txt", (typeof(default) == "object" ? JSON.stringify(default) : default));
         }
         permchannels = JSON.parse(this.defaultValue("permchannels"));
         if (pluginLoaded["party.js"]) {
