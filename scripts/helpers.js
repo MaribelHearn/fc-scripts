@@ -109,7 +109,7 @@ helpers = {
             "rangebanmessages": "object"
         }, dataFile;
         for (dataFile in dataFiles) {
-            sys.write(DATA_FOLDER + dataFile + ".txt", this.defaultValue(dataFile, dataFiles[dataFile]));
+            sys.write(DATA_FOLDER + dataFile + ".txt", JSON.stringify(this.defaultValue(dataFile, dataFiles[dataFile])));
         }
         if (pluginLoaded["funcmds.js"]) {
             sys.write(DATA_FOLDER + "bigtexts.txt", "{}");
