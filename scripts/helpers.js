@@ -178,7 +178,7 @@ helpers = {
 
     readData: function (dataFile) {
         if (!sys.fexists(DATA_FOLDER + dataFile + ".txt")) {
-            sys.write(DATA_FOLDER + dataFile + ".txt", this.defaultValue(dataFile));
+            sys.write(DATA_FOLDER + dataFile + ".txt", JSON.stringify(this.defaultValue(dataFile)));
             print("Missing data file " + dataFile + ".txt created");
             return "";
         }
@@ -189,7 +189,7 @@ helpers = {
 
     readNumber: function (dataFile) {
         if (!sys.fexists(DATA_FOLDER + dataFile + ".txt")) {
-            sys.write(DATA_FOLDER + dataFile + ".txt", this.defaultValue(dataFile));
+            sys.write(DATA_FOLDER + dataFile + ".txt", JSON.stringify(this.defaultValue(dataFile));)
             print("Missing data file " + dataFile + ".txt created");
             return 0;
         }
@@ -200,7 +200,7 @@ helpers = {
 
     readBoolean: function (dataFile) {
         if (!sys.fexists(DATA_FOLDER + dataFile + ".txt")) {
-            sys.write(DATA_FOLDER + dataFile + ".txt", this.defaultValue(dataFile));
+            sys.write(DATA_FOLDER + dataFile + ".txt", JSON.stringify(this.defaultValue(dataFile)));
             print("Missing data file " + dataFile + ".txt created");
             return true;
         }
@@ -211,7 +211,7 @@ helpers = {
 
     readArray: function (dataFile) {
         if (!sys.fexists(DATA_FOLDER + dataFile + ".txt")) {
-            sys.write(DATA_FOLDER + dataFile + ".txt", this.defaultValue(dataFile));
+            sys.write(DATA_FOLDER + dataFile + ".txt", JSON.stringify(this.defaultValue(dataFile)));
             print("Missing data file " + dataFile + ".txt created");
             return [];
         }
@@ -227,7 +227,7 @@ helpers = {
 
     readObject: function (dataFile) {
         if (!sys.fexists(DATA_FOLDER + dataFile + ".txt")) {
-            sys.write(DATA_FOLDER + dataFile + ".txt", this.defaultValue(dataFile));
+            sys.write(DATA_FOLDER + dataFile + ".txt", JSON.stringify(this.defaultValue(dataFile)));
             print("Missing data file " + dataFile + ".txt created");
             return {};
         }
