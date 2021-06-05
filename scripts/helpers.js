@@ -154,7 +154,7 @@ helpers = {
         for (dataFile in dataFiles) {
             sys.write(DATA_FOLDER + dataFile + ".txt", this.defaultValue(dataFile, dataFiles[dataFile]));
         }
-        permchannels = JSON.parse(this.defaultValue(permChannels));
+        permchannels = JSON.parse(this.defaultValue("permchannels"));
         if (pluginLoaded["party.js"]) {
             permchannels.push("Party");
             sys.write(DATA_FOLDER + "permchannels.txt", JSON.stringify(permchannels));
