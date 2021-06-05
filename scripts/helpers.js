@@ -54,7 +54,7 @@ helpers = {
             "permchannels": ["Watch", "Auth Channel", "Owner Channel"],
             "silentcommands": ["future", "spoiler", "seval", "sseval", "skick", "invisibleowner", "invisible", "invis",
                 "silentupdate", "silenteval", "secretsilenteval", "silentkick", "supdate", "silentupdateplugin", "supdateplugin"],
-            "rules": {"rules":["No spamming (including challenge spamming), trolling, flaming, bashing or advertising. " +
+            "rules": {"rules":["No spamming (including challenge spamming), trolling, flaming, bashing or advertising. ",
                 "No abusing commands or auth powers.", "Do not talk about inappropriate or obscene subjects, " +
                 "nor mention words that refer to such.", "No asking for auth.", "Do not attempt to circumvent the rules."],
                 "explanations":["These things cause disorder in the chat. You can get kicked, muted or banned depending on how " +
@@ -81,7 +81,7 @@ helpers = {
     ,
 
     initCustoms: function () {
-        var dataFiles = {
+        var default, dataFiles = {
             "botcolor": "string",
             "botsymbol": "string",
             "servertopic": "string",
@@ -109,7 +109,8 @@ helpers = {
             "rangebanmessages": "object"
         }, dataFile;
         for (dataFile in dataFiles) {
-            sys.write(DATA_FOLDER + dataFile + ".txt", JSON.stringify(this.defaultValue(dataFile, dataFiles[dataFile])));
+            defaultVal = this.defaultValue(dataFile, dataFiles[dataFile]);
+            sys.write(DATA_FOLDER + dataFile + ".txt", (typeof(defaultVal) == "object" ? JSON.stringify(defaultVal) : defaultVal));
         }
         if (pluginLoaded["funcmds.js"]) {
             sys.write(DATA_FOLDER + "bigtexts.txt", "{}");
@@ -121,7 +122,7 @@ helpers = {
     ,
 
     initData: function () {
-        var default, dataFiles = {
+        var defaultVal, dataFiles = {
             "open": "boolean",
             "allowance": "number",
             "floodtime": "number",
@@ -152,8 +153,8 @@ helpers = {
         }, dataFile;
         sys.mkdir("data");
         for (dataFile in dataFiles) {
-            default = this.defaultValue(dataFile, dataFiles[dataFile]);
-            sys.write(DATA_FOLDER + dataFile + ".txt", (typeof(default) == "object" ? JSON.stringify(default) : default));
+            defaultVal = this.defaultValue(dataFile, dataFiles[dataFile]);
+            sys.write(DATA_FOLDER + dataFile + ".txt", (typeof(defaultVal) == "object" ? JSON.stringify(defaultVal) : defaultVal));
         }
         permchannels = JSON.parse(this.defaultValue("permchannels"));
         if (pluginLoaded["party.js"]) {
