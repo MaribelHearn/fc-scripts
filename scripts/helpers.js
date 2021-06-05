@@ -36,44 +36,44 @@ helpers = {
                 "&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;" +
                 "&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;" +
                 "&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;</b></font>",
-            "cmdcolors": '["#4169E1","#008000","#FF0000","#FFA500","#FFD700","#0000FF"]',
-            "listcolors": '{"mute":"#1E90FF","ban":"#FF6900","rangeban":"#008000","megaban":"#800080","gigaban":"#AA0000"}',
-            "bots": '{"attack":"AttackBot","armyof":"ArmyBot","auth":"AuthBot","ban":"BanBot",' +
-                '"battle":"BattleBot","caps":"CapsBot","channel":"ChannelBot","clear":"ClearBot","command":"CommandBot",' +
-                '"cow":"Miltank","flood":"FloodBot","fun":"FunBot","gigaban":"GigabanBot","idle":"IdleBot","kick":"KickBot",' +
-                '"main":"Bot","megaban":"MegabanBot","mute":"MuteBot","name":"NameBot","party":"PartyBot","pass":"PassBot",' +
-                '"priv":"PrivacyBot","reverse":"ReverseBot","rr":"RussiaBot","russia":"RussiaBot","safari":"SafariBot",' +
-                '"script":"ScriptBot","silence":"SilenceBot","spy":"WatchBot","starfox":"Wolf","status":"StatusBot",' +
-                '"tour":"TourBot","topic":"TopicBot","warn":"WarnBot","welcome":"WelcomeBot","roulette": "RouletteBot"}',
+            "cmdcolors": ["#4169E1","#008000","#FF0000","#FFA500","#FFD700","#0000FF"],
+            "listcolors": {"mute":"#1E90FF","ban":"#FF6900","rangeban":"#008000","megaban":"#800080","gigaban":"#AA0000"},
+            "bots": {"attack":"AttackBot","armyof":"ArmyBot","auth":"AuthBot","ban":"BanBot",
+                "battle":"BattleBot","caps":"CapsBot","channel":"ChannelBot","clear":"ClearBot","command":"CommandBot",
+                "cow":"Miltank","flood":"FloodBot","fun":"FunBot","gigaban":"GigabanBot","idle":"IdleBot","kick":"KickBot",
+                "main":"Bot","megaban":"MegabanBot","mute":"MuteBot","name":"NameBot","party":"PartyBot","pass":"PassBot",
+                "priv":"PrivacyBot","reverse":"ReverseBot","rr":"RussiaBot","russia":"RussiaBot","safari":"SafariBot",
+                "script":"ScriptBot","silence":"SilenceBot","spy":"WatchBot","starfox":"Wolf","status":"StatusBot",
+                "tour":"TourBot","topic":"TopicBot","warn":"WarnBot","welcome":"WelcomeBot","roulette": "RouletteBot"},
             "allowance": 8,
             "floodtime": 10,
             "floodlevel": 1,
             "updatefrequency": 3600,
-            "allowed": '["127.0.0.1"]',
-            "allowedrange": '["192.168"]',
-            "permchannels": '["Watch", "Auth Channel", "Owner Channel"]',
-            "silentcommands": '["future", "spoiler", "seval", "sseval", "skick", "invisibleowner", "invisible", "invis",' +
-                '"silentupdate", "silenteval", "secretsilenteval", "silentkick", "supdate", "silentupdateplugin", "supdateplugin"]',
-            "rules": '{"rules":["No spamming (including challenge spamming), trolling, flaming, bashing or advertising. "' +
-                '"No abusing commands or auth powers.", "Do not talk about inappropriate or obscene subjects, "' +
-                '"nor mention words that refer to such.", "No asking for auth.", "Do not attempt to circumvent the rules."],' +
-                '"explanations":["These things cause disorder in the chat. You can get kicked, muted or banned depending on how "' +
-                '"severely you are breaking this rule.","This should make sense without any explanation. "' +
-                '"Commands exist to be used for what they are meant for, not for mistakes to be exploited. "' +
-                '"The same goes for auths; do what you should do and not beyond that.",' +
-                '"Anything inappropriate or obscene will result in a mute, or ban after multiple occasions.",' +
-                '"You may get auth when recognized for coming on a lot, chat activity, good behaviour and maybe even contribution. "' +
-                '"Asking for it will not get you any further.","Taking the rules too literally is no use when you know you are "' +
-                '"supposed to be punished anyway. Do not try to find loopholes in the rules, it will result in even more punishment."]}'
+            "allowed": ["127.0.0.1"],
+            "allowedrange": ["192.168"],
+            "permchannels": ["Watch", "Auth Channel", "Owner Channel"],
+            "silentcommands": ["future", "spoiler", "seval", "sseval", "skick", "invisibleowner", "invisible", "invis",
+                "silentupdate", "silenteval", "secretsilenteval", "silentkick", "supdate", "silentupdateplugin", "supdateplugin"],
+            "rules": {"rules":["No spamming (including challenge spamming), trolling, flaming, bashing or advertising. " +
+                "No abusing commands or auth powers.", "Do not talk about inappropriate or obscene subjects, " +
+                "nor mention words that refer to such.", "No asking for auth.", "Do not attempt to circumvent the rules."],
+                "explanations":["These things cause disorder in the chat. You can get kicked, muted or banned depending on how " +
+                "severely you are breaking this rule.","This should make sense without any explanation. " +
+                "Commands exist to be used for what they are meant for, not for mistakes to be exploited. " +
+                "The same goes for auths; do what you should do and not beyond that.",
+                "Anything inappropriate or obscene will result in a mute, or ban after multiple occasions.",
+                "You may get auth when recognized for coming on a lot, chat activity, good behaviour and maybe even contribution. " +
+                "Asking for it will not get you any further.","Taking the rules too literally is no use when you know you are " +
+                "supposed to be punished anyway. Do not try to find loopholes in the rules, it will result in even more punishment."]}
         };
         if (values.hasOwnProperty(dataFile)) {
             return values[dataFile];
         }
         switch (type) {
-            case "number": return "0";
-            case "boolean": return "true";
-            case "array": return "[]";
-            case "object": return "{}";
+            case "number": return 0;
+            case "boolean": return true;
+            case "array": return [];
+            case "object": return {};
             default: return "";
         }
     }
@@ -121,7 +121,7 @@ helpers = {
     ,
 
     initData: function () {
-        var dataFiles = {
+        var default, dataFiles = {
             "open": "boolean",
             "allowance": "number",
             "floodtime": "number",
@@ -152,7 +152,8 @@ helpers = {
         }, dataFile;
         sys.mkdir("data");
         for (dataFile in dataFiles) {
-            sys.write(DATA_FOLDER + dataFile + ".txt", JSON.stringify(this.defaultValue(dataFile, dataFiles[dataFile])));
+            default = this.defaultValue(dataFile, dataFiles[dataFile]);
+            sys.write(DATA_FOLDER + dataFile + ".txt", (typeof default == "object" ? JSON.stringify(default) : default));
         }
         permchannels = JSON.parse(this.defaultValue("permchannels"));
         if (pluginLoaded["party.js"]) {
@@ -178,7 +179,7 @@ helpers = {
 
     readData: function (dataFile) {
         if (!sys.fexists(DATA_FOLDER + dataFile + ".txt")) {
-            sys.write(DATA_FOLDER + dataFile + ".txt", JSON.stringify(this.defaultValue(dataFile)));
+            sys.write(DATA_FOLDER + dataFile + ".txt", this.defaultValue(dataFile));
             print("Missing data file " + dataFile + ".txt created");
             return "";
         }
@@ -189,7 +190,7 @@ helpers = {
 
     readNumber: function (dataFile) {
         if (!sys.fexists(DATA_FOLDER + dataFile + ".txt")) {
-            sys.write(DATA_FOLDER + dataFile + ".txt", JSON.stringify(this.defaultValue(dataFile)));
+            sys.write(DATA_FOLDER + dataFile + ".txt", this.defaultValue(dataFile));
             print("Missing data file " + dataFile + ".txt created");
             return 0;
         }
@@ -200,7 +201,7 @@ helpers = {
 
     readBoolean: function (dataFile) {
         if (!sys.fexists(DATA_FOLDER + dataFile + ".txt")) {
-            sys.write(DATA_FOLDER + dataFile + ".txt", JSON.stringify(this.defaultValue(dataFile)));
+            sys.write(DATA_FOLDER + dataFile + ".txt", this.defaultValue(dataFile));
             print("Missing data file " + dataFile + ".txt created");
             return true;
         }
