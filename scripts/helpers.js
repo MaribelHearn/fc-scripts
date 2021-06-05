@@ -81,7 +81,7 @@ helpers = {
     ,
 
     initCustoms: function () {
-        var default, dataFiles = {
+        var dataFiles = {
             "botcolor": "string",
             "botsymbol": "string",
             "servertopic": "string",
@@ -107,7 +107,7 @@ helpers = {
             "mutemessages": "object",
             "banmessages": "object",
             "rangebanmessages": "object"
-        }, dataFile;
+        }, dataFile, defaultVal;
         for (dataFile in dataFiles) {
             defaultVal = this.defaultValue(dataFile, dataFiles[dataFile]);
             sys.write(DATA_FOLDER + dataFile + ".txt", (typeof(defaultVal) == "object" ? JSON.stringify(defaultVal) : defaultVal));
@@ -122,7 +122,7 @@ helpers = {
     ,
 
     initData: function () {
-        var defaultVal, dataFiles = {
+        var dataFiles = {
             "open": "boolean",
             "allowance": "number",
             "floodtime": "number",
@@ -150,7 +150,7 @@ helpers = {
             "gigabanlist": "object",
             "countryname": "object",
             "rangebanlist": "object"
-        }, dataFile;
+        }, dataFile, defaultVal;
         sys.mkdir("data");
         for (dataFile in dataFiles) {
             defaultVal = this.defaultValue(dataFile, dataFiles[dataFile]);
