@@ -74,6 +74,7 @@ helpers = {
             case "boolean": return true;
             case "array": return [];
             case "object": return {};
+            case "string": return "";
             default: return "";
         }
     }
@@ -117,6 +118,7 @@ helpers = {
         } else if (sys.fexists(DATA_FOLDER + "bigtexts.txt")) {
             sys.rm(DATA_FOLDER + "bigtexts.txt");
         }
+        print("Customisation settings created");
     }
 
     ,
@@ -159,20 +161,18 @@ helpers = {
         permchannels = this.defaultValue("permchannels");
         if (pluginLoaded["party.js"]) {
             permchannels.push("Party");
-            sys.write(DATA_FOLDER + "permchannels.txt", JSON.stringify(permchannels));
         }
         if (pluginLoaded["roulette.js"]) {
             permchannels.push("Roulette");
-            sys.write(DATA_FOLDER + "permchannels.txt", JSON.stringify(permchannels));
         }
         if (pluginLoaded["rr.js"]) {
             permchannels.push("Russian Roulette");
-            sys.write(DATA_FOLDER + "permchannels.txt", JSON.stringify(permchannels));
         }
         if (pluginLoaded["safari.js"]) {
             permchannels.push("Safari");
-            sys.write(DATA_FOLDER + "permchannels.txt", JSON.stringify(permchannels));
         }
+        sys.write(DATA_FOLDER + "permchannels.txt", JSON.stringify(permchannels));
+        print("Data folder created");
         this.initCustoms();
     }
 
@@ -182,7 +182,6 @@ helpers = {
         if (!sys.fexists(DATA_FOLDER + dataFile + ".txt")) {
             sys.write(DATA_FOLDER + dataFile + ".txt", this.defaultValue(dataFile));
             print("Missing data file " + dataFile + ".txt created");
-            return "";
         }
         return sys.read(DATA_FOLDER + dataFile + ".txt");
     }
@@ -193,7 +192,6 @@ helpers = {
         if (!sys.fexists(DATA_FOLDER + dataFile + ".txt")) {
             sys.write(DATA_FOLDER + dataFile + ".txt", this.defaultValue(dataFile));
             print("Missing data file " + dataFile + ".txt created");
-            return 0;
         }
         return parseInt(this.readData(dataFile));
     }
@@ -204,7 +202,6 @@ helpers = {
         if (!sys.fexists(DATA_FOLDER + dataFile + ".txt")) {
             sys.write(DATA_FOLDER + dataFile + ".txt", this.defaultValue(dataFile));
             print("Missing data file " + dataFile + ".txt created");
-            return true;
         }
         return this.readData(dataFile) == "true" ? true : false;
     }
@@ -215,7 +212,6 @@ helpers = {
         if (!sys.fexists(DATA_FOLDER + dataFile + ".txt")) {
             sys.write(DATA_FOLDER + dataFile + ".txt", JSON.stringify(this.defaultValue(dataFile)));
             print("Missing data file " + dataFile + ".txt created");
-            return [];
         }
         try {
             return JSON.parse(this.readData(dataFile));
@@ -231,7 +227,6 @@ helpers = {
         if (!sys.fexists(DATA_FOLDER + dataFile + ".txt")) {
             sys.write(DATA_FOLDER + dataFile + ".txt", JSON.stringify(this.defaultValue(dataFile)));
             print("Missing data file " + dataFile + ".txt created");
-            return {};
         }
         try {
             return JSON.parse(this.readData(dataFile));

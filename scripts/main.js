@@ -145,7 +145,10 @@
         Initialize data for first time use, set API keys
         ------------------------------------------------
     **/
-    if (!helpers.isInArray("data", sys.dirsForDirectory(sys.cwd()))) {
+    if (!sys.fexists("data/")) {
+        if (sys.fexists("data")) {
+            sys.rm("data");
+        }
         helpers.initData();
     }
     API_KEY = sys.read(DATA_FOLDER + "API_KEY.txt");
