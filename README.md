@@ -15,7 +15,7 @@ If you wish for the scripts to automatically update, `git` has to be installed o
 
 The scripts offer country and time zone retrieval functionality, for which it uses the [IPinfoDB](http://ipinfodb.com/) API service. If you want this functionality, you will need to register at IPinfoDB and obtain a free API key. Add it with the `/setipkey <API key>` command, assuming `<API key>` is a valid API key. If you want to remove the functionality again, use the `/removeipkey` command. This will also erase all country and time zone data. There is Google API functionality as well, which is used for YouTube link information and the `/listen` command. Similarly to the IPinfoDB API system, you can use `/setgooglekey <API key>` to enable it and `/removegooglekey` to disable it again.
 
-By default, the official channels are not registered. You should run the `/registerall` command (assuming you are Owner) to register them and give them their default settings. For this reason you should, if your server is new, decide your main channel name before running the command; since, if you change your main channel name, you will have to register it again.
+By default, the official channels are not registered. You should run the `/registerall` command (assuming you are Owner) to register them and give them their default settings. For this reason you should, if your server is new, decide your main channel name before running the command; since, if you change your main channel name, you will have to register it again. If your server is running in a command line environment, run `/owner <username>` in said command line to make yourself Owner.
 
 ### Plugins
 

@@ -1585,6 +1585,14 @@
                     return;
                 }
                 print(text);
+            } else if (lower == "owner") {
+                var player = command[1];
+                if (!player || !sys.id(player)) {
+                    print("Error 404, player not found.");
+                    return;
+                }
+                sys.changeAuth(sys.id(player), 3);
+                print(members[player.toLowerCase()] + " is now Owner.");
             } else if (lower == "commands") {
                 print("/reload <script>: reloads the server script <script>; all if <script> is not given.");
                 print("/eval <code>: executes <code> and prints its runtime.");
