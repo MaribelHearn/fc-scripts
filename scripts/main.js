@@ -470,7 +470,7 @@
                 sha = json[i].sha;
             }
             if (sha == latestShaHash) {
-            s   ys.sendHtmlOwner(helpers.bot(bots.script) + "An automatic update was attempted, but the scripts were already up-to-date.");
+                sys.sendHtmlOwner(helpers.bot(bots.script) + "An automatic update was attempted, but the scripts were already up-to-date.");
                 return;
             }
             latestShaHash = sha;
