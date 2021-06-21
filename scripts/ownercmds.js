@@ -667,6 +667,7 @@ ownercommands = {
             helpers.starfox(src, channel, command, bots.script, "Error 403, you have to specify a number of seconds.");
             return;
         }
+        freq = parseInt(freq);
         updateFrequency = freq;
         helpers.saveData("updateFrequency");
         if (freq === 0) {
