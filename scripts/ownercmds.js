@@ -509,22 +509,20 @@ ownercommands = {
         var commandsmessage = border
         + "<h2>Owner Commands ~ Script Settings</h2>"
         + "<br>"
-        + "Automatic updating is currently turned <b>" + (UPDATE_KEY !== "" ? "on" : "off") + "</b>.<br>";
+        + "Automatic updates are currently turned <b>" + (UPDATE_KEY !== "" || updateFrequency > 0 ? "on" : "off") + "</b>.<br>";
         if (UPDATE_KEY !== "") {
             commandsmessage += "Update frequency: " + helpers.secondsToWording(updateFrequency) + ".<br>"
         }
         commandsmessage += "<br>"
         + "<b>" + helpers.user("/reload ") + helpers.arg("script") + "</b>: reloads script file <b>script</b> from the local files, which can be a module or a plugin. If <b>script</b> is not specified, reloads all scripts.<br>"
-        + "<b>" + helpers.user("/update ") + helpers.arg("module") + "</b>: updates the <b>module</b> module. Updates the main script file by default.<br>"
-        + "<b>" + helpers.user("/silentupdate ") + helpers.arg("module") + "</b>: silently updates the <b>module</b> module. Updates the main script file by default. Also /supdate.<br>"
-        + "<b>" + helpers.user("/updateplugin ") + helpers.arg("plugin") + "</b>: updates the official plugin <b>plugin</b>. If <b>plugin</b> is not specified, updates all plugins. Also /updateplugins.<br>"
-        + "<b>" + helpers.user("/silentupdateplugin ") + helpers.arg("plugin") + "</b>: silently updates the official plugin <b>plugin</b>. If <b>plugin</b> is not specified, updates all plugins. Also /supdateplugin or /supdateplugins.<br>";
         if (UPDATE_KEY === "") {
             commandsmessage += "<b>" + helpers.user("/setgithubkey ") + helpers.arg("key") + "</b>: sets the GitHub API key for automatic script updates to <b>key</b>.<br>"
             + "Requires the server folder to be a clone of the <tt>fc-scripts</tt> git repository. <u>Be careful with this command!</u> Entering an invalid API key will rate limit the updates!<br>";
         } else {
             commandsmessage += "<b>" + helpers.user("/removegithubkey") + "</b>: removes your GitHub API key. This will disable automatic script updates.<br>"
-            + "<b>" + helpers.user("/updatefrequency ") + helpers.arg("number") + "</b>: changes the frequency of automatic updating to once every <b>number</b> seconds.<br>";
+            + "<b>" + helpers.user("/update ") + helpers.arg("module") + "</b>: updates the scripts to the newest version. Requires the GitHub API key and requires <tt>git</tt> to be installed on the host computer.<br>"
+            + "<b>" + helpers.user("/silentupdate ") + helpers.arg("module") + "</b>: silently updates the scripts to the newest version. Also /supdate.<br>"
+            + "<b>" + helpers.user("/updatefrequency ") + helpers.arg("number") + "</b>: changes the frequency of automatic updates to once every <b>number</b> seconds. If <b>number</b> is 0, turns off automatic updates.<br>";
         }
         commandsmessage += "<b>" + helpers.user("/var ") + helpers.arg("variable") + helpers.arg2("*html") + "</b>: displays the value of <b>variable</b>. If <b>html</b> is specified, enables HTML.<br>"
         + "<b>" + helpers.user("/time ") + helpers.arg("command") + "</b>: runs <b>command</b> and prints its runtime. An indefinite number of arguments can be passed to this command.<br>"
@@ -567,98 +565,82 @@ ownercommands = {
 
     ,
 
-    update: function (src, channel, command) {
-        var name = sys.name(src), date = new Date(), silent = command[0].substr(0, 6), module, time;
-        var noncmds = ["main", "helpers", "handler", "base64", "tierchecks"];
-        if (!command[1]) {
-            if (src) {
-                silent == "silent" ? sys.sendHtmlMessage(src, helpers.bot(bots.script) + "Downloading scripts...", channel) : sys.sendHtmlOwner(helpers.bot(bots.script) + "Downloading scripts...");
-            }
-            sys.webCall(SCRIPT_URL + "main.js", function (resp) {
-                if (resp === "") {
-                    if (silent == "silent" && src) {
-                        sys.sendHtmlMessage(src, helpers.bot(bots.script) + "An error occurred while downloading the scripts. The scripts have not been updated.", channel);
-                    } else if (src) {
-                        sys.sendHtmlOwner(helpers.bot(bots.script) + "An error occurred while downloading the scripts. The scripts have not been updated.", channel);
-                    }
-                    return;
-                }
-                sys.write(SCRIPTS_FOLDER + "main.js", resp);
-                try {
-                    sys.changeScript(sys.read("scripts.js"));
-                } catch (e) {
-                    if (src) {
-                        silent == "silent" ? sys.sendHtmlMessage(src, helpers.bot(bots.script) + e, channel) : sys.sendHtmlOwner(helpers.bot(bots.script) + e);
-                    }
-                    return;
-                }
-                time = new Date() - date;
-                if (silent == "silent" && src) {
-                    sys.sendHtmlMessage(src, helpers.bot(bots.script) + " The server scripts have been reloaded. [Time elapsed: " + (time / 1000) + " seconds.]", channel);
-                } else if (src) {
-                    sys.sendHtmlOwner(helpers.bot(bots.script) + name + " has reloaded the server scripts! [Time elapsed: " + (time / 1000) + " seconds.]");
-                }
-            });
-        } else if (command[1] == "all") {
-            for (var i = 0; i < SCRIPT_MODULES.length; i++) {
-                this.update(src, channel, [command[0], SCRIPT_MODULES[i].split('.')[0].replace(/cmds/, "")]);
-            }
-        } else {
-            module = command[1];
-            if (!helpers.isInArray(module, noncmds)) {
-                module += "cmds";
-            }
-            if (!helpers.isInArray(module + ".js", SCRIPT_MODULES)) {
-                helpers.starfox(src, channel, command, bots.main, "Error 404, module '" + module + "' not found.");
-                return;
-            }
-            if (src) {
-                silent == "silent" ? sys.sendHtmlMessage(src, helpers.bot(bots.script) + "Downloading scripts...", channel) : sys.sendHtmlOwner(helpers.bot(bots.script) + "Downloading scripts...");
-            }
-            sys.webCall(SCRIPT_URL + module + ".js", function (resp) {
-                if (resp === "") {
-                    if (silent == "silent" && src) {
-                        sys.sendHtmlMessage(src, helpers.bot(bots.script) + "An error occurred while downloading the scripts. The scripts have not been updated.", channel);
-                    } else if (src) {
-                        sys.sendHtmlOwner(helpers.bot(bots.script) + "An error occurred while downloading the scripts. The scripts have not been updated.");
-                    }
-                    return;
-                }
-                sys.write(SCRIPTS_FOLDER + "" + module + ".js", resp);
-                try {
-                    sys.exec(SCRIPTS_FOLDER + "" + module + ".js");
-                } catch (e) {
-                    if (src) {
-                        silent == "silent" ? sys.sendHtmlMessage(src, helpers.bot(bots.script) + e, channel) : sys.sendHtmlOwner(helpers.bot(bots.script) + e);
-                    }
-                    return;
-                }
-                time = new Date() - date;
-                if (module == "main") {
-                    if (silent == "silent" && src) {
-                        sys.sendHtmlMessage(src, helpers.bot(bots.script) + " The server scripts have been reloaded. [Time elapsed: " + (time / 1000) + " seconds.]", channel);
-                    } else if (src) {
-                        sys.sendHtmlOwner(helpers.bot(bots.script) + name + " has reloaded the server scripts! [Time elapsed: " + (time / 1000) + " seconds.]");
-                    }
-                } else {
-                    if (silent == "silent" && src) {
-                        sys.sendHtmlMessage(src, helpers.bot(bots.script) + " The " + module.replace("cmds", "") + " script module has been reloaded. [Time elapsed: " + (time / 1000) + " seconds.]", channel);
-                    } else if (src) {
-                        sys.sendHtmlOwner(helpers.bot(bots.script) + name + " has reloaded the " + module.replace("cmds", "") + " script module! [Time elapsed: " + (time / 1000) + " seconds.]");
-                    }
-                }
-            });
+    setgithubkey: function (src, channel, command) {
+        if (UPDATE_KEY !== "") {
+            helpers.starfox(src, channel, command, bots.script, "Error 400, you already have a GitHub API key set!");
+            return;
         }
-        for (var i = SCRIPT_MODULES.length; i > 1; i--) {
-            if (command[i]) {
-                this.update(src, channel, [command[0], command[i]]);
+        if (!sys.fexists(".git")) {
+            helpers.starfox(src, channel, command, bots.script, "Error 403, you cannot set a GitHub API key without a git repository. Please clone <tt>fc-scripts</tt> in your server folder.");
+            return;
+        }
+        var key = command[1];
+        if (!key) {
+            helpers.starfox(src, channel, command, bots.script, "Error 404, key not found.");
+            return;
+        }
+        UPDATE_KEY = key;
+        helpers.saveData("UPDATE_KEY");
+        sys.sendHtmlMessage(src, helpers.bot(bots.script) + "Your GitHub API key has been set.", channel);
+    }
+
+    ,
+
+    removegithubkey: function (src, channel, command) {
+        if (UPDATE_KEY === "") {
+            helpers.starfox(src, channel, command, bots.script, "Error 400, you cannot remove a GitHub API key when you don't have one!");
+            return;
+        }
+        UPDATE_KEY = "";
+        helpers.saveData("UPDATE_KEY");
+        sys.sendHtmlMessage(src, helpers.bot(bots.script) + "Your GitHub API key has been removed.", channel);
+    }
+
+    ,
+
+    update: function (src, channel, command) {
+        if (UPDATE_KEY === "") {
+            helpers.starfox(src, channel, command, bots.script, "Error 403, you may not use this command without a GitHub API key.");
+            return;
+        }
+        if (!sys.fexists(".git")) {
+            helpers.starfox(src, channel, command, bots.script, "Error 400, the git repository seems to have been deleted; the scripts cannot not be updated.");
+            return;
+        }
+        var silence = (command[0].substr(0, 6) == "silent");
+        var resp = sys.synchronousWebCall(AUTO_UPDATE_URL + UPDATE_KEY);
+        var json = JSON.parse(resp);
+        var i = 0;
+        var commitmessage = json[i].commit.message;
+        var author = json[i].committer.login;
+        var sha = json[i].sha;
+        if (commitmessage == "Merge branch 'master' of https://github.com:MaribelHearn/fc-scripts into master" || commitmessage == "Merge git://github.com/MaribelHearn/fc-scripts") {
+            i = i + 1;
+            commitmessage = json[i].commit.message;
+            author = json[i].committer.login;
+            sha = json[i].sha;
+        }
+        if (sha == latestShaHash) {
+            helpers.starfox(src, channel, command, bots.script, "Error 400, the scripts are already up-to-date.");
+            return;
+        }
+        latestShaHash = sha;
+        helpers.saveData("latestShaHash");
+        sys.system("git pull origin master");
+        try {
+            sys.changeScript(sys.read("scripts.js"));
+            if (!silence) {
+                sys.sendHtmlOwner(helpers.bot(bots.script) + "The server scripts have been updated! [Commit Message: " + commitmessage + "]");
             }
+        } catch (err) {
+            // do nothing
         }
     }
 
     ,
 
     silentupdate: function (src, channel, command) {
+        command[0] = "silentupdate";
         this.update(src, channel, command);
     }
 
@@ -671,117 +653,12 @@ ownercommands = {
 
     ,
 
-    updateplugin: function (src, channel, command) {
-        var name = sys.name(src), date = new Date(), silent = command[0].substr(0, 6), plugin, time,
-            noncmds = ["party", "rr", "roulette"], officials = Object.keys(OFFICIAL_PLUGINS), i;
-        if (!command[1] || command[1] == "all") {
-            for (i = 0; i < officials.length; i++) {
-                this.updateplugin(src, channel, [command[0], officials[i].split('.')[0]].replace(/cmds/, ""));
-            }
-        } else {
-            plugin = command[1];
-            if (!helpers.isInArray(plugin, noncmds)) {
-                plugin += "cmds";
-            }
-            if (!helpers.isInArray(plugin + ".js", officials)) {
-                helpers.starfox(src, channel, command, bots.main, "Error 404, plugin '" + plugin + "' not found.");
-                return;
-            }
-            silent == "silent" ? sys.sendHtmlMessage(src, helpers.bot(bots.script) + "Downloading scripts...", channel) : sys.sendHtmlOwner(helpers.bot(bots.script) + "Downloading scripts...");
-            sys.webCall(PLUGIN_URL + plugin + ".js", function (resp) {
-                if (resp === "") {
-                    if (silent == "silent") {
-                        sys.sendHtmlMessage(src, helpers.bot(bots.script) + "An error occurred while downloading the scripts. The scripts have not been updated.", channel);
-                    } else {
-                        sys.sendHtmlOwner(helpers.bot(bots.script) + "An error occurred while downloading the scripts. The scripts have not been updated.");
-                    }
-                    return;
-                }
-                sys.write(PLUGINS_FOLDER + plugin + ".js", resp);
-                try {
-                    sys.exec(PLUGINS_FOLDER + plugin + ".js");
-                } catch (e) {
-                    silent == "silent" ? sys.sendHtmlMessage(src, helpers.bot(bots.script) + e, channel) : sys.sendHtmlOwner(helpers.bot(bots.script) + e);
-                    return;
-                }
-                time = new Date() - date;
-                if (silent == "silent") {
-                    sys.sendHtmlMessage(src, helpers.bot(bots.script) + " The " + plugin.replace("cmds", "") + " script plugin has been reloaded. [Time elapsed: " + (time / 1000) + " seconds.]", channel);
-                } else {
-                    sys.sendHtmlOwner(helpers.bot(bots.script) + name + " has reloaded the " + plugin.replace("cmds", "") + " script plugin! [Time elapsed: " + (time / 1000) + " seconds.]");
-                }
-            });
-        }
-        for (i = officials.length; i > 1; i--) {
-            if (command[i]) {
-                this.updateplugin(src, channel, [command[0], command[i]]);
-            }
-        }
-    }
-
-    ,
-
-    updateplugins: function (src, channel, command) {
-        this.updateplugin(src, channel, command);
-    }
-
-    ,
-
-    silentupdateplugin: function (src, channel, command) {
-        this.updateplugin(src, channel, command);
-    }
-
-    ,
-
-    supdateplugin: function (src, channel, command) {
-        command[0] = "silentupdateplugin";
-        this.updateplugin(src, channel, command);
-    }
-
-    ,
-
-    supdateplugins: function (src, channel, command) {
-        command[0] = "silentupdateplugin";
-        this.updateplugin(src, channel, command);
-    }
-
-    ,
-
-    setgithubkey: function (src, channel, command) {
-        if (UPDATE_KEY !== "") {
-            helpers.starfox(src, channel, command, bots.command, "Error 400, you already have a GitHub API key set!");
-            return;
-        }
-        if (!sys.fexists(".git")) {
-            helpers.starfox(src, channel, command, bots.command, "Error 403, you cannot set a GitHub API key without a git repository. Please clone <tt>fc-scripts</tt> in your server folder.");
-            return;
-        }
-        var key = command[1];
-        if (!key) {
-            helpers.starfox(src, channel, command, bots.command, "Error 404, key not found.");
-            return;
-        }
-        UPDATE_KEY = key;
-        helpers.saveData("UPDATE_KEY");
-        sys.sendHtmlMessage(src, helpers.bot(bots.script) + "Your GitHub API key has been set.", channel);
-    }
-
-    ,
-
-    removegithubkey: function (src, channel, command) {
-        if (UPDATE_KEY === "") {
-            helpers.starfox(src, channel, command, bots.command, "Error 400, you cannot remove a GitHub API key when you don't have one!");
-            return;
-        }
-        UPDATE_KEY = "";
-        helpers.saveData("UPDATE_KEY");
-        sys.sendHtmlMessage(src, helpers.bot(bots.script) + "Your GitHub API key has been removed.", channel);
-    }
-
-    ,
-
     updatefrequency: function (src, channel, command) {
         var freq = command[1];
+        if (UPDATE_KEY === "") {
+            helpers.starfox(src, channel, command, bots.script, "Error 403, you may not use this command without a GitHub API key.");
+            return;
+        }
         if (!freq) {
             helpers.starfox(src, channel, command, bots.script, "Error 404, frequency not found.");
             return;
@@ -792,7 +669,11 @@ ownercommands = {
         }
         updateFrequency = freq;
         helpers.saveData("updateFrequency");
-        sys.sendHtmlMessage(src, helpers.bot(bots.script) + "The automatic update frequency has been set to " + helpers.secondsToWording(freq) + ".", channel);
+        if (freq === 0) {
+            sys.sendHtmlMessage(src, helpers.bot(bots.script) + "Automatic updates have been turned off.", channel);
+        } else {
+            sys.sendHtmlMessage(src, helpers.bot(bots.script) + "The automatic update frequency has been set to " + helpers.secondsToWording(freq) + ".", channel);
+        }
     }
 
     ,

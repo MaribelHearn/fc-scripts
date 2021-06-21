@@ -9,7 +9,6 @@
     contains the event handlers.
     ----------------------------------------------
     - auto-remove expired channel auth
-    - prevent repeated /cuser
     - no flags if no API?
     - add server silence?
     - allcommands alts?
@@ -449,11 +448,11 @@
             }
         }
         /**
-            -------------
-            Auto-Updating
-            -------------
+            ------------
+            Auto-Updates
+            ------------
         **/
-        if (UPDATE_KEY !== "" && sys.time() % updateFrequency === 0) {
+        if (UPDATE_KEY !== "" && updateFrequency > 0 && sys.time() % updateFrequency === 0) {
             if (!sys.fexists(".git")) {
                 sys.sendHtmlOwner(helpers.bot(bots.script) + "The git repository seems to have been deleted; the scripts will not be automatically updated.");
                 return;
