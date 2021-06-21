@@ -510,7 +510,7 @@ ownercommands = {
         + "<h2>Owner Commands ~ Script Settings</h2>"
         + "<br>"
         + "Automatic updates are currently turned <b>" + (UPDATE_KEY !== "" || updateFrequency > 0 ? "on" : "off") + "</b>.<br>";
-        if (UPDATE_KEY !== "") {
+        if (UPDATE_KEY !== "" && updateFrequency > 0) {
             commandsmessage += "Update frequency: " + helpers.secondsToWording(updateFrequency) + ".<br>"
         }
         commandsmessage += "<br>"
