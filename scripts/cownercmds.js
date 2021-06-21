@@ -3,7 +3,7 @@
     ----------------------------------------------
     FUN COMMUNITY COWNER COMMANDS cownercmds.js
      - by Maribel Hearn, 2012-2015
-    
+
     This file contains commands that can be
     run by channel owners.
     ----------------------------------------------
@@ -33,9 +33,9 @@ cownercommands = {
         + border2;
         sys.sendHtmlMessage(src, commandsmessage, channel);
     }
-    
+
     ,
-    
+
     unregisterthis: function (src, channel, command) {
         var name = sys.name(src), lower = sys.channel(channel).toLowerCase();
         if (regchannels[lower]) {
@@ -47,9 +47,9 @@ cownercommands = {
         }
         sys.sendHtmlAll(helpers.bot(bots.channel) + "The channel has been unregistered by " + name + "!", channel);
     }
-    
+
     ,
-    
+
     stay: function (src, channel, command) {
         var lower = sys.channel(channel).toLowerCase();
         if (regchannels[lower]) {
@@ -65,15 +65,15 @@ cownercommands = {
         }
         sys.sendHtmlAll(helpers.bot(bots.channel) + "<b>" + helpers.user(sys.name(src)) + " has made the channel permanent.</b>", channel);
     }
-    
+
     ,
-    
+
     perm: function (src, channel, command) {
         this.stay(src, channel, command);
     }
-    
+
     ,
-    
+
     priv: function (src, channel, command) {
         var name = sys.name(src), lower = sys.channel(channel).toLowerCase();
         if (regchannels[lower]) {
@@ -90,9 +90,9 @@ cownercommands = {
             return;
         }
     }
-    
+
     ,
-    
+
     zalgochar: function (src, channel, command) {
         var name = helpers.escapehtml(sys.name(src)), lower = sys.channel(channel).toLowerCase();
         if (regchannels[lower]) {
@@ -109,9 +109,9 @@ cownercommands = {
             return;
         }
     }
-    
+
     ,
-    
+
     reversechar: function (src, channel, command) {
         var name = helpers.escapehtml(sys.name(src)), lower = sys.channel(channel).toLowerCase();
         if (regchannels[lower]) {
@@ -128,9 +128,9 @@ cownercommands = {
             return;
         }
     }
-    
+
     ,
-    
+
     extendingchar: function (src, channel, command) {
         var name = helpers.escapehtml(sys.name(src)), lower = sys.channel(channel).toLowerCase();
         if (regchannels[lower]) {
@@ -147,9 +147,9 @@ cownercommands = {
             return;
         }
     }
-    
+
     ,
-    
+
     backwardchar: function (src, channel, command) {
         var name = helpers.escapehtml(sys.name(src)), lower = sys.channel(channel).toLowerCase();
         if (regchannels[lower]) {
@@ -166,9 +166,9 @@ cownercommands = {
             return;
         }
     }
-    
+
     ,
-    
+
     cuser: function (src, channel, command) {
         var lower = sys.channel(channel).toLowerCase();
         if (!command[1]) {
@@ -182,12 +182,13 @@ cownercommands = {
         if (regchannels[lower]) {
             if (regchannels[lower].mods.indexOf(command[1].toLowerCase()) != -1) {
                 regchannels[lower].mods.splice(regchannels[lower].mods.indexOf(command[1].toLowerCase()), 1);
-            }        
-            if (regchannels[lower].admins.indexOf(command[1].toLowerCase()) != -1) {
+            } else if (regchannels[lower].admins.indexOf(command[1].toLowerCase()) != -1) {
                 regchannels[lower].admins.splice(regchannels[lower].admins.indexOf(command[1].toLowerCase()), 1);
-            }
-            if (regchannels[lower].owners.indexOf(command[1].toLowerCase()) != -1) {
+            } else if (regchannels[lower].owners.indexOf(command[1].toLowerCase()) != -1) {
                 regchannels[lower].owners.splice(regchannels[lower].owners.indexOf(command[1].toLowerCase()), 1);
+            } else {
+                helpers.starfox(src, channel, command, bots.channel, "Error 400, that player is already a channel user.");
+                return;
             }
             helpers.saveData("regchannels");
         } else {
@@ -196,9 +197,9 @@ cownercommands = {
         }
         sys.sendHtmlAll(helpers.bot(bots.channel) + "<b>" + helpers.arg(command[1]) + " has been made Channel User by " + helpers.user(sys.name(src)) + "!</b>", channel);
     }
-    
+
     ,
-    
+
     cmod: function (src, channel, command) {
         var lower = sys.channel(channel).toLowerCase();
         if (!command[1]) {
@@ -209,12 +210,14 @@ cownercommands = {
             helpers.starfox(src, channel, command, bots.channel, "That player doesn't exist in the database!");
             return;
         }
-        if (regchannels[lower]) {    
+        if (regchannels[lower]) {
             if (regchannels[lower].admins.indexOf(command[1].toLowerCase()) != -1) {
                 regchannels[lower].admins.splice(regchannels[lower].admins.indexOf(command[1].toLowerCase()), 1);
-            }
-            if (regchannels[lower].owners.indexOf(command[1].toLowerCase()) != -1) {
+            } else if (regchannels[lower].owners.indexOf(command[1].toLowerCase()) != -1) {
                 regchannels[lower].owners.splice(regchannels[lower].owners.indexOf(command[1].toLowerCase()), 1);
+            } else if (regchannels[lower].mods.indexOf(command[1].toLowerCase()) != -1) {
+                helpers.starfox(src, channel, command, bots.channel, "Error 400, that player is already a channel mod.");
+                return;
             }
             regchannels[lower].mods.push(command[1].toLowerCase());
             helpers.saveData("regchannels");
@@ -224,9 +227,9 @@ cownercommands = {
         }
         sys.sendHtmlAll(helpers.bot(bots.channel) + "<b>" + helpers.arg(command[1]) + " has been made Channel Mod by " + helpers.user(sys.name(src)) + "!</b>", channel);
     }
-    
+
     ,
-    
+
     cadmin: function (src, channel, command) {
         var lower = sys.channel(channel).toLowerCase();
         if (!command[1]) {
@@ -240,9 +243,11 @@ cownercommands = {
         if (regchannels[lower]) {
             if (regchannels[lower].mods.indexOf(command[1].toLowerCase()) != -1) {
                 regchannels[lower].mods.splice(regchannels[lower].mods.indexOf(command[1].toLowerCase()), 1);
-            }
-            if (regchannels[lower].owners.indexOf(command[1].toLowerCase()) != -1) {
+            } else if (regchannels[lower].owners.indexOf(command[1].toLowerCase()) != -1) {
                 regchannels[lower].owners.splice(regchannels[lower].owners.indexOf(command[1].toLowerCase()), 1);
+            } else if (regchannels[lower].admins.indexOf(command[1].toLowerCase()) != -1) {
+                helpers.starfox(src, channel, command, bots.channel, "Error 400, that player is already a channel admin.");
+                return;
             }
             regchannels[lower].admins.push(command[1].toLowerCase());
             helpers.saveData("regchannels");
@@ -252,9 +257,9 @@ cownercommands = {
         }
         sys.sendHtmlAll(helpers.bot(bots.channel) + "<b>" + helpers.arg(command[1]) + " has been made Channel Admin by " + helpers.user(sys.name(src)) + "!</b>", channel);
     }
-    
+
     ,
-    
+
     cowner: function (src, channel, command) {
         var lower = sys.channel(channel).toLowerCase();
         if (!command[1]) {
@@ -268,9 +273,11 @@ cownercommands = {
         if (regchannels[lower]) {
             if (regchannels[lower].mods.indexOf(command[1].toLowerCase()) != -1) {
                 regchannels[lower].mods.splice(regchannels[lower].mods.indexOf(command[1].toLowerCase()), 1);
-            }        
-            if (regchannels[lower].admins.indexOf(command[1].toLowerCase()) != -1) {
+            } else if (regchannels[lower].admins.indexOf(command[1].toLowerCase()) != -1) {
                 regchannels[lower].admins.splice(regchannels[lower].admins.indexOf(command[1].toLowerCase()), 1);
+            } else if (regchannels[lower].owners.indexOf(command[1].toLowerCase()) != -1) {
+                helpers.starfox(src, channel, command, bots.channel, "Error 400, that player is already a channel owner.");
+                return;
             }
             regchannels[lower].owners.push(command[1].toLowerCase());
             helpers.saveData("regchannels");
@@ -280,9 +287,9 @@ cownercommands = {
         }
         sys.sendHtmlAll(helpers.bot(bots.channel) + "<b>" + helpers.arg(command[1]) + " has been made Channel Owner by " + helpers.user(sys.name(src)) + "!</b>", channel);
     }
-    
+
     ,
-    
+
     addcrule: function (src, channel, command) {
         var lower = sys.channel(channel).toLowerCase();
         if (channel === 0) {
@@ -306,9 +313,9 @@ cownercommands = {
         }
         helpers.saveData("regchannels");
     }
-    
+
     ,
-    
+
     changecrule: function (src, channel, command) {
         var lower = sys.channel(channel).toLowerCase();
         if (channel === 0) {
@@ -340,9 +347,9 @@ cownercommands = {
         }
         helpers.saveData("regchannels");
     }
-    
+
     ,
-    
+
     removecrule: function (src, channel, command) {
         var lower = sys.channel(channel).toLowerCase();
         if (channel === 0) {
@@ -370,9 +377,9 @@ cownercommands = {
         }
         helpers.saveData("regchannels");
     }
-    
+
     ,
-    
+
     clearcrules: function (src, channel, command) {
         var lower = sys.channel(channel).toLowerCase();
         if (!regchannels[lower]) {
