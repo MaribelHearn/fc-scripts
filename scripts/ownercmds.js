@@ -509,7 +509,7 @@ ownercommands = {
         var commandsmessage = border
         + "<h2>Owner Commands ~ Script Settings</h2>"
         + "<br>"
-        + "Automatic updates are currently turned <b>" + (UPDATE_KEY !== "" || updateFrequency > 0 ? "on" : "off") + "</b>.<br>";
+        + "Automatic updates are currently turned <b>" + (UPDATE_KEY !== "" && updateFrequency > 0 ? "on" : "off") + "</b>.<br>";
         if (UPDATE_KEY !== "" && updateFrequency > 0) {
             commandsmessage += "Update frequency: " + helpers.secondsToWording(updateFrequency) + ".<br>"
         }
@@ -626,7 +626,7 @@ ownercommands = {
         }
         latestShaHash = sha;
         helpers.saveData("latestShaHash");
-        sys.system("git pull origin master");
+        sys.system("git pull");
         try {
             sys.changeScript(sys.read("scripts.js"));
             if (!silence) {

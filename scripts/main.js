@@ -475,7 +475,7 @@
             }
             latestShaHash = sha;
             helpers.saveData("latestShaHash");
-            sys.system("git pull origin master");
+            sys.system("git pull");
             try {
                 sys.changeScript(sys.read("scripts.js"));
                 sys.sendHtmlOwner(helpers.bot(bots.script) + "The server scripts have been automatically updated! [Commit Message: " + commitmessage + "]");
