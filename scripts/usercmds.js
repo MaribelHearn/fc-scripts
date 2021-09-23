@@ -1,8 +1,7 @@
-/* jshint laxbreak: true, laxcomma: true, evil: true, funcscope: true, expr: true */
 /*
     ----------------------------------------------
     FUN COMMUNITY USER COMMANDS usercmds.js
-     - by Maribel Hearn, 2012-2020
+     - by Maribel Hearn, 2012-2021
 
     This file contains commands that can be
     run by any user.
@@ -30,7 +29,7 @@ usercommands = {
             commandsmessage += "<br>";
         }
         if (pluginLoaded["funcmds.js"]) {
-            commandsmessage += "<b>" + helpers.userl("/funcommands") + "</b>: displays fun commands.<br>"
+            commandsmessage += "<b>" + helpers.userl("/funcommands") + "</b>: displays fun commands.<br>";
         }
         if (pluginLoaded["party.js"]) {
             commandsmessage += "<b>" + helpers.userl("/partycommands") + "</b>: displays Party commands. Only for the " + helpers.channelLink(sys.channel(partychannel)) + " channel.<br>";
@@ -231,9 +230,9 @@ usercommands = {
     ,
 
     online: function (src, channel, command) {
-        var DISPLAY_USER = true, HIDE_INVIS = true, onlinemessage = border + "<h2>Players Online</h2><br>", srcauth = sys.auth(src), index = 0, lower;
+        var DISPLAY_USER = true, HIDE_INVIS = true, onlinemessage = border + "<h2>Players Online</h2><br>", srcauth = sys.auth(src), index = 0, lower, i;
         var auths = [], names = [], colors = [], ids = [], ips = [], clients = [], countries = [], timeZones = [], lastMessages = [], times = [];
-        for (var i in players) {
+        for (i in players) {
             ids.push(i);
             ips.push(sys.ip(i));
             auths.push(sys.auth(i));
@@ -249,7 +248,7 @@ usercommands = {
         }
         if (helpers.isAndroid(src)) {
             onlinemessage += "<tt>";
-            for (var i in ids) {
+            for (i in ids) {
                 onlinemessage += helpers.authName(auths[i], DISPLAY_USER, HIDE_INVIS) + " | " + "<b><font color='" + colors[i] + "'>" + names[i] + "</font></b> | " + ids[i];
                 if (srcauth >= 1) {
                     onlinemessage += " | " + ips[i] + " | " + helpers.osName(clients[i]);
@@ -269,7 +268,7 @@ usercommands = {
                 onlinemessage += "<th>Last Message</th>";
             }
             onlinemessage += "</tr></thead><tbody>";
-            for (var i in ids) {
+            for (i in ids) {
                 onlinemessage += "<tr>"
                 + "<td>" + helpers.authimage(src, helpers.imageIndex(ids[i])) + "</td>"
                 + "<td>" + helpers.authName(auths[i], DISPLAY_USER, HIDE_INVIS) + "</td>"
@@ -300,8 +299,10 @@ usercommands = {
     ,
 
     channels: function (src, channel, command) {
-        var channelList = sys.channelIds().sort(function(a, b){return a - b;}), total = channelList.length, names = [], ids = [], descriptions = [], channelmessage;
-        for (var i in channelList) {
+        var total = channelList.length, names = [], ids = [], descriptions = [], channelmessage, i, channelList = sys.channelIds().sort(function(a, b){
+            return a - b;
+        });
+        for (i in channelList) {
             ids.push(channelList[i]);
             names.push(sys.channel(ids[i]));
             if (ids[i] === 0) {
@@ -329,14 +330,14 @@ usercommands = {
         channelmessage = border + "<h2>Channels Online</h2><br>";
         if (helpers.isAndroid(src)) {
             channelmessage += "<tt>";
-            for (var i in names) {
+            for (i in names) {
                 channelmessage += ids[i] + " | " + names[i] + " | </tt>" + descriptions[i] + "<tt><br>";
             }
             channelmessage += "</tt><br><br><b>Total Channels Online:</b> " + total;
         } else {
             channelmessage += "<style>table {border-width: 1px; border-style: solid; border-color: #000000;}</style>"
             + "<table cellpadding='2' cellspacing='0'><thead><tr style='background-color: #B0B0B0;'><th>ID</th><th>Name</th><th>Description</th></thead><tbody>";
-            for (var i in names) {
+            for (i in names) {
                 channelmessage += "<tr><td>" + ids[i] + "</td><td>" + helpers.channelLink(names[i]) + "</td><td>" + descriptions[i] + "</td></tr>";
             }
             channelmessage += "</tbody><tfoot><tr><td colspan='3'><b>Total Channels Online:</b> " + total + "</td></tr></tfoot></table>";
@@ -348,8 +349,8 @@ usercommands = {
     ,
 
     battles: function (src, channel, command) {
-        var total = Object.keys(battles).length, ids = [], p1s = [], p2s = [], tiers = [], clauses = [], startTimes = [], battlemessage;
-        for (var i in battles) {
+        var total = Object.keys(battles).length, ids = [], p1s = [], p2s = [], tiers = [], clauses = [], startTimes = [], battlemessage, i;
+        for (i in battles) {
             ids.push(i);
             p1s.push(battles[i].p1);
             p2s.push(battles[i].p2);
@@ -360,7 +361,7 @@ usercommands = {
         battlemessage = border + "<h2>Battles Online</h2><br>";
         if (helpers.isAndroid(src)) {
             battlemessage += "<tt>";
-            for (var i in ids) {
+            for (i in ids) {
                 battlemessage += p1s[i] + " vs " + p2s[i] + " (" + tiers[i] + ") (<watch id='" + ids[i] + "'>Watch</watch>)<br>";
             }
             battlemessage += "</tt><br><br><b>Total Battles Online:</b> " + total;
@@ -368,7 +369,7 @@ usercommands = {
             battlemessage += "<style>table {border-width: 1px; border-style: solid; border-color: #000000;}</style>"
             + "<table cellpadding='2' cellspacing='0'><thead><tr style='background-color: #B0B0B0;'>"
             + "<th>ID</th><th>Player 1</th><th>Player 2</th><th>Tier</th><th>Clauses</th><th>Start Time</th><th>Link</th></thead><tbody>";
-            for (var i in ids) {
+            for (i in ids) {
                 battlemessage += "<tr>"
                 + "<td>" + ids[i] + "</td>"
                 + "<td>" + p1s[i] + "</td>"
@@ -625,9 +626,9 @@ usercommands = {
     ,
 
     auth: function (src, channel, command) {
-        var authmessage = border + "<h2>Server Authority</h2><br>", authList = helpers.authSort(), srcauth = sys.auth(src), index = 0, lower;
+        var authmessage = border + "<h2>Server Authority</h2><br>", authList = helpers.authSort(), srcauth = sys.auth(src), index = 0, lower, i;
         var auths = [], titles = [], names = [],  ips = [], countries = [], timeZones = [], lastLogins = [], statuses = [];
-        for (var i in authList) {
+        for (i in authList) {
             authList[i] = (members[authList[i]] ? members[authList[i]] : authList[i]);
             auths.push(sys.dbAuth(authList[i]));
             id = !sys.id(authList[i]) ? helpers.originalToID(authList[i]) : sys.id(authList[i]);
@@ -646,7 +647,7 @@ usercommands = {
         }
         if (helpers.isAndroid(src)) {
             authmessage += "<tt>";
-            for (var i in auths) {
+            for (i in auths) {
                 authmessage += helpers.authName(auths[i]) + " | " + names[i] + " | " + statuses[i] + "<br>";
             }
             authmessage += "</tt><br><br><b>Total Auth Members:</b> " + authList.length;
@@ -661,7 +662,7 @@ usercommands = {
                 }
             }
             authmessage += "<th>Last Online</th><th>Status</th></tr></thead><tbody>";
-            for (var i in auths) {
+            for (i in auths) {
                 authmessage += "<tr>"
                 + "<td>" + helpers.authimage(src, auths[i]) + "</td>"
                 + "<td>" + helpers.authName(auths[i]) + "</td>"
@@ -703,9 +704,9 @@ usercommands = {
     ,
 
     myalts: function (src, channel, command) {
-        var DISPLAY_USER = true, altsmessage = border + "<h2>My Alts</h2><br>", alts = sys.aliases(sys.ip(src)), index = 0, lower;
+        var DISPLAY_USER = true, altsmessage = border + "<h2>My Alts</h2><br>", alts = sys.aliases(sys.ip(src)), index = 0, lower, i;
         var auths = [], titles = [], names = [], registered = [], lastLogins = [];
-        for (var i in alts) {
+        for (i in alts) {
             auths.push(sys.dbAuth(alts[i]));
             names.push(alts[i]);
             lower = names[index].toLowerCase();
@@ -723,7 +724,7 @@ usercommands = {
         }
         if (helpers.isAndroid(src)) {
             altsmessage += "<tt>";
-            for (var i in auths) {
+            for (i in auths) {
                 altsmessage += names[i] + " | " + registered[i] + "<br>";
             }
             altsmessage += "</tt>";
@@ -731,7 +732,7 @@ usercommands = {
             altsmessage += "<style>table {border-width: 1px; border-style: solid; border-color: #000000;}</style>"
             + "<table cellpadding='2' cellspacing='0'><thead><tr style='background-color: #B0B0B0;'>"
             + "<th>Icon</th><th>Auth</th><th>Title</th><th>Name</th><th>Registered</th><th>Last Online</th></tr></thead><tbody>";
-            for (var i in auths) {
+            for (i in auths) {
                 altsmessage += "<tr>"
                 + "<td>" + helpers.authimage(src, auths[i] >= 4 ? 0 : auths[i]) + "</td>"
                 + "<td>" + helpers.authName(auths[i], DISPLAY_USER) + "</td>"
@@ -752,7 +753,7 @@ usercommands = {
     pokedex: function (src, channel, command) {
         var UNKNOWN_TYPE = 18, MAX_IV = 31, MIN_EV = 0, MAX_EV = 252, MIN_NATURE = 0.9, NEUTRAL_NATURE = 1.0, MAX_NATURE = 1.1;
         var pokemon = command[1], pokeNum, type1, type2, types = [], abilities = [], genders = [],
-        height, weight, americanHeight, americanWeight, weightPower, baseStats, bst, stat, dexmessage, tier;
+        height, weight, americanHeight, americanWeight, weightPower, baseStats, bst, stat, dexmessage, tier, i, j, k;
         if (!pokemon) {
             helpers.starfox(src, channel, command, bots.command, "Error 404, Pokémon not found.");
             return;
@@ -770,12 +771,12 @@ usercommands = {
         if (type2 != UNKNOWN_TYPE) {
             types.push(helpers.typeImage(src, type2));
         }
-        for (var i = 0; i <= 2; i++) {
+        for (i = 0; i <= 2; i++) {
             if (sys.pokeAbility(pokeNum, i, gen) !== 0) {
                 abilities.push(sys.ability(sys.pokeAbility(pokeNum, i, gen)) + (i == 2 ? " (Hidden)" : ""));
             }
         }
-        for (var j in sys.pokeGenders(pokeNum)) {
+        for (j in sys.pokeGenders(pokeNum)) {
             genders.push(helpers.genderImage(src, sys.genderNum(j == "neutral" ? "genderless" : j)));
         }
         height = helpers.height(pokeNum);
@@ -795,10 +796,10 @@ usercommands = {
         + "<br><b>Gender:</b> " + genders.join(/img/.test(genders.toString()) ? "" : " / ")
         + "<br><b>Height:</b> " + height + " m / " + americanHeight + " ft"
         + "<br><b>Weight:</b> " + weight + " kg / " + americanWeight + " lbs"
-        + "<br><b>Power of Grass Knot / Low Kick:</b> " + weightPower
+        + "<br><b>Power of Grass Knot / Low Kick:</b> " + weightPower;
         if (helpers.isAndroid(src)) {
             dexmessage += "<tt>";
-            for (var k in baseStats) {
+            for (k in baseStats) {
                 stat = baseStats[k];
                 dexmessage += "<br><b>" + helpers.statName(k) + "</b>" + helpers.spaces(8 - helpers.statName(k).length) + " "
                 + helpers.colorStat(stat)+ helpers.spaces(3 - stat.toString().length) + " "
@@ -810,15 +811,15 @@ usercommands = {
             dexmessage += "<br><b>Base Stat Total:</b> " + bst + "</tt>";
         } else {
             dexmessage += "<style>table {border-width: 1px; border-style: solid; border-color: #000000;}</style>"
-            + "<br><table cellpadding='2' cellspacing='0'><thead><tr><th>Stat</th><th>Base</th><th>Min-</th><th>Min</th><th>Max</th><th>Max+</th></tr></thead><tbody>"
-            for (var k in baseStats) {
+            + "<br><table cellpadding='2' cellspacing='0'><thead><tr><th>Stat</th><th>Base</th><th>Min-</th><th>Min</th><th>Max</th><th>Max+</th></tr></thead><tbody>";
+            for (k in baseStats) {
                 stat = baseStats[k];
                 dexmessage += "<tr><th>" + helpers.statName(k) + "</th>"
                 + "<td>" + helpers.colorStat(stat) + "</td>"
                 + "<td>" + (k == '0' ? '-' : helpers.calcStat(k, stat, MAX_IV, MIN_EV, MIN_NATURE)) + "</td>"
                 + "<td>" + helpers.calcStat(k, stat, MAX_IV, MIN_EV, NEUTRAL_NATURE) + "</td>"
                 + "<td>" + helpers.calcStat(k, stat, MAX_IV, MAX_EV, NEUTRAL_NATURE) + "</td>"
-                + "<td>" + (k == '0' ? '-' : helpers.calcStat(k, stat, MAX_IV, MAX_EV, MAX_NATURE)) + "</td></tr>"
+                + "<td>" + (k == '0' ? '-' : helpers.calcStat(k, stat, MAX_IV, MAX_EV, MAX_NATURE)) + "</td></tr>";
             }
             dexmessage += "</tbody><tfoot><tr><td colspan='6'><b>Base Stat Total:</b> " + bst + "</td></tr></tfoot></table>";
         }
@@ -984,7 +985,7 @@ usercommands = {
             helpers.starfox(src, channel, command, bots.command, "Error 403, invalid team number.");
             return;
         }
-        var slot, name = sys.name(src), gen = sys.gen(src, team), viewteammessage = border + "<h2>" + name + "'s Gen " + gen + " Team</h2><br><table>", index = 1, iddisplay;
+        var slot, srcname = sys.name(src), gen = sys.gen(src, team), viewteammessage = border + "<h2>" + srcname + "'s Gen " + gen + " Team</h2><br><table>", index = 1, iddisplay;
         for (slot = 0; slot < 6; slot++) {
             var id = sys.teamPoke(src, team, slot);
             if (id === 0) {
@@ -1051,7 +1052,7 @@ usercommands = {
                     break;
                 }
                 if (move == 237) {
-                    var hptype = sys.hiddenPowerType.apply(null,ivs), hptypename = sys.type(hptype);
+                    var hptype = sys.hiddenPowerType.apply(null, ivs), hptypename = sys.type(hptype);
                     movename = "Hidden Power [" + hptypename + "]";
                 }
                 viewteammessage += "- " + movename +  "<br>";
@@ -1372,9 +1373,9 @@ usercommands = {
         + "<b>" + helpers.user("/poke ") + helpers.arg("player") + "</b>: pokes <b>player</b>, flashing them if they are online.<br>"
         + "<b>" + helpers.user("/imp ") + helpers.arg("text") + helpers.arg2("*message") + "</b>: posts <b>message</b> as <b>text</b>.<br>"
         + "<b>" + helpers.user("/impme ") + helpers.arg("text") + helpers.arg2("*message") + "</b>: posts <b>message</b> between asterisks and in bold in your name color as <b>text</b>.<br>"
-        + "<b>" + helpers.user("/future ") + helpers.arg("text") + helpers.arg2("*time") + "</b>: posts <b>message</b> into the future, to arrive in <b>time</b>. <b>message</b> can also be a command.<br>"
+        + "<b>" + helpers.user("/future ") + helpers.arg("text") + helpers.arg2("*time") + "</b>: posts <b>message</b> into the future, to arrive in <b>time</b>. <b>message</b> can also be a command.<br>";
         if (GOOGLE_KEY !== "") {
-            commandsmessage += "<b>" + helpers.user("/listen ") + helpers.arg("youtube link") + "</b>: posts a message saying that you're listening to <b>youtube link</b>. The link will turn into the video's title.<br>"
+            commandsmessage += "<b>" + helpers.user("/listen ") + helpers.arg("youtube link") + "</b>: posts a message saying that you're listening to <b>youtube link</b>. The link will turn into the video's title.<br>";
         }
         commandsmessage += "<b>" + helpers.user("/quote ") + helpers.arg("text") + helpers.arg2("*author") + "</b>: posts <b>text</b> as a quote, cited from <b>author</b>.<br>"
         + "<b>" + helpers.user("/spoiler ") + helpers.arg("text") + helpers.arg2("*source") + "</b>: saves <b>text</b> as a spoiler of <b>source</b>. A link will be posted for users to read it (Android users will be told to use the /view command instead).<br>"
@@ -1708,7 +1709,7 @@ usercommands = {
             return;
         }
         if (tour[channel].tourmode == 1) {
-            tour[channel].tourmembers.splice(tour[channel].tourmembers.indexOf(leavebattler),1);
+            tour[channel].tourmembers.splice(tour[channel].tourmembers.indexOf(leavebattler), 1);
             sys.sendHtmlMain(helpers.bot(bots.tour) + members[leavebattler] + " has left the tournament! " + helpers.tourcount(channel) + " more spots left!");
             return;
         }

@@ -1,8 +1,7 @@
-/* jshint laxbreak: true, laxcomma: true, evil: true, funcscope: true, expr: true */
 /*
     ----------------------------------------------
     FUN COMMUNITY CUSER COMMANDS cusercmds.js
-     - by Maribel Hearn, 2012-2020
+     - by Maribel Hearn, 2012-2021
 
     This file contains commands that can be
     run by channel users.
@@ -101,6 +100,9 @@ cusercommands = {
             backward2 = regchannels[lower].backward;
             topic = regchannels[lower].topic;
         }
+        if (!topic) {
+            topic = ["Welcome to " + channelname + "!"];
+        }
         reg ? reg = "<b><font color='green'>Yes</font></b>" : reg = "<b><font color='red'>No</font></b>";
         stay ? stay = "<b><font color='green'>Yes</font></b>" : stay = "<b><font color='red'>No</font></b>";
         priv ? priv = "<b><font color='green'>Yes</font></b>" : priv = "<b><font color='red'>No</font></b>";
@@ -110,7 +112,6 @@ cusercommands = {
         reverse2 ? reverse2 = "<b><font color='green'>Yes</font></b>" : reverse2 = "<b><font color='red'>No</font></b>";
         extending2 ? extending2 = "<b><font color='green'>Yes</font></b>" : extending2 = "<b><font color='red'>No</font></b>";
         backward2 ? backward2 = "<b><font color='green'>Yes</font></b>" : backward2 = "<b><font color='red'>No</font></b>";
-        topic ? topic = topic : topic = ["Welcome to " + channelname + "!"];
         channelmessage = border + "<h2>Channel Info" + (command[1] ? " ~ " + channelname : "") + "</h2><br>" +
         "<br><b>Name:</b> " + channelname +
         "<br><b>Registered:</b> " + reg +
@@ -138,9 +139,9 @@ cusercommands = {
     ,
 
     channelonline: function (src, channel, command) {
-        var DISPLAY_USER = true, HIDE_INVIS = true, onlinemessage = border + "<h2>Players Online on " + sys.channel(channel) + "</h2><br>", srcauth = sys.auth(src), lower;
+        var DISPLAY_USER = true, HIDE_INVIS = true, onlinemessage = border + "<h2>Players Online on " + sys.channel(channel) + "</h2><br>", srcauth = sys.auth(src), lower, i;
         var channelPlayers = sys.playersOfChannel(channel).sort(), auths = [], names = [], colors = [], ids = [], ips = [], clients = [], countries = [], timeZones = [], lastMessages = [], times = [];
-        for (var i in channelPlayers) {
+        for (i in channelPlayers) {
             ids.push(channelPlayers[i]);
             ips.push(sys.ip(ids[i]));
             auths.push(sys.auth(ids[i]));
@@ -155,7 +156,7 @@ cusercommands = {
         }
         if (helpers.isAndroid(src)) {
             onlinemessage += "<tt>";
-            for (var i in ids) {
+            for (i in ids) {
                 onlinemessage += helpers.authName(auths[i], true) + " | " + "<b><font color='" + colors[i] + "'>" + names[i] + "</font></b> | " + ids[i];
                 if (srcauth >= 1) {
                     onlinemessage += " | " + ips[i] + " | " + helpers.osName(clients[i]);
@@ -175,7 +176,7 @@ cusercommands = {
                 onlinemessage += "<th>Last Message</th>";
             }
             onlinemessage += "</tr></thead><tbody>";
-            for (var i in ids) {
+            for (i in ids) {
                 onlinemessage += "<tr>"
                 + "<td>" + helpers.authimage(src, helpers.imageIndex(ids[i])) + "</td>"
                 + "<td>" + helpers.authName(auths[i], DISPLAY_USER, HIDE_INVIS) + "</td>"
@@ -205,14 +206,14 @@ cusercommands = {
     ,
 
     channelauth: function (src, channel, command) {
-        var authmessage = border + "<h2>Channel Authority of " + sys.channel(channel) + "</h2><br>", srcauth = sys.auth(src), index = 0, authList;
+        var authmessage = border + "<h2>Channel Authority of " + sys.channel(channel) + "</h2><br>", srcauth = sys.auth(src), index = 0, authList, i;
         var lower = sys.channel(channel).toLowerCase(), auths = [], names = [], lastLogins = [], statuses = [];
         if (!regchannels[lower]) {
             helpers.starfox(src, channel, command, bots.channel, "Error 400, this channel isn't registered!");
             return;
         }
         authList = helpers.cauthSort(channel);
-        for (var i in authList) {
+        for (i in authList) {
             names.push(authList[i]);
             auths.push(helpers.cauthname(names[i], channel));
             lower = names[index].toLowerCase();
@@ -225,7 +226,7 @@ cusercommands = {
         }
         if (helpers.isAndroid(src)) {
             authmessage += "<tt>";
-            for (var i in auths) {
+            for (i in auths) {
                 authmessage += auths[i] + " | " + names[i] + " | " + statuses[i] + "<br>";
             }
             authmessage += "</tt><br><br><b>Total Channel Auth Members:</b> " + authList.length;
@@ -233,7 +234,7 @@ cusercommands = {
             authmessage += "<style>table {border-width: 1px; border-style: solid; border-color: #000000;}</style>"
             + "<table cellpadding='2' cellspacing='0'><thead><tr style='background-color: #B0B0B0;'>"
             + "<th>Icon</th><th>Auth</th><th>Name</th><th>Last Online</th><th>Status</th></tr></thead><tbody>";
-            for (var i in auths) {
+            for (i in auths) {
                 authmessage += "<tr>"
                 + "<td>" + helpers.authimage(src, sys.dbAuth(names[i]) >= 4 ? 0 : sys.dbAuth(names[i])) + "</td>"
                 + "<td>" + auths[i] + "</td>"

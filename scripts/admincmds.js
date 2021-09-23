@@ -1,8 +1,7 @@
-/* jshint laxbreak: true, laxcomma: true, evil: true, funcscope: true, expr: true */
 /*
     ----------------------------------------------
     FUN COMMUNITY ADMIN COMMANDS admincmds.js
-     - by Maribel Hearn, 2012-2020
+     - by Maribel Hearn, 2012-2021
 
     This file contains commands that can be
     run by administrators.
@@ -69,7 +68,7 @@ admincommands = {
     ,
 
     ban: function (src, channel, command) {
-        var name = helpers.escapehtml(sys.name(src)), trgtname = command[1], trgt = sys.id(trgtname), reason = command[2], auth = sys.auth(src), trgtauth, trgtip;
+        var name = helpers.escapehtml(sys.name(src)), trgtname = command[1], trgt = sys.id(trgtname), reason = command[2], auth = sys.auth(src), trgtauth, trgtip, units, unit, time;
         if (!trgtname) {
             helpers.starfox(src, channel, command, bots.ban, "Error 404, player not found.");
             return;
@@ -96,7 +95,7 @@ admincommands = {
         } else {
             reason = helpers.escapehtml(reason);
         }
-        var units = ["s", "m", "h", "d", "seconds", "minutes", "hours", "days", "second", "minute", "hour", "day"];
+        units = ["s", "m", "h", "d", "seconds", "minutes", "hours", "days", "second", "minute", "hour", "day"];
         banlist[lower] = {};
         banlist[lower].ip = trgtip;
         banlist[lower].bannedby = players[src].name;
@@ -183,7 +182,7 @@ admincommands = {
     ,
 
     ipban: function (src, channel, command) {
-        var name = sys.name(src), trgtip = command[1], reason = command[2], auth = sys.auth(src), aliases;
+        var name = sys.name(src), trgtip = command[1], reason = command[2], auth = sys.auth(src), aliases, units, index;
         if (!trgtip) {
             helpers.starfox(src, channel, command, bots.ban, "Error 404, IP not found.");
             return;
@@ -201,7 +200,7 @@ admincommands = {
             return;
         } else {
             aliases = sys.aliases(trgtip);
-            for (var index in aliases) {
+            for (index in aliases) {
                 if (sys.dbAuth(aliases[index]) >= auth) {
                     helpers.starfox(src, channel, command, bots.ban, "Error 403, you may not ban " + trgtip + " because one or more of its alts has / have higher auth.");
                     return;
@@ -213,7 +212,7 @@ admincommands = {
         } else {
             reason = helpers.escapehtml(reason);
         }
-        var units = ["s", "m", "h", "d", "seconds", "minutes", "hours", "days", "second", "minute", "hour", "day"];
+        units = ["s", "m", "h", "d", "seconds", "minutes", "hours", "days", "second", "minute", "hour", "day"];
         banlist[trgtip] = {};
         banlist[trgtip].ip = trgtip;
         banlist[trgtip].bannedby = players[src].name;
@@ -265,14 +264,16 @@ admincommands = {
         } else {
             sys.sendHtmlAll(helpers.bot(bots.ban) + helpers.escapehtml(name) + " has IP banned " + trgtip + " from the server " + time + unit + "! [Reason: " + reason + "]", channel);
         }
-        for (var index in mutelist) {
+        for (index in mutelist) {
             if (!sys.dbIp(index)) {
                 delete mutelist[index];
                 continue;
             }
             if (mutelist[index].ip == trgtip) {
                 delete mutelist[index];
-                if (members[index])index = members[index];
+                if (members[index]) {
+                    index = members[index];
+                }
                 helpers.saveData("mutelist");
                 sys.sendHtmlMessage(src, helpers.bot(bots.mute) + index + " has been automatically unmuted.", channel);
                 continue;
@@ -550,7 +551,7 @@ admincommands = {
     ,
 
     rangeban: function (src, channel, command) {
-        var reason = command[2], name = sys.name(src), trgtname = command[1], auth = sys.auth(src), lower, ip, msg;
+        var reason = command[2], name = sys.name(src), trgtname = command[1], auth = sys.auth(src), lower, ip, msg, index;
         if (!trgtname) {
             helpers.starfox(src, channel, command, bots.gigaban, "Error 404, player not found.");
             return;
@@ -591,7 +592,7 @@ admincommands = {
         if (trgt) {
             sys.kick(trgt);
         }
-        for (var index in mutelist) {
+        for (index in mutelist) {
             if (!sys.dbIp(index)) {
                 delete mutedips[mutelist[index].ip];
                 delete mutelist[index];
@@ -600,12 +601,14 @@ admincommands = {
             if (sys.dbRange(index) == rangebanlist[lower].range) {
                 delete mutedips[mutelist[index].ip];
                 delete mutelist[index];
-                if (members[index])index = members[index];
+                if (members[index]) {
+                    index = members[index];
+                }
                 helpers.saveData("mutelist");
                 sys.sendHtmlMessage(src, helpers.bot(bots.mute) + helpers.escapehtml(index) + " has been automatically unmuted.", channel);
             }
         }
-        for (var index in banlist) {
+        for (index in banlist) {
             if (!sys.dbIp(index)) {
                 ip = banlist[index].ip;
                 banlist[ip] = banlist[index];
@@ -614,7 +617,9 @@ admincommands = {
             }
             if (sys.dbRange(index) == rangebanlist[lower].range) {
                 delete banlist[index];
-                if (members[index])index = members[index];
+                if (members[index]) {
+                    index = members[index];
+                }
                 helpers.saveData("banlist");
                 sys.sendHtmlMessage(src, helpers.bot(bots.ban) + helpers.escapehtml(index) + " has been automatically unbanned.", channel);
                 continue;
@@ -667,7 +672,7 @@ admincommands = {
     ,
 
     iprangeban: function (src, channel, command) {
-        var name = sys.name(src), auth = sys.auth(src), range = command[1], reason = command[2], db = sys.dbAll(), aliases = [], altsnum = 0, ip;
+        var name = sys.name(src), auth = sys.auth(src), range = command[1], reason = command[2], db = sys.dbAll(), aliases = [], altsnum = 0, ip, index;
         if (!range) {
             helpers.starfox(src, channel, command, bots.ban, "Error 404, range not found.");
             return;
@@ -681,13 +686,13 @@ admincommands = {
             return;
         }
         var trgtauth = sys.dbAuth(command[1]);
-        for (var index in db) {
+        for (index in db) {
             if (sys.dbRange(db[index]) == range) {
                 aliases[altsnum] = db[index];
                 altsnum++;
             }
         }
-        for (var index in aliases) {
+        for (index in aliases) {
             if (sys.dbAuth(aliases[index]) >= auth) {
                 helpers.starfox(src, channel, command, bots.ban, "Error 403, you may not range ban " + range + " because one of its alts' auth levels is higher or equal to yours.");
                 return;
@@ -711,20 +716,22 @@ admincommands = {
         } else {
             sys.sendHtmlAll(helpers.bot(bots.ban) + helpers.escapehtml(name) + " has range banned " + range + " from the server! [Reason: " + reason + "]");
         }
-        for (var index in mutelist) {
+        for (index in mutelist) {
             if (!sys.dbIp(index)) {
                 delete mutelist[index];
                 continue;
             }
             if (sys.dbRange(index) == range) {
                 delete mutelist[index];
-                if (members[index])index = members[index];
+                if (members[index]) {
+                    index = members[index];
+                }
                 helpers.saveData("mutelist");
                 sys.sendHtmlMessage(src, helpers.bot(bots.mute) + helpers.escapehtml(index) + " has been automatically unmuted.", channel);
                 continue;
             }
         }
-        for (var index in banlist) {
+        for (index in banlist) {
             if (!sys.dbIp(index)) {
                 ip = banlist[index].ip;
                 banlist[ip] = banlist[index];
@@ -733,7 +740,9 @@ admincommands = {
             }
             if (sys.dbRange(index) == range) {
                 delete banlist[index];
-                if (members[index])index = members[index];
+                if (members[index]) {
+                    index = members[index];
+                }
                 helpers.saveData("banlist");
                 sys.sendHtmlMessage(src, helpers.bot(bots.ban) + helpers.escapehtml(index) + " has been automatically unbanned.", channel);
                 continue;
@@ -1120,7 +1129,9 @@ admincommands = {
         }
         bot = command[1].toLowerCase();
         for (var index in bots) {
-            if (bot == index)isbot = true;
+            if (bot == index) {
+                isbot = true;
+            }
         }
         if (!isbot) {
             helpers.starfox(src, channel, command, bots.main, "Error 404, bot not found.");
@@ -1456,7 +1467,7 @@ admincommands = {
     ,
 
     welcomemsg: function (src, channel, command) {
-        this.welcomemessage(src, channel,command);
+        this.welcomemessage(src, channel, command);
     }
 
     ,
@@ -1475,7 +1486,7 @@ admincommands = {
     ,
 
     leavemsg: function (src, channel, command) {
-        this.leavemessage(src, channel,command);
+        this.leavemessage(src, channel, command);
     }
 
     ,
@@ -1494,7 +1505,7 @@ admincommands = {
     ,
 
     cwelcomemsg: function (src, channel, command) {
-        this.cwelcomemessage(src, channel,command);
+        this.cwelcomemessage(src, channel, command);
     }
 
     ,
@@ -1513,7 +1524,7 @@ admincommands = {
     ,
 
     cleavemsg: function (src, channel, command) {
-        this.cleavemessage(src, channel,command);
+        this.cleavemessage(src, channel, command);
     }
 
     ,

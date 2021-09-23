@@ -1,8 +1,7 @@
-/* jshint laxbreak: true, laxcomma: true, evil: true, funcscope: true, expr: true */
 /*
     ----------------------------------------------
     FUN COMMUNITY CMOD COMMANDS cmodcmds.js
-     - by Maribel Hearn, 2012-2020
+     - by Maribel Hearn, 2012-2021
 
     This file contains commands that can be
     run by channel moderators.
@@ -40,7 +39,7 @@ cmodcommands = {
     ,
 
     topic: function (src, channel, command) {
-        var lower = sys.channel(channel).toLowerCase(), name = sys.name(src).toLowerCase(), text = command[1];
+        var lower = sys.channel(channel).toLowerCase(), name = sys.name(src).toLowerCase(), text = command[1], i;
         if (!text) {
             if (regchannels[lower]) {
                 sys.sendHtmlMessage(src, helpers.bot(bots.channel) + "Current channel topic: " + regchannels[lower].topic.join(TOPIC_DELIMITER), channel);
@@ -53,7 +52,7 @@ cmodcommands = {
             helpers.starfox(src, channel, command, bots.channel, "Error 400, this channel isn't registered!", channel);
             return;
         }
-        for (var i in regchannels[lower].topicmakers) {
+        for (i in regchannels[lower].topicmakers) {
             if (helpers.cauth(regchannels[lower].topicmakers[i], channel) > helpers.cauth(name, channel)) {
                 helpers.starfox(src, channel, command, bots.channel, "Error 403, you may not change topic parts that are not yours and were made by higher channel auth.", channel);
                 return;
@@ -62,7 +61,7 @@ cmodcommands = {
         regchannels[lower].topic = [];
         if (text.indexOf(helpers.removespaces(TOPIC_DELIMITER)) >= 0) {
             text = text.split(helpers.removespaces(TOPIC_DELIMITER));
-            for (var i in text) {
+            for (i in text) {
                 regchannels[lower].topic.push(text[i]);
             }
         } else {
@@ -269,7 +268,7 @@ cmodcommands = {
     ,
 
     cmutelist: function (src, channel, command) {
-        var lower = sys.channel(channel).toLowerCase(), list, names = [], ips = [], muters = [], reasons = [], dates = [], mutelistmessage;
+        var lower = sys.channel(channel).toLowerCase(), list, names = [], ips = [], muters = [], reasons = [], dates = [], mutelistmessage, i;
         if (!regchannels[lower]) {
             helpers.starfox(src, channel, command, bots.channel, "Error 400, this channel isn't registered!");
             return;
@@ -279,7 +278,7 @@ cmodcommands = {
             helpers.starfox(src, channel, command, bots.channel, "The channel mute list is currently empty.");
             return;
         }
-        for (var i in list) {
+        for (i in list) {
             names.push(members[i] ? members[i] : i);
             ips.push(list[i].ip);
             muters.push(list[i].mutedby);
@@ -289,7 +288,7 @@ cmodcommands = {
         mutelistmessage = border + "<h2>" + sys.channel(channel) + " Mute List</h2><br>";
         if (helpers.isAndroid(src)) {
             mutelistmessage += "<tt>";
-            for (var i in names) {
+            for (i in names) {
                 mutelistmessage += names[i] + " | " + ips[i] + " | </tt>" + dates[i] + "<tt><br>";
             }
             mutelistmessage += "</tt>";
@@ -297,7 +296,7 @@ cmodcommands = {
             mutelistmessage += "<style>table {border-width: 1px; border-style: solid; border-color: #000000;}</style>"
             + "<table cellpadding='2' cellspacing='0'><thead><tr style='background-color: #B0B0B0;'>"
             + "<th>Name</th><th>IP Address</th><th>Muter</th><th>Reason</th><th>Date of muting</th></tr></thead><tbody>";
-            for (var i in names) {
+            for (i in names) {
                 mutelistmessage += "<tr>"
                 + "<td>" + names[i] + "</td>"
                 + "<td>" + ips[i] + "</td>"
@@ -306,7 +305,7 @@ cmodcommands = {
                 + "<td>" + dates[i] + "</td>"
                 + "</tr>";
             }
-            mutelistmessage += "</tbody></table>"
+            mutelistmessage += "</tbody></table>";
         }
         mutelistmessage += "<br><br><b>Total Muted Players:</b> " + Object.keys(list).length + "<br><br><timestamp/><br>" + border2;
         sys.sendHtmlMessage(src, mutelistmessage, channel);
@@ -315,7 +314,7 @@ cmodcommands = {
     ,
 
     cbanlist: function (src, channel, command) {
-        var lower = sys.channel(channel).toLowerCase(), list, names = [], ips = [], banners = [], reasons = [], dates = [], banlistmessage;
+        var lower = sys.channel(channel).toLowerCase(), list, names = [], ips = [], banners = [], reasons = [], dates = [], banlistmessage, i;
         if (!regchannels[lower]) {
             helpers.starfox(src, channel, command, bots.channel, "Error 400, this channel isn't registered!");
             return;
@@ -325,7 +324,7 @@ cmodcommands = {
             helpers.starfox(src, channel, command, bots.channel, "The channel ban list is currently empty.");
             return;
         }
-        for (var i in list) {
+        for (i in list) {
             names.push(members[i] ? members[i] : i);
             ips.push(list[i].ip);
             banners.push(list[i].banner);
@@ -335,7 +334,7 @@ cmodcommands = {
         banlistmessage = border + "<h2>" + sys.channel(channel) + " Ban List</h2><br>";
         if (helpers.isAndroid(src)) {
             banlistmessage += "<tt>";
-            for (var i in names) {
+            for (i in names) {
                 banlistmessage += names[i] + " | " + ips[i] + " | </tt>" + dates[i] + "<tt><br>";
             }
             banlistmessage += "</tt>";
@@ -343,7 +342,7 @@ cmodcommands = {
             banlistmessage += "<style>table {border-width: 1px; border-style: solid; border-color: #000000;}</style>"
             + "<table cellpadding='2' cellspacing='0'><thead><tr style='background-color: #B0B0B0;'>"
             + "<th>Name</th><th>IP Address</th><th>Banner</th><th>Reason</th><th>Date of banning</th></tr></thead><tbody>";
-            for (var i in names) {
+            for (i in names) {
                 banlistmessage += "<tr>"
                 + "<td>" + names[i] + "</td>"
                 + "<td>" + ips[i] + "</td>"
@@ -352,7 +351,7 @@ cmodcommands = {
                 + "<td>" + dates[i] + "</td>"
                 + "</tr>";
             }
-            banlistmessage += "</tbody></table>"
+            banlistmessage += "</tbody></table>";
         }
         banlistmessage += "<br><br><b>Total Banned Players:</b> " + Object.keys(list).length + "<br><br><timestamp/><br>" + border2;
         sys.sendHtmlMessage(src, banlistmessage, channel);

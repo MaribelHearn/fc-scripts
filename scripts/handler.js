@@ -1,4 +1,3 @@
-/* jshint laxbreak: true, laxcomma: true, evil: true, funcscope: true, expr: true */
 /*
     ----------------------------------------------
     FUN COMMUNITY COMMAND HANDLER handler.js

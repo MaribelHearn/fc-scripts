@@ -1,8 +1,7 @@
-/* jshint laxbreak: true, laxcomma: true, evil: true, funcscope: true, expr: true */
 /*
     ----------------------------------------------
     FUN COMMUNITY FUN COMMANDS funcmds.js
-     - by Maribel Hearn, 2012-2020
+     - by Maribel Hearn, 2012-2021
 
     This file contains the notorious
     fun commands. Can be run by any user.
@@ -332,8 +331,8 @@ funcommands = {
         !command[3] ? text2 = "BETTER DO IT NEXT TIME" : text2 = helpers.escapehtml(command[3]);
         !command[4] ? title = sys.pokemon(pokenum) : title = command[4];
         !command[5] ? color = "black" : color = command[5];
-        text1 = text1.replace(/\(asterisk\)/g, "*");text1 = text1.replace(/\[asterisk\]/g, "*");
-        text2 = text2.replace(/\(asterisk\)/g, "*");text2 = text2.replace(/\[asterisk\]/g, "*");
+        text1 = text1.replace(/\(asterisk\)/g, "*"); text1 = text1.replace(/\[asterisk\]/g, "*");
+        text2 = text2.replace(/\(asterisk\)/g, "*"); text2 = text2.replace(/\[asterisk\]/g, "*");
         sys.sendHtmlAll(helpers.bot(bots.fun) + "<b>" + helpers.user(name) + " has used the " + helpers.arg(title + " Meme") + " command.</b><br><center>" +
         "<font style='font-family:impact;font-family:iciel gotham ultra;font-size:24px;color:" + color + "'>" + text1 + "<br><img src='pokemon:" + pokenum + "'><br>" + text2 + "</font></center>", channel);
     }

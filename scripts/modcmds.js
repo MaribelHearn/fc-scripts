@@ -1,8 +1,7 @@
-/* jshint laxbreak: true, laxcomma: true, evil: true, funcscope: true, expr: true */
 /*
     ----------------------------------------------
     FUN COMMUNITY MOD COMMANDS modcmds.js
-     - by Maribel Hearn, 2012-2020
+     - by Maribel Hearn, 2012-2021
 
     This file contains commands that can be
     run by moderators.
@@ -320,19 +319,21 @@ modcommands = {
         }
         mutelist[lower].reason = helpers.escapehtml(reason);
         helpers.saveData("mutelist");
-        if (members[lower]) lower = members[lower];
+        if (members[lower]) {
+            lower = members[lower];
+        }
         sys.sendHtmlAll(helpers.bot(bots.mute) + name + " has changed the mute reason of " + lower + " to '" + helpers.escapehtml(reason) + "'!", channel);
     }
 
     ,
 
     mutelist: function (src, channel, command) {
-        var names = [], ips = [], muters = [], reasons = [], times = [], timesLeft = [], dates = [], silences = [], mutelistmessage;
+        var names = [], ips = [], muters = [], reasons = [], times = [], timesLeft = [], dates = [], silences = [], mutelistmessage, i;
         if (mutelist.isEmpty()) {
             sys.sendHtmlMessage(src, helpers.bot(bots.mute) + "The mute list is currently empty.", channel);
             return;
         }
-        for (var i in mutelist) {
+        for (i in mutelist) {
             names.push(members[i] ? members[i] : i);
             ips.push(mutelist[i].ip);
             muters.push(mutelist[i].mutedby);
@@ -340,12 +341,12 @@ modcommands = {
             times.push(helpers.formatJusticeTime(mutelist[i].starttime));
             timesLeft.push(helpers.formatJusticeTime(mutelist[i].time));
             dates.push(mutelist[i].date);
-            silences.push(mutelist[i].silent)
+            silences.push(mutelist[i].silent);
         }
         mutelistmessage = border + "<h2>Mute List</h2><br>";
         if (helpers.isAndroid(src)) {
             mutelistmessage += "<tt>";
-            for (var i in names) {
+            for (i in names) {
                 mutelistmessage += names[i] + " | " + ips[i] + " | </tt>" + dates[i] + "<tt><br>";
             }
             mutelistmessage += "</tt>";
@@ -353,7 +354,7 @@ modcommands = {
             mutelistmessage += "<style>table {border-width: 1px; border-style: solid; border-color: #000000;}</style>"
             + "<table cellpadding='2' cellspacing='0'><thead><tr style='background-color: " + listcolors.mute + ";'>"
             + "<th>Name</th><th>IP Address</th><th>Muter</th><th>Reason</th><th>Muted for</th><th>Time left</th><th>Date of muting</th><th>Silent</th></tr></thead><tbody>";
-            for (var i in names) {
+            for (i in names) {
                 mutelistmessage += "<tr style='background-color: " + Qt.lighter(listcolors.mute, 1.55) + ";'>"
                 + "<td>" + helpers.escapehtml(names[i]) + "</td>"
                 + "<td>" + ips[i] + "</td>"
@@ -365,7 +366,7 @@ modcommands = {
                 + "<td>" + (silences[i] ? "Yes" : "No") + "</td>"
                 + "</tr>";
             }
-            mutelistmessage += "</tbody></table>"
+            mutelistmessage += "</tbody></table>";
         }
         mutelistmessage += "<br><br><b>Total Muted Players:</b> " + Object.keys(mutelist).length + "<br><br><timestamp/><br>" + border2;
         sys.sendHtmlMessage(src, mutelistmessage, channel);
@@ -382,12 +383,12 @@ modcommands = {
     ,
 
     banlist: function (src, channel, command) {
-        var names = [], ips = [], banners = [], reasons = [], times = [], timesLeft = [], dates = [], banlistmessage;
+        var names = [], ips = [], banners = [], reasons = [], times = [], timesLeft = [], dates = [], banlistmessage, i;
         if (banlist.isEmpty()) {
             sys.sendHtmlMessage(src, helpers.bot(bots.ban) + "The ban list is currently empty.", channel);
             return;
         }
-        for (var i in banlist) {
+        for (i in banlist) {
             names.push(members[i] ? members[i] : i);
             ips.push(banlist[i].ip);
             banners.push(banlist[i].bannedby);
@@ -399,7 +400,7 @@ modcommands = {
         banlistmessage = border + "<h2>Ban List</h2><br>";
         if (helpers.isAndroid(src)) {
             banlistmessage += "<tt>";
-            for (var i in names) {
+            for (i in names) {
                 banlistmessage += names[i] + " | " + ips[i] + " | </tt>" + dates[i] + "<tt><br>";
             }
             banlistmessage += "</tt>";
@@ -407,7 +408,7 @@ modcommands = {
             banlistmessage += "<style>table {border-width: 1px; border-style: solid; border-color: #000000;}</style>"
             + "<table cellpadding='2' cellspacing='0'><thead><tr style='background-color: " + listcolors.ban + ";'>"
             + "<th>Name</th><th>IP Address</th><th>Banner</th><th>Reason</th><th>Banned for</th><th>Time left</th><th>Date of banning</th></tr></thead><tbody>";
-            for (var i in names) {
+            for (i in names) {
                 banlistmessage += "<tr style='background-color: " + Qt.lighter(listcolors.ban, 1.55) + ";'>"
                 + "<td>" + helpers.escapehtml(names[i]) + "</td>"
                 + "<td>" + ips[i] + "</td>"
@@ -418,7 +419,7 @@ modcommands = {
                 + "<td>" + dates[i] + "</td>"
                 + "</tr>";
             }
-            banlistmessage += "</tbody></table>"
+            banlistmessage += "</tbody></table>";
         }
         banlistmessage += "<br><br><b>Total Banned Players:</b> " + Object.keys(banlist).length + "<br><br><timestamp/><br>" + border2;
         sys.sendHtmlMessage(src, banlistmessage, channel);
@@ -427,12 +428,12 @@ modcommands = {
     ,
 
     rangebanlist: function (src, channel, command) {
-        var names = [], ranges = [], banners = [], reasons = [], dates = [], rangebanlistmessage;
+        var names = [], ranges = [], banners = [], reasons = [], dates = [], rangebanlistmessage, i;
         if (rangebanlist.isEmpty()) {
             sys.sendHtmlMessage(src, helpers.bot(bots.ban) + "The range ban list is currently empty.", channel);
             return;
         }
-        for (var i in rangebanlist) {
+        for (i in rangebanlist) {
             names.push(members[i] ? members[i] : i);
             ranges.push(rangebanlist[i].range);
             banners.push(rangebanlist[i].banner);
@@ -442,7 +443,7 @@ modcommands = {
         rangebanlistmessage = border + "<h2>Range Ban List</h2><br>";
         if (helpers.isAndroid(src)) {
             rangebanlistmessage += "<tt>";
-            for (var i in names) {
+            for (i in names) {
                 rangebanlistmessage += names[i] + " | " + ranges[i] + " | </tt>" + dates[i] + "<tt><br>";
             }
             rangebanlistmessage += "</tt>";
@@ -450,7 +451,7 @@ modcommands = {
             rangebanlistmessage += "<style>table {border-width: 1px; border-style: solid; border-color: #000000;}</style>"
             + "<table cellpadding='2' cellspacing='0'><thead><tr style='background-color: " + listcolors.rangeban + ";'>"
             + "<th>Name</th><th>IP Range</th><th>Banner</th><th>Reason</th><th>Date of banning</th></tr></thead><tbody>";
-            for (var i in names) {
+            for (i in names) {
                 rangebanlistmessage += "<tr style='background-color: " + Qt.lighter(listcolors.rangeban, 1.55) + ";'>"
                 + "<td>" + helpers.escapehtml(names[i]) + "</td>"
                 + "<td>" + helpers.escapehtml(ranges[i]) + "</td>"
@@ -459,7 +460,7 @@ modcommands = {
                 + "<td>" + dates[i] + "</td>"
                 + "</tr>";
             }
-            rangebanlistmessage += "</tbody></table>"
+            rangebanlistmessage += "</tbody></table>";
         }
         rangebanlistmessage += "<br><br><b>Total Range Banned Players:</b> " + Object.keys(rangebanlist).length + "<br><br><timestamp/><br>" + border2;
         sys.sendHtmlMessage(src, rangebanlistmessage, channel);
@@ -468,12 +469,12 @@ modcommands = {
     ,
 
     megabanlist: function (src, channel, command) {
-        var names = [], banners = [], reasons = [], dates = [], megabanlistmessage;
+        var names = [], banners = [], reasons = [], dates = [], megabanlistmessage, i;
         if (megabanlist.isEmpty()) {
             sys.sendHtmlMessage(src, helpers.bot(bots.megaban) + "The mega ban list is currently empty.", channel);
             return;
         }
-        for (var i in megabanlist) {
+        for (i in megabanlist) {
             names.push(members[i] ? members[i] : i);
             banners.push(megabanlist[i].banner);
             reasons.push(megabanlist[i].reason);
@@ -482,7 +483,7 @@ modcommands = {
         megabanlistmessage = border + "<h2>Mega Ban List</h2><br>";
         if (helpers.isAndroid(src)) {
             megabanlistmessage += "<tt>";
-            for (var i in names) {
+            for (i in names) {
                 megabanlistmessage += names[i] + " | </tt>" + dates[i] + "<tt><br>";
             }
             megabanlistmessage += "</tt>";
@@ -490,7 +491,7 @@ modcommands = {
             megabanlistmessage += "<style>table {border-width: 1px; border-style: solid; border-color: #000000;}</style>"
             + "<table cellpadding='2' cellspacing='0'><thead><tr style='background-color: " + listcolors.megaban + ";'>"
             + "<th>Name</th><th>Banner</th><th>Reason</th><th>Date of banning</th></tr></thead><tbody>";
-            for (var i in names) {
+            for (i in names) {
                 megabanlistmessage += "<tr style='background-color: " + Qt.lighter(listcolors.megaban, 1.55) + ";'>"
                 + "<td>" + helpers.escapehtml(names[i]) + "</td>"
                 + "<td>" + helpers.escapehtml(banners[i]) + "</td>"
@@ -498,7 +499,7 @@ modcommands = {
                 + "<td>" + dates[i] + "</td>"
                 + "</tr>";
             }
-            megabanlistmessage += "</tbody></table>"
+            megabanlistmessage += "</tbody></table>";
         }
         megabanlistmessage += "<br><br><b>Total Mega Banned Players:</b> " + Object.keys(megabanlist).length + "<br><br><timestamp/><br>" + border2;
         sys.sendHtmlMessage(src, megabanlistmessage, channel);
@@ -507,12 +508,12 @@ modcommands = {
     ,
 
     gigabanlist: function (src, channel, command) {
-        var names = [], banners = [], reasons = [], pseudos = [], dates = [], gigabanlistmessage;
+        var names = [], banners = [], reasons = [], pseudos = [], dates = [], gigabanlistmessage, i;
         if (gigabanlist.isEmpty()) {
             sys.sendHtmlMessage(src, helpers.bot(bots.gigaban) + "The giga ban list is currently empty.", channel);
             return;
         }
-        for (var i in gigabanlist) {
+        for (i in gigabanlist) {
             names.push(members[i] ? members[i] : i);
             banners.push(gigabanlist[i].banner);
             reasons.push(gigabanlist[i].reason);
@@ -522,7 +523,7 @@ modcommands = {
         gigabanlistmessage = border + "<h2>Giga Ban List</h2><br>";
         if (helpers.isAndroid(src)) {
             gigabanlistmessage += "<tt>";
-            for (var i in names) {
+            for (i in names) {
                 gigabanlistmessage += names[i] + " | </tt>" + dates[i] + "<tt><br>";
             }
             gigabanlistmessage += "</tt>";
@@ -530,7 +531,7 @@ modcommands = {
             gigabanlistmessage += "<style>table {border-width: 1px; border-style: solid; border-color: #000000;}</style>"
             + "<table cellpadding='2' cellspacing='0'><thead><tr style='background-color: " + listcolors.gigaban + ";'>"
             + "<th>Name</th><th>Banner</th><th>Reason</th><th>Pseudo</th><th>Date of banning</th></tr></thead><tbody>";
-            for (var i in names) {
+            for (i in names) {
                 gigabanlistmessage += "<tr style='background-color: " + Qt.lighter(listcolors.gigaban, 1.55) + ";'>"
                 + "<td>" + helpers.escapehtml(names[i]) + "</td>"
                 + "<td>" + helpers.escapehtml(banners[i]) + "</td>"
@@ -539,7 +540,7 @@ modcommands = {
                 + "<td>" + dates[i] + "</td>"
                 + "</tr>";
             }
-            gigabanlistmessage += "</tbody></table>"
+            gigabanlistmessage += "</tbody></table>";
         }
         gigabanlistmessage += "<br><br><b>Total Giga Banned Players:</b> " + Object.keys(gigabanlist).length + "<br><br><timestamp/><br>" + border2;
         sys.sendHtmlMessage(src, gigabanlistmessage, channel);
@@ -1051,8 +1052,8 @@ modcommands = {
     **/
     altsettings: function (src, channel, command) {
         var DISPLAY_USER = true, commandsmessage = border + "<h2>Moderator Commands ~ Alt Settings</h2><br>", alts = sys.aliases(sys.ip(src)), index = 0, lower;
-        var auths = [], titles = [], names = [], registered = [], lastLogins = [];
-        for (var i in alts) {
+        var auths = [], titles = [], names = [], registered = [], lastLogins = [], i;
+        for (i in alts) {
             auths.push(sys.dbAuth(alts[i]));
             names.push(alts[i]);
             lower = names[index].toLowerCase();
@@ -1070,7 +1071,7 @@ modcommands = {
         }
         if (helpers.isAndroid(src)) {
             commandsmessage += "<tt>";
-            for (var i in auths) {
+            for (i in auths) {
                 commandsmessage += titles[i] + " | " + names[i] + " | " + registered[i] + "<br>";
             }
             commandsmessage += "</tt><br><br>";
@@ -1078,7 +1079,7 @@ modcommands = {
             commandsmessage += "<style>table {border-width: 1px; border-style: solid; border-color: #000000;}</style>"
             + "<table cellpadding='2' cellspacing='0'><thead><tr style='background-color: #B0B0B0;'>"
             + "<th>Icon</th><th>Auth</th><th>Title</th><th>Name</th><th>Registered</th><th>Last Online</th></tr></thead><tbody>";
-            for (var i in auths) {
+            for (i in auths) {
                 commandsmessage += "<tr>"
                 + "<td>" + helpers.authimage(src, auths[i] >= 4 ? 0 : auths[i]) + "</td>"
                 + "<td>" + helpers.authName(auths[i], DISPLAY_USER) + "</td>"
@@ -1162,7 +1163,9 @@ modcommands = {
                 helpers.saveData("regchannels");
             }
         }
-        if (members[player])player = members[player];
+        if (members[player]) {
+            player = members[player];
+        }
         sys.sendHtmlAll(helpers.bot(bots.auth) + "<b>" + helpers.user(name) + " passed their auth to " + helpers.arg(helpers.escapehtml(player)) + "!</b>", channel);
     }
 
@@ -1216,7 +1219,9 @@ modcommands = {
             }
             authtitles[player] = command[2];
             helpers.saveData("authtitles");
-            if (members[player])player = members[player];
+            if (members[player]) {
+                player = members[player];
+            }
             sys.sendHtmlAll(helpers.bot(bots.command) + "<b>" + helpers.user(sys.name(src)) + " changed " + helpers.arg(player) + "'s auth title to " + helpers.arg2(command[2]) + ".</b>", channel);
         }
     }
@@ -1233,12 +1238,12 @@ modcommands = {
             helpers.starfox(src, channel, command, bots.command, "Error 400, this command is only usable with the fun commands plugin.");
             return;
         }
-        var lower = sys.name(src).toLowerCase(), auth = sys.auth(src), bigtextstemp = {}, commandsmessage;
-        for (var i in bigtexts) {
+        var lower = sys.name(src).toLowerCase(), auth = sys.auth(src), bigtextstemp = {}, commandsmessage, i;
+        for (i in bigtexts) {
             bigtextstemp[i] = bigtexts[i];
         }
         Object.keys(bigtextstemp).sort();
-        for (var i in bigtextstemp) {
+        for (i in bigtextstemp) {
             bigtextstemp["/" + i] = bigtextstemp[i];
             delete bigtextstemp[i];
         }

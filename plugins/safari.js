@@ -2,7 +2,7 @@
 /*
     ----------------------------------------------
     FUN COMMUNITY SAFARI safari.js
-     - by Maribel Hearn, 2015-2015
+     - by Maribel Hearn, 2015-2021
 
     This file contains the scripts necessary
     for Safari, a game based on the in-game
@@ -333,14 +333,14 @@ safaricommands = {
     ,
 
     pokemart: function (src, channel, command) {
-        var pokemartmessage = border + "<h2>Poké Mart</h2><br>", lower = sys.name(src).toLowerCase();
+        var pokemartmessage = border + "<h2>Poké Mart</h2><br>", lower = sys.name(src).toLowerCase(), i;
         if (!safari[lower]) {
             helpers.starfox(src, channel, command, bots.safari, "Error 400, you haven't yet joined the Safari game!");
             return;
         }
         if (helpers.isAndroid(src)) {
             pokemartmessage += "<tt>";
-            for (var i in POKEMART_PRICES) {
+            for (i in POKEMART_PRICES) {
                 pokemartmessage += safariHelpers.displayName(i) + " | " + POKEDOLLAR + POKEMART_PRICES[i] + "<br>";
             }
             pokemartmessage += "</tt>";
@@ -348,7 +348,7 @@ safaricommands = {
             pokemartmessage += "<style>table {border-width: 1px; border-style: solid; border-color: #000000;}</style>"
             + "<table cellpadding='2' cellspacing='0'><thead><tr style='background-color: #B0B0B0;'>"
             + "<th>Item</th><th>Name</th><th>Price</th><th>Buy / Sell</th></tr></thead><tbody>";
-            for (var i in POKEMART_PRICES) {
+            for (i in POKEMART_PRICES) {
                 pokemartmessage += "<tr>"
                 + "<td>" + helpers.itemImage(sys.itemNum(safariHelpers.displayName(i))) + "</td>"
                 + "<td>" + safariHelpers.displayName(i) + "</td>"
@@ -433,7 +433,7 @@ safaricommands = {
     ,
 
     bag: function (src, channel, command) {
-        var bagmessage = border + "<h2>Bag</h2><br>", lower = sys.name(src).toLowerCase(), items;
+        var bagmessage = border + "<h2>Bag</h2><br>", lower = sys.name(src).toLowerCase(), items, i;
         if (!safari[lower]) {
             helpers.starfox(src, channel, command, bots.safari, "Error 400, you haven't yet joined the Safari game!");
             return;
@@ -441,7 +441,7 @@ safaricommands = {
         items = safari[lower].items;
         if (helpers.isAndroid(src)) {
             bagmessage += "<tt>";
-            for (var i in ITEMS) {
+            for (i in ITEMS) {
                 bagmessage += "Money: " + POKEDOLLAR + safari[lower].money + "<br>"
                 + helpers.displayName(ITEMS[i]) + ": " + safari[lower].items[ITEMS[i]] + "<br>";
             }
@@ -450,7 +450,7 @@ safaricommands = {
             bagmessage += "<style>table {border-width: 1px; border-style: solid; border-color: #000000;}</style>"
             + "<table cellpadding='2' cellspacing='0'><thead><tr style='background-color: #B0B0B0;'>"
             + "<th>Item</th><th>Name</th><th>Amount</th></tr></thead><tbody>";
-            for (var i in ITEMS) {
+            for (i in ITEMS) {
                 bagmessage += "<tr>"
                 + "<td>" + helpers.itemImage(sys.itemNum(safariHelpers.displayName(ITEMS[i]))) + "</td>"
                 + "<td>" + safariHelpers.displayName(ITEMS[i]) + "</td>"
@@ -466,7 +466,7 @@ safaricommands = {
     ,
 
     box: function (src, channel, command) {
-        var boxmessage = border + "<h2>Box</h2><br>", lower = sys.name(src).toLowerCase(), counter = 0, pokemon;
+        var boxmessage = border + "<h2>Box</h2><br>", lower = sys.name(src).toLowerCase(), counter = 0, pokemon, i;
         if (!safari[lower]) {
             helpers.starfox(src, channel, command, bots.safari, "Error 400, you haven't yet joined the Safari game!");
             return;
@@ -474,14 +474,14 @@ safaricommands = {
         pokemon = safari[lower].pokemon;
         if (helpers.isAndroid(src)) {
             boxmessage += "<tt>";
-            for (var i in pokemon) {
+            for (i in pokemon) {
                 boxmessage += helpers.pokeIcon(pokemon[i]) + " ";
             }
             boxmessage = boxmessage.slice(0, -1) + "</tt>";
         } else {
             boxmessage += "<style>table {border-width: 1px; border-style: solid; border-color: #000000;}</style>"
             + "<table cellpadding='2' cellspacing='0'><tbody><tr>";
-            for (var i in pokemon) {
+            for (i in pokemon) {
                 if (counter !== 0 && counter % 10 === 0) {
                     boxmessage += "<tr>";
                 }

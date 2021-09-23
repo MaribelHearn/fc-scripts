@@ -1,15 +1,13 @@
-/* jshint laxbreak: true, laxcomma: true, evil: true, funcscope: true, expr: true */
 /*
     ----------------------------------------------
     FUN COMMUNITY MAIN SCRIPT main.js
-     - by Maribel Hearn, 2012-2020
+     - by Maribel Hearn, 2012-2021
 
     The main script file. Defines global
     constants, variables, functions and
     contains the event handlers.
     ----------------------------------------------
     - auto-remove expired channel auth
-    - no flags if no API?
     - add server silence?
     - allcommands alts?
     - allow (un)blocking cyrillic, arabic etc.
@@ -122,7 +120,7 @@
     unofficialPlugins = false;
     if (sys.dirsForDirectory(sys.cwd()).contains("plugins")) {
         plugins = sys.filesForDirectory(PLUGINS_FOLDER);
-        for (var i in plugins) {
+        for (i in plugins) {
             try {
                 sys.exec(PLUGINS_FOLDER + plugins[i]);
                 print("Loaded plugin " + plugins[i]);
@@ -168,14 +166,15 @@
         sys.sendHtmlAll(message, 0);
     };
     sys.sendHtmlAuths = function (message, channel) {
+        var index;
         if (!channel) {
-            for (var index in players) {
+            for (index in players) {
                 if (sys.auth(index) > 1) {
                     sys.sendHtmlMessage(index, message);
                 }
             }
         } else {
-            for (var index in players) {
+            for (index in players) {
                 if (sys.auth(index) > 1) {
                     sys.sendHtmlMessage(index, message, channel);
                 }
@@ -396,7 +395,7 @@
     ,
 
     step: function () {
-        var pluginEvent, name, number, number2;
+        var pluginEvent, name, number, number2, index;
         /**
             --------
             Flooding
@@ -420,7 +419,7 @@
             Ban Time
             --------
         **/
-        for (var index in banlist) {
+        for (index in banlist) {
             if (banlist[index].time !== "-") {
                 banlist[index].time--;
                 if (banlist[index].time === 0) {
@@ -436,7 +435,7 @@
             Mute Time
             ---------
         **/
-        for (var index in mutelist) {
+        for (index in mutelist) {
             if (mutelist[index].time !== "-") {
                 mutelist[index].time--;
                 if (mutelist[index].time === 0) {
@@ -496,7 +495,7 @@
             Custom Plugins
             --------------
         **/
-        for (var i in plugins) {
+        for (i in plugins) {
             if (Object.keys(OFFICIAL_PLUGINS).contains(plugins[i])) {
                 continue;
             }
@@ -535,12 +534,7 @@
     ,
 
     beforeLogIn: function (src) {
-        var name = sys.name(src),
-            lower = name.toLowerCase(),
-            ip = sys.ip(src),
-            range = sys.range(src),
-            color = helpers.color(src),
-            auth = sys.auth(src);
+        var name = sys.name(src), lower = name.toLowerCase(), ip = sys.ip(src), range = sys.range(src), color = helpers.color(src), auth = sys.auth(src), i;
         /**
             ----------------------------------------
             Allowed IPs and ranges bypass all checks
@@ -552,7 +546,7 @@
                 Ban Check
                 ---------
             **/
-            for (var i in banlist) {
+            for (i in banlist) {
                 if (banlist[i].ip == ip) {
                     sys.sendMessage(src, "You are banned!");
                     sys.sendHtmlWatch(helpers.bot(bots.spy) + "[Server] Banned user <b><font color='" + color + "'>" + name + "</font></b> tried to enter the server.");
@@ -565,7 +559,7 @@
                 Range Ban Check
                 ---------------
             **/
-            for (var i in rangebanlist) {
+            for (i in rangebanlist) {
                 if (rangebanlist[i].range == range) {
                     sys.sendMessage(src, "You are banned!");
                     sys.sendHtmlWatch(helpers.bot(bots.spy) + "[Server] Range banned user <b><font color='" + color + "'>" + name + "</font></b> tried to enter the server.");
@@ -1399,7 +1393,7 @@
         **/
         if (GOOGLE_KEY !== "") {
             var link = helpers.strip(message).substring(helpers.strip(message).indexOf(": ") + 2, helpers.strip(message).length).trim(),
-                regex = /.*(?:youtu.be\/|youtube.*v=|youtube.*\/embed\/|youtube.*\/v\/|youtube.*videos\/)([^#\&\?]*).*/,
+                regex = /.*(?:youtu.be\/|youtube.*v=|youtube.*\/embed\/|youtube.*\/v\/|youtube.*videos\/)([^#&?]*).*/,
                 image, ext, base64, array, size, x, y;
             if (link.match(regex)) {
                 try {
@@ -1499,7 +1493,7 @@
                 Script Errors and Warnings
                 --------------------------
             **/
-            if (/Script Check: Fatal script error on line \d+\:/.test(message)) {
+            if (/Script Check: Fatal script error on line \d+:/.test(message)) {
                 sys.stopEvent();
                 var errorMessage = message.split("changeScript");
                 print(errorMessage[0]);
@@ -1507,7 +1501,7 @@
                     sys.sendHtmlOwner(helpers.bot(bots.script) + errorMessage[0]);
                 }
             }
-            if (/Script Error line \d+\:/.test(message) || /Script Warning:/.test(message) || /Script Warning in/.test(message)) {
+            if (/Script Error line \d+:/.test(message) || /Script Warning:/.test(message) || /Script Warning in/.test(message)) {
                 if (!serverStarting) {
                     sys.stopEvent();
                     sys.printStackTrace(message);
@@ -1837,8 +1831,8 @@
             if (tour[0].tourbattlers.indexOf(winnername.toLowerCase()) != -1 && tour[0].tourbattlers.indexOf(losername.toLowerCase()) != -1 && !helpers.nopair(tourmemberswinner, tourmembersloser)) {
                 if (result == "tie") {
                     var tourwinner = tour[0].tourbattlers.indexOf(winnername.toLowerCase()), tourloser = tour[0].tourbattlers.indexOf(losername.toLowerCase());
-                    tour[0].tourbattlers.splice(tourloser,1);
-                    tour[0].tourbattlers.splice(tourwinner,1);
+                    tour[0].tourbattlers.splice(tourloser, 1);
+                    tour[0].tourbattlers.splice(tourwinner, 1);
                     var repeatmatchmessage = border + "<br/>"
                     + "<timestamp/><b> A tournament match has been tied.</b></font><br/>"
                     + "<b>" + winnername + " and " + losername + " need to battle again!</b><br/>"

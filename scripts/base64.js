@@ -1,14 +1,13 @@
-/* jshint laxbreak: true, laxcomma: true, evil: true, funcscope: true, expr: true */
 /*
     ----------------------------------------------
     FUN COMMUNITY BASE64 IMAGES base64.js
-     - by Maribel Hearn, 2012-2015
+     - by Maribel Hearn, 2012-2021
 
     This file contains images encoded in base64
     that are used by the scripts.
     ----------------------------------------------
 */
-
+var YOUTUBE_BASE64, AXOLOTL_BASE64, WINDOWS_BASE64, APPLE_BASE64, LINUX_BASE64, ANDROID_BASE64, IE_BASE64, POKEDOLLAR, AUTHIMAGE, STATUS, FLAGS;
 YOUTUBE_BASE64 = "<img src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAMCAYAAABr5z2BAAABIklEQVQoz53LvUrD" +
 "UBjG8bOoOammSf1IoBSvoCB4JeIqOHgBLt6AIMRBBQelWurQ2kERnMRBsBUcIp5FJSBI5oQsJVkkUHh8W0o5nhaFHvjBgef/Mq+Q46RJBMkI/vE+a" +
 "Ous956tnEswIZe1LV0QyJ5sE2GzgZfVMtRNIdiDpccEssdlB1mW4bvTwdvWJtRdErM7U+8S/FJykCRJX5qm+KpVce8UMNLRLbulz4iSjTAMh6Iows" +

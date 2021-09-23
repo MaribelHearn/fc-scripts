@@ -1,8 +1,7 @@
-/* jshint laxbreak: true, laxcomma: true, evil: true, funcscope: true, expr: true */
 /*
     ----------------------------------------------
     FUN COMMUNITY ROULETTE roulette.js
-     - by Maribel Hearn, 2015-2015
+     - by Maribel Hearn, 2015-2021
 
     This file contains the scripts necessary
     for Roulette, a random Pokemon generation
@@ -225,7 +224,7 @@ rouletteEventMessage = function (event, ended) {
 };
 
 rouletteEvents = function () {
-    var randomEvent;
+    var randomEvent, i;
     // only trigger events when the channel exists and at least one person is in the channel
     if (!serverStarting && sys.playersOfChannel(roulettechannel).length !== 0) {
         rouletteStep += 1;
@@ -235,7 +234,7 @@ rouletteEvents = function () {
             randomEvent = sys.rand(0, 100);
             if (randomEvent < 34) {
                 rouletteEvent = "frenzy";
-                for (var i in roulette) {
+                for (i in roulette) {
                     roulette[i].shinyChance = parseInt(4096 / (4096 / 33));
                 }
                 rouletteTime = 33;
@@ -249,7 +248,7 @@ rouletteEvents = function () {
                 rouletteEvent = "legendary";
                 rouletteTime = sys.rand(ROULETTE_EVENT_MIN, ROULETTE_EVENT_MAX);
             }
-            for (var i in roulette) { // flash those with event flashing on
+            for (i in roulette) { // flash those with event flashing on
                 if (roulette[i].eventFlash && sys.id(i)) {
                     sys.sendHtmlMessage(sys.id(i), "<ping/>", roulette);
                 }
@@ -263,7 +262,7 @@ rouletteEvents = function () {
             rouletteTime = sys.rand(ROULETTE_WAIT_MIN, ROULETTE_WAIT_MAX);
             rouletteEventMessage(rouletteEvent, true); // sets 'ended' to true
             if (rouletteEvent == "frenzy") {
-                for (var i in roulette) {
+                for (i in roulette) {
                     roulette[i].shinyChance = parseInt(roulette[i].shinyChance * (4096 / 33));
                 }
             }

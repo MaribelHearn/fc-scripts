@@ -1,9 +1,8 @@
-/* jshint laxbreak: true, laxcomma: true, evil: true, funcscope: true, expr: true */
 /*
     ----------------------------------------------
     FUN COMMUNITY TIER CHECKS tierchecks.js
-     - by Maribel Hearn, 2012-2015
-    
+     - by Maribel Hearn, 2012-2021
+
     This file contains checks for specific
     tiers.
     ----------------------------------------------
@@ -43,10 +42,10 @@ metronomecheck = function (src, team) {
         return;
     }
     for (var s = 0; s < 6; s++) {
-        move = sys.teamPokeMove(src, team, s, 0);move2 = sys.teamPokeMove(src, team, s, 1);move3 = sys.teamPokeMove(src, team, s, 2);
-        move4 = sys.teamPokeMove(src, team, s, 3);item = sys.teamPokeItem(src, team, s);
-        hp = sys.teamPokeEV(src, team, s, 0);atk = sys.teamPokeEV(src, team, s, 1);def = sys.teamPokeEV(src, team, s, 2);
-        satk = sys.teamPokeEV(src, team, s, 3);sdef = sys.teamPokeEV(src, team, s, 4);spd = sys.teamPokeEV(src, team, s, 5);
+        move = sys.teamPokeMove(src, team, s, 0); move2 = sys.teamPokeMove(src, team, s, 1); move3 = sys.teamPokeMove(src, team, s, 2);
+        move4 = sys.teamPokeMove(src, team, s, 3); item = sys.teamPokeItem(src, team, s);
+        hp = sys.teamPokeEV(src, team, s, 0); atk = sys.teamPokeEV(src, team, s, 1); def = sys.teamPokeEV(src, team, s, 2);
+        satk = sys.teamPokeEV(src, team, s, 3); sdef = sys.teamPokeEV(src, team, s, 4); spd = sys.teamPokeEV(src, team, s, 5);
         if (move != metronome) {
             sys.changePokeMove(src, team, s, 0, metronome);
         }

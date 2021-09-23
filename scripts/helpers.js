@@ -1,8 +1,7 @@
-/* jshint laxbreak: true, laxcomma: true, evil: true, funcscope: true, expr: true */
 /*
     ----------------------------------------------
     FUN COMMUNITY HELPER METHODS helpers.js
-     - by Maribel Hearn, 2012-2020,
+     - by Maribel Hearn, 2012-2021,
        with tournament methods by Lutra and
        pokemon db methods from main server
        scripts
@@ -36,15 +35,15 @@ helpers = {
                 "&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;" +
                 "&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;" +
                 "&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;</b></font>",
-            "cmdcolors": ["#4169E1","#008000","#FF0000","#FFA500","#FFD700","#0000FF"],
-            "listcolors": {"mute":"#1E90FF","ban":"#FF6900","rangeban":"#008000","megaban":"#800080","gigaban":"#AA0000"},
-            "bots": {"attack":"AttackBot","armyof":"ArmyBot","auth":"AuthBot","ban":"BanBot",
-                "battle":"BattleBot","caps":"CapsBot","channel":"ChannelBot","clear":"ClearBot","command":"CommandBot",
-                "cow":"Miltank","flood":"FloodBot","fun":"FunBot","gigaban":"GigabanBot","idle":"IdleBot","kick":"KickBot",
-                "main":"Bot","megaban":"MegabanBot","mute":"MuteBot","name":"NameBot","party":"PartyBot","pass":"PassBot",
-                "priv":"PrivacyBot","reverse":"ReverseBot","rr":"RussiaBot","russia":"RussiaBot","safari":"SafariBot",
-                "script":"ScriptBot","silence":"SilenceBot","spy":"WatchBot","starfox":"Wolf","status":"StatusBot",
-                "tour":"TourBot","topic":"TopicBot","warn":"WarnBot","welcome":"WelcomeBot","roulette": "RouletteBot"},
+            "cmdcolors": ["#4169E1", "#008000", "#FF0000", "#FFA500", "#FFD700", "#0000FF"],
+            "listcolors": {"mute":"#1E90FF", "ban":"#FF6900", "rangeban":"#008000", "megaban":"#800080", "gigaban":"#AA0000"},
+            "bots": {"attack":"AttackBot", "armyof":"ArmyBot", "auth":"AuthBot", "ban":"BanBot",
+                "battle":"BattleBot", "caps":"CapsBot", "channel":"ChannelBot", "clear":"ClearBot", "command":"CommandBot",
+                "cow":"Miltank", "flood":"FloodBot", "fun":"FunBot", "gigaban":"GigabanBot", "idle":"IdleBot", "kick":"KickBot",
+                "main":"Bot", "megaban":"MegabanBot", "mute":"MuteBot", "name":"NameBot", "party":"PartyBot", "pass":"PassBot",
+                "priv":"PrivacyBot", "reverse":"ReverseBot", "rr":"RussiaBot", "russia":"RussiaBot", "safari":"SafariBot",
+                "script":"ScriptBot", "silence":"SilenceBot", "spy":"WatchBot", "starfox":"Wolf", "status":"StatusBot",
+                "tour":"TourBot", "topic":"TopicBot", "warn":"WarnBot", "welcome":"WelcomeBot", "roulette": "RouletteBot"},
             "allowance": 8,
             "floodtime": 10,
             "floodlevel": 1,
@@ -58,12 +57,12 @@ helpers = {
                 "No abusing commands or auth powers.", "Do not talk about inappropriate or obscene subjects, " +
                 "nor mention words that refer to such.", "No asking for auth.", "Do not attempt to circumvent the rules."],
                 "explanations":["These things cause disorder in the chat. You can get kicked, muted or banned depending on how " +
-                "severely you are breaking this rule.","This should make sense without any explanation. " +
+                "severely you are breaking this rule.", "This should make sense without any explanation. " +
                 "Commands exist to be used for what they are meant for, not for mistakes to be exploited. " +
                 "The same goes for auths; do what you should do and not beyond that.",
                 "Anything inappropriate or obscene will result in a mute, or ban after multiple occasions.",
                 "You may get auth when recognized for coming on a lot, chat activity, good behaviour and maybe even contribution. " +
-                "Asking for it will not get you any further.","Taking the rules too literally is no use when you know you are " +
+                "Asking for it will not get you any further.", "Taking the rules too literally is no use when you know you are " +
                 "supposed to be punished anyway. Do not try to find loopholes in the rules, it will result in even more punishment."]}
         };
         if (values.hasOwnProperty(dataFile)) {
@@ -641,18 +640,18 @@ helpers = {
         "protected", "public", "return", "short", "static", "super", "switch", "synchronized", "this", "throw", "throws", "transient",
         "try", "typeof", "var", "void", "volatile", "while", "with", "true", "false", "prototype"];
         var NUMBERS = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
-        var index = 0, pattern, pattern1, pattern2;
+        var index = 0, pattern, pattern1, pattern2, i;
         code = code.replace(/;/g, ";<br>").replace(/\}/g, "}<br>").replace(/\{/g, "{<br>");
         if (code.substr(code.length - 4) == "<br>") {
             code = code.slice(0, -4);
         }
-        for (var i in KEYWORDS) {
+        for (i in KEYWORDS) {
             pattern1 = new RegExp(KEYWORDS[i] + ' ', "g");
             pattern2 = new RegExp(' ' + KEYWORDS[i], "g");
             code = code.replace(pattern1, "<b><font color='#00008B'>" + KEYWORDS[i] + "</font></b> ");
             code = code.replace(pattern2, " <b><font color='#00008B'>" + KEYWORDS[i] + "</font></b>");
         }
-        for (var i in NUMBERS) {
+        for (i in NUMBERS) {
             pattern = new RegExp(NUMBERS[i], "g");
             if (pattern.test(this.strip(code))) {
                 code = code.replace(pattern, "<font color='#FF4500'>" + NUMBERS[i] + "</font>");
@@ -1174,7 +1173,10 @@ helpers = {
     shortdate: function (d) {
         var f = "yyyy-MM-ddThh:mm:ss", y = d.getFullYear(), m = d.getMonth() + 1, hours = d.getHours(), minutes = d.getMinutes(), seconds = d.getSeconds();
         d = d.getDate();
-        function z(s) {s=''+s;return s.length>1?s:'0'+s;}
+        function z(s) {
+            s = '' + s;
+            return s.length > 1 ? s : '0' + s;
+        }
         f = f.replace(/yyyy/, y);
         f = f.replace(/yy/, String(y).substr(2));
         f = f.replace(/MM/, z(m));
@@ -1509,7 +1511,9 @@ helpers = {
     ,
 
     getmoves: function (id, num, moves, form, derp) {
-        if (form > 0)id = derp;
+        if (form > 0) {
+            id = derp;
+        }
         var moveindex = moves.indexOf(id + ":" + form);
         moveindex = eval(moveindex) + 3 * 1 + num * 1;
         moves = moves.substr(moveindex);
@@ -1524,7 +1528,9 @@ helpers = {
     ,
 
     getmovesarraya: function (id, num, moves, form, derp) {
-        if (form > 0)id = derp;
+        if (form > 0) {
+            id = derp;
+        }
         var moveindex = moves.indexOf(id + ":" + form);
         moveindex = eval(moveindex) + 3 * 1 + num * 1;
         moves = moves.substr(moveindex);
@@ -1547,20 +1553,18 @@ helpers = {
             if (found.hasOwnProperty(x)) {
                 var link = found[x];
                 newfound = found[x].replace(/\//g, sys.md5('/')).replace(/_/g, sys.md5('_'));
-                var regex = /.*(?:youtu.be\/|youtube.*v=|youtube.*\/embed\/|youtube.*\/v\/|youtube.*videos\/)([^#\&\?]*).*/;
+                var regex = /.*(?:youtu.be\/|youtube.*v=|youtube.*\/embed\/|youtube.*\/v\/|youtube.*videos\/)([^#&?]*).*/;
                 if (link.match(regex)) {
                     var name = link.match(regex)[link.match(regex).length - 1];
                     var resp;
                     try {
                         resp = JSON.parse(sys.synchronousWebCall(helpers.youtubeDataUrl(name)));
                         link = '<a href="' + this.escapehtml(link) + '">' + resp.items[0].snippet.title + '</a>';
-                    }
-                    catch (e) {
+                    } catch (e) {
                         sys.sendAll(e, 0);
                         link = newfound;
                     }
-                }
-                else {
+                } else {
                     link = newfound;
                 }
                 newtext = ('<a href ="' + newfound + '">' + link + '</a>').replace(/&amp;/gi, "&");
@@ -1861,25 +1865,25 @@ helpers = {
     ,
 
     escapehtml: function (string) {
-        return string.toString().replace(/&/g, "&amp;").replace(/\>/g, "&gt;").replace(/</g, "&lt;");
+        return string.toString().replace(/&/g, "&amp;").replace(/>/g, "&gt;").replace(/</g, "&lt;");
     }
 
     ,
 
     escapehtmluser: function (string) {
-        return "<font color='" + cmdcolors[0] + "'>" + string.replace(/&/g, "&amp;").replace(/\>/g, "&gt;").replace(/</g, "&lt;") + "</font>";
+        return "<font color='" + cmdcolors[0] + "'>" + string.replace(/&/g, "&amp;").replace(/>/g, "&gt;").replace(/</g, "&lt;") + "</font>";
     }
 
     ,
 
     escapehtmlarg: function (string) {
-        return "<font color='" + cmdcolors[1] + "'>" + string.replace(/&/g, "&amp;").replace(/\>/g, "&gt;").replace(/</g, "&lt;") + "</font>";
+        return "<font color='" + cmdcolors[1] + "'>" + string.replace(/&/g, "&amp;").replace(/>/g, "&gt;").replace(/</g, "&lt;") + "</font>";
     }
 
     ,
 
     toseconds: function (time, unit) {
-        return({"minutes": time*60 , "minute": time*60, "hours": time*3600, "hour": time*3600, "days": time*86400,"day": time*86400, "weeks": time*604800, "week": time*604800, "months": time*2592000 , "month": time*2592000, "year": time*31536000 , "years": time*31536000}[unit] || time);
+        return({"minutes": time*60, "minute": time*60, "hours": time*3600, "hour": time*3600, "days": time*86400, "day": time*86400, "weeks": time*604800, "week": time*604800, "months": time*2592000, "month": time*2592000, "year": time*31536000, "years": time*31536000}[unit] || time);
     }
 
     ,
@@ -2187,7 +2191,7 @@ helpers = {
         if (heightList[key] !== undefined) {
             return heightList[key].trim();
         }
-        var index = key.indexOf(':') + 1;
+        index = key.indexOf(':') + 1;
         var base = key.substr(0, index);
         return heightList[base + '0'].trim();
     }
@@ -2208,7 +2212,7 @@ helpers = {
         if (weightList[key] !== undefined) {
             return weightList[key];
         }
-        var index = key.indexOf(':') + 1;
+        index = key.indexOf(':') + 1;
         var base = key.substr(0, index);
         return weightList[base + '0'];
     }
@@ -2232,7 +2236,7 @@ helpers = {
         if (movepoolList[key] !== undefined) {
             return movepoolList[key];
         }
-        var index = key.indexOf(':') + 1;
+        index = key.indexOf(':') + 1;
         var base = key.substr(0, index);
         return movepoolList[base];
     }
@@ -2284,7 +2288,7 @@ helpers = {
                 26: "Uber",
                 27: "OU",
                 28: "UU"
-            }
+            };
 
         for (i = start; i < start + 6; i++) {
             pokemon = tiers[i].substring(tiers[i].indexOf("pokemons") + 9, tiers[i].indexOf("abilities")).trim();
@@ -2399,7 +2403,7 @@ helpers = {
         if (moveEffList[moveId] === undefined) {
             return "Deals normal damage.";
         }
-        return moveEffList[moveId].replace(/[\[\]{}]/g, "");
+        return moveEffList[moveId].replace(/[[\]{}]/g, "");
     }
 
     ,
@@ -2676,25 +2680,23 @@ helpers = {
     roundincrease: function (winnername, losername, channel) {
         var tourloser = tour[channel].tourbattlers.indexOf(losername);
         if (tourloser != - 1) {
-            tour[channel].tourbattlers.splice(tourloser,1);
+            tour[channel].tourbattlers.splice(tourloser, 1);
             var tourwinner = tour[channel].tourbattlers.indexOf(winnername);
-            tour[channel].tourbattlers.splice(tourwinner,1);
+            tour[channel].tourbattlers.splice(tourwinner, 1);
         }
         if (winnername != "|bye|") {
             if (tour[channel].tourlosers.indexOf(winnername) == -1) {
                 tour[channel].tourlosers.push(losername);
                 tour[channel].tourwinners.push(winnername);
                 sys.sendHtmlAll("<b>" + members[winnername] + " advances to the next round.</b>", channel);
-            }
-            else{
+            } else{
                 tour[channel].tourwinners.splice(tour[channel].tourwinners.indexOf(losername), 1);
                 tour[channel].tourlosers.splice(tour[channel].tourlosers.indexOf(winnername), 1);
                 tour[channel].tourmembers.splice(tour[channel].tourmembers.indexOf(winnername), 1);
                 tour[channel].tourmembers.splice(tour[channel].tourmembers.indexOf(losername), 1);
                 tour[channel].tourcurrentnumber-= 2;
             }
-        }
-        else{
+        } else{
             tour[channel].tourmembers.splice(tour[channel].tourcurrentnumber, 1);
             tour[channel].tourmembers.splice(tour[channel].tourmembers.indexOf(losername), 1);
             tour[channel].tourwinners.splice(tour[channel].tourwinners.indexOf(losername), 1);
@@ -2711,7 +2713,7 @@ helpers = {
         sys.sendHtmlAll(border2, channel);
         if (battlesleft === 0) {
             if (tour[channel].tourmembers[tour[channel].tourcurrentnumber] == "|bye|") {
-                tour[channel].tourmembers.splice(tour[channel].tourmembers.indexOf("|bye|"),1);
+                tour[channel].tourmembers.splice(tour[channel].tourmembers.indexOf("|bye|"), 1);
             }
             tour[channel].tourcurrentnumber -= tour[channel].tourlosers.length;
             if (tour[channel].tourcurrentnumber == 1) {
@@ -2732,11 +2734,11 @@ helpers = {
 
     roundpairing: function (channel) {
         while (0 in tour[channel].tourlosers) {
-            tour[channel].tourmembers.splice(tour[channel].tourmembers.indexOf(tour[channel].tourlosers[0]),1);
-            tour[channel].tourlosers.splice(0,1);
+            tour[channel].tourmembers.splice(tour[channel].tourmembers.indexOf(tour[channel].tourlosers[0]), 1);
+            tour[channel].tourlosers.splice(0, 1);
         }
         while (0 in tour[channel].tourwinners) {
-            tour[channel].tourwinners.splice(0,1);
+            tour[channel].tourwinners.splice(0, 1);
         }
         tour[channel].roundnumber++;
         this.fisheryates(tour[channel].tourmembers);
@@ -2762,7 +2764,7 @@ helpers = {
         var roundstring = correctborder + "<br/>"
         + "<timestamp/><font size=4><b>" + finalroundcheck + " of " + tour[channel].tourtier + " Tournament</b></font><br/>"
         + correctborder + "<br/>";
-        for (var tourmembersindex = 0 ; tourmembersindex < tour[channel].tourcurrentnumber-rounddisplayversion; tourmembersindex+=2) {
+        for (var tourmembersindex = 0; tourmembersindex < tour[channel].tourcurrentnumber-rounddisplayversion; tourmembersindex+=2) {
             var tourspotone = tour[channel].tourlosers.indexOf(tour[channel].tourmembers[tourmembersindex]) != -1 ? "<s>" + members[tour[channel].tourmembers[tourmembersindex]] + "</s>" : members[tour[channel].tourmembers[tourmembersindex]];
             var tourspottwo = tour[channel].tourlosers.indexOf(tour[channel].tourmembers[tourmembersindex+1]) != -1 ? "<s>" + members[tour[channel].tourmembers[tourmembersindex+1]] + "</s>" : members[tour[channel].tourmembers[tourmembersindex+1]];
             tourspotone = tour[channel].tourbattlers.indexOf(tour[channel].tourmembers[tourmembersindex]) != -1 ? "<i>" + members[tour[channel].tourmembers[tourmembersindex]] + "</i>" : tourspotone;

@@ -1,8 +1,7 @@
-/* jshint laxbreak: true, laxcomma: true, evil: true, funcscope: true, expr: true */
 /*
     ----------------------------------------------
     FUN COMMUNITY OWNER COMMANDS ownercmds.js
-     - by Maribel Hearn, 2012-2020
+     - by Maribel Hearn, 2012-2021
 
     This file contains commands that can be
     run by owners.
@@ -37,8 +36,8 @@ ownercommands = {
     **/
     authsettings: function (src, channel, command) {
         var DISPLAY_USER = true, commandsmessage = border + "<h2>Owner Commands ~ Auth Settings</h2><br>";
-        var auths = sys.dbAuths().sort(), authLevels = [], titles = [], names = [], lastLogins = [], index = 0, lower;
-        for (var i in auths) {
+        var auths = sys.dbAuths().sort(), authLevels = [], titles = [], names = [], lastLogins = [], index = 0, lower, i;
+        for (i in auths) {
             authLevels.push(sys.dbAuth(auths[i]));
             names.push(auths[i]);
             lower = names[index].toLowerCase();
@@ -51,7 +50,7 @@ ownercommands = {
         }
         if (helpers.isAndroid(src)) {
             commandsmessage += "<tt>";
-            for (var i in auths) {
+            for (i in auths) {
                 commandsmessage += names[i] + ": " + authLevels[i] + "<br>";
             }
             commandsmessage += "</tt>";
@@ -59,7 +58,7 @@ ownercommands = {
             commandsmessage += "<style>table {border-width: 1px; border-style: solid; border-color: #000000;}</style>"
             + "<table cellpadding='2' cellspacing='0'><thead><tr style='background-color: #B0B0B0;'>"
             + "<th>Icon</th><th>Auth</th><th>Level</th><th>Title</th><th>Name</th><th>Last Online</th></tr></thead><tbody>";
-            for (var i in auths) {
+            for (i in auths) {
                 commandsmessage += "<tr>"
                 + "<td>" + helpers.authimage(src, authLevels[i] >= 4 ? 0 : authLevels[i]) + "</td>"
                 + "<td>" + helpers.authName(authLevels[i], DISPLAY_USER) + "</td>"
@@ -511,10 +510,10 @@ ownercommands = {
         + "<br>"
         + "Automatic updates are currently turned <b>" + (UPDATE_KEY !== "" && updateFrequency > 0 ? "on" : "off") + "</b>.<br>";
         if (UPDATE_KEY !== "" && updateFrequency > 0) {
-            commandsmessage += "Update frequency: " + helpers.secondsToWording(updateFrequency) + ".<br>"
+            commandsmessage += "Update frequency: " + helpers.secondsToWording(updateFrequency) + ".<br>";
         }
         commandsmessage += "<br>"
-        + "<b>" + helpers.user("/reload ") + helpers.arg("script") + "</b>: reloads script file <b>script</b> from the local files, which can be a module or a plugin. If <b>script</b> is not specified, reloads all scripts.<br>"
+        + "<b>" + helpers.user("/reload ") + helpers.arg("script") + "</b>: reloads script file <b>script</b> from the local files, which can be a module or a plugin. If <b>script</b> is not specified, reloads all scripts.<br>";
         if (UPDATE_KEY === "") {
             commandsmessage += "<b>" + helpers.user("/setgithubkey ") + helpers.arg("key") + "</b>: sets the GitHub API key for automatic script updates to <b>key</b>.<br>"
             + "Requires the server folder to be a clone of the <tt>fc-scripts</tt> git repository. <u>Be careful with this command!</u> Entering an invalid API key will rate limit the updates!<br>";
@@ -744,8 +743,7 @@ ownercommands = {
             } else {
                 sys.sendHtmlAll(helpers.bot(bots.script) + "Script ran successfully.", channel);
             }
-        }
-        catch (error) {
+        } catch (error) {
             if (silent == "silent") {
                 sys.sendHtmlMessage(src, helpers.bot(bots.script) + "An error occurred: " + error, channel);
             } else {
@@ -784,8 +782,7 @@ ownercommands = {
             eval(command);
             runtime = new Date() - starttime;
             sys.sendHtmlMessage(src, helpers.bot(bots.script) + "The eval runtime was " + runtime + " milliseconds.", channel);
-        }
-        catch (error) {
+        } catch (error) {
             sys.sendHtmlMessage(src, helpers.bot(bots.script) + "An error occurred: " + error, channel);
         }
     }
@@ -1325,7 +1322,7 @@ ownercommands = {
     ,
 
     renamechannel: function (src, channel, command) {
-        var oldName = command[1], newName, oldName, lower;
+        var oldName = command[1], newName, lower;
         if (!oldName) {
             helpers.starfox(src, channel, command, bots.command, "Error 404, name not found.");
             return;
@@ -1405,7 +1402,9 @@ ownercommands = {
             return;
         }
         sys.kick(trgt);
-        if (members[lower])trgtname = members[lower];
+        if (members[lower]) {
+            trgtname = members[lower];
+        }
         sys.sendHtmlMessage(src, helpers.bot(bots.kick) + "You silently kicked " + trgtname + ".", channel);
     }
 
