@@ -270,6 +270,7 @@ ownercommands = {
         commandsmessage += "<br>"
         + "<b>" + helpers.user("/ls ") + helpers.arg("directory") + "</b>: shows the contents of <b>directory</b>. Shows the current working directory by default. Also /dir.<br>"
         + "<b>" + helpers.user("/cat ") + helpers.arg("file") + "</b>: shows the contents of <b>file</b>. Also /type.<br>"
+        + "<b>" + helpers.user("/mv ") + helpers.arg("file") + helpers.arg2("path") + "</b>: moves <b>file</b> to <b>path</b>. Can also be used to rename a file.<br>"
         + "<b>" + helpers.user("/rm ") + helpers.arg("file") + "</b>: deletes <b>file</b> from the file system.<br>"
         + "<b>" + helpers.user("/mkdir ") + helpers.arg("directory") + "</b>: creates a new directory called <b>directory</b>. Also /md.<br>"
         + "<b>" + helpers.user("/rmdir ") + helpers.arg("directory") + "</b>: deletes <b>directory</b> if it is empty. Also /rd.<br>"
@@ -345,6 +346,32 @@ ownercommands = {
 
     type: function (src, channel, command) {
         this.cat(src, channel, command);
+    }
+
+    ,
+
+    mv: function (src, channel, command) {
+        var file = command[1];
+        if (!file) {
+            helpers.starfox(src, channel, command, bots.script, "Error 404, file not found.");
+            return;
+        }
+        var path = command[2];
+        if (!path) {
+            helpers.starfox(src, channel, command, bots.script, "Error 404, path not found.");
+            return;
+        }
+        if (!sys.fexists(file)) {
+            helpers.starfox(src, channel, command, bots.script, "Error 404, that file does not exist.");
+            return;
+        }
+        if (sys.fexists(path)) {
+            helpers.starfox(src, channel, command, bots.script, "Error 403, you may not overwrite existing files.");
+            return;
+        }
+        var content = sys.read(file);
+        sys.write(path, content);
+        sys.sendHtmlMessage(src, helpers.bot(bots.script) + "File '" + file + "' has been moved to '" + path + "'!", channel);
     }
 
     ,
