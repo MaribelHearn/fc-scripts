@@ -270,7 +270,7 @@ ownercommands = {
         commandsmessage += "<br>"
         + "<b>" + helpers.user("/ls ") + helpers.arg("directory") + "</b>: shows the contents of <b>directory</b>. Shows the current working directory by default. Also /dir.<br>"
         + "<b>" + helpers.user("/cat ") + helpers.arg("file") + "</b>: shows the contents of <b>file</b>. Also /type.<br>"
-        + "<b>" + helpers.user("/mv ") + helpers.arg("file") + helpers.arg2("path") + "</b>: moves <b>file</b> to <b>path</b>. Can also be used to rename a file.<br>"
+        + "<b>" + helpers.user("/mv ") + helpers.arg("file") + helpers.arg2("*path") + "</b>: moves <b>file</b> to <b>path</b>. Can also be used to rename a file.<br>"
         + "<b>" + helpers.user("/rm ") + helpers.arg("file") + "</b>: deletes <b>file</b> from the file system.<br>"
         + "<b>" + helpers.user("/mkdir ") + helpers.arg("directory") + "</b>: creates a new directory called <b>directory</b>. Also /md.<br>"
         + "<b>" + helpers.user("/rmdir ") + helpers.arg("directory") + "</b>: deletes <b>directory</b> if it is empty. Also /rd.<br>"
