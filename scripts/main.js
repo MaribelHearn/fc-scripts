@@ -841,20 +841,6 @@
             return;
         }
         /**
-            ---------------
-            Welcome Message
-            ---------------
-        **/
-        var cauth = (helpers.cauth(name, channel) >= 1 && sys.dbAuth(name) < 4 ? helpers.cauthname(name, channel) + " " : "");
-        if (channel > 0 || players[src]) { // do not send main channel welcome on server join
-            if (layout == "new") {
-                sys.sendHtmlAll(helpers.bot(bots.channel) + channelWelcomeMessage.replace(/~Player~/, cauth + name).replace(/~Channel~/, channelname), channel);
-            } else {
-                sys.sendHtmlAll("<timestamp/><b>~Please Welcome " + helpers.rainbow(name) + " to " + channelname + "~</b>", channel);
-            }
-        }
-        sys.sendHtmlWatch(helpers.bot(bots.spy) + "[Server] <b><font color='" + helpers.color(src) + "'>" + sys.name(src) + "</font></b> has joined the channel " + helpers.channelLink(channelname) + ".");
-        /**
             --------------
             Custom Plugins
             --------------
@@ -868,6 +854,20 @@
                 global[pluginEvent](src, channel);
             }
         }
+        /**
+            ---------------
+            Welcome Message
+            ---------------
+        **/
+        var cauth = (helpers.cauth(name, channel) >= 1 && sys.dbAuth(name) < 4 ? helpers.cauthname(name, channel) + " " : "");
+        if (channel > 0 || players[src]) { // do not send main channel welcome on server join
+            if (layout == "new") {
+                sys.sendHtmlAll(helpers.bot(bots.channel) + channelWelcomeMessage.replace(/~Player~/, cauth + name).replace(/~Channel~/, channelname), channel);
+            } else {
+                sys.sendHtmlAll("<timestamp/><b>~Please Welcome " + helpers.rainbow(name) + " to " + channelname + "~</b>", channel);
+            }
+        }
+        sys.sendHtmlWatch(helpers.bot(bots.spy) + "[Server] <b><font color='" + helpers.color(src) + "'>" + sys.name(src) + "</font></b> has joined the channel " + helpers.channelLink(channelname) + ".");
     }
 
     ,
