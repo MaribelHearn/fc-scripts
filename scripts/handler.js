@@ -247,13 +247,22 @@ watchChannelLogging = function (message, channel, name, lower, color, channelNam
         if (!regchannels[channelName.toLowerCase()].priv && !silentcommands.contains(lower)) {
             sys.sendHtmlWatch(helpers.bot(bots.spy) + "[" + helpers.channelLink(channelName) +
             "] <b><font color='" + color + "'>" + helpers.escapehtml(name) +
-            "</font></b> ran /" + helpers.escapehtml(message.slice(1)) + ".");
+            "</font></b> ran " + helpers.escapehtml(message) + ".");
         }
     } else {
         if (!silentcommands.contains(lower)) {
             sys.sendHtmlWatch(helpers.bot(bots.spy) + "[" + helpers.channelLink(channelName) +
             "] <b><font color='" + color + "'>" + helpers.escapehtml(name) +
-            "</font></b> ran /" + helpers.escapehtml(message.slice(1)) + ".");
+            "</font></b> ran " + helpers.escapehtml(message) + ".");
+        }
+    }
+    for (var i in plugins) {
+        if (Object.keys(OFFICIAL_PLUGINS).contains(plugins[i])) {
+            continue;
+        }
+        pluginEvent = plugins[i].replace(".js", "") + "Watch";
+        if (global[pluginEvent]) {
+            global[pluginEvent](message, channel, name, color);
         }
     }
 };
