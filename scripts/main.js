@@ -1522,6 +1522,20 @@
     ,
 
     afterNewMessage: function (message) {
+        /**
+            --------------
+            Custom Plugins
+            --------------
+        **/
+        for (var i in plugins) {
+            if (Object.keys(OFFICIAL_PLUGINS).contains(plugins[i])) {
+                continue;
+            }
+            pluginEvent = plugins[i].replace(".js", "") + "AfterPrint";
+            if (global[pluginEvent]) {
+                global[pluginEvent](message);
+            }
+        }
     }
 
     ,
