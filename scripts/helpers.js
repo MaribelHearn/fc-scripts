@@ -574,6 +574,11 @@ helpers = {
 
             sys.changePokeMove(src, team, slot, moveSlot, move);
         }
+
+        for (var stat = 0; stat < 6; stat++) {
+            sys.changeTeamPokeDV(src, team, slot, stat, 31);
+            sys.changeTeamPokeEV(src, team, slot, stat, 84);
+        }
     },
 
     /**
