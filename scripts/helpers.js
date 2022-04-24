@@ -560,6 +560,7 @@ helpers = {
         }
 
         sys.changePokeNum(src, team, slot, poke);
+        sys.changePokeName(src, team, slot, sys.pokemon(poke));
         sys.changePokeAbility(src, team, slot, ability);
         sys.changePokeNature(src, team, slot, nature);
         sys.changePokeItem(src, team, slot, item);
