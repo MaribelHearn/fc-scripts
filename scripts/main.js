@@ -1751,16 +1751,16 @@
     ,
 
     beforeBattleStarted: function (src, trgt, clauses, rated, mode, battle, team, team2) {
-        if (sys.tier(src, team) == "Fundex Random" && sys.tier(trgt, team) == "Fundex Random") {
+        if (sys.tier(src, team) == "Fundex Random" && sys.tier(trgt, team2) == "Fundex Random") {
             for (var slot = 0; slot < 6; slot++) {
                 helpers.funrand(src, team, slot);
-                helpers.funrand(trgt, team, slot);
+                helpers.funrand(trgt, team2, slot);
             }
         }
 
-        if (sys.tier(src, team) == "1v1 Fundex Random" && sys.tier(trgt, team) == "1v1 Fundex Random") {
+        if (sys.tier(src, team) == "1v1 Fundex Random" && sys.tier(trgt, team2) == "1v1 Fundex Random") {
             helpers.funrand(src, team, 0);
-            helpers.funrand(trgt, team, 0);
+            helpers.funrand(trgt, team2, 0);
         }
     }
 
