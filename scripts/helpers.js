@@ -552,6 +552,29 @@ helpers = {
 
     ,
 
+    funrand: function (src, team, slot) {
+        var poke = sys.rand(1000, 1146), ability = sys.rand(0, 167), nature = sys.rand(0, 15), item = sys.rand(0, 330);
+
+        if (ability > 164) { // Web Browser and Snow Slide
+            ability += 68;
+        }
+
+        sys.changePokeNum(src, team, slot, poke);
+        sys.changePokeAbility(src, team, slot, ability);
+        sys.changePokeNature(src, team, slot, nature);
+        sys.changePokeItem(src, team, slot, item);
+
+        for (var moveSlot = 0; moveSlot < 4; moveSlot++) {
+            move = sys.rand(1, 682);
+
+            if (move > 559) { // Fundex moves
+                move += 440;
+            }
+
+            sys.changePokeMove(src, team, slot, moveSlot, move);
+        }
+    },
+
     /**
         --------------
         Return Helpers
