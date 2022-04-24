@@ -573,6 +573,12 @@ helpers = {
             }
 
             sys.changePokeMove(src, team, slot, moveSlot, move);
+
+            if (move == 216) {
+                sys.changePokeHappiness(src, team, slot, 255);
+            } else if (move == 218) {
+                sys.changePokeHappiness(src, team, slot, 0);
+            }
         }
 
         for (var stat = 0; stat < 6; stat++) {
