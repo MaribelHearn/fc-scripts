@@ -712,7 +712,7 @@ modcommands = {
         }
         db = sys.dbAll();
         for (var index in db) {
-            if (sys.dbRange(db[index]) == range) {
+            if (db[index] && sys.dbRange(db[index]) == range) {
                 alts.push(db[index]);
             }
         }
