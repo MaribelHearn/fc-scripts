@@ -175,13 +175,14 @@ modcommands = {
     ,
 
     mute: function (src, channel, command, time, unit) {
-        var name = helpers.escapehtml(sys.name(src)), original = players[src].name, trgtname = helpers.escapehtml(command[1]), trgt = sys.id(trgtname), reason = command[2], auth = sys.auth(src),
+        var name = helpers.escapehtml(sys.name(src)), original = players[src].name, trgtname = command[1], trgt = sys.id(trgtname), reason = command[2], auth = sys.auth(src),
             srcip = sys.ip(src), trgtauth, trgtip, lower, msg;
         if (!trgtname) {
             helpers.starfox(src, channel, command, bots.mute, "Error 404, player not found.");
             return;
         }
-        if (sys.dbIp(command[1]) === undefined) {
+        trgtname = helpers.escapehtml(trgtname);
+        if (!sys.dbIp(command[1])) {
             helpers.starfox(src, channel, command, bots.mute, "Error 400, you can't mute " + trgtname + " because they do not exist in the database.");
             return;
         }
