@@ -576,7 +576,7 @@ usercommands = {
 
     playerinfo: function (src, channel, command) {
         var infomessage = border + "<h2>Player Info</h2><br>", player = command[1],
-            trgt, auth, imageindex, status, lastlogin, nonMatching;
+            original = player, trgt, auth, imageindex, status, lastlogin, nonMatching;
         if (!player) {
             player = sys.name(src);
         }
