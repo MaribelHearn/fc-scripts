@@ -28,7 +28,7 @@
     TOPIC_DELIMITER = " || ";
     RELAY_STATION_PROXY = "::1%0";
     IP_RETRIEVAL_URL = "http://whatismyip.akamai.com";
-    REGISTRY_URL = "http://registry.pokemon-online.eu/";
+    REGISTRY_URL = "https://registry.pokemon-online.eu/";
     REPOSITORY_URL = "https://github.com/MaribelHearn/fc-scripts";
     SCRIPT_URL = "https://raw.githubusercontent.com/MaribelHearn/fc-scripts/master/scripts/";
     PLUGIN_URL = "https://raw.githubusercontent.com/MaribelHearn/fc-scripts/master/plugins/";

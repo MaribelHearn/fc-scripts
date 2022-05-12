@@ -359,6 +359,10 @@ cusercommands = {
 
     leaveall: function (src, channel, command) {
         var channels = sys.channelsOfPlayer(src);
+        if (channels.length === 1) {
+            helpers.starfox(src, channel, command, bots.channel, "Error 400, you aren't in any other channels!");
+            return;
+        }
         for (var index in channels) {
             if (channels[index] != channel) {
                 sys.kick(src, channels[index]);

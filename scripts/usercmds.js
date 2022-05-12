@@ -299,9 +299,10 @@ usercommands = {
     ,
 
     channels: function (src, channel, command) {
-        var total = channelList.length, names = [], ids = [], descriptions = [], channelmessage, i, channelList = sys.channelIds().sort(function(a, b){
+        var channelList = sys.channelIds().sort(function(a, b){
             return a - b;
         });
+        var total = channelList.length, names = [], ids = [], descriptions = [], channelmessage, i;
         for (i in channelList) {
             ids.push(channelList[i]);
             names.push(sys.channel(ids[i]));
@@ -507,9 +508,11 @@ usercommands = {
                 registrymessage += "</tbody></table>";
             }
             registrymessage += "<br><br><b>Total Servers:</b> " + servers.length
-            + "<br><b>Total Players:</b> " + total
-            + "<br><b>Percentage on " + servername + ":</b> " + (sys.numPlayers() / total * 100).toPrecision(2) + "%"
-            + "<br><br><timestamp/><br>" + border2;
+            + "<br><b>Total Players:</b> " + total;
+            if (!sys.isServerPrivate()) {
+                registrymessage += "<br><b>Percentage on " + servername + ":</b> " + (sys.numPlayers() / total * 100).toPrecision(2) + "%";
+            }
+            registrymessage += "<br><br><timestamp/><br>" + border2;
             sys.sendHtmlMessage(src, registrymessage, channel);
         });
     }
@@ -985,7 +988,7 @@ usercommands = {
             helpers.starfox(src, channel, command, bots.command, "Error 403, invalid team number.");
             return;
         }
-        var slot, srcname = sys.name(src), gen = sys.gen(src, team), viewteammessage = border + "<h2>" + srcname + "'s Gen " + gen + " Team</h2><br><table>", index = 1, iddisplay;
+        var slot, srcname = sys.name(src), gen = sys.gen(src, team), viewteammessage = border + "<h2>" + srcname + "'s " + sys.tier(src, team) + " Team</h2><br><table>", index = 1, iddisplay;
         for (slot = 0; slot < 6; slot++) {
             var id = sys.teamPoke(src, team, slot);
             if (id === 0) {
