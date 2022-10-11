@@ -1611,8 +1611,24 @@
             }
             return;
         }
+        /**
+            --------------
+            Custom Plugins
+            --------------
+        **/
+        for (var i in plugins) {
+            if (Object.keys(OFFICIAL_PLUGINS).contains(plugins[i])) {
+                continue;
+            }
+            pluginEvent = plugins[i].replace(".js", "") + "ServerMessage";
+            if (global[pluginEvent]) {
+                // on success, prevent ~~Server~~ message
+                if (global[pluginEvent](message)) {
+                    return;
+                }
+            }
+        }
         sys.sendHtmlMain("<font color='#FFA500'><timestamp/><b>~~Server~~:</b></font> " + message);
-        return;
     }
 
     ,
