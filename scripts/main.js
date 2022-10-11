@@ -1623,7 +1623,7 @@
             pluginEvent = plugins[i].replace(".js", "") + "ServerMessage";
             if (global[pluginEvent]) {
                 // on success, prevent ~~Server~~ message
-                if (global[pluginEvent](message)) {
+                if (!global[pluginEvent](message)) {
                     return;
                 }
             }
