@@ -1517,6 +1517,20 @@
                 sys.sendHtmlAll(helpers.bot(bots.spy) + "[Server] " + message, sys.channelId(sys.dosChannel()));
             }
         }
+        /**
+            --------------
+            Custom Plugins
+            --------------
+        **/
+        for (var i in plugins) {
+            if (Object.keys(OFFICIAL_PLUGINS).contains(plugins[i])) {
+                continue;
+            }
+            pluginEvent = plugins[i].replace(".js", "") + "NewMessage";
+            if (global[pluginEvent]) {
+                global[pluginEvent](message);
+            }
+        }
     }
 
     ,
