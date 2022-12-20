@@ -2318,14 +2318,15 @@ helpers = {
     tierOf: function (pokeId) {
         var name = sys.pokemon(pokeId), tiers = sys.getFileContent("tiers.xml").split('\n'), start = 23, pokemon,
             tierId = { // + 1 compared to index
-                24: "Chuck Norris",
-                25: "*** WINNER ***",
-                26: "Uber",
-                27: "OU",
-                28: "UU"
+                25: "Chuck Norris",
+                26: "*** WINNER ***",
+                27: "Uber",
+                28: "OU",
+                29: "UU",
+                30: "RU"
             };
 
-        for (i = start; i < start + 6; i++) {
+        for (i = start; i < start + 8; i++) {
             pokemon = tiers[i].substring(tiers[i].indexOf("pokemons") + 9, tiers[i].indexOf("abilities")).trim();
             pokemon = pokemon.replace(/"/g, "").split(", ");
             if (pokemon.indexOf(name) > -1) {
