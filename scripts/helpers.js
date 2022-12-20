@@ -1982,7 +1982,10 @@ helpers = {
 
     ,
 
-    pokeImage: function (pokeNum, shine) {
+    pokeImage: function (pokeNum, shine, gen) {
+        if (gen) {
+            return (shine ? "<img src='pokemon:" + pokeNum + "&shiny=true&gen=" + gen + "'>" : "<img src='pokemon:" + pokeNum + "&gen=" + gen + "'>");
+        }
         return (shine ? "<img src='pokemon:" + pokeNum + "&shiny=true'>" : "<img src='pokemon:" + pokeNum + "'>");
     }
 

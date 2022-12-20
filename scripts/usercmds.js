@@ -789,9 +789,13 @@ usercommands = {
         weightPower = helpers.weightPower(weight);
         baseStats = sys.pokeBaseStats(pokeNum, gen);
         bst = helpers.sum(baseStats);
-        dexmessage = border + "<h2>#" + helpers.displayNum(pokeNum) + " " + pokemon + "</h2>"
-        + "<br>" + helpers.pokeImage(pokeNum)
-        + "<br><b>Type:</b> " + types.join(/img/.test(types.toString()) ? "" : " / ");
+        dexmessage = border + "<h2>#" + helpers.displayNum(pokeNum) + " " + pokemon + "</h2>";
+        if (pokeNum > 999 && pokeNum < 1200) {
+            dexmessage += "<br>" + helpers.pokeImage(pokeNum, false, 5); // gen 5 for Fundex
+        } else {
+            dexmessage += "<br>" + helpers.pokeImage(pokeNum, false);
+        }
+        dexmessage += "<br><b>Type:</b> " + types.join(/img/.test(types.toString()) ? "" : " / ");
         if (pokeNum > 999 && pokeNum < 1200) {
             dexmessage += "<br><b>Tier:</b> " + helpers.tierOf(pokeNum);
         }
