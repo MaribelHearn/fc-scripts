@@ -766,7 +766,7 @@ usercommands = {
             return;
         }
         pokeNum = (isNaN(pokemon) ? sys.pokeNum(pokemon) : pokemon);
-        gen = (pokeNum > 999 && pokeNum < 1200 ? 5 : 7);
+        gen = (pokeNum > 999 && pokeNum < 1200 || pokeNum > 66536 ? 5 : 7);
         pokemon = sys.pokemon(pokeNum);
         type1 = sys.pokeType1(pokeNum, gen);
         type2 = sys.pokeType2(pokeNum, gen);
@@ -790,13 +790,13 @@ usercommands = {
         baseStats = sys.pokeBaseStats(pokeNum, gen);
         bst = helpers.sum(baseStats);
         dexmessage = border + "<h2>#" + helpers.displayNum(pokeNum) + " " + pokemon + "</h2>";
-        if (pokeNum > 999 && pokeNum < 1200) {
-            dexmessage += "<br>" + helpers.pokeImage(pokeNum, false, 5); // gen 5 for Fundex
+        if (pokeNum > 999 && pokeNum < 1200 || pokeNum > 66536) {
+            dexmessage += "<br>" + helpers.pokeImage(pokeNum, false, gen); // use gen 5 sprites for Fundex
         } else {
             dexmessage += "<br>" + helpers.pokeImage(pokeNum, false);
         }
         dexmessage += "<br><b>Type:</b> " + types.join(/img/.test(types.toString()) ? "" : " / ");
-        if (pokeNum > 999 && pokeNum < 1200) {
+        if (pokeNum > 999 && pokeNum < 1200 || pokeNum > 66536) {
             dexmessage += "<br><b>Tier:</b> " + helpers.tierOf(pokeNum);
         }
         dexmessage += "<br><b>" + (abilities.length == 1 ? "Ability" : "Abilities") + ":</b> " + abilities.join(" / ")
