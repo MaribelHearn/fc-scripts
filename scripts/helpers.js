@@ -2263,7 +2263,7 @@ helpers = {
             for (var i = 0; i < data.length; i++) {
                 var index = data[i].indexOf(' ');
                 var id = data[i].substr(0, index);
-                var movepool = data[i].substr(index + 1).split(' ');
+                var movepool = data[i].substr(index + 1).trim().split(' ');
                 for (var j in movepool) {
                     movepool[j] = sys.move(movepool[j]);
                 }
