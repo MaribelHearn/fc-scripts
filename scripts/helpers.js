@@ -2258,14 +2258,31 @@ helpers = {
     ,
 
     movepool: function (pokeId) {
+        var index, id, movepool;
         if (Object.keys(movepoolList).length === 0) {
-            var data = sys.read("db/pokes/" + (pokeId > 999 ? "5G" : "6G") + "/all_moves.txt").split('\n');
+            var data = sys.read("db/pokes/6G/all_moves.txt").split('\n');
             for (var i = 0; i < data.length; i++) {
-                var index = data[i].indexOf(' ');
-                var id = data[i].substr(0, index);
-                var movepool = data[i].substr(index + 1).trim().split(' ');
+                index = data[i].indexOf(' ');
+                id = data[i].substr(0, index);
+                movepool = data[i].substr(index + 1).trim().split(' ');
                 for (var j in movepool) {
                     movepool[j] = sys.move(movepool[j]);
+                }
+                movepoolList[id] = movepool;
+            }
+        }
+        var isFundex = (pokeId > 999 && pokeId < 1200 || pokeId > 66536);
+        if (isFundex && Object.keys(movepoolList).length <= 744) {
+            var fundexData = sys.read("db/pokes/5G/all_moves.txt").split('\n');
+            for (var k = 0; k < fundexData.length; k++) {
+                index = fundexData[k].indexOf(' ');
+                id = fundexData[k].substr(0, index);
+                if (parseInt(id.split(':')[0]) < 1000) {
+                    continue;
+                }
+                movepool = fundexData[k].substr(index + 1).trim().split(' ');
+                for (var l in movepool) {
+                    movepool[l] = sys.move(movepool[l]);
                 }
                 movepoolList[id] = movepool;
             }
