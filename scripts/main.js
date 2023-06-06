@@ -63,6 +63,43 @@
     MAX_IMAGE_HEIGHT = 350;
     MAX_POKEMON = 803; // Marshadow is 802
     /**
+        ----------------
+        Require Polyfill
+        ----------------
+    **/
+    var require_cache = typeof require != 'undefined' ? require.cache : {};
+    require = function require(module_name, retry) {
+        if (require.cache[module_name]) {
+            return require.cache[module_name];
+        }
+        var module = {};
+        module.module = module;
+        module.exports = {};
+        module.source = module_name;
+        with (module) {
+            var content = sys.getFileContent("scripts/" + module_name);
+            if (content) {
+                try {
+                        eval(sys.getFileContent("scripts/" + module_name));
+                        sys.writeToFile("scripts/" + module_name + ".bak", sys.getFileContent("scripts/" + module_name));
+                } catch(e) {
+                    if (staffchannel) {
+                        sys.sendAll("Error loading module " + module_name + ": " + e + (e.lineNumber ? " on line: " + e.lineNumber : ""), staffchannel);
+                    } else {
+                        sys.sendAll("Error loading module " + module_name + ": " + e);
+                    }
+                    sys.writeToFile("scripts/" + module_name, sys.getFileContent("scripts/" + module_name + ".bak"));
+                    if (!retry) {
+                        require(module_name, true); //prevent loops
+                    }
+                }
+            }
+        }
+        require.cache[module_name] = module.exports;
+        return module.exports;
+    };
+    require.cache = require_cache;
+    /**
         -------------------------
         Additional Object Methods
         -------------------------
