@@ -8,7 +8,7 @@
     ----------------------------------------------
 */
 
-modcommands = {
+module.exports = {
     modcommands: function (src, channel, command) {
         var commandsmessage = border
         + "<h2>Moderator Commands</h2>"

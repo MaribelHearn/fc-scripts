@@ -8,7 +8,7 @@
     ----------------------------------------------
 */
 
-cadmincommands = {
+module.exports = {
     cadmincommands: function (src, channel, command) {
         var commandsmessage = border
         + "<h2>Channel Administrator Commands</h2>"

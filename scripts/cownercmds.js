@@ -8,7 +8,7 @@
     ----------------------------------------------
 */
 
-cownercommands = {
+module.exports = {
     cownercommands: function (src, channel, command) {
         var commandsmessage = border
         + "<h2>Channel Owner Commands</h2>"

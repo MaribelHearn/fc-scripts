@@ -12,7 +12,7 @@
 */
 rr = sys.fileExists(DATA_FOLDER + "rr.txt") ? helpers.readObject("rr") : {};
 
-rrcommands = {
+module.exports = {
     rrcommands: function (src, channel, command) {
         var commandsMessage = border;
         commandsMessage += "<h2>Russian Roulette Commands</h2>"

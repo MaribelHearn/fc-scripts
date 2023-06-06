@@ -8,7 +8,7 @@
     ----------------------------------------------
 */
 
-usercommands = {
+module.exports = {
     /**
         -------------
         Command Lists

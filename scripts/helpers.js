@@ -12,7 +12,7 @@
     ----------------------------------------------
 */
 
-helpers = {
+module.exports = {
     defaultValue: function (dataFile, type) {
         var values = {
             "botcolor": "#318739",

@@ -8,7 +8,7 @@
     ----------------------------------------------
 */
 
-admincommands = {
+module.exports = {
     admincommands: function (src, channel, command) {
         var commandsmessage = border
         + "<h2>Administrator Commands</h2>"

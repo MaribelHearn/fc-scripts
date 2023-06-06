@@ -8,7 +8,7 @@
     ----------------------------------------------
 */
 
-cusercommands = {
+module.exports = {
     cusercommands: function (src, channel, command) {
         var commandsmessage = border
         + "<h2>Channel User Commands</h2>"

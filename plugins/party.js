@@ -15,7 +15,7 @@ PARTY_MODES = ["joke", "nightclub", "desu", "rainbow", "nyan", "dennis", "cirno"
 partyMode = sys.fexists(DATA_FOLDER + "partymode.txt") ? helpers.readData("partymode") : "none";
 helpers.setVariable("partyNyan", 0);
 
-partycommands = {
+module.exports = {
     partycommands: function (src, channel, command) {
         var commandsmessage = border
         + "<h2>Party Commands</h2>"

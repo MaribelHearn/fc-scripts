@@ -9,7 +9,7 @@
 */
 bigtexts = sys.fexists(DATA_FOLDER + "bigtexts.txt") ? helpers.readObject("bigtexts") : {};
 
-funcommands = {
+module.exports = {
     funcommands: function (src, channel, command) {
         var commandsmessage = border
         + "<h2>Fun Commands</h2>"

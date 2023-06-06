@@ -48,7 +48,7 @@ helpers.setVariable("currentWildShiny", false);
 helpers.setVariable("baseCatchRate", 0);
 helpers.setVariable("globalAttempts", 0);
 
-safaricommands = {
+module.exports = {
     safaricommands: function (src, channel, command) {
         var commandsmessage = border
         + "<h2>Safari Commands</h2>"

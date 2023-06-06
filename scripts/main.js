@@ -52,10 +52,54 @@
     DASH = /\u058A|\u05BE|\u1400|\u1806|\u2010-\u2015|\u2053|\u207B|\u208B|\u2212|\u2E17|\u2E1A|\u301C|\u3030|\u30A0|[\uFE31-\uFE32]|\uFE58|\uFE63|\uFF0D/;
     CYRILLIC = /\u0455|\u04ae|\u04c0|\u04cf|\u050c|\u051a|\u051b|\u051c|\u051d|\u0405|\u0408|\u0430|\u0410|\u0412|\u0435|\u0415|\u041c|\u041d|\u043e|\u041e|\u0440|\u0420|\u0441|\u0421|\u0422|\u0443|\u0445|\u0425|\u0456|\u0406/;
     AUTH_NAMES = ["User", "Moderator", "Administrator", "Owner", "Invisible Owner"];
-    SCRIPT_MODULES = ["usercmds.js", "modcmds.js", "admincmds.js", "ownercmds.js", "cusercmds.js",
-    "cmodcmds.js", "cadmincmds.js", "cownercmds.js", "helpers.js", "handler.js", "tierchecks.js", "base64.js"];
-    OFFICIAL_PLUGINS = {"funcmds.js": "Fun Commands", "party.js": "Party", "roulette.js": "Roulette", "rr.js": "Russian Roulette",
-    "safari.js": "Safari", "mafia.js": "Mafia", "mafiastats.js": "Mafia Stats", "mafiachecker.js": "Mafia Checker"};
+    SCRIPT_MODULES = {
+        usercommands: "usercmds.js",
+        modcommands: "modcmds.js",
+        admincommands: "admincmds.js",
+        ownercommands: "ownercmds.js",
+        cusercommands: "cusercmds.js",
+        cmodcommands: "cmodcmds.js",
+        cadmincommands: "cadmincmds.js",
+        cownercommands: "cownercmds.js",
+        helpers: "helpers.js",
+        handler: "handler.js",
+        tierchecks: "tierchecks.js",
+        base64: "base64.js"
+    };
+    OFFICIAL_PLUGINS = {
+        funcommands: {
+            name: "Fun Commands",
+            path: "funcmds.js"
+        },
+        partycommands: {
+            name: "Party",
+            path: "party.js"
+        },
+        roulettecommands: {
+            name: "Roulette",
+            path: "roulette.js"
+        },
+        rrcommands: {
+            name: "Russian Roulette",
+            path: "rr.js"
+        },
+        safaricommands: {
+            name: "Safari",
+            path: "safari.js"
+        },
+        mafia: {
+            name: "Mafia",
+            path: "mafia.js"
+        },
+        mafiastats: {
+            name: "Mafia Stats",
+            path: "mafiastats.js"
+        },
+        mafiachecker: {
+            name: "Mafia Checker",
+            path: "mafiachecker.js"
+        }
+    };
     SCRIPTS_FOLDER = "scripts/";
     PLUGINS_FOLDER = "plugins/";
     DATA_FOLDER = "data/";
@@ -68,30 +112,31 @@
         ----------------
     **/
     var require_cache = typeof require != "undefined" ? require.cache : {};
-    require = function require(module_name, retry) {
-        if (require.cache[module_name]) {
-            return require.cache[module_name];
+    require = function require(moduleName, retry, plugin) {
+        var directory = plugin ? "plugins/" : "scripts/";
+        if (require.cache[moduleName]) {
+            return require.cache[moduleName];
         }
         var module = {};
         module.module = module;
         module.exports = {};
-        module.source = module_name;
+        module.source = moduleName;
         with (module) {
-            var content = sys.getFileContent("scripts/" + module_name);
+            var content = sys.getFileContent(directory + moduleName);
             if (content) {
                 try {
-                        eval(sys.getFileContent("scripts/" + module_name));
-                        sys.writeToFile("scripts/" + module_name + ".bak", sys.getFileContent("scripts/" + module_name));
+                    eval(sys.getFileContent(directory + moduleName));
+                    sys.writeToFile(directory + moduleName + ".bak", sys.getFileContent(directory + moduleName));
                 } catch (e) {
-                    print("An error occurred in module " + module_name + ": " + e);
-                    sys.writeToFile("scripts/" + module_name, sys.getFileContent("scripts/" + module_name + ".bak"));
+                    print("An error occurred in module " + moduleName + ": " + e);
+                    sys.writeToFile(directory + moduleName, sys.getFileContent(directory + moduleName + ".bak"));
                     if (!retry) {
-                        require(module_name, true); //prevent loops
+                        require(moduleName, true); // prevent loops
                     }
                 }
             }
         }
-        require.cache[module_name] = module.exports;
+        require.cache[moduleName] = module.exports;
         return module.exports;
     };
     require.cache = require_cache;
@@ -134,39 +179,33 @@
         Load Modules and Plugins
         ------------------------
     **/
-    moduleLoaded = {};
-    for (var i in SCRIPT_MODULES) {
-        if (!moduleLoaded[SCRIPT_MODULES[i]]) {
-            try {
-                sys.exec(SCRIPTS_FOLDER + SCRIPT_MODULES[i]);
-                print("Loaded module " + SCRIPT_MODULES[i]);
-                moduleLoaded[SCRIPT_MODULES[i]] = true;
-            } catch (e) {
-                print("An error occurred in module " + SCRIPT_MODULES[i] + ": " + e);
-            }
-        }
+    for (var module in SCRIPT_MODULES) {
+        global[module] = require(SCRIPT_MODULES[module]);
     }
-    plugins = [];
+    plugins = sys.filesForDirectory(PLUGINS_FOLDER);
     channelPlugins = [];
     pluginLoaded = {"funcmds.js": false, "party.js": false, "roulette.js": false, "rr.js": false,
     "safari.js": false, "mafia.js": false, "mafiastats.js": false, "mafiachecker.js": false};
     unofficialPlugins = false;
+    for (var plugin in OFFICIAL_PLUGINS) {
+        var path = OFFICIAL_PLUGINS[plugin].path;
+        print(path);
+        print(sys.fexists("plugins/" + path));
+        if (sys.fexists("plugins/" + path)) {
+            global[plugin] = require(path, false, true); // retry = false, plugin = true
+            pluginLoaded[path] = true;
+            if (!["funcmds.js", "mafiastats.js", "mafiachecker.js"].contains(path)) {
+                channelPlugins.push(path.replace(".js", ""));
+            }
+        }
+    }
+    // unofficial plugins
     if (sys.dirsForDirectory(sys.cwd()).contains("plugins")) {
-        plugins = sys.filesForDirectory(PLUGINS_FOLDER);
-        for (i in plugins) {
-            try {
-                sys.exec(PLUGINS_FOLDER + plugins[i]);
-                print("Loaded plugin " + plugins[i]);
-                if (Object.keys(OFFICIAL_PLUGINS).contains(plugins[i])) {
-                    pluginLoaded[plugins[i]] = true;
-                    if (!["funcmds.js", "mafiastats.js", "mafiachecker.js"].contains(plugins[i])) {
-                        channelPlugins.push(plugins[i].replace(".js", ""));
-                    }
-                } else {
-                    unofficialPlugins = true;
-                }
-            } catch (e) {
-                print("An error occurred in plugin " + plugins[i] + ": " + e);
+        var numberOfPlugins = plugins.length;
+        for (var i = 0; i < numberOfPlugins; i++) {
+            if (!pluginLoaded[plugins[i]] && plugins[i].split('.')[1] == "js") {
+                require(plugins[i], false, true);
+                unofficialPlugins = true;
             }
         }
     }

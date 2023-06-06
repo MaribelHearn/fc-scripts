@@ -20,7 +20,7 @@ helpers.setVariable("rouletteTime", sys.rand(ROULETTE_WAIT_MIN, ROULETTE_WAIT_MA
 helpers.setVariable("rouletteEvent", "");
 helpers.setVariable("rouletteStep", 0);
 
-roulettecommands = {
+module.exports = {
     roulettecommands: function (src, channel, command) {
         var commandsmessage = border;
         commandsmessage += "<h2>Roulette Commands</h2>"

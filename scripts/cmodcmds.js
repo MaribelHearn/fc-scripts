@@ -8,7 +8,7 @@
     ----------------------------------------------
 */
 
-cmodcommands = {
+module.exports = {
     cmodcommands: function (src, channel, command) {
         var commandsmessage = border
         + "<h2>Channel Moderator Commands</h2>"
