@@ -67,7 +67,7 @@
         Require Polyfill
         ----------------
     **/
-    var require_cache = typeof require != 'undefined' ? require.cache : {};
+    var require_cache = typeof require != "undefined" ? require.cache : {};
     require = function require(module_name, retry) {
         if (require.cache[module_name]) {
             return require.cache[module_name];
@@ -82,12 +82,8 @@
                 try {
                         eval(sys.getFileContent("scripts/" + module_name));
                         sys.writeToFile("scripts/" + module_name + ".bak", sys.getFileContent("scripts/" + module_name));
-                } catch(e) {
-                    if (staffchannel) {
-                        sys.sendAll("Error loading module " + module_name + ": " + e + (e.lineNumber ? " on line: " + e.lineNumber : ""), staffchannel);
-                    } else {
-                        sys.sendAll("Error loading module " + module_name + ": " + e);
-                    }
+                } catch (e) {
+                    print("An error occurred in module " + module_name + ": " + e);
                     sys.writeToFile("scripts/" + module_name, sys.getFileContent("scripts/" + module_name + ".bak"));
                     if (!retry) {
                         require(module_name, true); //prevent loops
