@@ -15,7 +15,7 @@ cusercommands = {
         + "<br>"
         + "<b>" + helpers.user("/registerthis") + "</b>: registers the current channel. Also /register.<br>"
         + "<b>" + helpers.user("/channelinfo ") + helpers.arg("channel") + "</b>: displays information about <b>channel</b>. <b>channel</b> must be online except if it's registered." +
-        " If <b>channel</b> is not specified, displays the current channelo info. Also /cinfo.<br>"
+        " If <b>channel</b> is not specified, displays the current channel info. Also /cinfo.<br>"
         + "<b>" + helpers.user("/channelonline") + "</b>: shows the users who are currently online on this channel in a neat table. Also /conline.<br>"
         + "<b>" + helpers.user("/channelauth") + "</b>: displays the current channel's auth members in a neat table. Also /channelauths, /cauth and /cauths.<br>"
         + "<b>" + helpers.user("/channelrules") + "</b>: displays the current channel's rules. Note that these rules are not official server rules, as they are created by users. Also /crules.<br>"
