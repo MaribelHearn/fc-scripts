@@ -2336,7 +2336,7 @@ module.exports = {
 
     // Chuck Norris tier is at index 23
     tierOf: function (pokeId) {
-        var name = sys.pokemon(pokeId), tiers = sys.getFileContent("tiers.xml").split('\n'), start = 23, pokemon,
+        var name = sys.pokemon(pokeId), tiers = sys.read("tiers.xml").split('\n'), start = 23, pokemon,
             tierId = { // + 1 compared to index
                 25: "Chuck Norris",
                 26: "*** WINNER ***",

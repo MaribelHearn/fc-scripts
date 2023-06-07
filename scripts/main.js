@@ -124,14 +124,14 @@
         with (module) {
             var path = directory + moduleName;
             var backup = path + ".bak";
-            var content = sys.getFileContent(path);
+            var content = sys.read(path);
             if (content) {
                 try {
-                    eval(sys.getFileContent(path));
-                    sys.writeToFile(backup, sys.getFileContent(path));
+                    eval(sys.read(path));
+                    sys.writeToFile(backup, sys.read(path));
                 } catch (e) {
                     print("An error occurred in module " + moduleName + ": " + e);
-                    sys.writeToFile(path, sys.getFileContent(backup));
+                    sys.writeToFile(path, sys.read(backup));
                     if (!retry) {
                         require(moduleName, true); // prevent loops
                     }
