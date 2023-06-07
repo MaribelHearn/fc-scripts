@@ -10,10 +10,10 @@
     in the Party channel.
     ----------------------------------------------
 */
-PARTY_MODES = ["joke", "nightclub", "desu", "rainbow", "nyan", "dennis", "cirno",
-"sparta", "luigi", "roflcopter", "derp", "asdf", "leet", "morse", "reverse"];
 partyMode = sys.fexists(DATA_FOLDER + "partymode.txt") ? helpers.readData("partymode") : "none";
-helpers.setVariable("partyNyan", 0);
+
+var PARTY_MODES = ["joke", "nightclub", "desu", "rainbow", "nyan", "dennis", "cirno", "sparta", "luigi", "roflcopter", "derp", "asdf", "leet", "morse", "reverse"];
+var partyNyan = 0;
 
 module.exports = {
     partycommands: function (src, channel, command) {

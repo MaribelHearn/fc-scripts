@@ -189,8 +189,6 @@
     unofficialPlugins = false;
     for (var plugin in OFFICIAL_PLUGINS) {
         var path = OFFICIAL_PLUGINS[plugin].path;
-        print(path);
-        print(sys.fexists("plugins/" + path));
         if (sys.fexists("plugins/" + path)) {
             global[plugin] = require(path, false, true); // retry = false, plugin = true
             pluginLoaded[path] = true;

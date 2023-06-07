@@ -10,7 +10,7 @@
     in the Russian Roulette channel.
     ----------------------------------------------
 */
-rr = sys.fileExists(DATA_FOLDER + "rr.txt") ? helpers.readObject("rr") : {};
+var rr = sys.fileExists(DATA_FOLDER + "rr.txt") ? helpers.readObject("rr") : {};
 
 module.exports = {
     rrcommands: function (src, channel, command) {

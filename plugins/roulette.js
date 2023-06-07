@@ -9,16 +9,16 @@
     in the Roulette channel.
     ----------------------------------------------
 */
-ROULETTE_WAIT_MIN = 90;
-ROULETTE_WAIT_MAX = 271;
-ROULETTE_EVENT_MIN = 66;
-ROULETTE_EVENT_MAX = 135;
-ROULETTE_FEST_MIN = 22;
-ROULETTE_FEST_MAX = 45;
-roulette = sys.fexists(DATA_FOLDER + "roulette.txt") ? helpers.readObject("roulette") : {};
-helpers.setVariable("rouletteTime", sys.rand(ROULETTE_WAIT_MIN, ROULETTE_WAIT_MAX));
-helpers.setVariable("rouletteEvent", "");
-helpers.setVariable("rouletteStep", 0);
+var ROULETTE_WAIT_MIN = 90;
+var ROULETTE_WAIT_MAX = 271;
+var ROULETTE_EVENT_MIN = 66;
+var ROULETTE_EVENT_MAX = 135;
+var ROULETTE_FEST_MIN = 22;
+var ROULETTE_FEST_MAX = 45;
+var rouletteTime = sys.rand(ROULETTE_WAIT_MIN, ROULETTE_WAIT_MAX);
+var rouletteEvent = "";
+var rouletteStep = 0;
+var roulette = sys.fexists(DATA_FOLDER + "roulette.txt") ? helpers.readObject("roulette") : {};
 
 module.exports = {
     roulettecommands: function (src, channel, command) {

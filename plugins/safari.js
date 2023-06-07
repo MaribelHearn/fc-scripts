@@ -10,21 +10,21 @@
     many Pokemon as possible.
     ----------------------------------------------
 */
-CATCH_RATES = [0, 45, 45, 45, 45, 45, 45, 45, 45, 45, 255, 120, 45, 255, 120, 45, 255, 120, 45, 255, 127, 255, 90, 255, 90,
+var CATCH_RATES = [0, 45, 45, 45, 45, 45, 45, 45, 45, 45, 255, 120, 45, 255, 120, 45, 255, 120, 45, 255, 127, 255, 90, 255, 90,
 190, 75, 255, 90, 235, 120, 45, 235, 120, 45, 150, 25, 190, 75, 170, 50, 255, 90, 255, 120, 45, 190, 75, 190, 75, 255, 50,
 255, 90, 190, 75, 190, 75, 190, 75, 255, 120, 45, 200, 100, 50, 180, 90, 45, 255, 120, 45, 190, 60, 255, 120, 45, 190, 60,
 190, 75, 190, 60, 45, 190, 45, 190, 75, 190, 75, 190, 60, 190, 90, 45, 45, 190, 75, 225, 60, 190, 60, 90, 45, 190, 75, 45,
 45, 45, 190, 60, 120, 60, 30, 45, 45, 225, 75, 225, 60, 225, 60, 45, 45, 45, 45, 45, 45, 45, 255, 45, 45, 35, 45, 45, 45,
 45, 45, 45, 45, 45, 45, 45, 25, 3, 3, 3, 45, 45, 45, 3, 45];
 
-STARTER_POKEMON = ["Bulbasaur", "Charmander", "Squirtle", "Chikorita", "Cyndaquil", "Totodile", "Treecko", "Torchic", "Mudkip",
+var STARTER_POKEMON = ["Bulbasaur", "Charmander", "Squirtle", "Chikorita", "Cyndaquil", "Totodile", "Treecko", "Torchic", "Mudkip",
 "Turtwig", "Chimchar", "Piplup", "Snivy", "Tepig", "Oshawott", "Chespin", "Fennekin", "Froakie", "Pikachu", "Eevee"];
 
-POKE_BALLS = ["poke", "great", "ultra", "master", "repeat", "timer"];
+var POKE_BALLS = ["poke", "great", "ultra", "master", "repeat", "timer"];
 
-ITEMS = ["poke", "great", "ultra", "master", "repeat", "timer"];
+var ITEMS = ["poke", "great", "ultra", "master", "repeat", "timer"];
 
-RATE_MULTIPLIERS = {
+var RATE_MULTIPLIERS = {
     "poke": 1,
     "great": 1.5,
     "ultra": 2,
@@ -33,7 +33,7 @@ RATE_MULTIPLIERS = {
     "master": Infinity
 };
 
-POKEMART_PRICES = {
+var POKEMART_PRICES = {
     "poke": 200,
     "great": 600,
     "ultra": 1200,
