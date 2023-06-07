@@ -897,6 +897,7 @@
             "'>Channel " + (layout == "new" ? "Topic" : "Description") +
             ":</font></b> " + regchannels[lower].topic.join(TOPIC_DELIMITER), channel);
         } else {
+            var partyMode = partycommands.getPartyMode();
             if (require.cache.hasOwnProperty("party.js") && channel == partychannel && partyMode != "none") {
                 sys.sendHtmlMessage(src, "<b><font color='" + (layout == "new" ? channelTopicColor : "indigo") +
                 "'>Channel " + (layout == "new" ? "Topic" : "Description") +
@@ -960,6 +961,7 @@
             cauth = (helpers.cauth(lower, channel) >= 1 && sys.dbAuth(lower) < 4 ? helpers.cauthname(lower, channel) + " " : ""),
             channelname = sys.channel(channel), id = sys.uniqueId(src) ? sys.uniqueId(src).id : "none";
         if (require.cache.hasOwnProperty("party.js")) {
+            var partyMode = partycommands.getPartyMode();
             if (channel == partychannel && partyMode == "nightclub") {
                 sys.sendHtmlWatch(helpers.bot(bots.spy) + "[Server] <b><font color='" + helpers.color(src) + "'>" + name + "</font></b> has left the channel " + helpers.channelLink(channelname) + ".");
                 return;
@@ -1324,9 +1326,10 @@
             -----
         **/
         if (require.cache.hasOwnProperty("party.js")) {
+            var partyMode = partycommands.getPartyMode();
             if (channel == partychannel && partyMode != "none") {
                 sys.stopEvent();
-                partyBeforeChat(src, message, channel);
+                partycommands.beforeChatMessage(src, message, channel);
                 return;
             }
         }
@@ -1348,9 +1351,6 @@
             --------------
         **/
         for (var i in plugins) {
-            if (Object.keys(OFFICIAL_PLUGINS).contains(plugins[i])) {
-                continue;
-            }
             pluginEvent = plugins[i].replace(".js", "") + "Commands";
             command = message.replace(COMMAND_SYMBOL, "").replace(' ', DELIMITER).split(' ')[0];
             if (message.charAt(0) == COMMAND_SYMBOL && message.charAt(1) != COMMAND_SYMBOL && global[pluginEvent] && global[pluginEvent].hasOwnProperty(command)) {
