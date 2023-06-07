@@ -7,9 +7,23 @@
     fun commands. Can be run by any user.
     ----------------------------------------------
 */
-bigtexts = sys.fexists(DATA_FOLDER + "bigtexts.txt") ? helpers.readObject("bigtexts") : {};
+var bigtexts = sys.fexists(DATA_FOLDER + "bigtexts.txt") ? helpers.readObject("bigtexts") : {};
 
 module.exports = {
+    getBigtexts: function () {
+        return bigtexts;
+    },
+
+    addBigtext: function (name, text, title, bot, color, size) {
+        bigtexts[name] = ["bigtext", text, title, bot, color, size];
+        helpers.saveData("bigtexts");
+    },
+
+    removeBigtext: function (name) {
+        delete bigtexts[name];
+        helpers.saveData("bigtexts");
+    },
+
     commands: {
         funcommands: function (src, channel, command) {
             var commandsmessage = border

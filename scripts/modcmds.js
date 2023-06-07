@@ -1239,7 +1239,7 @@ module.exports = {
             helpers.starfox(src, channel, command, bots.command, "Error 400, this command is only usable with the fun commands plugin.");
             return;
         }
-        var lower = sys.name(src).toLowerCase(), auth = sys.auth(src), bigtextstemp = {}, commandsmessage, i;
+        var bigtexts = funcommands.getBigtexts(), lower = sys.name(src).toLowerCase(), auth = sys.auth(src), bigtextstemp = {}, commandsmessage, i;
         for (i in bigtexts) {
             bigtextstemp[i] = bigtexts[i];
         }
@@ -1292,28 +1292,26 @@ module.exports = {
             helpers.starfox(src, channel, command, bots.command, "Error 403, the title may not be the same as one of an existing command.");
             return;
         }
-        bigtexts[helpers.removespaces(lower)] = ["bigtext", text, title, bot, color, size];
-        helpers.saveData("bigtexts");
         sys.sendHtmlAll(helpers.bot(bots.command) + name + " has added a custom bigtext command called '" + title + "'!", channel);
+        funcommands.addBigtext(helpers.removespaces(lower), text, title, bot, color, size);
     }
 
     ,
 
     removecommand: function (src, channel, command) {
-        var name = sys.name(src), lower, title;
+        var name = sys.name(src), lower;
         if (!command[1]) {
             helpers.starfox(src, channel, command, bots.command, "Error 404, name not found.");
             return;
         }
-        lower = command[1].toLowerCase();
+        lower = helpers.removespaces(command[1].toLowerCase());
+        var bigtexts = funcommands.getBigtexts();
         if (!helpers.isInArray(lower, Object.keys(bigtexts))) {
             helpers.starfox(src, channel, command, bots.command, "Error 400, that command doesn't exist.");
             return;
         }
-        title = bigtexts[lower][2];
-        sys.sendHtmlAll(helpers.bot(bots.command) + name + " has removed the custom bigtext command '" + title + "'!", channel);
-        delete bigtexts[lower];
-        helpers.saveData("bigtexts");
+        sys.sendHtmlAll(helpers.bot(bots.command) + name + " has removed the custom bigtext command '" + bigtexts[lower][2] + "'!", channel);
+        funcommands.removeBigtext(lower);
     }
 
     ,

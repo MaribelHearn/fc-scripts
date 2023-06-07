@@ -61,6 +61,7 @@ channelUserCommand = function (src, channel, command, lower, name, auth, cauth, 
 };
 
 bigtextCommand = function (src, channel, command, lower, name, auth, cauth, message) {
+    var bigtexts = funcommands.getBigtexts();
     if (require.cache.hasOwnProperty("funcmds.js") && bigtexts[lower] !== undefined) {
         if (mutedOrSilenced(src, channel, command, name, auth)) {
             return 1;
