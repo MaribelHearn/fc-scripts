@@ -11,7 +11,7 @@
     ----------------------------------------------
 */
 var PARTY_MODES = ["joke", "nightclub", "desu", "rainbow", "nyan", "dennis", "cirno", "sparta", "luigi", "roflcopter", "derp", "asdf", "leet", "morse", "reverse"];
-var partyMode = sys.fexists(DATA_FOLDER + "partymode.txt") ? helpers.readData("partymode") : "none";
+var partyMode = sys.fexists(DATA_FOLDER + "partymode.txt") ? helpers.readData("partyMode") : "none";
 var partyNyan = 0;
 
 module.exports = {
@@ -169,7 +169,7 @@ module.exports = {
                 }
                 sys.sendHtmlAll(border + "<br>" + helpers.bot(bots.party) + "<b>" + helpers.user(name) + " has turned " + helpers.arg(mode) + " off.</b><br>" + border2, channel);
                 partyMode = "none";
-                helpers.saveData("partyMode");
+                sys.write(DATA_FOLDER + "partyMode.txt", partyMode);
                 if (regchannels[channelname]) {
                     regchannels[channelname].topic = ["Welcome to " + sys.channel(partychannel) + "!"];
                     helpers.saveData("regchannels");
@@ -179,7 +179,7 @@ module.exports = {
             for (var index in PARTY_MODES) {
                 if (PARTY_MODES[index] == command[1].toLowerCase()) {
                     partyMode = PARTY_MODES[index];
-                    helpers.saveData("partyMode");
+                    sys.write(DATA_FOLDER + "partyMode.txt", partyMode);
                     mode = helpers.cap(PARTY_MODES[index]) + " Mode";
                     if (oldmode == "nightclub") {
                         sys.sendHtmlAll(":<div>", channel);

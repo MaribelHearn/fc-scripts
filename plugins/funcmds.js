@@ -16,12 +16,12 @@ module.exports = {
 
     addBigtext: function (name, text, title, bot, color, size) {
         bigtexts[name] = ["bigtext", text, title, bot, color, size];
-        helpers.saveData("bigtexts");
+        sys.write(DATA_FOLDER + "bigtexts.txt", JSON.stringify(bigtexts));
     },
 
     removeBigtext: function (name) {
         delete bigtexts[name];
-        helpers.saveData("bigtexts");
+        sys.write(DATA_FOLDER + "bigtexts.txt", JSON.stringify(bigtexts));
     },
 
     commands: {

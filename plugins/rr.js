@@ -45,7 +45,7 @@ module.exports = {
                 return;
             }
             rr[lower].bullets++;
-            helpers.saveData("rr");
+            sys.write(DATA_FOLDER + "rr.txt", JSON.stringify(rr));
             sys.sendHtmlAll(helpers.bot(bots.rr) + name + " has loaded a bullet into their revolver!", rrchannel);
         },
     
@@ -60,7 +60,7 @@ module.exports = {
                 return;
             }
             rr[lower].bullets--;
-            helpers.saveData("rr");
+            sys.write(DATA_FOLDER + "rr.txt", JSON.stringify(rr));
             sys.sendHtmlAll(helpers.bot(bots.rr) + name + " has unloaded a bullet from their revolver!", rrchannel);
         },
     
@@ -89,7 +89,7 @@ module.exports = {
                 }
                 sys.sendHtmlAll(helpers.bot(bots.rr) + name + " has spun the cylinder and pulled the trigger... nothing happened! Whew!", rrchannel);
             }
-            helpers.saveData("rr");
+            sys.write(DATA_FOLDER + "rr.txt", JSON.stringify(rr));
         },
     
         bullets: function (src, channel, command) {
@@ -130,7 +130,7 @@ module.exports = {
                 return;
             }
             delete rr[lower];
-            helpers.saveData("rr");
+            sys.write(DATA_FOLDER + "rr.txt", JSON.stringify(rr));
             sys.sendHtmlMessage(src, helpers.bot(bots.rr) + "Your Russian Roulette data has been reset.", rrchannel);
         }
     }
