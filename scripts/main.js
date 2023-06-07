@@ -122,16 +122,22 @@
         module.exports = {};
         module.source = moduleName;
         with (module) {
-            var content = sys.getFileContent(directory + moduleName);
+            var path = directory + moduleName;
+            var backup = path + ".bak";
+            var content = sys.getFileContent(path);
             if (content) {
                 try {
-                    eval(sys.getFileContent(directory + moduleName));
-                    sys.writeToFile(directory + moduleName + ".bak", sys.getFileContent(directory + moduleName));
+                    eval(sys.getFileContent());
+                    sys.writeToFile(backup, sys.getFileContent(path));
                 } catch (e) {
                     print("An error occurred in module " + moduleName + ": " + e);
-                    sys.writeToFile(directory + moduleName, sys.getFileContent(directory + moduleName + ".bak"));
+                    sys.writeToFile(path, sys.getFileContent(backup));
                     if (!retry) {
                         require(moduleName, true); // prevent loops
+                    }
+                } finally {
+                    if (sys.fexists(backup)) {
+                        sys.rm(backup);
                     }
                 }
             }
