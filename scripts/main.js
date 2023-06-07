@@ -127,7 +127,7 @@
             var content = sys.getFileContent(path);
             if (content) {
                 try {
-                    eval(sys.getFileContent());
+                    eval(sys.getFileContent(path));
                     sys.writeToFile(backup, sys.getFileContent(path));
                 } catch (e) {
                     print("An error occurred in module " + moduleName + ": " + e);

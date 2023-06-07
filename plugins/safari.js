@@ -42,7 +42,7 @@ var POKEMART_PRICES = {
     "master": 15000
 };
 
-safari = sys.fileExists(DATA_FOLDER + "safari.txt") ? helpers.readObject("safari") : {};
+safari = sys.fexists(DATA_FOLDER + "safari.txt") ? helpers.readObject("safari") : {};
 helpers.setVariable("currentWild", "none");
 helpers.setVariable("currentWildShiny", false);
 helpers.setVariable("baseCatchRate", 0);
