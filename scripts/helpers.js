@@ -112,7 +112,7 @@ module.exports = {
             defaultVal = this.defaultValue(dataFile, dataFiles[dataFile]);
             sys.write(DATA_FOLDER + dataFile + ".txt", (typeof(defaultVal) == "object" ? JSON.stringify(defaultVal) : defaultVal));
         }
-        if (pluginLoaded["funcmds.js"]) {
+        if (require.cache.hasOwnProperty("funcmds.js")) {
             sys.write(DATA_FOLDER + "bigtexts.txt", "{}");
         } else if (sys.fexists(DATA_FOLDER + "bigtexts.txt")) {
             sys.rm(DATA_FOLDER + "bigtexts.txt");
@@ -158,16 +158,16 @@ module.exports = {
             sys.write(DATA_FOLDER + dataFile + ".txt", (typeof(defaultVal) == "object" ? JSON.stringify(defaultVal) : defaultVal));
         }
         permchannels = this.defaultValue("permchannels");
-        if (pluginLoaded["party.js"]) {
+        if (require.cache.hasOwnProperty("party.js")) {
             permchannels.push("Party");
         }
-        if (pluginLoaded["roulette.js"]) {
+        if (require.cache.hasOwnProperty("roulette.js")) {
             permchannels.push("Roulette");
         }
-        if (pluginLoaded["rr.js"]) {
+        if (require.cache.hasOwnProperty("rr.js")) {
             permchannels.push("Russian Roulette");
         }
-        if (pluginLoaded["safari.js"]) {
+        if (require.cache.hasOwnProperty("safari.js")) {
             permchannels.push("Safari");
         }
         sys.write(DATA_FOLDER + "permchannels.txt", JSON.stringify(permchannels));
@@ -1342,27 +1342,27 @@ module.exports = {
         for (i in cownercommands) {
             array.push(i);
         }
-        if (pluginLoaded["safari.js"]) {
+        if (require.cache.hasOwnProperty("safari.js")) {
             for (i in safaricommands) {
                 array.push(i);
             }
         }
-        if (pluginLoaded["roulette.js"]) {
+        if (require.cache.hasOwnProperty("roulette.js")) {
             for (i in roulettecommands) {
                 array.push(i);
             }
         }
-        if (pluginLoaded["rr.js"]) {
+        if (require.cache.hasOwnProperty("rr.js")) {
             for (i in rrcommands) {
                 array.push(i);
             }
         }
-        if (pluginLoaded["party.js"]) {
+        if (require.cache.hasOwnProperty("party.js")) {
             for (i in partycommands) {
                 array.push(i);
             }
         }
-        if (pluginLoaded["funcmds.js"]) {
+        if (require.cache.hasOwnProperty("funcmds.js")) {
             for (i in funcommands) {
                 array.push(i);
             }

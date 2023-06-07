@@ -190,14 +190,11 @@
     }
     plugins = sys.filesForDirectory(PLUGINS_FOLDER);
     channelPlugins = [];
-    pluginLoaded = {"funcmds.js": false, "party.js": false, "roulette.js": false, "rr.js": false,
-    "safari.js": false, "mafia.js": false, "mafiastats.js": false, "mafiachecker.js": false};
     unofficialPlugins = false;
     for (var plugin in OFFICIAL_PLUGINS) {
         var path = OFFICIAL_PLUGINS[plugin].path;
         if (sys.fexists("plugins/" + path)) {
             global[plugin] = require(path, false, true); // retry = false, plugin = true
-            pluginLoaded[path] = true;
             if (!["funcmds.js", "mafiastats.js", "mafiachecker.js"].contains(path)) {
                 channelPlugins.push(path.replace(".js", ""));
             }
@@ -207,7 +204,7 @@
     if (sys.dirsForDirectory(sys.cwd()).contains("plugins")) {
         var numberOfPlugins = plugins.length;
         for (var i = 0; i < numberOfPlugins; i++) {
-            if (!pluginLoaded[plugins[i]] && plugins[i].split('.')[1] == "js") {
+            if (!require.cache.hasOwnProperty(plugins[i]) && plugins[i].split('.')[1] == "js") {
                 require(plugins[i], false, true);
                 unofficialPlugins = true;
             }
@@ -563,7 +560,7 @@
             Roulette Events
             ---------------
         **/
-        if (pluginLoaded["roulette.js"]) {
+        if (require.cache.hasOwnProperty("roulette.js")) {
             rouletteEvents();
         }
         /**
@@ -900,7 +897,7 @@
             "'>Channel " + (layout == "new" ? "Topic" : "Description") +
             ":</font></b> " + regchannels[lower].topic.join(TOPIC_DELIMITER), channel);
         } else {
-            if (pluginLoaded["party.js"] && channel == partychannel && partyMode != "none") {
+            if (require.cache.hasOwnProperty("party.js") && channel == partychannel && partyMode != "none") {
                 sys.sendHtmlMessage(src, "<b><font color='" + (layout == "new" ? channelTopicColor : "indigo") +
                 "'>Channel " + (layout == "new" ? "Topic" : "Description") +
                 ":</font></b> This channel is currently in " + helpers.cap(partyMode) + " Mode" +
@@ -912,7 +909,7 @@
                 ":</font></b> Welcome to " + channelname + "!", channel);
             }
         }
-        if (pluginLoaded["party.js"] && channel == partychannel && partyMode == "nightclub") {
+        if (require.cache.hasOwnProperty("party.js") && channel == partychannel && partyMode == "nightclub") {
             sys.sendHtmlWatch(helpers.bot(bots.spy) + "[Server] <b><font color='" + helpers.color(src) + "'>" + sys.name(src) + "</b> has joined the channel " + helpers.channelLink(channelname) + ".");
             return;
         }
@@ -962,7 +959,7 @@
         var name = sys.name(src), lower = players[src].name.toLowerCase(), cookie = sys.cookie(src) ? sys.cookie(src) : "none",
             cauth = (helpers.cauth(lower, channel) >= 1 && sys.dbAuth(lower) < 4 ? helpers.cauthname(lower, channel) + " " : ""),
             channelname = sys.channel(channel), id = sys.uniqueId(src) ? sys.uniqueId(src).id : "none";
-        if (pluginLoaded["party.js"]) {
+        if (require.cache.hasOwnProperty("party.js")) {
             if (channel == partychannel && partyMode == "nightclub") {
                 sys.sendHtmlWatch(helpers.bot(bots.spy) + "[Server] <b><font color='" + helpers.color(src) + "'>" + name + "</font></b> has left the channel " + helpers.channelLink(channelname) + ".");
                 return;
@@ -1326,7 +1323,7 @@
             Party
             -----
         **/
-        if (pluginLoaded["party.js"]) {
+        if (require.cache.hasOwnProperty("party.js")) {
             if (channel == partychannel && partyMode != "none") {
                 sys.stopEvent();
                 partyBeforeChat(src, message, channel);
@@ -1338,7 +1335,7 @@
             Mafia
             -----
         **/
-        /*if (pluginLoaded["mafia.js"]) {
+        /*if (require.cache.hasOwnProperty("mafia.js")) {
             if (channel == mafiachannel) {
                 sys.stopEvent();
                 mafiaBeforeChat(src, message, channel);

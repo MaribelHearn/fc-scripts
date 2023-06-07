@@ -18,7 +18,7 @@ module.exports = {
         + "<b>" + helpers.userl("/nameoptions") + "</b>: displays name options.<br>"
         + "<b>" + helpers.userl("/otheroptions") + "</b>: displays other options.<br>"
         + "<b>" + helpers.userl("/altsettings") + "</b>: displays alt settings.<br>";
-        if (pluginLoaded["funcmds.js"]) {
+        if (require.cache.hasOwnProperty("funcmds.js")) {
             commandsmessage += "<b>" + helpers.userl("/bigtextsettings") + "</b>: displays custom bigtext settings.<br>";
         }
         commandsmessage += "<b>" + helpers.userl("/customsettings") + "</b>: displays justice message customisation settings.<br>"
@@ -825,19 +825,19 @@ module.exports = {
         "<b>Total Channel Mod Commands:</b> " + Object.keys(cmodcommands).length + "<br>" +
         "<b>Total Channel Admin Commands:</b> " + Object.keys(cadmincommands).length + "<br>" +
         "<b>Total Channel Owner Commands:</b> " + Object.keys(cownercommands).length;
-        if (pluginLoaded["funcmds.js"]) {
+        if (require.cache.hasOwnProperty("funcmds.js")) {
             scriptmessage += "<br><b>Total Fun Commands:</b> " + Object.keys(funcommands).length;
         }
-        if (pluginLoaded["party.js"]) {
+        if (require.cache.hasOwnProperty("party.js")) {
             scriptmessage += "<br><b>Total Party Commands:</b> " + Object.keys(partycommands).length;
         }
-        if (pluginLoaded["rr.js"]) {
+        if (require.cache.hasOwnProperty("rr.js")) {
             scriptmessage += "<br><b>Total Russian Roulette Commands:</b> " + Object.keys(rrcommands).length;
         }
-        if (pluginLoaded["roulette.js"]) {
+        if (require.cache.hasOwnProperty("roulette.js")) {
             scriptmessage += "<br><b>Total Roulette Commands:</b> " + Object.keys(roulettecommands).length;
         }
-        if (pluginLoaded["safari.js"]) {
+        if (require.cache.hasOwnProperty("safari.js")) {
             scriptmessage += "<br><b>Total Safari Commands:</b> " + Object.keys(safaricommands).length;
         }
         scriptmessage += "<br><b>Total Helpers:</b> " + Object.keys(helpers).length + "<br>" +
@@ -1235,7 +1235,7 @@ module.exports = {
         ----------------
     **/
     bigtextsettings: function (src, channel, command) {
-        if (!pluginLoaded["funcmds.js"]) {
+        if (!require.cache.hasOwnProperty("funcmds.js")) {
             helpers.starfox(src, channel, command, bots.command, "Error 400, this command is only usable with the fun commands plugin.");
             return;
         }

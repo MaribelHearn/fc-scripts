@@ -1300,16 +1300,16 @@ module.exports = {
         cmodcommands.cclose(src, authchannel, ["cclose", 1]);
         cmodcommands.cclose(src, ownerchannel, ["cclose", 3]);
         cownercommands.priv(src, ownerchannel, ["priv"]);
-        if (pluginLoaded["party.js"]) {
+        if (require.cache.hasOwnProperty("party.js")) {
             cownercommands.priv(src, partychannel, ["priv"]);
         }
-        if (pluginLoaded["rr.js"]) {
+        if (require.cache.hasOwnProperty("rr.js")) {
             cownercommands.priv(src, roulettechannel, ["priv"]);
         }
-        if (pluginLoaded["roulette.js"]) {
+        if (require.cache.hasOwnProperty("roulette.js")) {
             cownercommands.priv(src, rrchannel, ["priv"]);
         }
-        if (pluginLoaded["safari.js"]) {
+        if (require.cache.hasOwnProperty("safari.js")) {
             cownercommands.priv(src, safarichannel, ["priv"]);
         }
         helpers.saveData("regchannels");
@@ -1330,16 +1330,16 @@ module.exports = {
         for (var i in permchannels) {
             cownercommands.unregisterthis(src, sys.channelId(permchannels[i]), ["unregisterthis"]);
         }
-        if (pluginLoaded["party.js"]) {
+        if (require.cache.hasOwnProperty("party.js")) {
             cownercommands.unregisterthis(src, sys.channelId(sys.channel(partychannel)), ["unregisterthis"]);
         }
-        if (pluginLoaded["rr.js"]) {
+        if (require.cache.hasOwnProperty("rr.js")) {
             cownercommands.unregisterthis(src, sys.channelId(sys.channel(roulettechannel)), ["unregisterthis"]);
         }
-        if (pluginLoaded["roulette.js"]) {
+        if (require.cache.hasOwnProperty("roulette.js")) {
             cownercommands.unregisterthis(src, sys.channelId(sys.channel(rrchannel)), ["unregisterthis"]);
         }
-        if (pluginLoaded["safari.js"]) {
+        if (require.cache.hasOwnProperty("safari.js")) {
             cownercommands.unregisterthis(src, sys.channelId(sys.channel(safarichannel)), ["unregisterthis"]);
         }
         helpers.saveData("regchannels");

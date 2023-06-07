@@ -61,7 +61,7 @@ channelUserCommand = function (src, channel, command, lower, name, auth, cauth, 
 };
 
 bigtextCommand = function (src, channel, command, lower, name, auth, cauth, message) {
-    if (pluginLoaded["funcmds.js"] && bigtexts[lower] !== undefined) {
+    if (require.cache.hasOwnProperty("funcmds.js") && bigtexts[lower] !== undefined) {
         if (mutedOrSilenced(src, channel, command, name, auth)) {
             return 1;
         }
@@ -72,7 +72,7 @@ bigtextCommand = function (src, channel, command, lower, name, auth, cauth, mess
 };
 
 funCommand = function (src, channel, command, lower, name, auth, cauth, message) {
-    if (pluginLoaded["funcmds.js"] && funcommands[lower] !== undefined) {
+    if (require.cache.hasOwnProperty("funcmds.js") && funcommands[lower] !== undefined) {
         if (helpers.isMutable(funcommands[lower]) && mutedOrSilenced(src, channel, command, name, auth, message)) {
             return 1;
         }
@@ -83,7 +83,7 @@ funCommand = function (src, channel, command, lower, name, auth, cauth, message)
 };
 
 partyCommand = function (src, channel, command, lower, name, auth, cauth, message) {
-    if (pluginLoaded["party.js"] && partycommands[lower] !== undefined) {
+    if (require.cache.hasOwnProperty("party.js") && partycommands[lower] !== undefined) {
         if (channel != partychannel) {
             helpers.starfox(src, channel, command, bots.party, "Error 403, this command is meant to be used in " +
             "the " + helpers.channelLink(sys.channel(partychannel)) + " channel.");
@@ -97,7 +97,7 @@ partyCommand = function (src, channel, command, lower, name, auth, cauth, messag
 };
 
 rouletteCommand = function (src, channel, command, lower, name, auth, cauth, message) {
-    if (pluginLoaded["roulette.js"] && roulettecommands[lower] !== undefined) {
+    if (require.cache.hasOwnProperty("roulette.js") && roulettecommands[lower] !== undefined) {
         if (channel != roulettechannel) {
             helpers.starfox(src, channel, command, bots.roulette, "Error 403, this command is meant to be used in " +
             "the " + helpers.channelLink(sys.channel(roulettechannel)) + " channel.");
@@ -111,7 +111,7 @@ rouletteCommand = function (src, channel, command, lower, name, auth, cauth, mes
 };
 
 russianRouletteCommand = function (src, channel, command, lower, name, auth, cauth, message) {
-    if (pluginLoaded["rr.js"] && rrcommands[lower] !== undefined) {
+    if (require.cache.hasOwnProperty("rr.js") && rrcommands[lower] !== undefined) {
         if (channel != rrchannel) {
             helpers.starfox(src, channel, command, bots.rr, "Error 403, this command is meant to be used in the " +
             "the " + helpers.channelLink(sys.channel(rrchannel)) + " channel.");
@@ -125,7 +125,7 @@ russianRouletteCommand = function (src, channel, command, lower, name, auth, cau
 };
 
 safariCommand = function (src, channel, command, lower, name, auth, cauth, message) {
-    if (pluginLoaded["safari.js"] && safaricommands[lower] !== undefined) {
+    if (require.cache.hasOwnProperty("safari.js") && safaricommands[lower] !== undefined) {
         if (channel != safarichannel) {
             helpers.starfox(src, channel, command, bots.roulette, "Error 403, this command is meant to be used in " +
             "the " + helpers.channelLink(sys.channel(safarichannel)) + " channel.");
@@ -139,7 +139,7 @@ safariCommand = function (src, channel, command, lower, name, auth, cauth, messa
 };
 
 mafiaCommand = function (src, channel, command, lower, name, auth, cauth, message) {
-    if (pluginLoaded["mafia.js"] && mafiacommands[lower] !== undefined) {
+    if (require.cache.hasOwnProperty("mafia.js") && mafiacommands[lower] !== undefined) {
         if (channel != mafiachannel) {
             helpers.starfox(src, channel, command, bots.mafia, "Error 403, this command is meant to be used in " +
             "the " + helpers.channelLink(sys.channel(mafiachannel)) + " channel.");

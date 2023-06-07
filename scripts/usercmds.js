@@ -25,25 +25,25 @@ module.exports = {
         commandsmessage += (cauth >= 1 ? "<b>" + helpers.userl("/cmodcommands") + "</b>: displays channel moderator commands.<br>" : "");
         commandsmessage += (cauth >= 2 ? "<b>" + helpers.userl("/cadmincommands") + "</b>: displays channel administrator commands.<br>" : "");
         commandsmessage += (cauth >= 3 ? "<b>" + helpers.userl("/cownercommands") + "</b>: displays channel owner commands.<br>" : "");
-        if (pluginLoaded["funcmds.js"] || pluginLoaded["party.js"] || pluginLoaded["rr.js"] || pluginLoaded["roulette.js"] || pluginLoaded["safari.js"] || pluginLoaded["mafia.js"]) {
+        if (require.cache.hasOwnProperty("funcmds.js") || require.cache.hasOwnProperty("party.js") || require.cache.hasOwnProperty("rr.js") || require.cache.hasOwnProperty("roulette.js") || require.cache.hasOwnProperty("safari.js") || require.cache.hasOwnProperty("mafia.js")) {
             commandsmessage += "<br>";
         }
-        if (pluginLoaded["funcmds.js"]) {
+        if (require.cache.hasOwnProperty("funcmds.js")) {
             commandsmessage += "<b>" + helpers.userl("/funcommands") + "</b>: displays fun commands.<br>";
         }
-        if (pluginLoaded["party.js"]) {
+        if (require.cache.hasOwnProperty("party.js")) {
             commandsmessage += "<b>" + helpers.userl("/partycommands") + "</b>: displays Party commands. Only for the " + helpers.channelLink(sys.channel(partychannel)) + " channel.<br>";
         }
-        if (pluginLoaded["roulette.js"]) {
+        if (require.cache.hasOwnProperty("roulette.js")) {
             commandsmessage += "<b>" + helpers.userl("/roulettecommands") + "</b>: displays Roulette commands. Only for the " + helpers.channelLink(sys.channel(roulettechannel)) + " channel.<br>";
         }
-        if (pluginLoaded["rr.js"]) {
+        if (require.cache.hasOwnProperty("rr.js")) {
             commandsmessage += "<b>" + helpers.userl("/rrcommands") + "</b>: displays Russian Roulette commands. Only for the " + helpers.channelLink(sys.channel(rrchannel)) + " channel.<br>";
         }
-        if (pluginLoaded["safari.js"]) {
+        if (require.cache.hasOwnProperty("safari.js")) {
             commandsmessage += "<b>" + helpers.userl("/safaricommands") + "</b>: displays Safari commands. Only for the " + helpers.channelLink(sys.channel(safarichannel)) + " channel.<br>";
         }
-        if (pluginLoaded["mafia.js"]) {
+        if (require.cache.hasOwnProperty("mafia.js")) {
             commandsmessage += "<b>" + helpers.userl("/mafiacommands") + "</b>: displays Mafia commands. Only for the " + helpers.channelLink(sys.channel(mafiachannel)) + " channel.<br>";
         }
         commandsmessage += "<br><timestamp/><br>" + border2;
@@ -122,7 +122,7 @@ module.exports = {
         }
         topic = topic.toLowerCase();
         if (topic == "roulette") {
-            if (!pluginLoaded["roulette.js"]) {
+            if (!require.cache.hasOwnProperty("roulette.js")) {
                 helpers.starfox(src, channel, command, bots.command, "Error 400, Roulette is not available on this server!");
                 return;
             }
@@ -144,7 +144,7 @@ module.exports = {
             + "<br>"
             + "Use <b>" + helpers.user("/roulettecommands") + "</b> to list the commands for Roulette.<br>";
         } else if (topic == "party") {
-            if (!pluginLoaded["party.js"]) {
+            if (!require.cache.hasOwnProperty("party.js")) {
                 helpers.starfox(src, channel, command, bots.command, "Error 400, Party is not available on this server!");
                 return;
             }
@@ -174,7 +174,7 @@ module.exports = {
             + "<br>"
             + "Use <b>" + helpers.user("/partycommands") + "</b> to list the commands for Party.<br>";
         } else if (topic == "russian roulette" || topic == "rr") {
-            if (!pluginLoaded["rr.js"]) {
+            if (!require.cache.hasOwnProperty("rr.js")) {
                 helpers.starfox(src, channel, command, bots.command, "Error 400, Russian Roulette is not available on this server!");
                 return;
             }
@@ -314,15 +314,15 @@ module.exports = {
                 descriptions.push("Server authorities discuss things here.");
             } else if (ids[i] == ownerchannel) {
                 descriptions.push("For the server owners.");
-            } else if (pluginLoaded["party.js"] && ids[i] == partychannel) {
+            } else if (require.cache.hasOwnProperty("party.js") && ids[i] == partychannel) {
                 descriptions.push("To have some fun.");
-            } else if (pluginLoaded["roulette.js"] && ids[i] == roulettechannel) {
+            } else if (require.cache.hasOwnProperty("roulette.js") && ids[i] == roulettechannel) {
                 descriptions.push("To play Roulette.");
-            } else if (pluginLoaded["rr.js"] && ids[i] == rrchannel) {
+            } else if (require.cache.hasOwnProperty("rr.js") && ids[i] == rrchannel) {
                 descriptions.push("To play Russian Roulette.");
-            } else if (pluginLoaded["safari.js"] && ids[i] == safarichannel) {
+            } else if (require.cache.hasOwnProperty("safari.js") && ids[i] == safarichannel) {
                 descriptions.push("To play Safari.");
-            } else if (pluginLoaded["mafia.js"] && ids[i] == mafiachannel) {
+            } else if (require.cache.hasOwnProperty("mafia.js") && ids[i] == mafiachannel) {
                 descriptions.push("To play Mafia.");
             } else {
                 descriptions.push("A user-created channel.");

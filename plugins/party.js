@@ -123,7 +123,7 @@ partyBeforeChat = function (src, message, channel) {
         partyNyan = (partyNyan + 1) % 7;
         return;
     } else if (mode == "dennis") {
-        if (pluginLoaded["funcmds.js"] && message.toLowerCase() == "/dennis") {
+        if (require.cache.hasOwnProperty("funcmds.js") && message.toLowerCase() == "/dennis") {
             funcommands.dennis(src, channel, ["dennis"]);
             return true;
         }
