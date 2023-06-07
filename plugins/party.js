@@ -1,7 +1,7 @@
 /*
     ----------------------------------------------
     FUN COMMUNITY PARTY COMMANDS party.js
-     - by Maribel Hearn, 2015-2020
+     - by Maribel Hearn, 2015-2023
 
     This file contains the scripts necessary
     for the Party channel, a channel in which
@@ -16,70 +16,70 @@ var PARTY_MODES = ["joke", "nightclub", "desu", "rainbow", "nyan", "dennis", "ci
 var partyNyan = 0;
 
 module.exports = {
-    partycommands: function (src, channel, command) {
-        var commandsmessage = border
-        + "<h2>Party Commands</h2>"
-        + "<br>"
-        + "<b>" + helpers.user("/mode ") + helpers.arg("mode") + "</b>: changes the current party mode to <b>mode</b>. If <b>mode</b> is 'off', ends the current party mode. Only for channel auth.<br>"
-        + "<br><timestamp/><br>"
-        + border2;
-        sys.sendHtmlMessage(src, commandsmessage, channel);
-    }
+    commands: {
+        partycommands: function (src, channel, command) {
+            var commandsmessage = border
+            + "<h2>Party Commands</h2>"
+            + "<br>"
+            + "<b>" + helpers.user("/mode ") + helpers.arg("mode") + "</b>: changes the current party mode to <b>mode</b>. If <b>mode</b> is 'off', ends the current party mode. Only for channel auth.<br>"
+            + "<br><timestamp/><br>"
+            + border2;
+            sys.sendHtmlMessage(src, commandsmessage, channel);
+        },
 
-    ,
-
-    mode: function (src, channel, command) {
-        var name = helpers.escapehtml(sys.name(src)), lower = sys.name(src).toLowerCase(),
-        channelname = sys.channel(channel).toLowerCase(), oldmode = partyMode, mode;
-        if (helpers.cauth(lower, channelname) === 0) {
-            helpers.starfox(src, channel, command, bots.starfox, noPermissionMessage.replace(/~Player~/gi, sys.name(src)));
-            return;
-        }
-        if (!command[1]) {
-            helpers.starfox(src, channel, command, bots.party, "Error 404, mode not found.");
-            return;
-        }
-        if (command[1] == "off") {
-            if (partyMode == "none") {
-                helpers.starfox(src, channel, command, bots.party, "Error 400, you can't turn the current party mode off, because it is already off!");
+        mode: function (src, channel, command) {
+            var name = helpers.escapehtml(sys.name(src)), lower = sys.name(src).toLowerCase(),
+            channelname = sys.channel(channel).toLowerCase(), oldmode = partyMode, mode;
+            if (helpers.cauth(lower, channelname) === 0) {
+                helpers.starfox(src, channel, command, bots.starfox, noPermissionMessage.replace(/~Player~/gi, sys.name(src)));
                 return;
             }
-            mode = helpers.cap(partyMode) + " Mode";
-            if (partyMode == "nightclub") {
-                sys.sendHtmlAll(":<div>", channel);
+            if (!command[1]) {
+                helpers.starfox(src, channel, command, bots.party, "Error 404, mode not found.");
+                return;
             }
-            sys.sendHtmlAll(border + "<br>" + helpers.bot(bots.party) + "<b>" + helpers.user(name) + " has turned " + helpers.arg(mode) + " off.</b><br>" + border2, channel);
-            partyMode = "none";
-            helpers.saveData("partyMode");
-            if (regchannels[channelname]) {
-                regchannels[channelname].topic = ["Welcome to " + sys.channel(partychannel) + "!"];
-                helpers.saveData("regchannels");
-            }
-            return;
-        }
-        for (var index in PARTY_MODES) {
-            if (PARTY_MODES[index] == command[1].toLowerCase()) {
-                partyMode = PARTY_MODES[index];
-                helpers.saveData("partyMode");
-                mode = helpers.cap(PARTY_MODES[index]) + " Mode";
-                if (oldmode == "nightclub") {
+            if (command[1] == "off") {
+                if (partyMode == "none") {
+                    helpers.starfox(src, channel, command, bots.party, "Error 400, you can't turn the current party mode off, because it is already off!");
+                    return;
+                }
+                mode = helpers.cap(partyMode) + " Mode";
+                if (partyMode == "nightclub") {
                     sys.sendHtmlAll(":<div>", channel);
                 }
-                sys.sendHtmlAll(border + "<br>" + helpers.bot(bots.party) + "<b>" + helpers.user(name) + " has turned " + helpers.arg(mode) + " on!</b><br>" + border2, channel);
-                if (partyMode == "nightclub") {
-                    sys.sendHtmlAll("<font color='#FFFFFF'>:</font><div style='background: #000000;'>", channel);
-                    if (regchannels[channelname]) {
-                        regchannels[sys.channel(partychannel).toLowerCase()].topic = ["This channel is currently in " + mode + ".<font color='#FFFFFF'>:</font><div style='background: #000000;'>"];
-                        helpers.saveData("regchannels");
-                    }
-                } else if (regchannels[channelname]) {
-                    regchannels[sys.channel(partychannel).toLowerCase()].topic = ["This channel is currently in " + mode + "."];
+                sys.sendHtmlAll(border + "<br>" + helpers.bot(bots.party) + "<b>" + helpers.user(name) + " has turned " + helpers.arg(mode) + " off.</b><br>" + border2, channel);
+                partyMode = "none";
+                helpers.saveData("partyMode");
+                if (regchannels[channelname]) {
+                    regchannels[channelname].topic = ["Welcome to " + sys.channel(partychannel) + "!"];
                     helpers.saveData("regchannels");
                 }
                 return;
             }
+            for (var index in PARTY_MODES) {
+                if (PARTY_MODES[index] == command[1].toLowerCase()) {
+                    partyMode = PARTY_MODES[index];
+                    helpers.saveData("partyMode");
+                    mode = helpers.cap(PARTY_MODES[index]) + " Mode";
+                    if (oldmode == "nightclub") {
+                        sys.sendHtmlAll(":<div>", channel);
+                    }
+                    sys.sendHtmlAll(border + "<br>" + helpers.bot(bots.party) + "<b>" + helpers.user(name) + " has turned " + helpers.arg(mode) + " on!</b><br>" + border2, channel);
+                    if (partyMode == "nightclub") {
+                        sys.sendHtmlAll("<font color='#FFFFFF'>:</font><div style='background: #000000;'>", channel);
+                        if (regchannels[channelname]) {
+                            regchannels[sys.channel(partychannel).toLowerCase()].topic = ["This channel is currently in " + mode + ".<font color='#FFFFFF'>:</font><div style='background: #000000;'>"];
+                            helpers.saveData("regchannels");
+                        }
+                    } else if (regchannels[channelname]) {
+                        regchannels[sys.channel(partychannel).toLowerCase()].topic = ["This channel is currently in " + mode + "."];
+                        helpers.saveData("regchannels");
+                    }
+                    return;
+                }
+            }
+            helpers.starfox(src, channel, command, bots.party, "Error 403, invalid mode.");
         }
-        helpers.starfox(src, channel, command, bots.party, "Error 403, invalid mode.");
     }
 };
 

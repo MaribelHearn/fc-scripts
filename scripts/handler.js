@@ -1,7 +1,7 @@
 /*
     ----------------------------------------------
     FUN COMMUNITY COMMAND HANDLER handler.js
-     - by Maribel Hearn, 2015-2020
+     - by Maribel Hearn, 2015-2023
 
     This script file contains the command
     handler, which will parse a given command
@@ -65,31 +65,30 @@ bigtextCommand = function (src, channel, command, lower, name, auth, cauth, mess
         if (mutedOrSilenced(src, channel, command, name, auth)) {
             return 1;
         }
-        funcommands.bigtext(src, channel, bigtexts[lower]);
+        funcommands.commands.bigtext(src, channel, bigtexts[lower]);
         return 2;
     }
     return 0;
 };
 
 funCommand = function (src, channel, command, lower, name, auth, cauth, message) {
-    if (require.cache.hasOwnProperty("funcmds.js") && funcommands[lower] !== undefined) {
-        if (helpers.isMutable(funcommands[lower]) && mutedOrSilenced(src, channel, command, name, auth, message)) {
+    if (require.cache.hasOwnProperty("funcmds.js") && funcommands.commands[lower] !== undefined) {
+        if (helpers.isMutable(funcommands.commands[lower]) && mutedOrSilenced(src, channel, command, name, auth, message)) {
             return 1;
         }
-        funcommands[lower](src, channel, command);
+        funcommands.commands[lower](src, channel, command);
         return 2;
     }
     return 0;
 };
 
 partyCommand = function (src, channel, command, lower, name, auth, cauth, message) {
-    if (require.cache.hasOwnProperty("party.js") && partycommands[lower] !== undefined) {
+    if (require.cache.hasOwnProperty("party.js") && partycommands.commands[lower] !== undefined) {
         if (channel != partychannel) {
-            helpers.starfox(src, channel, command, bots.party, "Error 403, this command is meant to be used in " +
-            "the " + helpers.channelLink(sys.channel(partychannel)) + " channel.");
+            helpers.starfox(src, channel, command, bots.party, "Error 403, this command is meant to be used in the " + helpers.channelLink(sys.channel(partychannel)) + " channel.");
             return 1;
-        } else if (!(helpers.isMutable(partycommands[lower]) && mutedOrSilenced(src, channel, command, name, auth, message))) {
-            partycommands[lower](src, channel, command);
+        } else if (!(helpers.isMutable(partycommands.commands[lower]) && mutedOrSilenced(src, channel, command, name, auth, message))) {
+            partycommands.commands[lower](src, channel, command);
             return 2;
         }
     }
@@ -97,13 +96,12 @@ partyCommand = function (src, channel, command, lower, name, auth, cauth, messag
 };
 
 rouletteCommand = function (src, channel, command, lower, name, auth, cauth, message) {
-    if (require.cache.hasOwnProperty("roulette.js") && roulettecommands[lower] !== undefined) {
+    if (require.cache.hasOwnProperty("roulette.js") && roulettecommands.commands[lower] !== undefined) {
         if (channel != roulettechannel) {
-            helpers.starfox(src, channel, command, bots.roulette, "Error 403, this command is meant to be used in " +
-            "the " + helpers.channelLink(sys.channel(roulettechannel)) + " channel.");
+            helpers.starfox(src, channel, command, bots.roulette, "Error 403, this command is meant to be used in the " + helpers.channelLink(sys.channel(roulettechannel)) + " channel.");
             return 1;
-        } else if (!(helpers.isMutable(roulettecommands[lower]) && mutedOrSilenced(src, channel, command, name, auth, message))) {
-            roulettecommands[lower](src, channel, command);
+        } else if (!(helpers.isMutable(roulettecommands.commands[lower]) && mutedOrSilenced(src, channel, command, name, auth, message))) {
+            roulettecommands.commands[lower](src, channel, command);
             return 2;
         }
     }
@@ -111,13 +109,12 @@ rouletteCommand = function (src, channel, command, lower, name, auth, cauth, mes
 };
 
 russianRouletteCommand = function (src, channel, command, lower, name, auth, cauth, message) {
-    if (require.cache.hasOwnProperty("rr.js") && rrcommands[lower] !== undefined) {
+    if (require.cache.hasOwnProperty("rr.js") && rrcommands.commands[lower] !== undefined) {
         if (channel != rrchannel) {
-            helpers.starfox(src, channel, command, bots.rr, "Error 403, this command is meant to be used in the " +
-            "the " + helpers.channelLink(sys.channel(rrchannel)) + " channel.");
+            helpers.starfox(src, channel, command, bots.rr, "Error 403, this command is meant to be used in the the " + helpers.channelLink(sys.channel(rrchannel)) + " channel.");
             return 1;
-        } else if (!(helpers.isMutable(rrcommands[lower]) && mutedOrSilenced(src, channel, command, name, auth, message))) {
-            rrcommands[lower](src, channel, command);
+        } else if (!(helpers.isMutable(rrcommands.commands[lower]) && mutedOrSilenced(src, channel, command, name, auth, message))) {
+            rrcommands.commands[lower](src, channel, command);
             return 2;
         }
     }
@@ -125,13 +122,12 @@ russianRouletteCommand = function (src, channel, command, lower, name, auth, cau
 };
 
 safariCommand = function (src, channel, command, lower, name, auth, cauth, message) {
-    if (require.cache.hasOwnProperty("safari.js") && safaricommands[lower] !== undefined) {
+    if (require.cache.hasOwnProperty("safari.js") && safaricommands.commands[lower] !== undefined) {
         if (channel != safarichannel) {
-            helpers.starfox(src, channel, command, bots.roulette, "Error 403, this command is meant to be used in " +
-            "the " + helpers.channelLink(sys.channel(safarichannel)) + " channel.");
+            helpers.starfox(src, channel, command, bots.roulette, "Error 403, this command is meant to be used in the " + helpers.channelLink(sys.channel(safarichannel)) + " channel.");
             return 1;
-        } else if (!(helpers.isMutable(safaricommands[lower]) && mutedOrSilenced(src, channel, command, name, auth, message))) {
-            safaricommands[lower](src, channel, command);
+        } else if (!(helpers.isMutable(safaricommands.commands[lower]) && mutedOrSilenced(src, channel, command, name, auth, message))) {
+            safaricommands.commands[lower](src, channel, command);
             return 2;
         }
     }
@@ -139,13 +135,12 @@ safariCommand = function (src, channel, command, lower, name, auth, cauth, messa
 };
 
 mafiaCommand = function (src, channel, command, lower, name, auth, cauth, message) {
-    if (require.cache.hasOwnProperty("mafia.js") && mafiacommands[lower] !== undefined) {
+    if (require.cache.hasOwnProperty("mafia.js") && mafiacommands.commands[lower] !== undefined) {
         if (channel != mafiachannel) {
-            helpers.starfox(src, channel, command, bots.mafia, "Error 403, this command is meant to be used in " +
-            "the " + helpers.channelLink(sys.channel(mafiachannel)) + " channel.");
+            helpers.starfox(src, channel, command, bots.mafia, "Error 403, this command is meant to be used in the " + helpers.channelLink(sys.channel(mafiachannel)) + " channel.");
             return 1;
-        } else if (!(helpers.isMutable(mafiacommands[lower]) && mutedOrSilenced(src, channel, command, name, auth, message))) {
-            mafiacommands[lower](src, channel, command);
+        } else if (!(helpers.isMutable(mafiacommands.commands[lower]) && mutedOrSilenced(src, channel, command, name, auth, message))) {
+            mafiacommands.commands[lower](src, channel, command);
             return 2;
         }
     }
