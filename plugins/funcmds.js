@@ -77,6 +77,7 @@ module.exports = {
         },
 
         armyof: function (src, channel, command) {
+            var MAX_POKEMON = 803; // Marshadow is 802
             var shiny = [], sprites = "", chance = 64, name = sys.name(src), pokeNum;
             pokeNum = (!sys.pokeNum(command[1]) && command[1] != "tentaquil" ? sys.rand(0, MAX_POKEMON) : sys.pokeNum(command[1]));
             for (i = 0; i < 6; i++) {

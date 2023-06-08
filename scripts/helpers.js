@@ -619,6 +619,13 @@ module.exports = {
     },
 
     bannedchars: function (string) {
+        var FAKEI = /\u00A1/;
+        var GREEK = /[\u0370-\u03FF]/;
+        var OTHER = /\u3061|\u65532/;
+        var SPACE = /\u0009-\u000D|\u0085|\u00A0|\u1680|\u180E|\u2000-\u200A|\u2028|\u2029|\u2029|\u202F|\u205F|\u3000/;
+        var DASH = /\u058A|\u05BE|\u1400|\u1806|\u2010-\u2015|\u2053|\u207B|\u208B|\u2212|\u2E17|\u2E1A|\u301C|\u3030|\u30A0|[\uFE31-\uFE32]|\uFE58|\uFE63|\uFF0D/;
+        var CYRILLIC = /\u0455|\u04ae|\u04c0|\u04cf|\u050c|\u051a|\u051b|\u051c|\u051d|\u0405|\u0408|\u0430|\u0410|\u0412|\u0435|\u0415|\u041c|\u041d|\u043e|\u041e|\u0440|\u0420|\u0441|\u0421|\u0422|\u0443|\u0445|\u0425|\u0456|\u0406/;
+
         if (CYRILLIC.test(string)) {
             return [true, "Cyrillic that is similar to letters"];
         } else if (GREEK.test(string)) {

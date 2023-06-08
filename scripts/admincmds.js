@@ -1005,6 +1005,7 @@ module.exports = {
     ,
 
     dbsearch: function (src, channel, command) {
+        var DBSEARCH_THRESHOLD = 100;
         var list = "", term = command[1], resultsmessage = border + "<h2>Database Search</h2><br>Your database search request '" + term + "' returned the following results:<br><br>", total = 0, db;
         if (!term) {
             helpers.starfox(src, channel, command, bots.command, "Error 404, text not found.", channel);

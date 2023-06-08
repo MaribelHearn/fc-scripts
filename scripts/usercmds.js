@@ -463,7 +463,7 @@ module.exports = {
     registry: function (src, channel, command) {
         var auth = sys.auth(src), registrymessage;
         var servername = sys.getServerName(), servers = [], playernums = [], serverIps = [], advConnects = [], total = 0, tmp1, tmp2;
-        sys.webCall(REGISTRY_URL, function (resp) {
+        sys.webCall("https://registry.pokemon-online.eu/", function (resp) {
             if (resp === "") {
                 sys.sendHtmlMessage(src, helpers.bot(bots.command) + "An error occurred while fetching the registry.", channel);
                 return;
@@ -541,6 +541,7 @@ module.exports = {
     ,
 
     scriptinfo: function (src, channel, command) {
+        var repo = "https://github.com/MaribelHearn/fc-scripts";
         var scriptmessage = border + "<h2>Script Info</h2><br>", scriptcontent = [],
             tempPlugins = [], customs = [], length, i;
         scriptcontent.push(sys.read("scripts.js"));
@@ -559,7 +560,7 @@ module.exports = {
         }
         scriptcontent = scriptcontent.join();
         scriptmessage += "<h3>Basic Information</h3>" +
-        "<b>Official Repository:</b> <a href='" + REPOSITORY_URL + "'>" + REPOSITORY_URL + "</a><br>" +
+        "<b>Official Repository:</b> <a href='" + repo + "'>" + repo + "</a><br>" +
         "<b>Name:</b> Fun Community Scripts<br>" +
         "<b>Creator:</b> Maribel Hearn<br>" +
         "<b>Characters:</b> " + helpers.sep(scriptcontent.length) + "<br>" +

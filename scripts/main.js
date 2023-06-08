@@ -26,31 +26,16 @@
     DELIMITER = '*';
     COMMAND_SYMBOL = '/';
     TOPIC_DELIMITER = " || ";
-    RELAY_STATION_PROXY = "::1%0";
     IP_RETRIEVAL_URL = "http://whatismyip.akamai.com";
-    REGISTRY_URL = "https://registry.pokemon-online.eu/";
-    REPOSITORY_URL = "https://github.com/MaribelHearn/fc-scripts";
-    SCRIPT_URL = "https://raw.githubusercontent.com/MaribelHearn/fc-scripts/master/scripts/";
-    PLUGIN_URL = "https://raw.githubusercontent.com/MaribelHearn/fc-scripts/master/plugins/";
     AUTO_UPDATE_URL = "https://api.github.com/repos/MaribelHearn/fc-scripts/commits";
     DAYS = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
     MONTHS = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
     REACTIVATE_REGISTER_BUTTON = 14;
-    FAKEI = /\u00A1/;
-    OTHER = /\u3061|\u65532/;
     THAI = /[\u0E00-\u0E7F]/;
-    GREEK = /[\u0370-\u03FF]/;
     ZALGO = /[\u0300-\u036F]/;
     HEBREW = /[\u0591-\u05F4]/;
     ARABIC = /[\u0600-\u06FF]/;
-    NUMBERS = /[\u0030-\u0039]/;
     SPECIAL = /[\ufff0-\uffff]/;
-    ARMENIAN = /[\u0555-\u0585]/;
-    LOWERCASE = /[\u0061-\u007A]/;
-    UPPERCASE = /[\u0041-\u005A]/;
-    SPACE = /\u0009-\u000D|\u0085|\u00A0|\u1680|\u180E|\u2000-\u200A|\u2028|\u2029|\u2029|\u202F|\u205F|\u3000/;
-    DASH = /\u058A|\u05BE|\u1400|\u1806|\u2010-\u2015|\u2053|\u207B|\u208B|\u2212|\u2E17|\u2E1A|\u301C|\u3030|\u30A0|[\uFE31-\uFE32]|\uFE58|\uFE63|\uFF0D/;
-    CYRILLIC = /\u0455|\u04ae|\u04c0|\u04cf|\u050c|\u051a|\u051b|\u051c|\u051d|\u0405|\u0408|\u0430|\u0410|\u0412|\u0435|\u0415|\u041c|\u041d|\u043e|\u041e|\u0440|\u0420|\u0441|\u0421|\u0422|\u0443|\u0445|\u0425|\u0456|\u0406/;
     AUTH_NAMES = ["User", "Moderator", "Administrator", "Owner", "Invisible Owner"];
     SCRIPT_MODULES = {
         usercommands: "usercmds.js",
@@ -103,9 +88,6 @@
     SCRIPTS_FOLDER = "scripts/";
     PLUGINS_FOLDER = "plugins/";
     DATA_FOLDER = "data/";
-    DBSEARCH_THRESHOLD = 100;
-    MAX_IMAGE_HEIGHT = 350;
-    MAX_POKEMON = 803; // Marshadow is 802
     /**
         ----------------
         Require Polyfill
@@ -597,7 +579,7 @@
             Relay Station
             -------------
         **/
-        if (ip == RELAY_STATION_PROXY) {
+        if (ip == "::1%0") {
             sys.sendHtmlWatch(helpers.bot(bots.spy) + "[Server] The web client is connecting to the server.");
         } else {
             sys.sendHtmlWatch(helpers.bot(bots.spy) + "[Server] IP " + ip + " is connecting to the server.");
@@ -1503,7 +1485,7 @@
                     " && identify " + DATA_FOLDER + "temp_img" + ext + " > " + DATA_FOLDER + "temp_id.txt");
                     size = sys.read(DATA_FOLDER + "temp_id.txt").split(' ')[2];
                     x = Number(size.split('x')[0]); y = Number(size.split('x')[1]);
-                    if (y > MAX_IMAGE_HEIGHT) {
+                    if (y > 350) {
                         sys.system("convert -size " + size + " " + DATA_FOLDER + "temp_img" + ext +
                         " -resize " + (x / 2) + "x" + (y / 2) + " " + DATA_FOLDER + "temp_img" + ext);
                     }
