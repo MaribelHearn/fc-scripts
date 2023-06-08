@@ -221,9 +221,9 @@
         }
         helpers.initData();
     }
-    API_KEY = sys.read(DATA_FOLDER + "API_KEY.txt");
-    GOOGLE_KEY = sys.read(DATA_FOLDER + "GOOGLE_KEY.txt");
-    UPDATE_KEY = sys.read(DATA_FOLDER + "UPDATE_KEY.txt");
+    API_KEY = JSON.parse(sys.read(DATA_FOLDER + "API_KEY.txt"));
+    GOOGLE_KEY = JSON.parse(sys.read(DATA_FOLDER + "GOOGLE_KEY.txt"));
+    UPDATE_KEY = JSON.parse(sys.read(DATA_FOLDER + "UPDATE_KEY.txt"));
     /**
         ----------------------
         Additional Sys Methods
@@ -500,7 +500,7 @@
                     members[index] ? name = members[index] : name = index;
                     sys.sendHtmlAuths(helpers.bot(bots.ban) + name + "'s ban has expired!");
                 }
-                helpers.saveData("banlist");
+                helpers.saveData("banlist", banlist);
             }
         }
         /**
@@ -516,7 +516,7 @@
                     members[index] ? name = members[index] : name = index;
                     sys.sendHtmlAuths(helpers.bot(bots.mute) + name + "'s mute has expired!");
                 }
-                helpers.saveData("mutelist");
+                helpers.saveData("mutelist", mutelist);
             }
         }
         /**
@@ -546,7 +546,7 @@
                 return;
             }
             latestShaHash = sha;
-            helpers.saveData("latestShaHash");
+            helpers.saveData("latestShaHash", sha);
             sys.system("git pull");
             try {
                 sys.changeScript(sys.read("scripts.js"));
@@ -733,7 +733,7 @@
         if (helpers.isInArray(lower, namestounban)) {
             sys.removeCookie(src);
             namestounban.splice(namestounban.indexOf(name), 1);
-            helpers.saveData("namestounban");
+            helpers.saveData("namestounban", namestounban);
         } else {
             if (sys.isMegaBanned(cookie)) {
                 sys.sendMessage(src, "You are banned!");
@@ -752,7 +752,7 @@
             authtitles[lower] = AUTH_NAMES[auth];
         }
         members[name.toLowerCase()] = name;
-        helpers.saveData("members");
+        helpers.saveData("members", members);
         /**
             -----------
             Max Players
@@ -760,7 +760,7 @@
         **/
         if (sys.numPlayers() > maxplayers) {
             maxplayers++;
-            helpers.saveData("maxplayers");
+            helpers.saveData("maxplayers", maxplayers);
         }
         /**
             --------------
@@ -804,10 +804,10 @@
             -----------------------------------
         **/
         operatingsystem[lower] = os;
-        helpers.saveData("operatingsystem");
+        helpers.saveData("operatingsystem", operatingsystem);
         os = helpers.os(operatingsystem[lower]);
         versions[lower] = helpers.version(version);
-        helpers.saveData("versions");
+        helpers.saveData("versions", versions);
         version = versions[lower];
         sys.sendHtmlWatch(helpers.bot(bots.spy) + "[Server] <b><font color='" + color + "'>" + name + "</font></b> is using " + os + (version === "" ? "" : ", " + version) + ".");
         /**
@@ -833,9 +833,9 @@
                     timezone[lower] = helpers.timezonedata(resp.countryName, resp.timeZone);
                     countryname[lower] = helpers.countrydata(resp.countryName);
                     cityname[lower] = helpers.citydata(resp.cityName);
-                    helpers.saveData("timezone");
-                    helpers.saveData("countryname");
-                    helpers.saveData("cityname");
+                    helpers.saveData("timezone", timezone);
+                    helpers.saveData("countryname", countryname);
+                    helpers.saveData("cityname", cityname);
                     country = helpers.toFlagKey(helpers.removespaces(countryname[lower].toUpperCase()));
                     sys.sendHtmlWatch(helpers.bot(bots.spy) + "[Server] <b><font color='" + color + "'>" + name + "</font></b> is from " + FLAGS[country] + " " + countryname[lower] + ".");
                 });
@@ -1052,11 +1052,11 @@
             delete timezone[lower];
             delete operatingsystem[lower];
             delete versions[lower];
-            helpers.saveData("countryname");
-            helpers.saveData("cityname");
-            helpers.saveData("timezone");
-            helpers.saveData("operatingsystem");
-            helpers.saveData("versions");
+            helpers.saveData("countryname", countryname);
+            helpers.saveData("cityname", cityname);
+            helpers.saveData("timezone", timezone);
+            helpers.saveData("operatingsystem", operatingsystem);
+            helpers.saveData("versions", versions);
         }
         delete players[src];
     }
@@ -1089,7 +1089,7 @@
             -----------------------
         **/
         members[name.toLowerCase()] = name;
-        helpers.saveData("members");
+        helpers.saveData("members", members);
         sys.sendHtmlWatch(helpers.bot(bots.spy) + "[Player] <b><font color='" + players[src].color + "'>" + players[src].name + "</font></b> changed their team, and their name to <b><font color='" + color +
         "'>" + name + "</font></b>.");
         players[src].name = name;
@@ -1101,8 +1101,8 @@
         **/
         operatingsystem[lower] = sys.os(src);
         versions[lower] = helpers.version(sys.version(src));
-        helpers.saveData("operatingsystem");
-        helpers.saveData("versions");
+        helpers.saveData("operatingsystem", operatingsystem);
+        helpers.saveData("versions", versions);
         /**
             ---------------------
             Time Zone and Country
@@ -1112,9 +1112,9 @@
             timezone[lower] = timezone[oldName];
             countryname[lower] = countryname[oldName];
             cityname[lower] = cityname[oldName];
-            helpers.saveData("timezone");
-            helpers.saveData("countryname");
-            helpers.saveData("cityname");
+            helpers.saveData("timezone", timezone);
+            helpers.saveData("countryname", countryname);
+            helpers.saveData("cityname", cityname);
         }
     }
 

@@ -51,7 +51,7 @@ module.exports = {
             regchannels[lower].banlist[name].reason = reason;
             var date = helpers.date(new Date());
             regchannels[lower].banlist[name].date = date;
-            helpers.saveData("regchannels");
+            helpers.saveData("regchannels", regchannels);
         } else {
             helpers.starfox(src, channel, command, bots.channel, "Error 400, this channel isn't registered!", channel);
             return;
@@ -83,7 +83,7 @@ module.exports = {
         for (var index in regchannels[lower].banlist) {
             if (sys.dbIp(index) == sys.dbIp(trgtname)) {
                 delete regchannels[lower].banlist[index];
-                helpers.saveData("regchannels");
+                helpers.saveData("regchannels", regchannels);
             }
         }
         sys.sendHtmlAll(helpers.bot(bots.channel) + trgtname + " has been unbanned from this channel by " + sys.name(src) + "!", channel);

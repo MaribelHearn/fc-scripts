@@ -7,7 +7,7 @@
     fun commands. Can be run by any user.
     ----------------------------------------------
 */
-var bigtexts = sys.fexists(DATA_FOLDER + "bigtexts.txt") ? helpers.readObject("bigtexts") : {};
+var bigtexts = sys.fexists(DATA_FOLDER + "bigtexts.txt") ? helpers.readData("bigtexts") : {};
 
 module.exports = {
     getBigtexts: function () {
@@ -16,12 +16,12 @@ module.exports = {
 
     addBigtext: function (name, text, title, bot, color, size) {
         bigtexts[name] = ["bigtext", text, title, bot, color, size];
-        sys.write(DATA_FOLDER + "bigtexts.txt", JSON.stringify(bigtexts));
+        helpers.saveData("bigtexts", bigtexts);
     },
 
     removeBigtext: function (name) {
         delete bigtexts[name];
-        sys.write(DATA_FOLDER + "bigtexts.txt", JSON.stringify(bigtexts));
+        helpers.saveData("bigtexts", bigtexts);
     },
 
     commands: {

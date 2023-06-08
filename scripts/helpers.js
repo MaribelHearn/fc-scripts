@@ -76,9 +76,7 @@ module.exports = {
             case "string": return "";
             default: return "";
         }
-    }
-
-    ,
+    },
 
     initCustoms: function () {
         var dataFiles = {
@@ -118,9 +116,7 @@ module.exports = {
             sys.rm(DATA_FOLDER + "bigtexts.txt");
         }
         print("Customisation settings created");
-    }
-
-    ,
+    },
 
     initData: function () {
         var dataFiles = {
@@ -173,84 +169,30 @@ module.exports = {
         sys.write(DATA_FOLDER + "permchannels.txt", JSON.stringify(permchannels));
         print("Data folder created");
         this.initCustoms();
-    }
-
-    ,
+    },
 
     readData: function (dataFile) {
         if (!sys.fexists(DATA_FOLDER + dataFile + ".txt")) {
             sys.write(DATA_FOLDER + dataFile + ".txt", this.defaultValue(dataFile));
             print("Missing data file " + dataFile + ".txt created");
         }
-        return sys.read(DATA_FOLDER + dataFile + ".txt");
-    }
-
-    ,
-
-    readNumber: function (dataFile) {
-        if (!sys.fexists(DATA_FOLDER + dataFile + ".txt")) {
-            sys.write(DATA_FOLDER + dataFile + ".txt", this.defaultValue(dataFile));
-            print("Missing data file " + dataFile + ".txt created");
-        }
-        return parseInt(this.readData(dataFile));
-    }
-
-    ,
-
-    readBoolean: function (dataFile) {
-        if (!sys.fexists(DATA_FOLDER + dataFile + ".txt")) {
-            sys.write(DATA_FOLDER + dataFile + ".txt", this.defaultValue(dataFile));
-            print("Missing data file " + dataFile + ".txt created");
-        }
-        return this.readData(dataFile) == "true" ? true : false;
-    }
-
-    ,
-
-    readArray: function (dataFile) {
-        if (!sys.fexists(DATA_FOLDER + dataFile + ".txt")) {
-            sys.write(DATA_FOLDER + dataFile + ".txt", JSON.stringify(this.defaultValue(dataFile)));
-            print("Missing data file " + dataFile + ".txt created");
-        }
         try {
-            return JSON.parse(this.readData(dataFile));
+            return JSON.parse(sys.read(DATA_FOLDER + dataFile + ".txt"));
         } catch (err) {
             print("JSON data file " + dataFile + ".txt failed to parse: " + err);
-            return [];
+            return null;
         }
-    }
+    },
 
-    ,
-
-    readObject: function (dataFile) {
-        if (!sys.fexists(DATA_FOLDER + dataFile + ".txt")) {
-            sys.write(DATA_FOLDER + dataFile + ".txt", JSON.stringify(this.defaultValue(dataFile)));
-            print("Missing data file " + dataFile + ".txt created");
-        }
-        try {
-            return JSON.parse(this.readData(dataFile));
-        } catch (err) {
-            print("JSON data file " + dataFile + ".txt failed to parse: " + err);
-            return {};
-        }
-    }
-
-    ,
-
-    saveData: function (dataFile) {
-        var data = (typeof(global[dataFile]) == "object" ? JSON.stringify(global[dataFile]) : global[dataFile]);
-        sys.write(DATA_FOLDER + (dataFile.match("KEY") ? dataFile : dataFile.toLowerCase()) + ".txt", data);
-    }
-
-    ,
+    saveData: function (dataFile, data) {
+        sys.write(DATA_FOLDER + (dataFile.match("KEY") ? dataFile : dataFile.toLowerCase()) + ".txt", JSON.stringify(data));
+    },
 
     setVariable: function (variable, data) {
         if (typeof(global[variable]) == "undefined") {
             global[variable] = data;
         }
-    }
-
-    ,
+    },
 
     initCustomGlobals: function () {
         botcolor = this.readData("botcolor");
@@ -267,52 +209,48 @@ module.exports = {
         noPermissionMessage = this.readData("nopermissionmessage");
         silenceMessage = this.readData("silencemessage");
         unsilenceMessage = this.readData("unsilencemessage");
-        cmdcolors = this.readArray("cmdcolors");
-        listcolors = this.readObject("listcolors");
-        bots = this.readObject("bots");
-        authtitles = this.readObject("authtitles");
-        selfkickmessages = this.readObject("selfkickmessages");
-        kickmessages = this.readObject("kickmessages");
-        mutemessages = this.readObject("mutemessages");
-        banmessages = this.readObject("banmessages");
-        rangebanmessages = this.readObject("rangebanmessages");
+        cmdcolors = this.readData("cmdcolors");
+        listcolors = this.readData("listcolors");
+        bots = this.readData("bots");
+        authtitles = this.readData("authtitles");
+        selfkickmessages = this.readData("selfkickmessages");
+        kickmessages = this.readData("kickmessages");
+        mutemessages = this.readData("mutemessages");
+        banmessages = this.readData("banmessages");
+        rangebanmessages = this.readData("rangebanmessages");
         this.setVariable("border", this.readData("border"));
         this.setVariable("border2", this.readData("border2"));
-    }
-
-    ,
+    },
 
     initServerGlobals: function () {
-        open = this.readBoolean("open");
+        open = this.readData("open");
         latestShaHash = this.readData("latestshahash");
-        updateFrequency = this.readNumber("updatefrequency");
-        allowance = this.readNumber("allowance");
-        floodtime = this.readNumber("floodtime");
-        floodlevel = this.readNumber("floodlevel");
-        maxplayers = this.readNumber("maxplayers");
-        allowed = this.readArray("allowed");
-        exceptions = this.readArray("exceptions");
-        permchannels = this.readArray("permchannels");
-        allowedrange = this.readArray("allowedrange");
-        namestounban = this.readArray("namestounban");
-        nameblocklist = this.readArray("nameblocklist");
-        silentcommands = this.readArray("silentcommands");
-        rules = this.readObject("rules");
-        banlist = this.readObject("banlist");
-        mutelist = this.readObject("mutelist");
-        timezone = this.readObject("timezone");
-        cityname = this.readObject("cityname");
-        versions = this.readObject("versions");
-        members = this.readObject("members");
-        operatingsystem = this.readObject("operatingsystem");
-        regchannels = this.readObject("regchannels");
-        megabanlist = this.readObject("megabanlist");
-        gigabanlist = this.readObject("gigabanlist");
-        countryname = this.readObject("countryname");
-        rangebanlist = this.readObject("rangebanlist");
-    }
-
-    ,
+        updateFrequency = this.readData("updatefrequency");
+        allowance = this.readData("allowance");
+        floodtime = this.readData("floodtime");
+        floodlevel = this.readData("floodlevel");
+        maxplayers = this.readData("maxplayers");
+        allowed = this.readData("allowed");
+        exceptions = this.readData("exceptions");
+        permchannels = this.readData("permchannels");
+        allowedrange = this.readData("allowedrange");
+        namestounban = this.readData("namestounban");
+        nameblocklist = this.readData("nameblocklist");
+        silentcommands = this.readData("silentcommands");
+        rules = this.readData("rules");
+        banlist = this.readData("banlist");
+        mutelist = this.readData("mutelist");
+        timezone = this.readData("timezone");
+        cityname = this.readData("cityname");
+        versions = this.readData("versions");
+        members = this.readData("members");
+        operatingsystem = this.readData("operatingsystem");
+        regchannels = this.readData("regchannels");
+        megabanlist = this.readData("megabanlist");
+        gigabanlist = this.readData("gigabanlist");
+        countryname = this.readData("countryname");
+        rangebanlist = this.readData("rangebanlist");
+    },
 
     initTempVars: function () {
         this.setVariable("stopbattles", false);
@@ -349,9 +287,7 @@ module.exports = {
         this.setVariable("flingPowerList", {});
         this.setVariable("berryPowerList", {});
         this.setVariable("berryTypeList", {});
-    }
-
-    ,
+    },
 
     /**
         ----------------
@@ -360,47 +296,33 @@ module.exports = {
     **/
     isMutable: function (command) {
         return /sendAll|sendHtmlAll|sendHtmlMain|sendHtmlAuths|sendHtmlAuth|sendHtmlOwner/.test(command.toString());
-    }
-
-    ,
+    },
 
     isAndroid: function (src) {
         return sys.os(src) == "android";
-    }
-
-    ,
+    },
 
     isWeb: function (src) {
         return sys.os(src) == "webclient";
-    }
-
-    ,
+    },
 
     isAndroidOrWeb: function (src) {
         return sys.os(src) == "android" || sys.os(src) == "webclient";
-    }
-
-    ,
+    },
 
     isLetter: function (c) {
         var lower = c.toLowerCase();
         return lower >= 'a' && lower <= 'z';
-    }
-
-    ,
+    },
 
     isVowel: function (letter) {
         letter = letter.toLowerCase();
         return letter == 'a' || letter == 'e' || letter == 'i' || letter == 'o' || letter == 'u';
-    }
-
-    ,
+    },
 
     isHexColor: function (code) {
         return /#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})/.test(code);
-    }
-
-    ,
+    },
 
     floodCheck: function (src, channelname) {
         var auth = (sys.auth(src) == 10 ? 3 : sys.auth(src));
@@ -425,9 +347,7 @@ module.exports = {
             players[src].floodcount = Infinity;
         }
         return false;
-    }
-
-    ,
+    },
 
     muteCheck: function (name) {
         for (var i in mutelist) {
@@ -436,24 +356,18 @@ module.exports = {
             }
         }
         return false;
-    }
-
-    ,
+    },
 
     cmuteCheck: function (name, lower) {
         if (regchannels[lower]) {
             return regchannels[lower].mutelist[name.toLowerCase()] || regchannels[lower].mutedips[sys.dbIp(name)];
         }
         return false;
-    }
-
-    ,
+    },
 
     closeCheck: function (src, name, lower) {
         return regchannels[lower].close > sys.auth(src) && regchannels[lower].close > helpers.cauth(name.toLowerCase(), sys.channelId(lower));
-    }
-
-    ,
+    },
 
     /**
         --------------
@@ -501,9 +415,7 @@ module.exports = {
                 "</font></b> got Star Fox'd.");
             }
         }
-    }
-
-    ,
+    },
 
     muteMessage: function (src, channel, message) {
         var alts = sys.aliases(sys.ip(src)), lower;
@@ -523,34 +435,24 @@ module.exports = {
         }
         sys.sendHtmlMessage(src, this.bot(bots.mute) + "Sorry, you are muted on the server. [Time until expiration: " + this.formatJusticeTime(mutelist[lower].time) +
         "] [Reason: " + mutelist[lower].reason + "]", channel);
-    }
-
-    ,
+    },
 
     channelMuteMessage: function (src, channel) {
         sys.sendHtmlMessage(src, this.bot(bots.mute) + "Sorry, you are muted on this channel.", channel);
-    }
-
-    ,
+    },
 
     silenceMessage: function (src, channel) {
         sys.sendHtmlMessage(src, this.bot(bots.silence) + (bots.silence == "Achmed the Dead Terrorist" ? "I KILL YOOOOUUUU!!!" : "Sorry, this channel is currently silenced."), channel);
-    }
-
-    ,
+    },
 
     reset: function (src) {
         sys.changeName(src, players[src].name);
-    }
-
-    ,
+    },
 
     formatEvent: function (event) {
         var eventFormats = {"frenzy": "<b>Shiny Frenzy</b>", "fest": "<b>Chainfest</b>", "legendary": "<b>Legendary Swarm</b>"};
         return (eventFormats[event] ? eventFormats[event] : "<b>Typeframe</b>");
-    }
-
-    ,
+    },
 
     funrand: function (src, team, slot) {
         var poke = sys.rand(1000, 1146), ability = sys.rand(0, 167), nature = sys.rand(0, 15), item = sys.rand(0, 330);
@@ -599,17 +501,13 @@ module.exports = {
             }
         }
         return false;
-    }
-
-    ,
+    },
 
     calcDamage: function (attack, defense, power, modifier) {
         // assumes the attacking Pokémon is level 100
         var damage = Math.floor((0.84 * (attack / defense) * power + 2) * modifier);
         return [Math.floor(damage * 0.85), damage];
-    }
-
-    ,
+    },
 
     timePassed: function (color, lastMessageTime) {
         var timePassed = new Date() - lastMessageTime, unit;
@@ -637,9 +535,7 @@ module.exports = {
             color = "#008000";
         }
         return "<b><font color='" + color + "'>(" + timePassed + " " + unit + " ago)</font></b>";
-    }
-
-    ,
+    },
 
     imageIndex: function (src) {
         var imageIndex = sys.auth(src);
@@ -652,21 +548,15 @@ module.exports = {
             imageIndex += 4;
         }
         return imageIndex;
-    }
-
-    ,
+    },
 
     channelLink: function (channelName) {
         return "<a href='po:join/" + channelName + "'>#" + channelName + "</a>";
-    }
-
-    ,
+    },
 
     battleLink: function (battle) {
         return "<a href='po:watch/" + battle + "'>Watch</a>";
-    }
-
-    ,
+    },
 
     syntaxHighlight: function (code) {
         var KEYWORDS = ["abstract", "boolean", "break", "byte", "case", "catch", "char", "class", "const", "continue", "debugger",
@@ -698,9 +588,7 @@ module.exports = {
         }
         code = code.replace(/\/\*/g, "<font color='#008000'>/*").replace(/\*\//g, "*/</font>");
         return code;
-    }
-
-    ,
+    },
 
     sum: function (array) {
         var sum = 0;
@@ -708,9 +596,7 @@ module.exports = {
             sum += parseInt(array[i]);
         }
         return sum;
-    }
-
-    ,
+    },
 
     timestampify: function (time) { // time must be a date object
         var hours = JSON.stringify(time.getHours());
@@ -726,15 +612,11 @@ module.exports = {
             seconds = "0" + seconds;
         }
         return "(" + hours + ":" + minutes + ":" + seconds + ")";
-    }
-
-    ,
+    },
 
     type: function (variable) {
         return variable.constructor.toString().replace("function ", "").replace("native code", "").replace(/[^A-Za-z]/g, "");
-    }
-
-    ,
+    },
 
     bannedchars: function (string) {
         if (CYRILLIC.test(string)) {
@@ -760,30 +642,22 @@ module.exports = {
         } else {
             return [false, ""];
         }
-    }
-
-    ,
+    },
 
     countryRetrievalUrl: function (ip) {
         return "http://api.ipinfodb.com/v3/ip-city/?key=" + API_KEY + "&ip=" + ip + "&format=json";
-    }
-
-    ,
+    },
 
     mapsUrl: function (city, country) {
         return "https://www.google.com/maps?q=" + city + ", " + country;
-    }
-
-    ,
+    },
 
     youtubeDataUrl: function (video) {
         if (GOOGLE_KEY === "") {
             return false;
         }
         return "https://www.googleapis.com/youtube/v3/videos?id=" + video + "&key=" + GOOGLE_KEY + "&part=snippet,contentDetails,statistics,status";
-    }
-
-    ,
+    },
 
     countrydata: function (country) {
         if (country == '-' || country === "") {
@@ -841,9 +715,7 @@ module.exports = {
         } else {
             return country;
         }
-    }
-
-    ,
+    },
 
     toFlagKey: function (country) {
         country = this.removespaces(country).toUpperCase();
@@ -864,9 +736,7 @@ module.exports = {
         } else {
             return country;
         }
-    }
-
-    ,
+    },
 
     citydata: function (city) {
         if (city == '-' || city === "") {
@@ -883,9 +753,7 @@ module.exports = {
                 return this.cap(city.toLowerCase());
             }
         }
-    }
-
-    ,
+    },
 
     timezonedata: function (country, zone) {
         if (country == '-' || country === "") {
@@ -893,9 +761,7 @@ module.exports = {
         } else {
             return zone;
         }
-    }
-
-    ,
+    },
 
     formatJusticeTime: function (justiceTime) { // justiceTime is in seconds
         var str = "", days = 0, hours = 0, minutes = 0, seconds = 0;
@@ -937,9 +803,7 @@ module.exports = {
             str += seconds + " seconds";
         }
         return str;
-    }
-
-    ,
+    },
 
     formatUptime: function (uptime) { // uptime is in milliseconds
         var days = 0, hours = 0, minutes = 0, seconds = 0;
@@ -963,15 +827,11 @@ module.exports = {
             seconds += 1;
         }
         return days + " days, " + hours + " hours, " + minutes + " minutes and " + seconds + " seconds.";
-    }
-
-    ,
+    },
 
     formatLastOn: function (src, lastlogin) {
         return (timezone[players[src].name.toLowerCase()] ? this.toTimeZone(lastlogin, timezone[players[src].name.toLowerCase()].split(':')[0]) : lastlogin).split('.')[0].replace('T', ", ");
-    }
-
-    ,
+    },
 
     secondsToWording: function (seconds) {
         var result = [], days = 0, hours = 0, minutes = 0;
@@ -1003,9 +863,7 @@ module.exports = {
         }
 
         return result.join(", ");
-    }
-
-    ,
+    },
 
     version: function (version) {
         switch (version) {
@@ -1058,15 +916,11 @@ module.exports = {
             default:
                 return "";
         }
-    }
-
-    ,
+    },
 
     isGuest: function (name) {
         return (/\bguest[0-9]/i).test(name);
-    }
-
-    ,
+    },
 
     os: function (srcos) {
         if (srcos == "windows") {
@@ -1080,9 +934,7 @@ module.exports = {
         } else if (srcos == "webclient") {
             return IE_BASE64 + " Web Client";
         }
-    }
-
-    ,
+    },
 
     osImage: function (srcos) {
         if (srcos == "windows") {
@@ -1096,15 +948,11 @@ module.exports = {
         } else if (srcos == "webclient") {
             return IE_BASE64;
         }
-    }
-
-    ,
+    },
 
     osName: function (srcos) {
         return (srcos == "webclient" ? "Web Client" : this.cap(srcos));
-    }
-
-    ,
+    },
 
     bannedcharacters: function (message, lower) {
         for (var i in bansites) {
@@ -1133,9 +981,7 @@ module.exports = {
                 return true;
             }
         }
-    }
-
-    ,
+    },
 
     nyancolor: function (number) {
         switch (number) {
@@ -1154,9 +1000,7 @@ module.exports = {
             default:
                 return "#FF0000";
         }
-    }
-
-    ,
+    },
 
     tominutes: function (time, unit) {
         if (unit == "seconds" || unit == "second") {
@@ -1168,9 +1012,7 @@ module.exports = {
         } else {
             return time;
         }
-    }
-
-    ,
+    },
 
     toTimeZone: function (d, zone) {
         d = d.split('T');
@@ -1201,9 +1043,7 @@ module.exports = {
         //sys.sendMessage(src, "Time: " + time, 0);
         newdate = new Date(time);
         return newdate.toISOString();
-    }
-
-    ,
+    },
 
     shortdate: function (d) {
         var f = "yyyy-MM-ddThh:mm:ss", y = d.getFullYear(), m = d.getMonth() + 1, hours = d.getHours(), minutes = d.getMinutes(), seconds = d.getSeconds();
@@ -1222,9 +1062,7 @@ module.exports = {
         f = f.replace(/mm/, z(minutes));
         f = f.replace(/ss/, z(seconds));
         return f;
-    }
-
-    ,
+    },
 
     isRange: function (range) {
         var ipdigits = range.split(".").join(""), iparray;
@@ -1241,9 +1079,7 @@ module.exports = {
             }
         }
         return true;
-    }
-
-    ,
+    },
 
     isIp: function (ip) {
         var ipdigits = ip.split(".").join(""), iparray;
@@ -1260,9 +1096,7 @@ module.exports = {
             }
         }
         return true;
-    }
-
-    ,
+    },
 
     isauthip: function (ip) {
         var alts = sys.aliases(ip);
@@ -1272,16 +1106,12 @@ module.exports = {
             }
         }
         return false;
-    }
-
-    ,
+    },
 
     ipRange: function (ip) {
         var ipdigits = ip.split(".");
         return ipdigits[0] + "." + ipdigits[1];
-    }
-
-    ,
+    },
 
     sameIp: function (ip1, ip2) {
         if (ip1 == "127.0.0.1" && this.ipRange(ip2) == "192.168") {
@@ -1290,9 +1120,7 @@ module.exports = {
             return true;
         }
         return ip1 == ip2;
-    }
-
-    ,
+    },
 
     isInArray: function (string, array) {
         for (var i in array) {
@@ -1301,9 +1129,7 @@ module.exports = {
             }
         }
         return false;
-    }
-
-    ,
+    },
 
     isInString: function (string, array) {
         for (var i in array) {
@@ -1312,9 +1138,7 @@ module.exports = {
             }
         }
         return false;
-    }
-
-    ,
+    },
 
     allCommands: function () {
         var array = [], i;
@@ -1373,9 +1197,7 @@ module.exports = {
             }
         }
         return array;
-    }
-
-    ,
+    },
 
     objecttoarray: function (object) {
         var array = [];
@@ -1383,18 +1205,14 @@ module.exports = {
             array.push(object[index]);
         }
         return array;
-    }
-
-    ,
+    },
 
     bot: function (string) {
         if (string.charAt(0) == '•') {
             return "<b><font color='" + botsymbolcolor + "'>" + string.substr(0, 3) + "</font></b><b><font color='" + botcolor + "'>" + string.slice(3) + "</font></b>";
         }
         return "<font color='" + botcolor + "'><timestamp/></font><font color='" + botsymbolcolor + "'><b>" + this.escapehtml(botsymbol) + "</b></font><font color='" + botcolor + "'><b>" + string + ": </b></font>";
-    }
-
-    ,
+    },
 
     colorcheck: function (poke) {
         POKEMON_COLORS = {
@@ -1500,9 +1318,7 @@ module.exports = {
                 return "brown";
             }
         }
-    }
-
-    ,
+    },
 
     date: function (date) {
         date = date.toString().split(' ');
@@ -1512,9 +1328,7 @@ module.exports = {
         }
         date.splice(6, 1);
         return date.join(' ');
-    }
-
-    ,
+    },
 
     gen: function (pokenum) {
         var NUMBER_OF_GENS = 6, NUMBER_OF_POKEMON_GEN = [151, 251, 386, 493, 649, 718];
@@ -1524,9 +1338,7 @@ module.exports = {
             }
         }
         return 0;
-    }
-
-    ,
+    },
 
     middlecup: function (poke) {
         var MIDDLE_CUP_POKEMON = "Bayleef, Boldore, Cascoon, Chansey, Charmeleon, Clefairy, Combusken, Croconaw, Dewott, Dragonair, Duosion, Dusclops, Eelektrik, Electabuzz, Flaaffy, " +
@@ -1541,9 +1353,7 @@ module.exports = {
             }
         }
         return false;
-    }
-
-    ,
+    },
 
     getmoves: function (id, num, moves, form, derp) {
         if (form > 0) {
@@ -1558,9 +1368,7 @@ module.exports = {
             movesarraya[0][i] = sys.move(movesarraya[0][i]);
         }
         return movesarraya[0].join(", ");
-    }
-
-    ,
+    },
 
     getmovesarraya: function (id, num, moves, form, derp) {
         if (form > 0) {
@@ -1575,9 +1383,7 @@ module.exports = {
             movesarraya[0][i] = sys.move(movesarraya[0][i]);
         }
         return movesarraya[0];
-    }
-
-    ,
+    },
 
     htmlLinks:  function (text, type) {
         var exp = /([a-zA-Z]+:\/\/|www\.)[^\s]+/ig;
@@ -1607,9 +1413,7 @@ module.exports = {
             }
         }
         return type ? resp : link;
-    }
-
-    ,
+    },
 
     idsort: function (array) {
         // array consists of multiple numbers. Using array.sort() would put 1000 in front of 995, for example
@@ -1630,9 +1434,7 @@ module.exports = {
             }
         }
         return sorted;
-    }
-
-    ,
+    },
 
     authSort: function () {
         var i, authArray = [], highestAuth = 0, list = sys.dbAuths().sort();
@@ -1651,22 +1453,16 @@ module.exports = {
             highestAuth--;
         }
         return authArray;
-    }
-
-    ,
+    },
 
     cauthSort: function (channel) {
         var lower = sys.channel(channel).toLowerCase();
         return regchannels[lower].owners.sort().concat(regchannels[lower].admins.sort()).concat(regchannels[lower].mods.sort());
-    }
-
-    ,
+    },
 
     userg: function (string) {
         return (layout == "old" ? "\u2022 " : "") + "<b><font color='#808080'>" + this.escapehtml(string) + "</font></b>";
-    }
-
-    ,
+    },
 
     userl: function (string) {
         if (layout == "new") {
@@ -1674,9 +1470,7 @@ module.exports = {
         } else {
             return "\u2022 <a href='po:send/" + string + "' style='text-decoration: none;'><font color='green'>" + this.escapehtml(string) + "</font></a>";
         }
-    }
-
-    ,
+    },
 
     user: function (string) {
         if (layout == "new") {
@@ -1685,9 +1479,7 @@ module.exports = {
             return (!sys.id(string) ? "\u2022 <font color='green'>" : "") + this.escapehtml(string) + "</font>";
         }
 
-    }
-
-    ,
+    },
 
     arg: function (string) {
         if (layout == "new") {
@@ -1696,33 +1488,23 @@ module.exports = {
             return "<font color='" + (string.toLowerCase() !== string ? "green" : "red") + "'>" + this.escapehtml(string) + "</font>";
         }
 
-    }
-
-    ,
+    },
 
     arg2: function (string) {
         return "<font color='" + (layout == "new" ? cmdcolors[2] : "blue") + "'>" + this.escapehtml(string) + "</font>";
-    }
-
-    ,
+    },
 
     arg3: function (string) {
         return "<font color='" + (layout == "new" ? cmdcolors[3] : "blueviolet") + "'>" + this.escapehtml(string) + "</font>";
-    }
-
-    ,
+    },
 
     arg4: function (string) {
         return "<font color='" + (layout == "new" ? cmdcolors[4] : "olive") + "'>" + this.escapehtml(string) + "</font>";
-    }
-
-    ,
+    },
 
     arg5: function (string) {
         return "<font color='" + (layout == "new" ? cmdcolors[5] : "orange") + "'>" + this.escapehtml(string) + "</font>";
-    }
-
-    ,
+    },
 
     rainbow: function (text) {
         var colors = ["#FF0000", "#FFA500", "#FFD700", "#008000", "#0000FF", "#4B0082", "#800080"],
@@ -1732,9 +1514,7 @@ module.exports = {
             toggle = (toggle + 1) % colors.length;
         }
         return array.join("");
-    }
-
-    ,
+    },
 
     duoColor: function (text, colorX, colorY) {
         var array = [], toggle = false, i;
@@ -1743,16 +1523,12 @@ module.exports = {
             toggle = !toggle;
         }
         return array.join("");
-    }
-
-    ,
+    },
 
     desu: function (text) {
         var firstColor = ["#008000", "#FF0000"][sys.rand(0, 2)];
         return this.duoColor(text, firstColor, (firstColor == "#008000" ? "#FF0000" : "#008000"));
-    }
-
-    ,
+    },
 
     leet: function (text) {
         var charset = ['o', 'l', 'z', 'e', 'a', 's', '6', 't', 'b', 'g'], i;
@@ -1760,9 +1536,7 @@ module.exports = {
             text = text.replace(new RegExp(charset[i], "gi"), i);
         }
         return text.toLowerCase();
-    }
-
-    ,
+    },
 
     morse: function (text) {
         var charset = "abcdefghijklmnopqrstuvwxyz0123456789 ", morse = [".-", "-...", "-.-.", "-..", ".", "..-.", "--.", "....",
@@ -1775,15 +1549,11 @@ module.exports = {
             }
         }
         return newText.join(" ");
-    }
-
-    ,
+    },
 
     reverse: function (text) {
         return text.split("").reverse().join("");
-    }
-
-    ,
+    },
 
     statName: function (stat) {
         return([
@@ -1794,9 +1564,7 @@ module.exports = {
             "Sp. Def.",
             "Speed"
         ][stat]);
-    }
-
-    ,
+    },
 
     colorStat: function (stat) {
         if (stat <= 30) {
@@ -1814,25 +1582,18 @@ module.exports = {
         } else {
             return "<b><font color='#00008B'>" + stat + "</font></b>";
         }
-    }
-
-    ,
+    },
 
     cap: function (string) {
         return string.charAt(0).toUpperCase() + string.slice(1);
-    }
-
-    ,
-
+    },
 
     sep: function (num) {
         if (isNaN(num)) {
             return '-';
         }
         return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-    }
-
-    ,
+    },
 
     correctDateNotation: function (date) {
         var tmp, time, year, month, day;
@@ -1848,21 +1609,15 @@ module.exports = {
             month = month.slice(1);
         }
         return day + '-' + month + '-' + year + ", " + time.replace('Z', "");
-    }
-
-    ,
+    },
 
     noflash: function (name) {
         return name[0] + "\u200b" + name.substr(1);
-    }
-
-    ,
+    },
 
     removespaces: function (string) {
         return string.split(" ").join("");
-    }
-
-    ,
+    },
 
     spaces: function (num) {
         if (isNaN(num)) {
@@ -1874,15 +1629,11 @@ module.exports = {
             num--;
         }
         return spaces;
-    }
-
-    ,
+    },
 
     strip: function (str) {
         return str.replace(/<\/?[^>]*>/g, "");
-    }
-
-    ,
+    },
 
     breakinghtml: function (string) {
         if (string.split("<").length > string.split(">").length) {
@@ -1895,33 +1646,23 @@ module.exports = {
             return true;
         }
         return false;
-    }
-
-    ,
+    },
 
     escapehtml: function (string) {
         return string.toString().replace(/&/g, "&amp;").replace(/>/g, "&gt;").replace(/</g, "&lt;");
-    }
-
-    ,
+    },
 
     escapehtmluser: function (string) {
         return "<font color='" + cmdcolors[0] + "'>" + string.replace(/&/g, "&amp;").replace(/>/g, "&gt;").replace(/</g, "&lt;") + "</font>";
-    }
-
-    ,
+    },
 
     escapehtmlarg: function (string) {
         return "<font color='" + cmdcolors[1] + "'>" + string.replace(/&/g, "&amp;").replace(/>/g, "&gt;").replace(/</g, "&lt;") + "</font>";
-    }
-
-    ,
+    },
 
     toseconds: function (time, unit) {
         return({"minutes": time*60, "minute": time*60, "hours": time*3600, "hour": time*3600, "days": time*86400, "day": time*86400, "weeks": time*604800, "week": time*604800, "months": time*2592000, "month": time*2592000, "year": time*31536000, "years": time*31536000}[unit] || time);
-    }
-
-    ,
+    },
 
     timeplurality: function (time, unit) {
         if (unit == "s") {
@@ -1943,18 +1684,14 @@ module.exports = {
             unit = "feet";
         }
         return unit;
-    }
-
-    ,
+    },
 
     unitplural: function (unit) {
         if (unit[unit.length-1] != "s") {
             unit = unit + "s";
         }
         return unit;
-    }
-
-    ,
+    },
 
     typecolor: function (pokeNum) {
         return ([
@@ -1978,48 +1715,36 @@ module.exports = {
             "#EE82EE",
             "#2E8B57",
         ][sys.pokeType1(pokeNum)]);
-    }
-
-    ,
+    },
 
     pokeImage: function (pokeNum, shine, gen) {
         if (gen) {
             return (shine ? "<img src='pokemon:" + pokeNum + "&shiny=true&gen=" + gen + "'>" : "<img src='pokemon:" + pokeNum + "&gen=" + gen + "'>");
         }
         return (shine ? "<img src='pokemon:" + pokeNum + "&shiny=true'>" : "<img src='pokemon:" + pokeNum + "'>");
-    }
-
-    ,
+    },
 
     pokeIcon: function (pokeNum) {
         return "<img src='icon:" + pokeNum + "'>";
-    }
-
-    ,
+    },
 
     itemImage: function (itemNum) {
         return "<img src='item:" + itemNum + "'>";
-    }
-
-    ,
+    },
 
     typeImage: function (src, type) {
         if (this.isAndroidOrWeb(src)) {
             return sys.type(type);
         }
         return "<img src='Themes/Classic/types/type" + type + ".png'>";
-    }
-
-    ,
+    },
 
     genderImage: function (src, gender) {
         if (this.isAndroidOrWeb(src)) {
             return this.cap(sys.gender(gender));
         }
         return "<img src='Themes/Classic/genders/gender" + gender + ".png'>";
-    }
-
-    ,
+    },
 
     pokeBallImage: function (src, ball) {
         var mapping;
@@ -2029,18 +1754,14 @@ module.exports = {
         }
         mapping = {"poke": "u", "great": "m", "ultra": "a", "master": "o"};
         return "<img src='Themes/Classic/client/" + mapping[ball] + "Available.png'>";
-    }
-
-    ,
+    },
 
     statusImage: function (src, status) {
         if (this.isAndroidOrWeb(src)) {
             return STATUS[status.toUpperCase()];
         }
         return "<img src='Themes/Classic/status/battle_status" + this.toStatusNumber(status) + ".png'>";
-    }
-
-    ,
+    },
 
     toStatusNumber: function (status) {
         return ({
@@ -2050,9 +1771,7 @@ module.exports = {
             "burn": 4,
             "poison": 5
         }[status]);
-    }
-
-    ,
+    },
 
     color: function (src) {
         if (sys.getColor(src) == "#000000") {
@@ -2060,9 +1779,7 @@ module.exports = {
             return colorlist[src % colorlist.length];
         }
         return sys.getColor(src);
-    }
-
-    ,
+    },
 
     isTooGreen: function (color) {
         var hex = color.substr(3, 2).toUpperCase(), first = hex.charAt(0), second = hex.charAt(1);
@@ -2076,9 +1793,7 @@ module.exports = {
             return false;
         }
         return true;
-    }
-
-    ,
+    },
 
     authName: function (auth, displayuser, hideinvis) {
         if (auth === 0) {
@@ -2088,9 +1803,7 @@ module.exports = {
         } else if (auth >= 4) {
             return hideinvis ? AUTH_NAMES[0] : AUTH_NAMES[4];
         }
-    }
-
-    ,
+    },
 
     cauth: function (name, channel) {
         var lower = sys.channel(channel).toLowerCase();
@@ -2109,9 +1822,7 @@ module.exports = {
         } else {
             return (sys.dbAuth(name) >= 4 ? 3 : sys.dbAuth(name));
         }
-    }
-
-    ,
+    },
 
     cauthname: function (name, channel) {
         var auth = this.cauth(name, channel);
@@ -2123,9 +1834,7 @@ module.exports = {
             return "Channel Owner";
         }
         return "";
-    }
-
-    ,
+    },
 
     authimage: function (src, authlevel) {
         if (this.isAndroidOrWeb(src)) {
@@ -2159,9 +1868,7 @@ module.exports = {
         0: "<img src='Themes/Classic/client/uAvailable.png'>",
         }[authlevel] || "<img src='Themes/Classic/client/uAway.png'>");
 
-    }
-
-    ,
+    },
 
     listOfClauses: function (number) {
         var clauses = ["Inverted Battle", "Self-KO Clause", "Wifi Battle", "Species Clause", "No Timeout", "Challenge Cup", "Item Clause", "Disallow Spects", "Freeze Clause", "Sleep Clause"],
@@ -2179,41 +1886,31 @@ module.exports = {
             list = "none";
         }
         return list;
-    }
-
-    ,
+    },
 
     calcStat: function (stat, base, IV, EV, nature) {
         if (stat == '0') {
             return this.calcHP(base, IV, EV);
         }
         return Math.floor(Math.floor((IV + (2 * base) + Math.floor(EV / 4)) * 100 / 100 + 5) * nature);
-    }
-
-    ,
+    },
 
     calcHP: function (base, IV, EV) {
         if (base == 1) {
             return 1;
         }
         return Math.floor((IV + (2 * base) + Math.floor(EV / 4) + 100) + 10);
-    }
-
-    ,
+    },
 
     getDbIndex: function (pokeId) {
         var id = pokeId % 65536, forme = (pokeId - id) / 65536;
         return id + ':' + forme;
-    }
-
-    ,
+    },
 
     displayNum: function (pokeId) {
         var id = pokeId % 65536, forme = (pokeId - id) / 65536;
         return forme === 0 ? id : id + '-' + forme;
-    }
-
-    ,
+    },
 
     height: function (pokeId) {
         if (Object.keys(heightList).length === 0) {
@@ -2232,9 +1929,7 @@ module.exports = {
         index = key.indexOf(':') + 1;
         var base = key.substr(0, index);
         return heightList[base + '0'].trim();
-    }
-
-    ,
+    },
 
     weight: function (pokeId) {
         if (Object.keys(weightList).length === 0) {
@@ -2253,9 +1948,7 @@ module.exports = {
         index = key.indexOf(':') + 1;
         var base = key.substr(0, index);
         return weightList[base + '0'];
-    }
-
-    ,
+    },
 
     movepool: function (pokeId) {
         var index, id, movepool;
@@ -2294,9 +1987,7 @@ module.exports = {
         index = key.indexOf(':') + 1;
         var base = key.substr(0, index);
         return movepoolList[base];
-    }
-
-    ,
+    },
 
     weightPower: function (weight) {
         var power;
@@ -2314,15 +2005,11 @@ module.exports = {
             power = 120;
         }
         return power;
-    }
-
-    ,
+    },
 
     teamOrdinal: function (team) {
         return ({ 0:"first", 1:"second", 2:"third", 3:"fourth", 4:"fifth", 5:"sixth" }[team]);
-    }
-
-    ,
+    },
 
     ordinal: function (num) {
         var str = String(num), lastDigit = str.charAt(str.length - 1);
@@ -2330,9 +2017,7 @@ module.exports = {
             lastDigit = "3";
         }
         return num + ({ "1":"st", "2":"nd", "3":"th" }[lastDigit]);
-    }
-
-    ,
+    },
 
     // Chuck Norris tier is at index 23
     tierOf: function (pokeId) {
@@ -2355,9 +2040,7 @@ module.exports = {
         }
 
         return "NU";
-    }
-
-    ,
+    },
 
     movePower: function (moveId, gen) {
         if (!gen) {
@@ -2376,9 +2059,7 @@ module.exports = {
             return '-';
         }
         return powerList[moveId];
-    }
-
-    ,
+    },
 
     moveCategory: function (moveId, gen) {
         if (!gen) {
@@ -2400,9 +2081,7 @@ module.exports = {
             return "<font color='#FF69B4'>Special</font>";
         }
         return "<font color='#2E8B57'>Other</font>";
-    }
-
-    ,
+    },
 
     moveAccuracy: function (moveId, gen) {
         if (!gen) {
@@ -2421,9 +2100,7 @@ module.exports = {
             return '-';
         }
         return accList[moveId];
-    }
-
-    ,
+    },
 
     movePP: function (moveId, gen) {
         if (!gen) {
@@ -2439,9 +2116,7 @@ module.exports = {
             }
         }
         return [ppList[moveId], ppList[moveId] * 8 / 5];
-    }
-
-    ,
+    },
 
     moveEffect: function (moveId, gen) {
         if (!gen) {
@@ -2460,9 +2135,7 @@ module.exports = {
             return "Deals normal damage.";
         }
         return moveEffList[moveId].replace(/[[\]{}]/g, "");
-    }
-
-    ,
+    },
 
     moveContact: function (moveId, gen) {
         if (!gen) {
@@ -2478,9 +2151,7 @@ module.exports = {
             }
         }
         return (moveFlagList[moveId] % 2 === 1) ? "<font color='#008000'>Yes</font>" : "<font color='#FF0000'>No</font>";
-    }
-
-    ,
+    },
 
     movePriority: function (moveId, gen) {
         if (!gen) {
@@ -2499,9 +2170,7 @@ module.exports = {
             return 0;
         }
         return movePriorityList[moveId];
-    }
-
-    ,
+    },
 
     moveRange: function (moveId, gen) {
         if (!gen) {
@@ -2520,9 +2189,7 @@ module.exports = {
             return "Single Target";
         }
         return this.moveRangeToText(parseInt(moveRangeList[moveId]));
-    }
-
-    ,
+    },
 
     moveRangeToText: function (moveRange) {
         switch (moveRange) {
@@ -2551,9 +2218,7 @@ module.exports = {
             default:
                 return "Single Target";
         }
-    }
-
-    ,
+    },
 
     ability: function (abilityId) {
         if (Object.keys(abilityList).length === 0) {
@@ -2566,9 +2231,7 @@ module.exports = {
             }
         }
         return abilityList[abilityId];
-    }
-
-    ,
+    },
 
     pokemonWithAbility: function (abilityId) {
         if (!pokemonWithAbilityList[abilityId]) {
@@ -2597,9 +2260,7 @@ module.exports = {
             }
         }
         return pokemonWithAbilityList[abilityId];
-    }
-
-    ,
+    },
 
     getItem: function (itemId) {
         if (Object.keys(itemList).length === 0) {
@@ -2612,9 +2273,7 @@ module.exports = {
             }
         }
         return itemList[itemId];
-    }
-
-    ,
+    },
 
     getBerry: function (berryId) {
         if (Object.keys(berryList).length === 0) {
@@ -2627,9 +2286,7 @@ module.exports = {
             }
         }
         return berryList[berryId];
-    }
-
-    ,
+    },
 
     getFlingPower: function (itemId) {
         if (Object.keys(flingPowerList).length === 0) {
@@ -2642,9 +2299,7 @@ module.exports = {
             }
         }
         return flingPowerList[itemId];
-    }
-
-    ,
+    },
 
     getBerryPower: function (berryId) {
         if (Object.keys(berryPowerList).length === 0) {
@@ -2657,9 +2312,7 @@ module.exports = {
             }
         }
         return +berryPowerList[berryId] + 20;
-    }
-
-    ,
+    },
 
     getBerryType: function (berryId) {
         if (Object.keys(berryTypeList).length === 0) {
@@ -2672,9 +2325,7 @@ module.exports = {
             }
         }
         return berryTypeList[berryId].trim();
-    }
-
-    ,
+    },
 
     /**
         ------------
@@ -2693,23 +2344,17 @@ module.exports = {
             myarraya[i] = tempj;
             myarraya[j] = tempi;
         }
-    }
-
-    ,
+    },
 
     tourstart: function (channel) {
         tour[channel].tourmode = 2;
         tour[channel].roundnumber = 0;
         this.roundpairing(channel);
-    }
-
-    ,
+    },
 
     tourcount: function (channel) {
         return tour[channel].tournumber - tour[channel].tourmembers.length;
-    }
-
-    ,
+    },
 
     tourdisplay: function (tourdisplayversion, channel) {
         var correctborder = border;
@@ -2729,9 +2374,7 @@ module.exports = {
         + joinmodestring + "<br>"
         + border2;
         tourdisplayversion === 0 ? sys.sendHtmlMain(tourdisplay) : sys.sendHtmlMessage(src, tourdisplay, channel);
-    }
-
-    ,
+    },
 
     roundincrease: function (winnername, losername, channel) {
         var tourloser = tour[channel].tourbattlers.indexOf(losername);
@@ -2784,9 +2427,7 @@ module.exports = {
             }
             this.roundpairing(channel);
         }
-    }
-
-    ,
+    },
 
     roundpairing: function (channel) {
         while (0 in tour[channel].tourlosers) {
@@ -2809,9 +2450,7 @@ module.exports = {
                 }
             }
         }*/
-    }
-
-    ,
+    },
 
     rounddisplay: function (rounddisplayversion, channel) {
         var send = rounddisplayversion === 0 ? this.sendmessage : sys.sendHtmlAll;
@@ -2860,9 +2499,7 @@ module.exports = {
             + correctborder;
         }
         sys.sendHtmlMain(roundstring);
-    }
-
-    ,
+    },
 
     tourmembersnumber: function (name, channel) {
         if (tour[channel].tourmode !== 0) {
@@ -2871,30 +2508,22 @@ module.exports = {
                 return tourmembersnumber;
             }
         }
-    }
-
-    ,
+    },
 
     tourmembersname: function (number, channel) {
         if (number <= tour[channel].tourcurrentnumber) {
             return members[tour[channel].tourmembers[number]];
         }
-    }
-
-    ,
+    },
 
     tourloserscheck: function (name, channel) {
         return tour[channel].tourlosers.indexOf(name) == -1 ? true: false;
-    }
-
-    ,
+    },
 
     opponentof: function (name, channel) {
         var tourmembersnumber = this.tourmembersnumber(name, channel);
         return tourmembersnumber % 2 === 0 ? tour[channel].tourmembers[tourmembersnumber+1]: tour[channel].tourmembers[tourmembersnumber-1];
-    }
-
-    ,
+    },
 
     nopair: function (index1, index2) {
         return (index1 % 2 === 0 && index2 != index1 + 1) || (index1 % 2 == 1 && index1 != index2 + 1) ? true: false;

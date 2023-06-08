@@ -10,7 +10,7 @@
     in the Russian Roulette channel.
     ----------------------------------------------
 */
-var rr = sys.fexists(DATA_FOLDER + "rr.txt") ? helpers.readObject("rr") : {};
+var rr = sys.fexists(DATA_FOLDER + "rr.txt") ? helpers.readData("rr") : {};
 
 module.exports = {
     commands: {
@@ -45,7 +45,7 @@ module.exports = {
                 return;
             }
             rr[lower].bullets++;
-            sys.write(DATA_FOLDER + "rr.txt", JSON.stringify(rr));
+            helpers.saveData("rr", rr);
             sys.sendHtmlAll(helpers.bot(bots.rr) + name + " has loaded a bullet into their revolver!", rrchannel);
         },
     
@@ -60,7 +60,7 @@ module.exports = {
                 return;
             }
             rr[lower].bullets--;
-            sys.write(DATA_FOLDER + "rr.txt", JSON.stringify(rr));
+            helpers.saveData("rr", rr);
             sys.sendHtmlAll(helpers.bot(bots.rr) + name + " has unloaded a bullet from their revolver!", rrchannel);
         },
     
@@ -89,7 +89,7 @@ module.exports = {
                 }
                 sys.sendHtmlAll(helpers.bot(bots.rr) + name + " has spun the cylinder and pulled the trigger... nothing happened! Whew!", rrchannel);
             }
-            sys.write(DATA_FOLDER + "rr.txt", JSON.stringify(rr));
+            helpers.saveData("rr", rr);
         },
     
         bullets: function (src, channel, command) {
@@ -130,7 +130,7 @@ module.exports = {
                 return;
             }
             delete rr[lower];
-            sys.write(DATA_FOLDER + "rr.txt", JSON.stringify(rr));
+            helpers.saveData("rr", rr);
             sys.sendHtmlMessage(src, helpers.bot(bots.rr) + "Your Russian Roulette data has been reset.", rrchannel);
         }
     }

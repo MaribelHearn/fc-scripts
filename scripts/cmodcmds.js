@@ -67,7 +67,7 @@ module.exports = {
         } else {
             regchannels[lower].topic.push(text);
         }
-        helpers.saveData("regchannels");
+        helpers.saveData("regchannels", regchannels);
         sys.sendHtmlAll(helpers.bot(bots.channel) + sys.name(src) + " changed the channel topic to '" + helpers.escapehtml(((typeof(text)) == "string" ? text : text.join(TOPIC_DELIMITER))) + "'", channel);
     }
 
@@ -82,7 +82,7 @@ module.exports = {
         if (regchannels[lower]) {
             regchannels[lower].topic.push(text);
             regchannels[lower].topicmakers.push(name);
-            helpers.saveData("regchannels");
+            helpers.saveData("regchannels", regchannels);
             sys.sendHtmlAll(helpers.bot(bots.channel) + sys.name(src) + " added '" + helpers.escapehtml(text) + "' to the channel topic!", channel);
         } else {
             helpers.starfox(src, channel, command, bots.channel, "Error 400, this channel isn't registered!", channel);
@@ -119,7 +119,7 @@ module.exports = {
             oldtext = regchannels[lower].topic[number];
             regchannels[lower].topic.splice(number, 1);
             regchannels[lower].topicmakers.splice(number, 1);
-            helpers.saveData("regchannels");
+            helpers.saveData("regchannels", regchannels);
             sys.sendHtmlAll(helpers.bot(bots.channel) + sys.name(src) + " removed '" + helpers.escapehtml(oldtext) + "' from the channel topic!", channel);
         } else {
             helpers.starfox(src, channel, command, bots.channel, "Error 400, this channel isn't registered!", channel);
@@ -154,7 +154,7 @@ module.exports = {
             }
             oldtext = regchannels[lower].topic[number];
             regchannels[lower].topic[number] = text;
-            helpers.saveData("regchannels");
+            helpers.saveData("regchannels", regchannels);
             sys.sendHtmlAll(helpers.bot(bots.channel) + sys.name(src) + " changed '" + helpers.escapehtml(oldtext) + "' to '" + helpers.escapehtml(text) + "' in the channel topic!", channel);
         } else {
             helpers.starfox(src, channel, command, bots.channel, "Error 400, this channel isn't registered!", channel);
@@ -234,7 +234,7 @@ module.exports = {
         regchannels[lower].mutelist[trgtname].mutedby = players[src].name;
         regchannels[lower].mutelist[trgtname].reason = reason;
         regchannels[lower].mutelist[trgtname].date = helpers.date(new Date());
-        helpers.saveData("regchannels");
+        helpers.saveData("regchannels", regchannels);
         sys.sendHtmlAll(helpers.bot(bots.channel) + trgtname + " has been muted on this channel by " + name + "! [Reason: " + reason + "]", channel);
     }
 
@@ -261,7 +261,7 @@ module.exports = {
         }
         delete regchannels[lower].mutelist[command[1].toLowerCase()];
         delete regchannels[lower].mutedips[trgtip];
-        helpers.saveData("regchannels");
+        helpers.saveData("regchannels", regchannels);
         sys.sendHtmlAll(helpers.bot(bots.channel) + command[1] + " has been unmuted on this channel by " + name + "!", channel);
     }
 
@@ -381,7 +381,7 @@ module.exports = {
             strength = cauth;
         }
         regchannels[lower].close = strength;
-        helpers.saveData("regchannels");
+        helpers.saveData("regchannels", regchannels);
         sys.sendHtmlAll(helpers.bot(bots.channel) + "This channel has been closed for any channel auth level lower than Channel " + AUTH_NAMES[strength] + " by " + name + ".", channel);
     }
 
@@ -398,7 +398,7 @@ module.exports = {
             return;
         }
         regchannels[lower].close = 0;
-        helpers.saveData("regchannels");
+        helpers.saveData("regchannels", regchannels);
         sys.sendHtmlAll(helpers.bot(bots.channel) + "This channel has been opened by " + name + ".", channel);
     }
 
@@ -428,7 +428,7 @@ module.exports = {
                 return;
             }
             regchannels[lower].silence = level;
-            helpers.saveData("regchannels");
+            helpers.saveData("regchannels", regchannels);
             sys.sendHtmlAll(helpers.bot(bots.silence) + silenceMessage.replace(/~Player~/gi, name).replace(/~Channel~/gi, channelName) + " [Silence Level: " + level + "]", channel);
             return;
         }
@@ -447,7 +447,7 @@ module.exports = {
                 helpers.starfox(src, channel, command, bots.silence, "Error 400, this channel isn't silenced!");
             } else if (regchannels[lower].silence <= cauth) {
                 regchannels[lower].silence = 0;
-                helpers.saveData("regchannels");
+                helpers.saveData("regchannels", regchannels);
                 sys.sendHtmlAll(helpers.bot(bots.silence) + unsilenceMessage.replace(/~Player~/gi, name), channel);
             }
             return;
@@ -467,7 +467,7 @@ module.exports = {
                 regchannels[lower].caps = true;
                 sys.sendHtmlAll(helpers.bot(bots.channel) + "<b>" + helpers.user(sys.name(src)) + " has allowed excessive usage of caps on the channel.</b>", channel);
             }
-            helpers.saveData("regchannels");
+            helpers.saveData("regchannels", regchannels);
         } else {
             helpers.starfox(src, channel, command, bots.channel, "Error 400, this channel isn't registered!", channel);
             return;
@@ -486,7 +486,7 @@ module.exports = {
                 regchannels[lower].flood = true;
                 sys.sendHtmlAll(helpers.bot(bots.channel) + "<b>" + helpers.user(sys.name(src)) + " has allowed flooding on the channel.</b>", channel);
             }
-            helpers.saveData("regchannels");
+            helpers.saveData("regchannels", regchannels);
         } else {
             helpers.starfox(src, channel, command, bots.channel, "Error 400, this channel isn't registered!", channel);
             return;

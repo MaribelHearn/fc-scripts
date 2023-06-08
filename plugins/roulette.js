@@ -18,7 +18,7 @@ var ROULETTE_FEST_MAX = 45;
 var rouletteTime = sys.rand(ROULETTE_WAIT_MIN, ROULETTE_WAIT_MAX);
 var rouletteEvent = "";
 var rouletteStep = 0;
-var roulette = sys.fexists(DATA_FOLDER + "roulette.txt") ? helpers.readObject("roulette") : {};
+var roulette = sys.fexists(DATA_FOLDER + "roulette.txt") ? helpers.readData("roulette") : {};
 
 module.exports = {
     commands: {
@@ -123,7 +123,7 @@ module.exports = {
             itemName = sys.item(item);
     
             roulette[lower].previousPokemon = pokemon;
-            sys.write(DATA_FOLDER + "roulette.txt", JSON.stringify(roulette));
+            helpers.saveData("roulette", roulette);
     
             rouletteMessage += "They obtained a" + (helpers.isVowel(nature.charAt(0)) ? "n " + nature : " " + nature) + " " + (shiny ? "<b><font color='#FFA500'>Shiny</font></b> " : "") +
             "<b><font color='" + helpers.typecolor(pokemon) + "'>" + pokeName + "<font></b> holding a" + (helpers.isVowel(itemName.charAt(0)) || itemName.charAt(0) == 'X' ? "n " + itemName : " " + itemName) + "!" +
@@ -141,7 +141,7 @@ module.exports = {
                 roulette[lower].eventFlash = false;
                 roulette[lower].shinyChance = 4096;
                 roulette[lower].longestChain = [1, ""];
-                sys.write(DATA_FOLDER + "roulette.txt", JSON.stringify(roulette));
+                helpers.saveData("roulette", roulette);
                 sys.sendHtmlMessage(src, helpers.bot(bots.roulette) + "You don't have any Shiny Pokémon. :(", channel);
                 return;
             }
@@ -167,7 +167,7 @@ module.exports = {
                 roulette[lower].eventFlash = false;
                 roulette[lower].shinyChance = 4096;
                 roulette[lower].longestChain = [1, ""];
-                sys.write(DATA_FOLDER + "roulette.txt", JSON.stringify(roulette));
+                helpers.saveData("roulette", roulette);
                 sys.sendHtmlMessage(src, helpers.bot(bots.roulette) + "You haven't chained yet. :(", channel);
                 return;
             }
@@ -188,12 +188,12 @@ module.exports = {
                 roulette[lower].isChaining = false;
                 roulette[lower].eventFlash = false;
                 roulette[lower].shinyChance = 4096;
-                sys.write(DATA_FOLDER + "roulette.txt", JSON.stringify(roulette));
+                helpers.saveData("roulette", roulette);
                 sys.sendHtmlMessage(src, helpers.bot(bots.roulette) + "You turned event flashing on!", channel);
                 return;
             }
             roulette[lower].eventFlash = (roulette[lower].eventFlash ? false : true);
-            sys.write(DATA_FOLDER + "roulette.txt", JSON.stringify(roulette));
+            helpers.saveData("roulette", roulette);
             sys.sendHtmlMessage(src, helpers.bot(bots.roulette) + "You turned event flashing " + (roulette[lower].eventFlash ? "on" : "off") + "!", channel);
         }
     }

@@ -252,7 +252,7 @@ module.exports = {
         mutelist[lower].silent = (!command[4] ? false : true);
         var date = helpers.date(new Date());
         mutelist[lower].date = date;
-        helpers.saveData("mutelist");
+        helpers.saveData("mutelist", mutelist);
         if (members[lower]) {
             trgtname = members[lower];
         }
@@ -298,7 +298,7 @@ module.exports = {
             }
             if (sys.dbIp(index) == trgtip) {
                 delete mutelist[index];
-                helpers.saveData("mutelist");
+                helpers.saveData("mutelist", mutelist);
                 sys.sendHtmlAll(helpers.bot(bots.mute) + trgtname + " has been unmuted by " + name + "!");
                 return;
             }
@@ -319,7 +319,7 @@ module.exports = {
             reason = "Unknown";
         }
         mutelist[lower].reason = helpers.escapehtml(reason);
-        helpers.saveData("mutelist");
+        helpers.saveData("mutelist", mutelist);
         if (members[lower]) {
             lower = members[lower];
         }
@@ -377,7 +377,7 @@ module.exports = {
 
     clearmutelist: function (src, channel, command) {
         mutelist = {};
-        helpers.saveData("mutelist");
+        helpers.saveData("mutelist", mutelist);
         sys.sendHtmlAll(helpers.bot(bots.mute) + "The mute list has been cleared by " + sys.name(src) + "!", channel);
     }
 
@@ -973,7 +973,7 @@ module.exports = {
             return;
         }
         servertopic = command[1];
-        helpers.saveData("servertopic");
+        helpers.saveData("servertopic", servertopic);
         sys.sendHtmlAll(helpers.bot(bots.topic) + "<b>" + helpers.user(name) + " changed the server topic to " + helpers.arg(command[1]) + ".</b>");
     }
 
@@ -1153,15 +1153,15 @@ module.exports = {
             if (helpers.isInArray(lower, regchannels[index].mods)) {
                 regchannels[index].mods.splice(regchannels[index].mods.indexOf(lower), 1);
                 regchannels[index].mods.push(player);
-                helpers.saveData("regchannels");
+                helpers.saveData("regchannels", regchannels);
             } else if (helpers.isInArray(lower, regchannels[index].admins)) {
                 regchannels[index].admins.splice(regchannels[index].admins.indexOf(lower), 1);
                 regchannels[index].admins.push(player);
-                helpers.saveData("regchannels");
+                helpers.saveData("regchannels", regchannels);
             } else if (helpers.isInArray(lower, regchannels[index].owners)) {
                 regchannels[index].owners.splice(regchannels[index].owners.indexOf(lower), 1);
                 regchannels[index].owners.push(player);
-                helpers.saveData("regchannels");
+                helpers.saveData("regchannels", regchannels);
             }
         }
         if (members[player]) {
@@ -1206,7 +1206,7 @@ module.exports = {
                 return;
             }
             authtitles[players[src].name.toLowerCase()] = command[1];
-            helpers.saveData("authtitles");
+            helpers.saveData("authtitles", authtitles);
             sys.sendHtmlAll(helpers.bot(bots.command) + "<b>" + helpers.user(sys.name(src)) + " changed their auth title to " + helpers.arg(command[1]) + ".</b>", channel);
         } else {
             player = command[1].toLowerCase();
@@ -1219,7 +1219,7 @@ module.exports = {
                 return;
             }
             authtitles[player] = command[2];
-            helpers.saveData("authtitles");
+            helpers.saveData("authtitles", authtitles);
             if (members[player]) {
                 player = members[player];
             }
@@ -1369,7 +1369,7 @@ module.exports = {
             return;
         }
         selfkickmessages[lower] = message;
-        helpers.saveData("selfkickmessages");
+        helpers.saveData("selfkickmessages", selfkickmessages);
         sys.sendHtmlMessage(src, helpers.bot(bots.kick) + "Your self kick message has been changed successfully.", channel);
     }
 
@@ -1383,7 +1383,7 @@ module.exports = {
             return;
         }
         kickmessages[lower] = message;
-        helpers.saveData("kickmessages");
+        helpers.saveData("kickmessages", kickmessages);
         sys.sendHtmlMessage(src, helpers.bot(bots.kick) + "Your kick message has been changed successfully.", channel);
     }
 
@@ -1397,7 +1397,7 @@ module.exports = {
             return;
         }
         mutemessages[lower] = message;
-        helpers.saveData("mutemessages");
+        helpers.saveData("mutemessages", mutemessages);
         sys.sendHtmlMessage(src, helpers.bot(bots.mute) + "Your mute message has been changed successfully.", channel);
     }
 
@@ -1411,19 +1411,19 @@ module.exports = {
         }
         if (message == "selfkick") {
             delete selfkickmessages[lower];
-            helpers.saveData("selfkickmessages");
+            helpers.saveData("selfkickmessages", selfkickmessages);
         } else if (message == "kick") {
             delete kickmessages[lower];
-            helpers.saveData("kickmessages");
+            helpers.saveData("kickmessages", kickmessages);
         } else if (message == "mute") {
             delete mutemessages[lower];
-            helpers.saveData("mutemessages");
+            helpers.saveData("mutemessages", mutemessages);
         } else if (message == "ban") {
             delete banmessages[lower];
-            helpers.saveData("banmessages");
+            helpers.saveData("banmessages", banmessages);
         } else if (message == "rangeban") {
             delete rangebanmessages[lower];
-            helpers.saveData("rangebanmessages");
+            helpers.saveData("rangebanmessages", rangebanmessages);
         } else {
             helpers.starfox(src, channel, command, bots.command, "Error 403, invalid message.");
             return;
@@ -1440,11 +1440,11 @@ module.exports = {
         delete mutemessages[lower];
         delete banmessages[lower];
         delete rangebanmessages[lower];
-        helpers.saveData("selfkickmessages");
-        helpers.saveData("kickmessages");
-        helpers.saveData("mutemessages");
-        helpers.saveData("banmessages");
-        helpers.saveData("rangebanmessages");
+        helpers.saveData("selfkickmessages", selfkickmessages);
+        helpers.saveData("kickmessages", kickmessages);
+        helpers.saveData("mutemessages", mutemessages);
+        helpers.saveData("banmessages", banmessages);
+        helpers.saveData("rangebanmessages", rangebanmessages);
         sys.sendHtmlMessage(src, helpers.bot(bots.main) + "Your messages have been reset.", channel);
     }
 
@@ -1486,7 +1486,7 @@ module.exports = {
         }
         word = command[1].toLowerCase();
         nameblocklist.push(word);
-        helpers.saveData("nameblocklist");
+        helpers.saveData("nameblocklist", nameblocklist);
         sys.sendHtmlAuths(helpers.bot(bots.command) + "The word '" + word + "' has been added to the filter list.");
     }
 
@@ -1510,7 +1510,7 @@ module.exports = {
             return;
         }
         nameblocklist.splice(nameblocklist.indexOf(word), 1);
-        helpers.saveData("nameblocklist");
+        helpers.saveData("nameblocklist", nameblocklist);
         sys.sendHtmlAuths(helpers.bot(bots.command) + "The word '" + word + "' has been removed from the filter list.");
     }
 
@@ -1530,7 +1530,7 @@ module.exports = {
         }
         name = command[1].toLowerCase();
         exceptions.push(name);
-        helpers.saveData("exceptions");
+        helpers.saveData("exceptions", exceptions);
         sys.sendHtmlAuths(helpers.bot(bots.command) + "The name '" + name + "' will now bypass filtering.");
     }
 
@@ -1544,7 +1544,7 @@ module.exports = {
         }
         name = command[1].toLowerCase();
         exceptions.splice(exceptions.indexOf(name), 1);
-        helpers.saveData("exceptions");
+        helpers.saveData("exceptions", exceptions);
         sys.sendHtmlAuths(helpers.bot(bots.command) + "The name '" + name + "' will no longer bypass filtering.");
     }
 

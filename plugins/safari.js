@@ -42,7 +42,7 @@ var POKEMART_PRICES = {
     "master": 15000
 };
 
-var safari = sys.fexists(DATA_FOLDER + "safari.txt") ? helpers.readObject("safari") : {};
+var safari = sys.fexists(DATA_FOLDER + "safari.txt") ? helpers.readData("safari") : {};
 var currentWild = "none";
 var baseCatchRate = 0;
 var globalAttempts = 0;
@@ -113,7 +113,7 @@ module.exports = {
             for (var i in ITEMS) {
                 safari[lower].items[i] = 0;
             }
-            sys.write(DATA_FOLDER + "safari.txt", JSON.stringify(safari));
+            helpers.saveData("safari", safari);
             starterNum = sys.pokeNum(starter);
             starter = sys.pokemon(starterNum);
             sys.sendHtmlAll(helpers.bot(bots.safari) + name + " has joined the Safari game! They are starting with <b><font color='" + helpers.typecolor(starterNum) + "'>" + starter + "</font></b>!", safarichannel);
@@ -199,7 +199,7 @@ module.exports = {
                     safari[i].mercy = 0;
                     safari[i].rate = 0;
                 }
-                sys.write(DATA_FOLDER + "safari.txt", JSON.stringify(safari));
+                helpers.saveData("safari", safari);
                 currentWild = "none";
                 globalAttempts = 0;
             } else {
@@ -213,7 +213,7 @@ module.exports = {
                 safari[lower].mercy += (safari[lower].attempts >= 10 ? Math.sqrt(1 / baseCatchRate) * 100 * 0.5 : Math.sqrt(1 / baseCatchRate) * 100 * (safari[lower].attempts / 20));
                 safari[lower].rate = baseCatchRate + safari[lower].mercy;
                 safari[lower].items[ball]--;
-                sys.write(DATA_FOLDER + "safari.txt", JSON.stringify(safari));
+                helpers.saveData("safari", safari);
                 globalAttempts++;
                 sys.sendHtmlAll(helpers.bot(bots.safari) + "The wild " + pokemon + " broke out of " + name + "'s " + helpers.itemImage(sys.itemNum(ballName)) + " " + ballName + "!", safarichannel);
             }
@@ -291,7 +291,7 @@ module.exports = {
                 safari[lower].money = 0;
             }
             safari[lower].money += money;
-            sys.write(DATA_FOLDER + "safari.txt", JSON.stringify(safari));
+            helpers.saveData("safari", safari);
             sys.sendHtmlAll(helpers.bot(bots.safari) + name + " paid " + POKEDOLLAR + money + " to " + (members[lower] ? members[lower] : trgtname) + "!", safarichannel);
         },
 
@@ -351,7 +351,7 @@ module.exports = {
             }
             safari[lower].money -= price * quantity;
             safari[lower].items[item] = (!safari[lower].items[item] ? quantity : safari[lower].items[item] + quantity);
-            sys.write(DATA_FOLDER + "safari.txt", JSON.stringify(safari));
+            helpers.saveData("safari", safari);
             grammar = (quantity == 1 ? "" : "s");
             sys.sendHtmlMessage(src, helpers.bot(bots.safari) + "You bought " + quantity + " " + safariHelpers.displayName(item) + grammar +
             " for " + POKEDOLLAR + POKEMART_PRICES[item] + ". You now have " + POKEDOLLAR + safari[lower].money + "!", channel);
@@ -383,7 +383,7 @@ module.exports = {
             price = POKEMART_PRICES[item] / 2 * quantity;
             safari[lower].money += price;
             safari[lower].items[item] -= quantity;
-            sys.write(DATA_FOLDER + "safari.txt", JSON.stringify(safari));
+            helpers.saveData("safari", safari);
             grammar = (quantity == 1 ? "" : "s");
             sys.sendHtmlMessage(src, helpers.bot(bots.safari) + "You sold " + quantity + " " + safariHelpers.displayName(item) + grammar +
             " for " + POKEDOLLAR + price + ". You now have " + POKEDOLLAR + safari[lower].money + "!", channel);

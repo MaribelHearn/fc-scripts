@@ -139,7 +139,7 @@ module.exports = {
         }
         var date = helpers.date(new Date());
         banlist[lower].date = date;
-        helpers.saveData("banlist");
+        helpers.saveData("banlist", banlist);
         if (members[lower]) {
             trgtname = members[lower];
         }
@@ -166,7 +166,7 @@ module.exports = {
                 if (members[index]) {
                     index = members[index];
                 }
-                helpers.saveData("mutelist");
+                helpers.saveData("mutelist", mutelist);
                 sys.sendHtmlMessage(src, helpers.bot(bots.mute) + index + " has been automatically unmuted.", channel);
                 continue;
             }
@@ -257,7 +257,7 @@ module.exports = {
         }
         var date = helpers.date(new Date());
         banlist[trgtip].date = date;
-        helpers.saveData("banlist");
+        helpers.saveData("banlist", banlist);
         if (banmessages[name.toLowerCase()]) {
             msg = banmessages[name.toLowerCase()].replace(/~Self~/gi, name).replace(/~Target~/gi, trgtip).replace(/~Time~/gi, time + unit).replace(/~Server~/gi, sys.getServerName());
             sys.sendHtmlAll(helpers.bot(bots.ban) + msg + " [Reason: " + reason + "]", channel);
@@ -274,7 +274,7 @@ module.exports = {
                 if (members[index]) {
                     index = members[index];
                 }
-                helpers.saveData("mutelist");
+                helpers.saveData("mutelist", mutelist);
                 sys.sendHtmlMessage(src, helpers.bot(bots.mute) + index + " has been automatically unmuted.", channel);
                 continue;
             }
@@ -307,7 +307,7 @@ module.exports = {
             }
             if (sys.dbIp(index) == sys.dbIp(trgtname)) {
                 delete banlist[index];
-                helpers.saveData("banlist");
+                helpers.saveData("banlist", banlist);
             }
         }
         if (members[lower]) {
@@ -334,7 +334,7 @@ module.exports = {
             return;
         }
         delete banlist[trgtip];
-        helpers.saveData("banlist");
+        helpers.saveData("banlist", banlist);
         sys.sendHtmlAll(helpers.bot(bots.ban) + trgtip + " has been IP unbanned by " + helpers.escapehtml(name) + "!");
     }
 
@@ -343,7 +343,7 @@ module.exports = {
     clearbanlist: function (src, channel, command) {
         var name = sys.name(src);
         banlist = {};
-        helpers.saveData("banlist");
+        helpers.saveData("banlist", banlist);
         sys.sendHtmlAll(helpers.bot(bots.ban) + "The ban list has been cleared by " + helpers.escapehtml(name) + "!");
     }
 
@@ -362,7 +362,7 @@ module.exports = {
         }
         var banner = sys.name(src), banned = command[1], srcauth = sys.auth(src), lower = command[1].toLowerCase();
         banlist[banned.toLowerCase()].reason = reason;
-        helpers.saveData("banlist");
+        helpers.saveData("banlist", banlist);
         sys.sendHtmlAll(helpers.bot(bots.ban) + helpers.escapehtml(banner) + " has changed the ban reason of " + helpers.escapehtml(banned) + " to '" + reason + "'!");
     }
 
@@ -376,7 +376,7 @@ module.exports = {
             return;
         }
         banmessages[lower] = helpers.escapehtml(message);
-        helpers.saveData("banmessages");
+        helpers.saveData("banmessages", banmessages);
         sys.sendHtmlMessage(src, helpers.bot(bots.ban) + "Your ban message has been changed successfully.", channel);
     }
 
@@ -405,7 +405,7 @@ module.exports = {
         megabanlist[lower].reason = reason;
         megabanlist[lower].date = helpers.date(new Date());
         sys.setCookie(trgt, "banned " + trgtname);
-        helpers.saveData("megabanlist");
+        helpers.saveData("megabanlist", megabanlist);
         sys.sendHtmlAuths(helpers.bot(bots.megaban) + helpers.escapehtml(name) + " has mega banned " + helpers.escapehtml(trgtname) + " from the server! [Reason: " + reason + "]");
         sys.kick(trgt);
     }
@@ -428,8 +428,8 @@ module.exports = {
         members[lower] ? trgtname = members[lower] : trgtname = helpers.escapehtml(command[1]);
         namestounban.push(lower);
         delete megabanlist[lower];
-        helpers.saveData("namestounban");
-        helpers.saveData("megabanlist");
+        helpers.saveData("namestounban", namestounban);
+        helpers.saveData("megabanlist", megabanlist);
         sys.sendHtmlAuths(helpers.bot(bots.megaban) + trgtname + " has been mega unbanned by " + helpers.escapehtml(name) + ". It will take effect once they enter the server again.");
     }
 
@@ -445,7 +445,7 @@ module.exports = {
         members[lower] ? trgtname = members[lower] : trgtname = helpers.escapehtml(trgtname);
         command[2] ? reason = helpers.escapehtml(command[2]) : reason = "Unknown";
         megabanlist[lower].reason = reason;
-        helpers.saveData("megabanlist");
+        helpers.saveData("megabanlist", megabanlist);
         sys.sendHtmlAuths(helpers.bot(bots.megaban) + helpers.escapehtml(name) + " has changed the mega ban reason of " + trgtname + " to '" + reason + "'.");
     }
 
@@ -457,8 +457,8 @@ module.exports = {
             namestounban.push(i);
         }
         megabanlist = {};
-        helpers.saveData("megabanlist");
-        helpers.saveData("namestounban");
+        helpers.saveData("megabanlist", megabanlist);
+        helpers.saveData("namestounban", namestounban);
         sys.sendHtmlAuths(helpers.bot(bots.megaban) + "The mega ban list has been cleared by " + helpers.escapehtml(name) + "!");
     }
 
@@ -490,7 +490,7 @@ module.exports = {
         gigabanlist[lower].reason = reason;
         gigabanlist[lower].pseudo = pseudo;
         gigabanlist[lower].date = helpers.date(new Date());
-        helpers.saveData("gigabanlist");
+        helpers.saveData("gigabanlist", gigabanlist);
         sys.sendHtmlAuths(helpers.bot(bots.gigaban) + helpers.escapehtml(name) + " has giga banned " + trgtname + " from the server! [Reason: " + reason + "]");
         sys.kick(trgt);
     }
@@ -516,7 +516,7 @@ module.exports = {
             return;
         }
         delete gigabanlist[lower];
-        helpers.saveData("gigabanlist");
+        helpers.saveData("gigabanlist", gigabanlist);
         sys.sendHtmlAuths(helpers.bot(bots.gigaban) + helpers.escapehtml(name) + " has giga unbanned " + trgtname + " from the server.");
     }
 
@@ -536,7 +536,7 @@ module.exports = {
         }
         command[2] ? reason = helpers.escapehtml(command[2]) : reason = "Unknown";
         gigabanlist[lower].reason = reason;
-        helpers.saveData("gigabanlist");
+        helpers.saveData("gigabanlist", gigabanlist);
         sys.sendHtmlAuths(helpers.bot(bots.gigaban) + helpers.escapehtml(name) + " has changed the giga ban reason of " + trgtname + " to '" + reason + "'!");
     }
 
@@ -544,7 +544,7 @@ module.exports = {
 
     cleargigabanlist: function (src, channel, command) {
         gigabanlist = {};
-        helpers.saveData("gigabanlist");
+        helpers.saveData("gigabanlist", gigabanlist);
         sys.sendHtmlAuths(helpers.bot(bots.gigaban) + "The giga ban list has been cleared by " + helpers.escapehtml(name) + "!");
     }
 
@@ -582,7 +582,7 @@ module.exports = {
         rangebanlist[lower].reason = reason;
         var date = helpers.date(new Date()), trgt = sys.id(trgtname);
         rangebanlist[lower].date = date;
-        helpers.saveData("rangebanlist");
+        helpers.saveData("rangebanlist", rangebanlist);
         if (rangebanmessages[name.toLowerCase()]) {
             msg = rangebanmessages[name.toLowerCase()].replace(/~Self~/gi, name).replace(/~Target~/gi, trgtname).replace(/~Server~/gi, sys.getServerName());
             sys.sendHtmlAll(helpers.bot(bots.ban) + msg + " [Reason: " + reason + "]");
@@ -604,7 +604,7 @@ module.exports = {
                 if (members[index]) {
                     index = members[index];
                 }
-                helpers.saveData("mutelist");
+                helpers.saveData("mutelist", mutelist);
                 sys.sendHtmlMessage(src, helpers.bot(bots.mute) + helpers.escapehtml(index) + " has been automatically unmuted.", channel);
             }
         }
@@ -620,7 +620,7 @@ module.exports = {
                 if (members[index]) {
                     index = members[index];
                 }
-                helpers.saveData("banlist");
+                helpers.saveData("banlist", banlist);
                 sys.sendHtmlMessage(src, helpers.bot(bots.ban) + helpers.escapehtml(index) + " has been automatically unbanned.", channel);
                 continue;
             }
@@ -660,7 +660,7 @@ module.exports = {
             }
             if (sys.dbRange(index) == sys.dbRange(trgtname)) {
                 delete rangebanlist[index];
-                helpers.saveData("rangebanlist");
+                helpers.saveData("rangebanlist", rangebanlist);
             }
         }
         if (members[trgtname]) {
@@ -709,7 +709,7 @@ module.exports = {
         rangebanlist[range].reason = reason;
         var date = helpers.date(new Date());
         rangebanlist[range].date = date;
-        helpers.saveData("rangebanlist");
+        helpers.saveData("rangebanlist", rangebanlist);
         if (rangebanmessages[name.toLowerCase()]) {
             msg = rangebanmessages[name.toLowerCase()].replace(/~Self~/gi, name).replace(/~Target~/gi, range).replace(/~Server~/gi, sys.getServerName());
             sys.sendHtmlAll(helpers.bot(bots.ban) + msg + " [Reason: " + reason + "]");
@@ -726,7 +726,7 @@ module.exports = {
                 if (members[index]) {
                     index = members[index];
                 }
-                helpers.saveData("mutelist");
+                helpers.saveData("mutelist", mutelist);
                 sys.sendHtmlMessage(src, helpers.bot(bots.mute) + helpers.escapehtml(index) + " has been automatically unmuted.", channel);
                 continue;
             }
@@ -743,7 +743,7 @@ module.exports = {
                 if (members[index]) {
                     index = members[index];
                 }
-                helpers.saveData("banlist");
+                helpers.saveData("banlist", banlist);
                 sys.sendHtmlMessage(src, helpers.bot(bots.ban) + helpers.escapehtml(index) + " has been automatically unbanned.", channel);
                 continue;
             }
@@ -767,7 +767,7 @@ module.exports = {
             return;
         }
         delete rangebanlist[range];
-        helpers.saveData("rangebanlist");
+        helpers.saveData("rangebanlist", rangebanlist);
         sys.sendHtmlAll(helpers.bot(bots.ban) + range + " has been range unbanned by " + helpers.escapehtml(name) + "!");
     }
 
@@ -786,7 +786,7 @@ module.exports = {
         }
         var banner = sys.name(src), banned = command[1], srcauth = sys.auth(src), lower = command[1].toLowerCase();
         rangebanlist[banned.toLowerCase()].reason = reason;
-        helpers.saveData("rangebanlist");
+        helpers.saveData("rangebanlist", rangebanlist);
         sys.sendHtmlAll(helpers.bot(bots.ban) + helpers.escapehtml(banner) + " has changed the range ban reason of " + helpers.escapehtml(banned) + " to '" + reason + "'!");
     }
 
@@ -795,7 +795,7 @@ module.exports = {
     clearrangebanlist: function (src, channel, command) {
         var name = sys.name(src);
         rangebanlist = {};
-        helpers.saveData("rangebanlist");
+        helpers.saveData("rangebanlist", rangebanlist);
         sys.sendHtmlAll(helpers.bot(bots.ban) + "The range ban list has been cleared by " + helpers.escapehtml(name) + "!");
     }
 
@@ -809,7 +809,7 @@ module.exports = {
             return;
         }
         rangebanmessages[lower] = helpers.escapehtml(message);
-        helpers.saveData("rangebanmessages");
+        helpers.saveData("rangebanmessages", rangebanmessages);
         sys.sendHtmlMessage(src, helpers.bot(bots.ban) + "Your range ban message has been changed successfully.", channel);
     }
 
@@ -1141,7 +1141,7 @@ module.exports = {
             command[2] = "undefined";
         }
         bots[bot] = command[2];
-        helpers.saveData("bots");
+        helpers.saveData("bots", bots);
         sys.sendHtmlAll(helpers.bot(bots.main) + "<b>" + helpers.user(name) + " changed the " + bot + " bot's name to " + helpers.arg(command[2]) + "!</b>", channel);
     }
 
@@ -1154,7 +1154,7 @@ module.exports = {
             return;
         }
         botcolor = command[1];
-        helpers.saveData("botcolor");
+        helpers.saveData("botcolor", botcolor);
         sys.sendHtmlAll(helpers.bot(bots.main) + "<b>" + helpers.user(name) + " changed the bot " + command[0].slice(3) + " to " + command[1] + "!</b>", channel);
     }
 
@@ -1177,7 +1177,7 @@ module.exports = {
             return;
         }
         botsymbol = command[1];
-        helpers.saveData("botsymbol");
+        helpers.saveData("botsymbol", botsymbol);
         sys.sendHtmlAll(helpers.bot(bots.main) + "<b>" + helpers.user(name) + " changed the bot symbol to " + helpers.escapehtml(command[1]) + "!</b>", channel);
     }
 
@@ -1190,7 +1190,7 @@ module.exports = {
             return;
         }
         botsymbolcolor = command[1];
-        helpers.saveData("botsymbolcolor");
+        helpers.saveData("botsymbolcolor", botsymbolcolor);
         sys.sendHtmlAll(helpers.bot(bots.main) + "<b>" + helpers.user(name) + " changed the bot symbol " + command[0].slice(6) + " to " + helpers.escapehtml(command[1]) + "!</b>", channel);
     }
 
@@ -1249,7 +1249,7 @@ module.exports = {
             return;
         }
         floodlevel = parseInt(command[1]);
-        helpers.saveData("floodlevel");
+        helpers.saveData("floodlevel", floodlevel);
         sys.sendHtmlAuths(helpers.bot(bots.flood) + "The flood level has been changed to " + floodlevel + ".");
     }
 
@@ -1265,7 +1265,7 @@ module.exports = {
             return;
         }
         floodtime = command[1];
-        helpers.saveData("floodtime");
+        helpers.saveData("floodtime", floodtime);
         sys.sendHtmlAuths(helpers.bot(bots.flood) + "The flood time has been changed to " + floodtime + " seconds.");
     }
 
@@ -1281,7 +1281,7 @@ module.exports = {
             return;
         }
         allowance = command[1];
-        helpers.saveData("allowance");
+        helpers.saveData("allowance", allowance);
         sys.sendHtmlAuths(helpers.bot(bots.flood) + "The message allowance has been changed to " + allowance + " messages.");
     }
 
@@ -1330,7 +1330,7 @@ module.exports = {
         }
         number = parseInt(number);
         rules.rules[number - 1] = rule;
-        helpers.saveData("rules");
+        helpers.saveData("rules", rules);
         sys.sendHtmlAll(helpers.bot(bots.main) + "Rule " + number + " has been changed to '" + rule + "' by " + name + ".", channel);
     }
 
@@ -1353,7 +1353,7 @@ module.exports = {
         }
         number = parseInt(number);
         rules.explanations[number - 1] = explanation;
-        helpers.saveData("rules");
+        helpers.saveData("rules", rules);
         sys.sendHtmlAuths(helpers.bot(bots.main) + "The explanation of rule " + number + " has been changed to '" + explanation + "' by " + name + ".");
     }
 
@@ -1372,7 +1372,7 @@ module.exports = {
         }
         rules.rules[number] = rule;
         rules.explanations[number] = explanation;
-        helpers.saveData("rules");
+        helpers.saveData("rules", rules);
         sys.sendHtmlAll(helpers.bot(bots.main) + "Rule " + (number + 1) + " has been added to the server rules by " + name + ". Use <b>" + helpers.user("/rule ") + helpers.arg("number") + "</b> to read the new rule.");
     }
 
@@ -1390,7 +1390,7 @@ module.exports = {
         }
         rules.rules.splice(number - 1, 1);
         rules.explanations.splice(number - 1, 1);
-        helpers.saveData("rules");
+        helpers.saveData("rules", rules);
         sys.sendHtmlAll(src, helpers.bot(bots.main) + "Rule " + number + " has been removed by " + name + ". The other rule numbers have been changed accordingly.");
     }
 
@@ -1460,7 +1460,7 @@ module.exports = {
             return;
         }
         welcomeMessage = message;
-        helpers.saveData("welcomeMessage");
+        helpers.saveData("welcomeMessage", welcomeMessage);
         sys.sendHtmlAll(helpers.bot(bots.main) + "The welcome message has been changed to '" + welcomeMessage + "' by " + name + ".", channel);
     }
 
@@ -1479,7 +1479,7 @@ module.exports = {
             return;
         }
         leaveMessage = message;
-        helpers.saveData("leaveMessage");
+        helpers.saveData("leaveMessage", leaveMessage);
         sys.sendHtmlAll(helpers.bot(bots.main) + "The leave message has been changed to '" + leaveMessage + "' by " + name + ".", channel);
     }
 
@@ -1498,7 +1498,7 @@ module.exports = {
             return;
         }
         channelWelcomeMessage = message;
-        helpers.saveData("channelWelcomeMessage");
+        helpers.saveData("channelWelcomeMessage", channelWelcomeMessage);
         sys.sendHtmlAll(helpers.bot(bots.main) + "The channel welcome message has been changed to '" + channelWelcomeMessage + "' by " + name + ".", channel);
     }
 
@@ -1517,7 +1517,7 @@ module.exports = {
             return;
         }
         channelLeaveMessage = message;
-        helpers.saveData("channelLeaveMessage");
+        helpers.saveData("channelLeaveMessage", channelLeaveMessage);
         sys.sendHtmlAll(helpers.bot(bots.main) + "The channel leave message has been changed to '" + channelLeaveMessage + "' by " + name + ".", channel);
     }
 
@@ -1536,7 +1536,7 @@ module.exports = {
             return;
         }
         silenceMessage = message;
-        helpers.saveData("silenceMessage");
+        helpers.saveData("silenceMessage", silenceMessage);
         sys.sendHtmlAll(helpers.bot(bots.main) + "The silence message has been changed to '" + silenceMessage + "' by " + name + ".", channel);
     }
 
@@ -1555,7 +1555,7 @@ module.exports = {
             return;
         }
         unsilenceMessage = message;
-        helpers.saveData("unsilenceMessage");
+        helpers.saveData("unsilenceMessage", unsilenceMessage);
         sys.sendHtmlAll(helpers.bot(bots.main) + "The unsilence message has been changed to '" + unsilenceMessage + "' by " + name + ".", channel);
     }
 
@@ -1574,7 +1574,7 @@ module.exports = {
             return;
         }
         noPermissionMessage = message;
-        helpers.saveData("noPermissionMessage");
+        helpers.saveData("noPermissionMessage", noPermissionMessage);
         sys.sendHtmlAuths(helpers.bot(bots.main) + "The no permission message has been changed to '" + noPermissionMessage + "' by " + name + ".", channel);
     }
 
@@ -1645,9 +1645,9 @@ module.exports = {
             "&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;</b></font>";
             sys.sendHtmlAuths(helpers.bot(bots.main) + "The command border " + spelling + " has been changed to " + color + " by " + name + ".", channel);
         }
-        helpers.saveData("border");
-        helpers.saveData("border2");
-        helpers.saveData("borderColor");
+        helpers.saveData("border", border);
+        helpers.saveData("border2", border2);
+        helpers.saveData("borderColor", borderColor);
     }
 
     ,
@@ -1669,7 +1669,7 @@ module.exports = {
             return;
         }
         serverTopicColor = sys.hexColor(color);
-        helpers.saveData("serverTopicColor");
+        helpers.saveData("serverTopicColor", serverTopicColor);
         sys.sendHtmlAuths(helpers.bot(bots.main) + "The server topic " + spelling +
         " has been changed to " + color + " by " + name + ".", channel);
     }
@@ -1693,7 +1693,7 @@ module.exports = {
             return;
         }
         channelTopicColor = sys.hexColor(color);
-        helpers.saveData("channelTopicColor");
+        helpers.saveData("channelTopicColor", channelTopicColor);
         sys.sendHtmlAuths(helpers.bot(bots.main) + "The channel topic " + spelling +
         " has been changed to " + color + " by " + name + ".", channel);
     }
@@ -1725,7 +1725,7 @@ module.exports = {
             return;
         }
         cmdcolors[command[1]] = sys.hexColor(command[2]);
-        helpers.saveData("cmdcolors");
+        helpers.saveData("cmdcolors", cmdcolors);
         sys.sendHtmlAuths(helpers.bot(bots.main) + "Command " + spelling + " " + command[1] +
         " has been changed to " + command[2] + " by " + name + ".", channel);
     }
@@ -1784,7 +1784,7 @@ module.exports = {
             return;
         }
         listcolors[list] = sys.hexColor(color);
-        helpers.saveData("listcolors");
+        helpers.saveData("listcolors", listcolors);
         sys.sendHtmlAuths(helpers.bot(bots.main) + "The " + command[0].slice(4) + " of the " + list + " list has been changed to " + color + " by " + name + ".", channel);
     }
 };

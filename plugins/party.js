@@ -169,7 +169,7 @@ module.exports = {
                 }
                 sys.sendHtmlAll(border + "<br>" + helpers.bot(bots.party) + "<b>" + helpers.user(name) + " has turned " + helpers.arg(mode) + " off.</b><br>" + border2, channel);
                 partyMode = "none";
-                sys.write(DATA_FOLDER + "partyMode.txt", partyMode);
+                helpers.saveData("partyMode", partyMode);
                 if (regchannels[channelname]) {
                     regchannels[channelname].topic = ["Welcome to " + sys.channel(partychannel) + "!"];
                     helpers.saveData("regchannels");
@@ -179,7 +179,7 @@ module.exports = {
             for (var index in PARTY_MODES) {
                 if (PARTY_MODES[index] == command[1].toLowerCase()) {
                     partyMode = PARTY_MODES[index];
-                    sys.write(DATA_FOLDER + "partyMode.txt", partyMode);
+                    helpers.saveData("partyMode", partyMode);
                     mode = helpers.cap(PARTY_MODES[index]) + " Mode";
                     if (oldmode == "nightclub") {
                         sys.sendHtmlAll(":<div>", channel);
@@ -189,11 +189,11 @@ module.exports = {
                         sys.sendHtmlAll("<font color='#FFFFFF'>:</font><div style='background: #000000;'>", channel);
                         if (regchannels[channelname]) {
                             regchannels[sys.channel(partychannel).toLowerCase()].topic = ["This channel is currently in " + mode + ".<font color='#FFFFFF'>:</font><div style='background: #000000;'>"];
-                            helpers.saveData("regchannels");
+                            helpers.saveData("regchannels", regchannels);
                         }
                     } else if (regchannels[channelname]) {
                         regchannels[sys.channel(partychannel).toLowerCase()].topic = ["This channel is currently in " + mode + "."];
-                        helpers.saveData("regchannels");
+                        helpers.saveData("regchannels", regchannels);
                     }
                     return;
                 }

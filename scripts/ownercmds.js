@@ -606,7 +606,7 @@ module.exports = {
             return;
         }
         UPDATE_KEY = key;
-        helpers.saveData("UPDATE_KEY");
+        helpers.saveData("UPDATE_KEY", key);
         sys.sendHtmlMessage(src, helpers.bot(bots.script) + "Your GitHub API key has been set.", channel);
     }
 
@@ -618,7 +618,7 @@ module.exports = {
             return;
         }
         UPDATE_KEY = "";
-        helpers.saveData("UPDATE_KEY");
+        helpers.saveData("UPDATE_KEY", "");
         sys.sendHtmlMessage(src, helpers.bot(bots.script) + "Your GitHub API key has been removed.", channel);
     }
 
@@ -651,7 +651,7 @@ module.exports = {
             return;
         }
         latestShaHash = sha;
-        helpers.saveData("latestShaHash");
+        helpers.saveData("latestShaHash", sha);
         sys.system("git pull");
         try {
             sys.changeScript(sys.read("scripts.js"));
@@ -695,7 +695,7 @@ module.exports = {
         }
         freq = parseInt(freq);
         updateFrequency = freq;
-        helpers.saveData("updateFrequency");
+        helpers.saveData("updateFrequency", freq);
         if (freq === 0) {
             sys.sendHtmlMessage(src, helpers.bot(bots.script) + "Automatic updates have been turned off.", channel);
         } else {
@@ -724,6 +724,7 @@ module.exports = {
         }
         if (typeof(result) == "object") {
             result = JSON.stringify(result);
+
         }
         sys.sendHtmlMessage(src, helpers.bot(bots.script) + "The evaluated content of '" + helpers.escapehtml(command[1]) + "' is " + (html ? result : helpers.escapehtml(result)) + ".", channel);
     }
@@ -854,7 +855,7 @@ module.exports = {
             return;
         }
         open = true;
-        helpers.saveData("open");
+        helpers.saveData("open", true);
         sys.sendHtmlAuths(helpers.bot(bots.priv) + "The server has been opened by " + name + ".");
     }
 
@@ -867,7 +868,7 @@ module.exports = {
             return;
         }
         open = false;
-        helpers.saveData("open");
+        helpers.saveData("open", false);
         sys.sendHtmlAuths(helpers.bot(bots.priv) + "The server has been closed by " + name + ".");
     }
 
@@ -889,7 +890,7 @@ module.exports = {
             return;
         }
         allowed.push(ip);
-        helpers.saveData("allowed");
+        helpers.saveData("allowed", allowed);
         sys.sendHtmlOwner(helpers.bot(bots.priv) + "The IP " + ip + " has been allowed through server closure and bans by " + name + ".", channel);
     }
 
@@ -911,7 +912,7 @@ module.exports = {
             return;
         }
         allowed.splice(allowed.indexOf(ip), 1);
-        helpers.saveData("allowed");
+        helpers.saveData("allowed", allowed);
         sys.sendHtmlOwner(helpers.bot(bots.priv) + "The IP " + ip + " has been disallowed through server closure and bans by " + name + ".");
     }
 
@@ -933,7 +934,7 @@ module.exports = {
             return;
         }
         allowedrange.push(range);
-        helpers.saveData("allowedrange");
+        helpers.saveData("allowedrange", allowedrange);
         sys.sendHtmlOwner(helpers.bot(bots.priv) + "The range " + range + " has been allowed through server closure and bans by " + name + ".");
     }
 
@@ -955,7 +956,7 @@ module.exports = {
             return;
         }
         allowedrange.splice(allowedrange.indexOf(range), 1);
-        helpers.saveData("allowedrange");
+        helpers.saveData("allowedrange", allowedrange);
         sys.sendHtmlOwner(helpers.bot(bots.priv) + "The range " + range + " has been disallowed through server closure and bans by " + name + ".");
     }
 
@@ -1204,7 +1205,7 @@ module.exports = {
             return;
         }
         silentcommands.push(sc);
-        helpers.saveData("silentcommands");
+        helpers.saveData("silentcommands", silentcommands);
         sys.sendHtmlMessage(src, helpers.bot(bots.command) + "The command '/" + sc + "' is now a silent command.", channel);
     }
 
@@ -1227,7 +1228,7 @@ module.exports = {
             return;
         }
         silentcommands.remove(sc);
-        helpers.saveData("silentcommands");
+        helpers.saveData("silentcommands", silentcommands);
         sys.sendHtmlMessage(src, helpers.bot(bots.command) + "The command '/" + sc + "' is no longer a silent command.", channel);
     }
 
@@ -1243,7 +1244,7 @@ module.exports = {
         sys.write(DATA_FOLDER + "silentcommands.txt", '["future","spoiler","seval","sseval","skick",' +
         '"invisibleowner","invisible","invis","silentupdate","silenteval","secretsilenteval","silentkick",' +
         '"supdate","silentupdateplugin", "supdateplugin"]');
-        silentcommands = helpers.readObject("silentcommands");
+        silentcommands = helpers.readData("silentcommands");
         sys.sendHtmlMessage(src, helpers.bot(bots.command) + "The silent commands have been reset to their defaults.", channel);
     }
 
@@ -1312,7 +1313,7 @@ module.exports = {
         if (require.cache.hasOwnProperty("safari.js")) {
             cownercommands.priv(src, safarichannel, ["priv"]);
         }
-        helpers.saveData("regchannels");
+        helpers.saveData("regchannels", regchannels);
         sys.sendHtmlMessage(src, helpers.bot(bots.main) + "All permanent channels have been registered successfully and have been given their default settings.", channel);
     }
 
@@ -1342,7 +1343,7 @@ module.exports = {
         if (require.cache.hasOwnProperty("safari.js")) {
             cownercommands.unregisterthis(src, sys.channelId(sys.channel(safarichannel)), ["unregisterthis"]);
         }
-        helpers.saveData("regchannels");
+        helpers.saveData("regchannels", regchannels);
         sys.sendHtmlMessage(src, helpers.bot(bots.main) + "All permanent channels have been unregistered successfully.", channel);
     }
 
@@ -1369,10 +1370,10 @@ module.exports = {
                         regchannels[newName.toLowerCase()].topic = "Welcome to " + newName + "!";
                     }
                     delete regchannels[lower];
-                    helpers.saveData("regchannels");
+                    helpers.saveData("regchannels", regchannels);
                 }
                 permchannels[i] = newName;
-                helpers.saveData("permchannels");
+                helpers.saveData("permchannels", permchannels);
                 sys.sendHtmlMessage(src, helpers.bot(bots.main) + "The permanent channel '" + oldName + "' is now called '" + newName + "'. Will take effect upon the next server restart.", channel);
                 return;
             }
@@ -1454,13 +1455,13 @@ module.exports = {
             helpers.starfox(src, channel, command, bots.command, "Error 400, you already have an IPinfoDB API key set!");
             return;
         }
-        var api = command[1];
-        if (!api) {
+        var key = command[1];
+        if (!key) {
             helpers.starfox(src, channel, command, bots.command, "Error 404, API key not found.");
             return;
         }
-        API_KEY = api;
-        helpers.saveData("API_KEY");
+        API_KEY = key;
+        helpers.saveData("API_KEY", key);
         sys.webCall(IP_RETRIEVAL_URL, function (resp) {
             if (resp === "") {
                 print("An error occurred while loading the host IP address.");
@@ -1489,10 +1490,10 @@ module.exports = {
         countryname = {};
         cityname = {};
         timezone = {};
-        helpers.saveData("API_KEY");
-        helpers.saveData("countryname");
-        helpers.saveData("cityname");
-        helpers.saveData("timezone");
+        helpers.saveData("API_KEY", "");
+        helpers.saveData("countryname", {});
+        helpers.saveData("cityname", {});
+        helpers.saveData("timezone", {});
         sys.sendHtmlMessage(src, helpers.bot(bots.main) + "Your IPinfoDB API key has been removed.", channel);
     }
 
@@ -1503,13 +1504,13 @@ module.exports = {
             helpers.starfox(src, channel, command, bots.command, "Error 400, you already have a Google API key set!");
             return;
         }
-        var api = command[1];
-        if (!api) {
+        var key = command[1];
+        if (!key) {
             helpers.starfox(src, channel, command, bots.command, "Error 404, API key not found.");
             return;
         }
-        GOOGLE_KEY = api;
-        helpers.saveData("GOOGLE_KEY");
+        GOOGLE_KEY = key;
+        helpers.saveData("GOOGLE_KEY", key);
         sys.sendHtmlMessage(src, helpers.bot(bots.main) + "Your Google API key has been set.", channel);
     }
 
@@ -1521,7 +1522,7 @@ module.exports = {
             return;
         }
         GOOGLE_KEY = "";
-        helpers.saveData("GOOGLE_KEY");
+        helpers.saveData("GOOGLE_KEY", "");
         sys.sendHtmlMessage(src, helpers.bot(bots.main) + "Your Google API key has been removed.", channel);
     }
 
