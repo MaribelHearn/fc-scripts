@@ -1,12 +1,142 @@
 /*
     ----------------------------------------------
     FUN COMMUNITY USER COMMANDS usercmds.js
-     - by Maribel Hearn, 2012-2021
+     - by Maribel Hearn, 2012-2023
 
     This file contains commands that can be
     run by any user.
     ----------------------------------------------
 */
+function battleLink(battle) {
+    return "<a href='po:watch/" + battle + "'>Watch</a>";
+}
+
+function isAuthIp(ip) {
+    var alts = sys.aliases(ip);
+    for (var index in alts) {
+        if (sys.dbAuth(alts[index]) > 0) {
+            return true;
+        }
+    }
+    return false;
+}
+
+function statName(stat) {
+    return([
+        "HP",
+        "Attack",
+        "Defense",
+        "Sp. Atk.",
+        "Sp. Def.",
+        "Speed"
+    ][stat]);
+}
+
+function colorStat(stat) {
+    if (stat <= 30) {
+        return "<b><font color='#8B0000'>" + stat + "</font></b>";
+    } else if (stat < 60) {
+        return "<b><font color='#FF0000'>" + stat + "</font></b>";
+    } else if (stat < 90) {
+        return "<b><font color='#FF4500'>" + stat + "</font></b>";
+    } else if (stat < 120) {
+        return "<b><font color='#00FF00'>" + stat + "</font></b>";
+    } else if (stat < 150) {
+        return "<b><font color='#008000'>" + stat + "</font></b>";
+    } else if (stat < 180) {
+        return "<b><font color='#0000FF'>" + stat + "</font></b>";
+    } else {
+        return "<b><font color='#00008B'>" + stat + "</font></b>";
+    }
+}
+
+function timePlurality(time, unit) {
+    if (unit == "s") {
+        unit = "seconds";
+    } else if (unit == "m") {
+        unit = "minutes";
+    } else if (unit == "h") {
+        unit = "hours";
+    } else if (unit == "d") {
+        unit = "days";
+    }
+    if (time == 1 && unit[unit.length-1] == "s") {
+        unit = unit.replace(/s$/, "");
+    } else if (time != 1 && unit[unit.length-1] != "s" && unit != "feet" && unit != "km") {
+        unit = unit + "s";
+    } else if (unit == "feet") {
+        unit = "foot";
+    } else if (unit == "foot") {
+        unit = "feet";
+    }
+    return unit;
+}
+
+function toSeconds(time, unit) {
+    return({
+        "minutes": time * 60,
+        "minute": time * 60,
+        "hours": time * 3600,
+        "hour": time * 3600,
+        "days": time * 86400,
+        "day": time * 86400,
+        "weeks": time * 604800,
+        "week": time * 604800,
+        "months": time * 2592000,
+        "month": time * 2592000,
+        "year": time * 31536000,
+        "years": time * 31536000
+    }[unit] || time);
+}
+
+function typeImage(src, type) {
+    if (helpers.isAndroidOrWeb(src)) {
+        return sys.type(type);
+    }
+    return "<img src='Themes/Classic/types/type" + type + ".png'>";
+}
+
+function genderImage(src, gender) {
+    if (helpers.isAndroidOrWeb(src)) {
+        return helpers.cap(sys.gender(gender));
+    }
+    return "<img src='Themes/Classic/genders/gender" + gender + ".png'>";
+}
+
+function ordinal(num) {
+    var str = String(num), lastDigit = str.charAt(str.length - 1);
+    if (Number(lastDigit) >= 3) {
+        lastDigit = "3";
+    }
+    return num + ({ "1":"st", "2":"nd", "3":"th" }[lastDigit]);
+}
+
+function teamOrdinal(team) {
+    return ({ 0:"first", 1:"second", 2:"third", 3:"fourth", 4:"fifth", 5:"sixth" }[team]);
+}
+
+// Chuck Norris tier is at index 23
+function tierOf(pokeId) {
+    var name = sys.pokemon(pokeId), tiers = sys.read("tiers.xml").split('\n'), start = 23, pokemon,
+        tierId = { // + 1 compared to index
+            25: "Chuck Norris",
+            26: "*** WINNER ***",
+            27: "Uber",
+            28: "OU",
+            29: "UU",
+            30: "RU"
+        };
+
+    for (i = start; i < start + 8; i++) {
+        pokemon = tiers[i].substring(tiers[i].indexOf("pokemons") + 9, tiers[i].indexOf("abilities")).trim();
+        pokemon = pokemon.replace(/"/g, "").split(", ");
+        if (pokemon.indexOf(name) > -1) {
+            return tierId[i];
+        }
+    }
+
+    return "NU";
+}
 
 module.exports = {
     /**
@@ -48,9 +178,7 @@ module.exports = {
         }
         commandsmessage += "<br><timestamp/><br>" + border2;
         sys.sendHtmlMessage(src, commandsmessage, channel);
-    }
-
-    ,
+    },
 
     usercommands: function (src, channel, command) {
         var commandsmessage = border
@@ -63,9 +191,7 @@ module.exports = {
         + "<br><timestamp/><br>"
         + border2;
         sys.sendHtmlMessage(src, commandsmessage, channel);
-    }
-
-    ,
+    },
 
     /**
         ------------
@@ -103,9 +229,7 @@ module.exports = {
         + "<br><timestamp/><br>"
         + border2;
         sys.sendHtmlMessage(src, commandsmessage, channel);
-    }
-
-    ,
+    },
 
     help: function (src, channel, command) {
         var helpmessage = border, topic = command[1];
@@ -195,9 +319,7 @@ module.exports = {
         }
         helpmessage += "<br><timestamp/><br>" + border2;
         sys.sendHtmlMessage(src, helpmessage, channel);
-    }
-
-    ,
+    },
 
     rules: function (src, channel, command) {
         var rulesmessage = border
@@ -208,9 +330,7 @@ module.exports = {
         }
         rulesmessage += "<br><timestamp/><br>" + border2;
         sys.sendHtmlMessage(src, rulesmessage, channel);
-    }
-
-    ,
+    },
 
     rule: function (src, channel, command) {
         var number = command[1], rulemessage = border;
@@ -225,9 +345,7 @@ module.exports = {
         number = parseInt(number);
         rulemessage += "<h2>Rules ~ Rule " + number + "</h2><br>" + helpers.bot("• " + botsymbol + "Rule " + number + ": " + rules.rules[number - 1]) + "<br>" + rules.explanations[number - 1] + "<br><br><timestamp/><br>" + border2;
         sys.sendHtmlMessage(src, rulemessage, channel);
-    }
-
-    ,
+    },
 
     online: function (src, channel, command) {
         var DISPLAY_USER = true, HIDE_INVIS = true, onlinemessage = border + "<h2>Players Online</h2><br>", srcauth = sys.auth(src), index = 0, lower, i;
@@ -288,15 +406,11 @@ module.exports = {
         }
         onlinemessage += "<br><br><timestamp/><br>" + border2;
         sys.sendHtmlMessage(src, onlinemessage, channel);
-    }
-
-    ,
+    },
 
     players: function (src, channel, command) {
         this.online(src, channel, command);
-    }
-
-    ,
+    },
 
     channels: function (src, channel, command) {
         var channelList = sys.channelIds().sort(function(a, b){
@@ -345,9 +459,7 @@ module.exports = {
         }
         channelmessage += "<br><br><timestamp/><br>" + border2;
         sys.sendHtmlMessage(src, channelmessage, channel);
-    }
-
-    ,
+    },
 
     battles: function (src, channel, command) {
         var total = Object.keys(battles).length, ids = [], p1s = [], p2s = [], tiers = [], clauses = [], startTimes = [], battlemessage, i;
@@ -378,16 +490,14 @@ module.exports = {
                 + "<td>" + tiers[i] + "</td>"
                 + "<td>" + clauses[i] + "</td>"
                 + "<td>" + startTimes[i] + "</td>"
-                + "<td>" + helpers.battleLink(ids[i]) + "</td>"
+                + "<td>" + battleLink(ids[i]) + "</td>"
                 + "</tr>";
             }
             battlemessage += "</tbody><tfoot><tr><td colspan='7'><b>Total Battles Online:</b> " + total + "</td></tr></tfoot></table>";
         }
         battlemessage += "<br><br><timestamp/><br>" + border2;
         sys.sendHtmlMessage(src, battlemessage, channel);
-    }
-
-    ,
+    },
 
     ranking: function (src, channel, command) {
         var tierList = sys.getTierList(), player = command[1], tier = command[2], trgt, self, rank;
@@ -422,12 +532,10 @@ module.exports = {
             "not currently ranked in " + tier + ".", channel);
         } else {
             sys.sendHtmlMessage(src, helpers.bot(bots.battle) + (self ? "You" : player) + " currently " +
-            "rank" + (self ? "" : "s") + " " + helpers.ordinal(rank) + " out of " + sys.totalPlayersByTier(tier) +
+            "rank" + (self ? "" : "s") + " " + ordinal(rank) + " out of " + sys.totalPlayersByTier(tier) +
             " players in " + tier + " (rating: " + sys.ladderRating(src, tier) + ").", channel);
         }
-    }
-
-    ,
+    },
 
     intier: function (src, channel, command) {
         var tier = command[1], list = [], i;
@@ -449,16 +557,12 @@ module.exports = {
         } else {
             sys.sendHtmlMessage(src, helpers.bot(bots.battle) + "Unidled players currently in " + tier + ": " + list.join(", ") + ".", channel);
         }
-    }
-
-    ,
+    },
 
     uptime: function (src, channel, command) {
         var uptime = sys.profileDump().split('\n')[0].split(',')[0].split(':')[1].slice(1, -2);
         sys.sendHtmlMessage(src, helpers.bot(bots.command) + "The server has been up for " + helpers.formatUptime(uptime), channel);
-    }
-
-    ,
+    },
 
     registry: function (src, channel, command) {
         var auth = sys.auth(src), registrymessage;
@@ -515,9 +619,7 @@ module.exports = {
             registrymessage += "<br><br><timestamp/><br>" + border2;
             sys.sendHtmlMessage(src, registrymessage, channel);
         });
-    }
-
-    ,
+    },
 
     serverinfo: function (src, channel, command) {
         var servermessage = border + "<h2>Server Info</h2><br>", ports = sys.serverPorts().length, serveropen, time,
@@ -536,9 +638,7 @@ module.exports = {
         "<br><b>Public:</b> " + serverprivate + "<br><b>Open:</b> " + serveropen + "<br><br>" + "<b>Local Date:</b> " + date +
         "<br><b>Local Time:</b> " + time + "<br><b>Server Uptime:</b> " + helpers.formatUptime(uptime) + "<br><br><timestamp/><br>" + border2;
         sys.sendHtmlMessage(src, servermessage, channel);
-    }
-
-    ,
+    },
 
     scriptinfo: function (src, channel, command) {
         var repo = "https://github.com/MaribelHearn/fc-scripts";
@@ -574,9 +674,7 @@ module.exports = {
         "Pokémon Online server scripts (pokemon database methods, idea of safari)<br>" +
         "<br><timestamp/><br>" + border2;
         sys.sendHtmlMessage(src, scriptmessage, channel);
-    }
-
-    ,
+    },
 
     playerinfo: function (src, channel, command) {
         var infomessage = border + "<h2>Player Info</h2><br>", player = command[1],
@@ -619,15 +717,11 @@ module.exports = {
         infomessage += "<br><b>Last Online:</b> " + lastlogin +
         "<br><br><timestamp/><br>" + border2;
         sys.sendHtmlMessage(src, infomessage, channel);
-    }
-
-    ,
+    },
 
     player: function (src, channel, command) {
         this.playerinfo(src, channel, command);
-    }
-
-    ,
+    },
 
     auth: function (src, channel, command) {
         var authmessage = border + "<h2>Server Authority</h2><br>", authList = helpers.authSort(), srcauth = sys.auth(src), index = 0, lower, i;
@@ -685,27 +779,19 @@ module.exports = {
         }
         authmessage += "<br><br><timestamp/><br>" + border2;
         sys.sendHtmlMessage(src, authmessage, channel);
-    }
-
-    ,
+    },
 
     auths: function (src, channel, command) {
         this.auth(src, channel, command);
-    }
-
-    ,
+    },
 
     authlist: function (src, channel, command) {
         this.auth(src, channel, command);
-    }
-
-    ,
+    },
 
     mp: function (src, channel, command) {
         modcommands.cp(src, channel, ["cp", sys.name(src)]);
-    }
-
-    ,
+    },
 
     myalts: function (src, channel, command) {
         var DISPLAY_USER = true, altsmessage = border + "<h2>My Alts</h2><br>", alts = sys.aliases(sys.ip(src)), index = 0, lower, i;
@@ -750,9 +836,7 @@ module.exports = {
         }
         altsmessage += "<br><br><timestamp/><br>" + border2;
         sys.sendHtmlMessage(src, altsmessage, channel);
-    }
-
-    ,
+    },
 
     pokedex: function (src, channel, command) {
         var UNKNOWN_TYPE = 18, MAX_IV = 31, MIN_EV = 0, MAX_EV = 252, MIN_NATURE = 0.9, NEUTRAL_NATURE = 1.0, MAX_NATURE = 1.1;
@@ -771,9 +855,9 @@ module.exports = {
         pokemon = sys.pokemon(pokeNum);
         type1 = sys.pokeType1(pokeNum, gen);
         type2 = sys.pokeType2(pokeNum, gen);
-        types.push(helpers.typeImage(src, type1));
+        types.push(typeImage(src, type1));
         if (type2 != UNKNOWN_TYPE) {
-            types.push(helpers.typeImage(src, type2));
+            types.push(typeImage(src, type2));
         }
         for (i = 0; i <= 2; i++) {
             if (sys.pokeAbility(pokeNum, i, gen) !== 0) {
@@ -781,7 +865,7 @@ module.exports = {
             }
         }
         for (j in sys.pokeGenders(pokeNum)) {
-            genders.push(helpers.genderImage(src, sys.genderNum(j == "neutral" ? "genderless" : j)));
+            genders.push(genderImage(src, sys.genderNum(j == "neutral" ? "genderless" : j)));
         }
         height = helpers.height(pokeNum);
         weight = helpers.weight(pokeNum);
@@ -798,7 +882,7 @@ module.exports = {
         }
         dexmessage += "<br><b>Type:</b> " + types.join(/img/.test(types.toString()) ? "" : " / ");
         if (pokeNum > 999 && pokeNum < 1200 || pokeNum > 66536) {
-            dexmessage += "<br><b>Tier:</b> " + helpers.tierOf(pokeNum);
+            dexmessage += "<br><b>Tier:</b> " + tierOf(pokeNum);
         }
         dexmessage += "<br><b>" + (abilities.length == 1 ? "Ability" : "Abilities") + ":</b> " + abilities.join(" / ")
         + "<br><b>Gender:</b> " + genders.join(/img/.test(genders.toString()) ? "" : " / ")
@@ -809,8 +893,8 @@ module.exports = {
             dexmessage += "<tt>";
             for (k in baseStats) {
                 stat = baseStats[k];
-                dexmessage += "<br><b>" + helpers.statName(k) + "</b>" + helpers.spaces(8 - helpers.statName(k).length) + " "
-                + helpers.colorStat(stat)+ helpers.spaces(3 - stat.toString().length) + " "
+                dexmessage += "<br><b>" + statName(k) + "</b>" + helpers.spaces(8 - statName(k).length) + " "
+                + colorStat(stat)+ helpers.spaces(3 - stat.toString().length) + " "
                 + (k == '0' ? '-' + helpers.spaces(2) : helpers.calcStat(k, stat, MAX_IV, MIN_EV, MIN_NATURE) + helpers.spaces(3 - helpers.calcStat(k, stat, MAX_IV, MIN_EV, MIN_NATURE).toString().length)) + " | "
                 + helpers.calcStat(k, stat, MAX_IV, MIN_EV, NEUTRAL_NATURE) + helpers.spaces(3 - helpers.calcStat(k, stat, MAX_IV, MIN_EV, NEUTRAL_NATURE).toString().length) + " | "
                 + helpers.calcStat(k, stat, MAX_IV, MAX_EV, NEUTRAL_NATURE) + helpers.spaces(3 - helpers.calcStat(k, stat, MAX_IV, MAX_EV, NEUTRAL_NATURE).toString().length) + " | "
@@ -822,8 +906,8 @@ module.exports = {
             + "<br><table cellpadding='2' cellspacing='0'><thead><tr><th>Stat</th><th>Base</th><th>Min-</th><th>Min</th><th>Max</th><th>Max+</th></tr></thead><tbody>";
             for (k in baseStats) {
                 stat = baseStats[k];
-                dexmessage += "<tr><th>" + helpers.statName(k) + "</th>"
-                + "<td>" + helpers.colorStat(stat) + "</td>"
+                dexmessage += "<tr><th>" + statName(k) + "</th>"
+                + "<td>" + colorStat(stat) + "</td>"
                 + "<td>" + (k == '0' ? '-' : helpers.calcStat(k, stat, MAX_IV, MIN_EV, MIN_NATURE)) + "</td>"
                 + "<td>" + helpers.calcStat(k, stat, MAX_IV, MIN_EV, NEUTRAL_NATURE) + "</td>"
                 + "<td>" + helpers.calcStat(k, stat, MAX_IV, MAX_EV, NEUTRAL_NATURE) + "</td>"
@@ -833,15 +917,11 @@ module.exports = {
         }
         dexmessage += "<br><br><timestamp/><br>" + border2;
         sys.sendHtmlMessage(src, dexmessage, channel);
-    }
-
-    ,
+    },
 
     pokemon: function (src, channel, command) {
         this.pokedex(src, channel, command);
-    }
-
-    ,
+    },
 
     movedex: function (src, channel, command) {
         var move = command[1], moveNum, type, power, category, accuracy, pp, effect, contact, priority, range, movemessage;
@@ -865,7 +945,7 @@ module.exports = {
         contact = helpers.moveContact(moveNum, gen);
         range = helpers.moveRange(moveNum, gen);
         movemessage = border + "<h2>#" + moveNum + " " + move + "</h2>"
-        + "<br><b>Type:</b> " + helpers.typeImage(src, type)
+        + "<br><b>Type:</b> " + typeImage(src, type)
         + "<br><b>Power:</b> " + power
         + "<br><b>Category:</b> " + category
         + "<br><b>Accuracy:</b> " + accuracy
@@ -875,15 +955,11 @@ module.exports = {
         + "<br><b>Effect:</b> " + effect
         + "<br><br><timestamp/><br>" + border2;
         sys.sendHtmlMessage(src, movemessage, channel);
-    }
-
-    ,
+    },
 
     move: function (src, channel, command) {
         this.movedex(src, channel, command);
-    }
-
-    ,
+    },
 
     movepool: function (src, channel, command) {
         var pokemon = command[1], pokeNum, move, moveNum, movepool, learnmessage;
@@ -914,15 +990,11 @@ module.exports = {
             return;
         }
         sys.sendHtmlMessage(src, learnmessage, channel);
-    }
-
-    ,
+    },
 
     canlearn: function (src, channel, command) {
         this.movepool(src, channel, command);
-    }
-
-    ,
+    },
 
     abilitydex: function (src, channel, command) {
         var ability = command[1], abilityNum, abilitymessage;
@@ -941,15 +1013,11 @@ module.exports = {
         + "<br><b>Pokémon with this ability:</b> " + helpers.pokemonWithAbility(abilityNum).join(", ")
         + "<br><br><timestamp/><br>" + border2;
         sys.sendHtmlMessage(src, abilitymessage, channel);
-    }
-
-    ,
+    },
 
     ability: function (src, channel, command) {
         this.abilitydex(src, channel, command);
-    }
-
-    ,
+    },
 
     itemdex: function (src, channel, command) {
         var item = command[1], itemNum, itemmessage, isBerry;
@@ -972,20 +1040,16 @@ module.exports = {
         itemmessage += "<br><b>Description:</b> " + (isBerry ? helpers.getBerry(itemNum) : helpers.getItem(itemNum))
         + "<br><b>Fling Power:</b> " + helpers.getFlingPower(itemNum);
         if (isBerry) {
-            itemmessage += "<br><b>Natural Gift Type:</b> " + helpers.typeImage(src, helpers.getBerryType(itemNum))
+            itemmessage += "<br><b>Natural Gift Type:</b> " + typeImage(src, helpers.getBerryType(itemNum))
             + "<br><b>Natural Gift Power:</b> " + helpers.getBerryPower(itemNum);
         }
         itemmessage += "<br><br><timestamp/><br>" + border2;
         sys.sendHtmlMessage(src, itemmessage, channel);
-    }
-
-    ,
+    },
 
     item: function (src, channel, command) {
         this.itemdex(src, channel, command);
-    }
-
-    ,
+    },
 
     team: function (src, channel, command) {
         command[1] ? team = command[1] : team = 0;
@@ -1073,9 +1137,7 @@ module.exports = {
         viewteammessage += "</table><b>" + helpers.user("/team") + "</b> without an argument displays your first team. To see your other teams, use <b>" + helpers.user("/team") + " " + helpers.arg("1/2/3/4/5") + "</b>." +
         "<br><br><timestamp/><br>" + border2;
         sys.sendHtmlMessage(src, viewteammessage, channel);
-    }
-
-    ,
+    },
 
     gradient: function (src, channel, command) {
         var gradient = command[1];
@@ -1093,9 +1155,7 @@ module.exports = {
         }
         sys.sendHtmlMessage(src, helpers.bot(bots.command) + "Your gradient will be shown below. If it's not there, or it's wrong, it doesn't work. Gradient:<br>" +
         "<table style='background-color: " + gradient + "' width='50%'><tr><td><br><br><br><br><br><br><br><br><br><br></td></tr></table>", channel);
-    }
-
-    ,
+    },
 
     /**
         ----------------
@@ -1122,9 +1182,7 @@ module.exports = {
         + "<br><timestamp/><br>"
         + border2;
         sys.sendHtmlMessage(src, commandsmessage, channel);
-    }
-
-    ,
+    },
 
     idle: function (src, channel, command) {
         if (sys.away(src)) {
@@ -1132,21 +1190,15 @@ module.exports = {
             return;
         }
         sys.changeAway(src, true);
-    }
-
-    ,
+    },
 
     afk: function (src, channel, command) {
         this.idle(src, channel, command);
-    }
-
-    ,
+    },
 
     away: function (src, channel, command) {
         this.idle(src, channel, command);
-    }
-
-    ,
+    },
 
     back: function (src, channel, command) {
         if (!sys.away(src)) {
@@ -1154,21 +1206,15 @@ module.exports = {
             return;
         }
         sys.changeAway(src, false);
-    }
-
-    ,
+    },
 
     goback: function (src, channel, command) {
         this.back(src, channel, command);
-    }
-
-    ,
+    },
 
     unidle: function (src, channel, command) {
         this.back(src, channel, command);
-    }
-
-    ,
+    },
 
     tier: function (src, channel, command) {
         var team = (!command[1] ? 0 : command[1]), tier = command[2];
@@ -1181,11 +1227,9 @@ module.exports = {
             return;
         }
         sys.changeTier(src, team, tier);
-        sys.sendHtmlMessage(src, helpers.bot(bots.battle) + "You changed your " + helpers.teamOrdinal(team) +
+        sys.sendHtmlMessage(src, helpers.bot(bots.battle) + "You changed your " + teamOrdinal(team) +
         " team's tier to " + tier + ".");
-    }
-
-    ,
+    },
 
     unregister: function (src, channel, command) {
         if (sys.auth(src) > 0) {
@@ -1195,9 +1239,7 @@ module.exports = {
         sys.clearPass(players[src].name);
         sys.sendNetworkCommand(src, REACTIVATE_REGISTER_BUTTON);
         sys.sendHtmlMessage(src, helpers.bot(bots.pass) + "Your password has been successfully cleared.", channel);
-    }
-
-    ,
+    },
 
     selfkick: function (src, channel, command) {
         var name = helpers.escapehtml(sys.name(src)), lower = name.toLowerCase();
@@ -1208,9 +1250,7 @@ module.exports = {
             sys.sendHtmlAll(helpers.bot(bots.kick) + name + " has kicked themselves from the server!", channel);
         }
         sys.kick(src);
-    }
-
-    ,
+    },
 
     selfmute: function (src, channel, command) {
         var auth = sys.auth(src), lower = players[src].name.toLowerCase(), original;
@@ -1224,9 +1264,7 @@ module.exports = {
         } else {
             delete mutemessages[lower];
         }
-    }
-
-    ,
+    },
 
     selfban: function (src, channel, command) {
         var auth = sys.auth(src), lower = players[src].name.toLowerCase(), original;
@@ -1240,9 +1278,7 @@ module.exports = {
         } else {
             delete banmessages[lower];
         }
-    }
-
-    ,
+    },
 
     color: function (src, channel, command) {
         var color = command[1], name = sys.name(src), auth = sys.auth(src), hexColor;
@@ -1267,15 +1303,11 @@ module.exports = {
             }
         }
         sys.sendHtmlAll(helpers.bot(bots.main) + "<b>" + helpers.user(name) + " changed their " + command[0] + " to " + helpers.arg(color) + "!</b>", channel);
-    }
-
-    ,
+    },
 
     colour: function (src, channel, command) {
         this.color(src, channel, command);
-    }
-
-    ,
+    },
 
     name: function (src, channel, command) {
         var name = sys.name(src), auth = sys.auth(src);
@@ -1294,7 +1326,7 @@ module.exports = {
             return;
         }
         if (sys.dbIp(lower)) {
-            if (helpers.isauthip(sys.dbIp(lower)) && sys.dbRegistered(lower)) {
+            if (isAuthIp(sys.dbIp(lower)) && sys.dbRegistered(lower)) {
                 helpers.starfox(src, channel, command, bots.name, "Error 403, that name is in use by an auth member.", channel);
                 return;
             }
@@ -1315,10 +1347,8 @@ module.exports = {
         }
         sys.changeName(src, newname);
         sys.sendHtmlAll(helpers.bot(bots.name) + "<b>" + helpers.user(name) +
-        " changed their name to " + helpers.escapehtmlarg(newname) + "!</b>", channel);
-    }
-
-    ,
+        " changed their name to " + helpers.arg(newname) + "!</b>", channel);
+    },
 
     reverse: function (src, channel, command) {
         var name = sys.name(src);
@@ -1336,37 +1366,27 @@ module.exports = {
         }
         sys.changeName(src, newname);
         sys.sendHtmlAll(helpers.bot(bots.reverse) + "<b>" + helpers.user(name) + " reversed their name!</b>", channel);
-    }
-
-    ,
+    },
 
     reset: function (src, channel, command) {
         sys.changeName(src, players[src].name);
         sys.changeColor(src, players[src].color);
         sys.sendHtmlAll(helpers.bot(bots.name) + "<b>" + helpers.user(players[src].name) + " set their name and color back to their original states!</b>", channel);
-    }
-
-    ,
+    },
 
     resetname: function (src, channel, command) {
         sys.changeName(src, players[src].name);
         sys.sendHtmlAll(helpers.bot(bots.name) + "<b>" + helpers.user(players[src].name) + " set their name back to its original state!</b>", channel);
-    }
-
-    ,
+    },
 
     resetcolor: function (src, channel, command) {
         sys.changeColor(src, players[src].color);
         sys.sendHtmlAll(helpers.bot(bots.main) + "<b>" + helpers.user(sys.name(src)) + " set their " + command[0].slice(5) + " back to its original state!</b>", channel);
-    }
-
-    ,
+    },
 
     resetcolour: function (src, channel, command) {
         this.resetcolor(src, channel, command);
-    }
-
-    ,
+    },
 
     /**
         ---------------
@@ -1391,18 +1411,14 @@ module.exports = {
         + "<br><timestamp/><br>"
         + border2;
         sys.sendHtmlMessage(src, commandsmessage, channel);
-    }
-
-    ,
+    },
 
     me: function (src, channel, command) {
         var name = sys.name(src), color = helpers.color(src);
         command.splice(0, 1);
         command = command.join(DELIMITER);
         sys.sendHtmlAll("<font color='" + color + "'><timestamp/><b>*** " + helpers.escapehtml(name) + " " + helpers.escapehtml(command) + " ***</b></font>", channel);
-    }
-
-    ,
+    },
 
     poke: function (src, channel, command) {
         var name = sys.name(src), auth = sys.auth(src), color = helpers.color(src), trgt;
@@ -1413,9 +1429,7 @@ module.exports = {
         if (trgt) {
             sys.sendHtmlMessage(trgt, "<ping/>", channel);
         }
-    }
-
-    ,
+    },
 
     listen: function (src, channel, command) {
         if (GOOGLE_KEY === "") {
@@ -1431,9 +1445,7 @@ module.exports = {
             return;
         }
         sys.sendHtmlAll("<font color='" + color + "'><timestamp/><b>*** " + name + " is listening to " + helpers.escapehtml(command) + " d^_^b ***</b></font>", channel);
-    }
-
-    ,
+    },
 
     imp: function (src, channel, command) {
         var name = sys.name(src), auth = sys.auth(src), color = helpers.color(src), message;
@@ -1451,9 +1463,7 @@ module.exports = {
             message = "<font color='" + color + "'><timestamp/> +<b><i>" + helpers.escapehtml(command[1]) + ":</i></b></font> " + helpers.escapehtml(command[2]);
         }
         sys.sendHtmlAll(message + " <small><b>-Imp by " + helpers.escapehtml(name) + "</b></small>", channel);
-    }
-
-    ,
+    },
 
     impme: function (src, channel, command) {
         var name = sys.name(src), auth = sys.auth(src), color = helpers.color(src);
@@ -1467,9 +1477,7 @@ module.exports = {
         }
         var message = "<font color='" + color + "'><timestamp/> <b>*** " + helpers.escapehtml(command[1]) + " " + helpers.escapehtml(command[2]) + " ***</b></font>";
         sys.sendHtmlAll(message + " <small><b>-Imp by " + helpers.escapehtml(name) + "</b></small>", channel);
-    }
-
-    ,
+    },
 
     future: function (src, channel, command) {
         var name = helpers.escapehtml(sys.name(src)), auth = sys.auth(src), color = helpers.color(src), message, lower, time, unit, derp;
@@ -1508,8 +1516,8 @@ module.exports = {
             helpers.starfox(src, channel, command, bots.command, "Error 400, invalid unit.");
             return;
         }
-        unit = helpers.timeplurality(time, unit);
-        var milliseconds = helpers.toseconds(time, unit) * 1000;
+        unit = timePlurality(time, unit);
+        var milliseconds = toSeconds(time, unit) * 1000;
         if (auth < 1) {
             message = "<font color='" + color + "'><timestamp/> <b>" + name + ":";
         } else {
@@ -1529,9 +1537,7 @@ module.exports = {
             }
         }, milliseconds, 0);
         sys.sendHtmlMessage(src, helpers.bot(bots.command) + "Your message has been sent " + time + " " + unit + " into the future!", channel);
-    }
-
-    ,
+    },
 
     quote: function (src, channel, command) {
         var name = sys.name(src), auth = sys.auth(src), text, author, quote;
@@ -1547,9 +1553,7 @@ module.exports = {
         author = helpers.escapehtml(command[2]);
         quote = "<blockquote>\"" + text + "\"</blockquote><br> - " + author + "<br>";
         sys.sendHtmlAll(helpers.bot(bots.main) + helpers.escapehtml(name) + " posted the following quote:<br>" + quote, channel);
-    }
-
-    ,
+    },
 
     spoiler: function (src, channel, command) {
         var name = helpers.escapehtml(sys.name(src)), auth = sys.auth(src), text = command[1], channelPlayers = sys.playersOfChannel(channel), origin;
@@ -1586,9 +1590,7 @@ module.exports = {
             }
         }
         currentSpoiler++;
-    }
-
-    ,
+    },
 
     view: function (src, channel, command) {
         var spoiler = command[1];
@@ -1601,9 +1603,7 @@ module.exports = {
             return;
         }
         sys.sendHtmlMessage(src, helpers.bot(bots.main) + spoilers[spoiler].text + " [Spoiler from: " + spoilers[spoiler].origin + "] [Sent by: " + spoilers[spoiler].sender + "]", channel);
-    }
-
-    ,
+    },
 
     /**
         ------------
@@ -1621,9 +1621,7 @@ module.exports = {
         + "<br><timestamp/><br>"
         + border2;
         sys.sendHtmlMessage(src, commandsmessage, channel);
-    }
-
-    ,
+    },
 
     viewtour: function (src, channel, command) {
         if (tour[channel].tourmode === 0) {
@@ -1637,9 +1635,7 @@ module.exports = {
         }
         receiver = src;
         helpers.tourdisplay(2, channel);
-    }
-
-    ,
+    },
 
     viewround: function (src, channel, command) {
         if (tour[channel].tourmode === 0) {
@@ -1662,9 +1658,7 @@ module.exports = {
         }
         receiver = src;
         helpers.rounddisplay(0, channel);
-    }
-
-    ,
+    },
 
     join: function (src, channel, command) {
         var name = players[src].name, lower = players[src].name.toLowerCase(), index = 0, team = 6;
@@ -1702,9 +1696,7 @@ module.exports = {
                 helpers.tourstart(channel);
             }
         }
-    }
-
-    ,
+    },
 
     leave: function (src, channel, command) {
         if (tour[channel].tourmode === 0) {

@@ -11,7 +11,6 @@
     script file uses.
     ----------------------------------------------
 */
-
 module.exports = {
     defaultValue: function (dataFile, type) {
         var values = {
@@ -188,12 +187,6 @@ module.exports = {
         sys.write(DATA_FOLDER + (dataFile.match("KEY") ? dataFile : dataFile.toLowerCase()) + ".txt", JSON.stringify(data));
     },
 
-    setVariable: function (variable, data) {
-        if (typeof(global[variable]) == "undefined") {
-            global[variable] = data;
-        }
-    },
-
     initCustomGlobals: function () {
         botcolor = this.readData("botcolor");
         botsymbol = this.readData("botsymbol");
@@ -218,75 +211,8 @@ module.exports = {
         mutemessages = this.readData("mutemessages");
         banmessages = this.readData("banmessages");
         rangebanmessages = this.readData("rangebanmessages");
-        this.setVariable("border", this.readData("border"));
-        this.setVariable("border2", this.readData("border2"));
-    },
-
-    initServerGlobals: function () {
-        open = this.readData("open");
-        latestShaHash = this.readData("latestshahash");
-        updateFrequency = this.readData("updatefrequency");
-        allowance = this.readData("allowance");
-        floodtime = this.readData("floodtime");
-        floodlevel = this.readData("floodlevel");
-        maxplayers = this.readData("maxplayers");
-        allowed = this.readData("allowed");
-        exceptions = this.readData("exceptions");
-        permchannels = this.readData("permchannels");
-        allowedrange = this.readData("allowedrange");
-        namestounban = this.readData("namestounban");
-        nameblocklist = this.readData("nameblocklist");
-        silentcommands = this.readData("silentcommands");
-        rules = this.readData("rules");
-        banlist = this.readData("banlist");
-        mutelist = this.readData("mutelist");
-        timezone = this.readData("timezone");
-        cityname = this.readData("cityname");
-        versions = this.readData("versions");
-        members = this.readData("members");
-        operatingsystem = this.readData("operatingsystem");
-        regchannels = this.readData("regchannels");
-        megabanlist = this.readData("megabanlist");
-        gigabanlist = this.readData("gigabanlist");
-        countryname = this.readData("countryname");
-        rangebanlist = this.readData("rangebanlist");
-    },
-
-    initTempVars: function () {
-        this.setVariable("stopbattles", false);
-        this.setVariable("megabancheck", false);
-        this.setVariable("gigabancheck", false);
-        this.setVariable("serverStarting", false);
-        this.setVariable("timer", 0);
-        this.setVariable("currentSpoiler", 0);
-        this.setVariable("layout", "new");
-        this.setVariable("hostIp", "");
-        this.setVariable("hostCountry", "");
-        this.setVariable("hostCity", "");
-        this.setVariable("hostTimeZone", "");
-        this.setVariable("players", []);
-        this.setVariable("floodplayers", []);
-        this.setVariable("spoilers", []);
-        this.setVariable("tour", {});
-        this.setVariable("battles", {});
-        this.setVariable("heightList", {});
-        this.setVariable("weightList", {});
-        this.setVariable("movepoolList", {});
-        this.setVariable("powerList", {});
-        this.setVariable("categoryList", {});
-        this.setVariable("accList", {});
-        this.setVariable("ppList", {});
-        this.setVariable("moveEffList", {});
-        this.setVariable("moveFlagList", {});
-        this.setVariable("movePriorityList", {});
-        this.setVariable("moveRangeList", {});
-        this.setVariable("abilityList", {});
-        this.setVariable("pokemonWithAbilityList", {});
-        this.setVariable("itemList", {});
-        this.setVariable("berryList", {});
-        this.setVariable("flingPowerList", {});
-        this.setVariable("berryPowerList", {});
-        this.setVariable("berryTypeList", {});
+        border = this.readData("border");
+        border2 = this.readData("border2");
     },
 
     /**
@@ -322,31 +248,6 @@ module.exports = {
 
     isHexColor: function (code) {
         return /#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})/.test(code);
-    },
-
-    floodCheck: function (src, channelname) {
-        var auth = (sys.auth(src) == 10 ? 3 : sys.auth(src));
-        if (regchannels[channelname]) {
-            if (regchannels[channelname].flood) {
-                return false;
-            }
-            if (players[src].floodcount > allowance) {
-                floodplayers.splice(floodplayers.indexOf(src), 1);
-                if (players[src].floodcount != Infinity && auth < floodlevel) {
-                    return true;
-                }
-                players[src].floodcount = Infinity;
-            }
-            return false;
-        }
-        if (players[src].floodcount > allowance) {
-            floodplayers.splice(floodplayers.indexOf(src), 1);
-            if (players[src].floodcount != Infinity && auth < floodlevel) {
-                return true;
-            }
-            players[src].floodcount = Infinity;
-        }
-        return false;
     },
 
     muteCheck: function (name) {
@@ -449,46 +350,6 @@ module.exports = {
         sys.changeName(src, players[src].name);
     },
 
-    formatEvent: function (event) {
-        var eventFormats = {"frenzy": "<b>Shiny Frenzy</b>", "fest": "<b>Chainfest</b>", "legendary": "<b>Legendary Swarm</b>"};
-        return (eventFormats[event] ? eventFormats[event] : "<b>Typeframe</b>");
-    },
-
-    funrand: function (src, team, slot) {
-        var poke = sys.rand(1000, 1146), ability = sys.rand(0, 167), nature = sys.rand(0, 15), item = sys.rand(0, 330);
-
-        if (ability > 164) { // Web Browser and Snow Slide
-            ability += 68;
-        }
-
-        sys.changePokeNum(src, team, slot, poke);
-        sys.changePokeName(src, team, slot, sys.pokemon(poke));
-        sys.changePokeAbility(src, team, slot, ability);
-        sys.changePokeNature(src, team, slot, nature);
-        sys.changePokeItem(src, team, slot, item);
-
-        for (var moveSlot = 0; moveSlot < 4; moveSlot++) {
-            move = sys.rand(1, 682);
-
-            if (move > 559) { // Fundex moves
-                move += 440;
-            }
-
-            sys.changePokeMove(src, team, slot, moveSlot, move);
-
-            if (move == 216) {
-                sys.changePokeHappiness(src, team, slot, 255);
-            } else if (move == 218) {
-                sys.changePokeHappiness(src, team, slot, 0);
-            }
-        }
-
-        for (var stat = 0; stat < 6; stat++) {
-            sys.changeTeamPokeDV(src, team, slot, stat, 31);
-            sys.changeTeamPokeEV(src, team, slot, stat, 84);
-        }
-    },
-
     /**
         --------------
         Return Helpers
@@ -501,12 +362,6 @@ module.exports = {
             }
         }
         return false;
-    },
-
-    calcDamage: function (attack, defense, power, modifier) {
-        // assumes the attacking Pokémon is level 100
-        var damage = Math.floor((0.84 * (attack / defense) * power + 2) * modifier);
-        return [Math.floor(damage * 0.85), damage];
     },
 
     timePassed: function (color, lastMessageTime) {
@@ -554,64 +409,12 @@ module.exports = {
         return "<a href='po:join/" + channelName + "'>#" + channelName + "</a>";
     },
 
-    battleLink: function (battle) {
-        return "<a href='po:watch/" + battle + "'>Watch</a>";
-    },
-
-    syntaxHighlight: function (code) {
-        var KEYWORDS = ["abstract", "boolean", "break", "byte", "case", "catch", "char", "class", "const", "continue", "debugger",
-        "default", "delete", "do", "double", "else", "enum", "export", "extends", "final", "finally", "float", "for", "function",
-        "goto", "if", "implements", "import", "in", "instanceof", "int", "interface", "long", "native", "new", "package", "private",
-        "protected", "public", "return", "short", "static", "super", "switch", "synchronized", "this", "throw", "throws", "transient",
-        "try", "typeof", "var", "void", "volatile", "while", "with", "true", "false", "prototype"];
-        var NUMBERS = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
-        var index = 0, pattern, pattern1, pattern2, i;
-        code = code.replace(/;/g, ";<br>").replace(/\}/g, "}<br>").replace(/\{/g, "{<br>");
-        if (code.substr(code.length - 4) == "<br>") {
-            code = code.slice(0, -4);
-        }
-        for (i in KEYWORDS) {
-            pattern1 = new RegExp(KEYWORDS[i] + ' ', "g");
-            pattern2 = new RegExp(' ' + KEYWORDS[i], "g");
-            code = code.replace(pattern1, "<b><font color='#00008B'>" + KEYWORDS[i] + "</font></b> ");
-            code = code.replace(pattern2, " <b><font color='#00008B'>" + KEYWORDS[i] + "</font></b>");
-        }
-        for (i in NUMBERS) {
-            pattern = new RegExp(NUMBERS[i], "g");
-            if (pattern.test(this.strip(code))) {
-                code = code.replace(pattern, "<font color='#FF4500'>" + NUMBERS[i] + "</font>");
-            }
-        }
-        while (code.indexOf('"') != -1) {
-            code = code.replace('"', (index % 2 === 0 ? "<font color='#808080'>&quot;" : "&quot;</font>"));
-            index++;
-        }
-        code = code.replace(/\/\*/g, "<font color='#008000'>/*").replace(/\*\//g, "*/</font>");
-        return code;
-    },
-
     sum: function (array) {
         var sum = 0;
         for (var i in array) {
             sum += parseInt(array[i]);
         }
         return sum;
-    },
-
-    timestampify: function (time) { // time must be a date object
-        var hours = JSON.stringify(time.getHours());
-        if (hours.length == 1) {
-            hours = "0" + hours;
-        }
-        var minutes = JSON.stringify(time.getMinutes());
-        if (minutes.length == 1) {
-            minutes = "0" + minutes;
-        }
-        var seconds = JSON.stringify(time.getSeconds());
-        if (seconds.length == 1) {
-            seconds = "0" + seconds;
-        }
-        return "(" + hours + ":" + minutes + ":" + seconds + ")";
     },
 
     type: function (variable) {
@@ -653,10 +456,6 @@ module.exports = {
 
     countryRetrievalUrl: function (ip) {
         return "http://api.ipinfodb.com/v3/ip-city/?key=" + API_KEY + "&ip=" + ip + "&format=json";
-    },
-
-    mapsUrl: function (city, country) {
-        return "https://www.google.com/maps?q=" + city + ", " + country;
     },
 
     youtubeDataUrl: function (video) {
@@ -770,48 +569,6 @@ module.exports = {
         }
     },
 
-    formatJusticeTime: function (justiceTime) { // justiceTime is in seconds
-        var str = "", days = 0, hours = 0, minutes = 0, seconds = 0;
-        if (justiceTime == '-') {
-            return "indefinite";
-        }
-        if (isNaN(justiceTime)) {
-            return justiceTime;
-        }
-        if (justiceTime === null) {
-            return "indefinite";
-        }
-        while (justiceTime >= 86400) {
-            days += 1;
-            justiceTime -= 86400;
-        }
-        if (days >= 1) {
-            str += days + " days, ";
-        }
-        while (justiceTime >= 3600) {
-            hours += 1;
-            justiceTime -= 3600;
-        }
-        if (hours >= 1) {
-            str += hours + " hours, ";
-        }
-        while (justiceTime >= 60) {
-            minutes += 1;
-            justiceTime -= 60;
-        }
-        if (minutes >= 1) {
-            str += minutes + " minutes and ";
-        }
-        while (justiceTime >= 1) {
-            seconds += 1;
-            justiceTime -= 1;
-        }
-        if (seconds >= 1) {
-            str += seconds + " seconds";
-        }
-        return str;
-    },
-
     formatUptime: function (uptime) { // uptime is in milliseconds
         var days = 0, hours = 0, minutes = 0, seconds = 0;
         while (uptime >= 86400000) {
@@ -834,191 +591,6 @@ module.exports = {
             seconds += 1;
         }
         return days + " days, " + hours + " hours, " + minutes + " minutes and " + seconds + " seconds.";
-    },
-
-    formatLastOn: function (src, lastlogin) {
-        return (timezone[players[src].name.toLowerCase()] ? this.toTimeZone(lastlogin, timezone[players[src].name.toLowerCase()].split(':')[0]) : lastlogin).split('.')[0].replace('T', ", ");
-    },
-
-    secondsToWording: function (seconds) {
-        var result = [], days = 0, hours = 0, minutes = 0;
-
-        while (seconds >= 86400) {
-            days += 1;
-            seconds -= 86400;
-        }
-        while (seconds >= 3600) {
-            hours += 1;
-            seconds -= 3600;
-        }
-        while (seconds >= 60) {
-            minutes += 1;
-            seconds -= 60;
-        }
-
-        if (days >= 1) {
-            result.push(days + " day" + (days != 1 ? "s" : ""));
-        }
-        if (hours >= 1) {
-            result.push(hours + " hour" + (hours != 1 ? "s" : ""));
-        }
-        if (minutes >= 1) {
-            result.push(minutes + " minute" + (minutes != 1 ? "s" : ""));
-        }
-        if (seconds >= 1) {
-            result.push(seconds + " second" + (seconds != 1 ? "s" : ""));
-        }
-
-        return result.join(", ");
-    },
-
-    version: function (version) {
-        switch (version) {
-            case 2630:
-                return "2.6.3";
-            case 2621:
-                return "2.6.2.1";
-            case 2620:
-                return "2.6.2";
-            case 2601:
-                return "2.6.1";
-            case 2600:
-                return "2.6.0";
-            case 2520:
-                return "2.5.2";
-            case 2510:
-                return "2.5.1";
-            case 2500:
-                return "2.5.0";
-            case 2402:
-                return "2.4.2";
-            case 2302:
-                return "2.3.2 / 2.4.0 / 2.4.1";
-            case 2209:
-                return "2.2.9";
-            case 2205:
-                return "2.2.5";
-            case 2203:
-                return "2.2.3 / 2.2.4";
-            case 2202:
-                return "2.2.2";
-            case 2201:
-                return "2.2.1";
-            case 2200:
-                return "2.2.0";
-            case 2100:
-                return "2.1.0 / 2.1.1 / 2.1.2";
-            case 2020:
-                return "2.0.20 / 2.0.21 / 2.0.22";
-            case 2010:
-                return "2.0.1";
-            case 2007:
-                return "2.0.07";
-            case 2006:
-                return "2.0.06";
-            case 2005:
-                return "2.0.05";
-            case 2002:
-                return "2.0.02";
-            default:
-                return "";
-        }
-    },
-
-    isGuest: function (name) {
-        return (/\bguest[0-9]/i).test(name);
-    },
-
-    os: function (srcos) {
-        if (srcos == "windows") {
-            return WINDOWS_BASE64 + " Windows";
-        } else if (srcos == "mac") {
-            return APPLE_BASE64 + " Mac";
-        } else if (srcos == "linux") {
-            return LINUX_BASE64 + " Linux";
-        } else if (srcos == "android") {
-            return ANDROID_BASE64 + " Android";
-        } else if (srcos == "webclient") {
-            return IE_BASE64 + " Web Client";
-        }
-    },
-
-    osImage: function (srcos) {
-        if (srcos == "windows") {
-            return WINDOWS_BASE64;
-        } else if (srcos == "mac") {
-            return APPLE_BASE64;
-        } else if (srcos == "linux") {
-            return LINUX_BASE64;
-        } else if (srcos == "android") {
-            return ANDROID_BASE64;
-        } else if (srcos == "webclient") {
-            return IE_BASE64;
-        }
-    },
-
-    osName: function (srcos) {
-        return (srcos == "webclient" ? "Web Client" : this.cap(srcos));
-    },
-
-    bannedcharacters: function (message, lower) {
-        for (var i in bansites) {
-            if (message.indexOf(bansites[i]) != -1) {
-                return true;
-            }
-        }
-        if (regchannels[lower]) {
-            if (ZALGO.test(message) && !regchannels[lower].zalgo) {
-                return true;
-            }
-            if (/[\u202E\u202D]/.test(message) && !regchannels[lower].reverse) {
-                return true;
-            }
-            if (THAI.test(message) && !regchannels[lower].extending) {
-                return true;
-            }
-            if (SPECIAL.test(message) && !regchannels[lower].backward) {
-                return true;
-            }
-            if (ARABIC.test(message) || HEBREW.test(message)) {
-                return true;
-            }
-        } else {
-            if (ZALGO.test(message) || /[\u202E\u202D]/.test(message) || THAI.test(message) || SPECIAL.test(message) || ARABIC.test(message) || HEBREW.test(message)) {
-                return true;
-            }
-        }
-    },
-
-    nyancolor: function (number) {
-        switch (number) {
-            case 1:
-                return "#FF4500";
-            case 2:
-                return "#FFD700";
-            case 3:
-                return "#008000";
-            case 4:
-                return "#0000FF";
-            case 5:
-                return "#00008B";
-            case 6:
-                return "#800080";
-            default:
-                return "#FF0000";
-        }
-    },
-
-    tominutes: function (time, unit) {
-        if (unit == "seconds" || unit == "second") {
-            return (time / 60);
-        } else if (unit == "hours" || unit == "hour") {
-            return (time * 60);
-        } else if (unit == "days" || unit == "day") {
-            return (time * 1440);
-        } else {
-            return time;
-        }
     },
 
     toTimeZone: function (d, zone) {
@@ -1052,23 +624,40 @@ module.exports = {
         return newdate.toISOString();
     },
 
-    shortdate: function (d) {
-        var f = "yyyy-MM-ddThh:mm:ss", y = d.getFullYear(), m = d.getMonth() + 1, hours = d.getHours(), minutes = d.getMinutes(), seconds = d.getSeconds();
-        d = d.getDate();
-        function z(s) {
-            s = '' + s;
-            return s.length > 1 ? s : '0' + s;
+    formatLastOn: function (src, lastlogin) {
+        return (timezone[players[src].name.toLowerCase()] ? this.toTimeZone(lastlogin, timezone[players[src].name.toLowerCase()].split(':')[0]) : lastlogin).split('.')[0].replace('T', ", ");
+    },
+
+    os: function (srcos) {
+        if (srcos == "windows") {
+            return WINDOWS_BASE64 + " Windows";
+        } else if (srcos == "mac") {
+            return APPLE_BASE64 + " Mac";
+        } else if (srcos == "linux") {
+            return LINUX_BASE64 + " Linux";
+        } else if (srcos == "android") {
+            return ANDROID_BASE64 + " Android";
+        } else if (srcos == "webclient") {
+            return IE_BASE64 + " Web Client";
         }
-        f = f.replace(/yyyy/, y);
-        f = f.replace(/yy/, String(y).substr(2));
-        f = f.replace(/MM/, z(m));
-        f = f.replace(/M/, m);
-        f = f.replace(/dd/, z(d));
-        f = f.replace(/d/, d);
-        f = f.replace(/hh/, z(hours));
-        f = f.replace(/mm/, z(minutes));
-        f = f.replace(/ss/, z(seconds));
-        return f;
+    },
+
+    osImage: function (srcos) {
+        if (srcos == "windows") {
+            return WINDOWS_BASE64;
+        } else if (srcos == "mac") {
+            return APPLE_BASE64;
+        } else if (srcos == "linux") {
+            return LINUX_BASE64;
+        } else if (srcos == "android") {
+            return ANDROID_BASE64;
+        } else if (srcos == "webclient") {
+            return IE_BASE64;
+        }
+    },
+
+    osName: function (srcos) {
+        return (srcos == "webclient" ? "Web Client" : this.cap(srcos));
     },
 
     isRange: function (range) {
@@ -1105,28 +694,9 @@ module.exports = {
         return true;
     },
 
-    isauthip: function (ip) {
-        var alts = sys.aliases(ip);
-        for (var index in alts) {
-            if (sys.dbAuth(alts[index]) > 0) {
-                return true;
-            }
-        }
-        return false;
-    },
-
     ipRange: function (ip) {
         var ipdigits = ip.split(".");
         return ipdigits[0] + "." + ipdigits[1];
-    },
-
-    sameIp: function (ip1, ip2) {
-        if (ip1 == "127.0.0.1" && this.ipRange(ip2) == "192.168") {
-            return true;
-        } else if (ip2 == "127.0.0.1" && this.ipRange(ip1) == "192.168") {
-            return true;
-        }
-        return ip1 == ip2;
     },
 
     isInArray: function (string, array) {
@@ -1206,125 +776,11 @@ module.exports = {
         return array;
     },
 
-    objecttoarray: function (object) {
-        var array = [];
-        for (var index in object) {
-            array.push(object[index]);
-        }
-        return array;
-    },
-
     bot: function (string) {
         if (string.charAt(0) == '•') {
             return "<b><font color='" + botsymbolcolor + "'>" + string.substr(0, 3) + "</font></b><b><font color='" + botcolor + "'>" + string.slice(3) + "</font></b>";
         }
         return "<font color='" + botcolor + "'><timestamp/></font><font color='" + botsymbolcolor + "'><b>" + this.escapehtml(botsymbol) + "</b></font><font color='" + botcolor + "'><b>" + string + ": </b></font>";
-    },
-
-    colorcheck: function (poke) {
-        POKEMON_COLORS = {
-            RED: ['Charmander', 'Charmeleon', 'Charizard', 'Vileplume', 'Paras', 'Parasect', 'Krabby', 'Kingler', 'Voltorb', 'Electrode', 'Goldeen', 'Seaking', 'Jynx', 'Magikarp',
-            'Magmar', 'Flareon', 'Ledyba', 'Ledian', 'Ariados', 'Yanma', 'Scizor', 'Slugma', 'Magcargo', 'Octillery', 'Delibird', 'Porygon2', 'Magby', 'Ho-Oh', 'Torchic', 'Combusken',
-            'Blaziken', 'Wurmple', 'Medicham', 'Carvanha', 'Camerupt', 'Solrock', 'Corphish', 'Crawdaunt', 'Latias', 'Groudon', 'Deoxys', 'Deoxys-A', 'Deoxys-D', 'Deoxys-S',
-            'Kricketot', 'Kricketune', 'Magmortar', 'Porygon-Z', 'Rotom', 'Rotom-H', 'Rotom-F', 'Rotom-W', 'Rotom-C', 'Rotom-S', 'Tepig', 'Pignite', 'Emboar', 'Pansear', 'Simisear',
-            'Throh', 'Venipede', 'Scolipede', 'Krookodile', 'Darumaka', 'Darmanitan', 'Dwebble', 'Crustle', 'Scrafty', 'Shelmet', 'Accelgor', 'Druddigon', 'Pawniard', 'Bisharp',
-            'Braviary', 'Heatmor'],
-            BLUE: ['Squirtle', 'Wartortle', 'Blastoise', 'Nidoran?', 'Nidorina', 'Nidoqueen', 'Oddish', 'Gloom', 'Golduck', 'Poliwag', 'Poliwhirl', 'Poliwrath', 'Tentacool',
-            'Tentacruel', 'Tangela', 'Horsea', 'Seadra', 'Gyarados', 'Lapras', 'Vaporeon', 'Omanyte', 'Omastar', 'Articuno', 'Dratini', 'Dragonair', 'Totodile', 'Croconaw',
-            'Feraligatr', 'Chinchou', 'Lanturn', 'Marill', 'Azumarill', 'Jumpluff', 'Wooper', 'Quagsire', 'Wobbuffet', 'Heracross', 'Kingdra', 'Phanpy', 'Suicune', 'Mudkip',
-            'Marshtomp', 'Swampert', 'Taillow', 'Swellow', 'Surskit', 'Masquerain', 'Loudred', 'Exploud', 'Azurill', 'Meditite', 'Sharpedo', 'Wailmer', 'Wailord', 'Swablu', 'Altaria',
-            'Whiscash', 'Chimecho', 'Wynaut', 'Spheal', 'Sealeo', 'Walrein', 'Clamperl', 'Huntail', 'Bagon', 'Salamence', 'Beldum', 'Metang', 'Metagross', 'Regice', 'Latios',
-            'Kyogre', 'Piplup', 'Prinplup', 'Empoleon', 'Shinx', 'Luxio', 'Luxray', 'Cranidos', 'Rampardos', 'Gible', 'Gabite', 'Garchomp', 'Riolu', 'Lucario', 'Croagunk',
-            'Toxicroak', 'Finneon', 'Lumineon', 'Mantyke', 'Tangrowth', 'Glaceon', 'Azelf', 'Phione', 'Manaphy', 'Oshawott', 'Dewott', 'Samurott', 'Panpour', 'Simipour', 'Roggenrola',
-            'Boldore', 'Gigalith', 'Woobat', 'Swoobat', 'Tympole', 'Palpitoad', 'Seismitoad', 'Sawk', 'Tirtouga', 'Carracosta', 'Ducklett', 'Karrablast', 'Eelektrik', 'Eelektross',
-            'Elgyem', 'Cryogonal', 'Deino', 'Zweilous', 'Hydreigon', 'Cobalion', 'Thundurus'],
-            GREEN: ['Bulbasaur', 'Ivysaur', 'Venusaur', 'Caterpie', 'Metapod', 'Bellsprout', 'Weepinbell', 'Victreebel', 'Scyther', 'Chikorita', 'Bayleef', 'Meganium', 'Spinarak',
-            'Natu', 'Xatu', 'Bellossom', 'Politoed', 'Skiploom', 'Larvitar', 'Tyranitar', 'Celebi', 'Treecko', 'Grovyle', 'Sceptile', 'Dustox', 'Lotad', 'Lombre', 'Ludicolo',
-            'Breloom', 'Electrike', 'Roselia', 'Gulpin', 'Vibrava', 'Flygon', 'Cacnea', 'Cacturne', 'Cradily', 'Kecleon', 'Tropius', 'Rayquaza', 'Turtwig', 'Grotle', 'Torterra',
-            'Budew', 'Roserade', 'Bronzor', 'Bronzong', 'Carnivine', 'Yanmega', 'Leafeon', 'Shaymin', 'Shaymin-S', 'Snivy', 'Servine', 'Serperior', 'Pansage', 'Simisage', 'Swadloon',
-            'Cottonee', 'Whimsicott', 'Petilil', 'Lilligant', 'Basculin', 'Maractus', 'Trubbish', 'Garbodor', 'Solosis', 'Duosion', 'Reuniclus', 'Axew', 'Fraxure', 'Golett',
-            'Golurk', 'Virizion', 'Tornadus'],
-            YELLOW: ['Kakuna', 'Beedrill', 'Pikachu', 'Raichu', 'Sandshrew', 'Sandslash', 'Ninetales', 'Meowth', 'Persian', 'Psyduck', 'Ponyta', 'Rapidash', 'Drowzee', 'Hypno',
-            'Exeggutor', 'Electabuzz', 'Jolteon', 'Zapdos', 'Moltres', 'Cyndaquil', 'Quilava', 'Typhlosion', 'Pichu', 'Ampharos', 'Sunkern', 'Sunflora', 'Girafarig', 'Dunsparce',
-            'Shuckle', 'Elekid', 'Raikou', 'Beautifly', 'Pelipper', 'Ninjask', 'Makuhita', 'Manectric', 'Plusle', 'Minun', 'Numel', 'Lunatone', 'Jirachi', 'Mothim', 'Combee',
-            'Vespiquen', 'Chingling', 'Electivire', 'Uxie', 'Cresselia', 'Victini', 'Sewaddle', 'Leavanny', 'Scraggy', 'Cofagrigus', 'Archen', 'Archeops', 'Deerling', 'Joltik',
-            'Galvantula', 'Haxorus', 'Mienfoo', 'Keldeo'],
-            PURPLE: ['Rattata', 'Ekans', 'Arbok', 'Nidoran?', 'Nidorino', 'Nidoking', 'Zubat', 'Golbat', 'Venonat', 'Venomoth', 'Grimer', 'Muk', 'Shellder', 'Cloyster', 'Gastly',
-            'Haunter', 'Gengar', 'Koffing', 'Weezing', 'Starmie', 'Ditto', 'Aerodactyl', 'Mewtwo', 'Crobat', 'Aipom', 'Espeon', 'Misdreavus', 'Forretress', 'Gligar', 'Granbull',
-            'Mantine', 'Tyrogue', 'Cascoon', 'Delcatty', 'Sableye', 'Illumise', 'Swalot', 'Grumpig', 'Lileep', 'Shellos', 'Gastrodon', 'Ambipom', 'Drifloon', 'Drifblim', 'Mismagius',
-            'Stunky', 'Skuntank', 'Spiritomb', 'Skorupi', 'Drapion', 'Gliscor', 'Palkia', 'Purrloin', 'Liepard', 'Gothita', 'Gothorita', 'Gothitelle', 'Mienshao', 'Genesect'],
-            PINK: ['Clefairy', 'Clefable', 'Jigglypuff', 'Wigglytuff', 'Slowpoke', 'Slowbro', 'Exeggcute', 'Lickitung', 'Chansey', 'Mr. Mime', 'Porygon', 'Mew', 'Cleffa', 'Igglybuff',
-            'Flaaffy', 'Hoppip', 'Slowking', 'Snubbull', 'Corsola', 'Smoochum', 'Miltank', 'Blissey', 'Whismur', 'Skitty', 'Milotic', 'Gorebyss', 'Luvdisc', 'Cherubi', 'Cherrim',
-            'Mime Jr.', 'Happiny', 'Lickilicky', 'Mesprit', 'Munna', 'Musharna', 'Audino', 'Alomomola'],
-            BROWN: ['Weedle', 'Pidgey', 'Pidgeotto', 'Pidgeot', 'Raticate', 'Spearow', 'Fearow', 'Vulpix', 'Diglett', 'Dugtrio', 'Mankey', 'Primeape', 'Growlithe', 'Arcanine', 'Abra',
-            'Kadabra', 'Alakazam', 'Geodude', 'Graveler', 'Golem', 'Farfetch\'d', 'Doduo', 'Dodrio', 'Cubone', 'Marowak', 'Hitmonlee', 'Hitmonchan', 'Kangaskhan', 'Staryu', 'Pinsir',
-            'Tauros', 'Eevee', 'Kabuto', 'Kabutops', 'Dragonite', 'Sentret', 'Furret', 'Hoothoot', 'Noctowl', 'Sudowoodo', 'Teddiursa', 'Ursaring', 'Swinub', 'Piloswine', 'Stantler',
-            'Hitmontop', 'Entei', 'Zigzagoon', 'Seedot', 'Nuzleaf', 'Shiftry', 'Shroomish', 'Slakoth', 'Slaking', 'Shedinja', 'Hariyama', 'Torkoal', 'Spinda', 'Trapinch', 'Baltoy',
-            'Feebas', 'Regirock', 'Chimchar', 'Monferno', 'Infernape', 'Starly', 'Staravia', 'Staraptor', 'Bidoof', 'Bibarel', 'Buizel', 'Floatzel', 'Buneary', 'Lopunny', 'Bonsly',
-            'Hippopotas', 'Hippowdon', 'Mamoswine', 'Heatran', 'Patrat', 'Watchog', 'Lillipup', 'Conkeldurr', 'Sandile', 'Krokorok', 'Sawsbuck', 'Beheeyem', 'Stunfisk', 'Bouffalant',
-            'Vullaby', 'Mandibuzz', 'Landorus'],
-            BLACK: ['Snorlax', 'Umbreon', 'Murkrow', 'Unown', 'Sneasel', 'Houndour', 'Houndoom', 'Mawile', 'Spoink', 'Seviper', 'Claydol', 'Shuppet', 'Banette', 'Duskull', 'Dusclops',
-            'Honchkrow', 'Chatot', 'Munchlax', 'Weavile', 'Dusknoir', 'Giratina', 'Darkrai', 'Blitzle', 'Zebstrika', 'Sigilyph', 'Yamask', 'Chandelure', 'Zekrom'],
-            GRAY: ['Machop', 'Machoke', 'Machamp', 'Magnemite', 'Magneton', 'Onix', 'Rhyhorn', 'Rhydon', 'Pineco', 'Steelix', 'Qwilfish', 'Remoraid', 'Skarmory', 'Donphan', 'Pupitar',
-            'Poochyena', 'Mightyena', 'Nincada', 'Nosepass', 'Aron', 'Lairon', 'Aggron', 'Volbeat', 'Barboach', 'Anorith', 'Armaldo', 'Snorunt', 'Glalie', 'Relicanth', 'Registeel',
-            'Shieldon', 'Bastiodon', 'Burmy', 'Wormadam', 'Wormadam-G', 'Wormadam-S', 'Glameow', 'Purugly', 'Magnezone', 'Rhyperior', 'Probopass', 'Arceus', 'Herdier', 'Stoutland',
-            'Pidove', 'Tranquill', 'Unfezant', 'Drilbur', 'Excadrill', 'Timburr', 'Gurdurr', 'Whirlipede', 'Zorua', 'Zoroark', 'Minccino', 'Cinccino', 'Escavalier', 'Ferroseed',
-            'Ferrothorn', 'Klink', 'Klang', 'Klinklang', 'Durant', 'Terrakion', 'Kyurem'],
-            WHITE: ['Butterfree', 'Seel', 'Dewgong', 'Togepi', 'Togetic', 'Mareep', 'Smeargle', 'Lugia', 'Linoone', 'Silcoon', 'Wingull', 'Ralts', 'Kirlia', 'Gardevoir', 'Vigoroth',
-            'Zangoose', 'Castform', 'Absol', 'Shelgon', 'Pachirisu', 'Snover', 'Abomasnow', 'Togekiss', 'Gallade', 'Froslass', 'Dialga', 'Regigigas', 'Swanna', 'Vanillite',
-            'Vanillish', 'Vanilluxe', 'Emolga', 'Foongus', 'Amoonguss', 'Frillish', 'Jellicent', 'Tynamo', 'Litwick', 'Lampent', 'Cubchoo', 'Beartic', 'Rufflet', 'Larvesta',
-            'Volcarona', 'Reshiram', 'Meloetta', 'Meloetta-S']
-        };
-        for (var index in POKEMON_COLORS.RED) {
-            if (POKEMON_COLORS.RED[index] == poke) {
-                return "red";
-            }
-        }
-        for (var index2 in POKEMON_COLORS.BLUE) {
-            if (POKEMON_COLORS.BLUE[index2] == poke) {
-                return "blue";
-            }
-        }
-        for (var index3 in POKEMON_COLORS.GREEBN) {
-            if (POKEMON_COLORS.GREEN[index3] == poke) {
-                return "green";
-            }
-        }
-        for (var index4 in POKEMON_COLORS.YELLOW) {
-            if (POKEMON_COLORS.YELLOW[index4] == poke) {
-                return "yellow";
-            }
-        }
-        for (var index5 in POKEMON_COLORS.WHITE) {
-            if (POKEMON_COLORS.WHITE[index5] == poke) {
-                return "white";
-            }
-        }
-        for (var index6 in POKEMON_COLORS.GRAY) {
-            if (POKEMON_COLORS.GRAY[index6] == poke) {
-                return "gray";
-            }
-        }
-        for (var index7 in POKEMON_COLORS.BLACK) {
-            if (POKEMON_COLORS.BLACK[index7] == poke) {
-                return "black";
-            }
-        }
-        for (var index8 in POKEMON_COLORS.PINK) {
-            if (POKEMON_COLORS.PINK[index8] == poke) {
-                return "pink";
-            }
-        }
-        for (var index9 in POKEMON_COLORS.PURPLE) {
-            if (POKEMON_COLORS.PURPLE[index9] == poke) {
-                return "purple";
-            }
-        }
-        for (var index10 in POKEMON_COLORS.BROWN) {
-            if (POKEMON_COLORS.BROWN[index10] == poke) {
-                return "brown";
-            }
-        }
     },
 
     date: function (date) {
@@ -1347,51 +803,6 @@ module.exports = {
         return 0;
     },
 
-    middlecup: function (poke) {
-        var MIDDLE_CUP_POKEMON = "Bayleef, Boldore, Cascoon, Chansey, Charmeleon, Clefairy, Combusken, Croconaw, Dewott, Dragonair, Duosion, Dusclops, Eelektrik, Electabuzz, Flaaffy, " +
-        "Fraxure, Gabite, Gloom, Golbat, Gothorita, Graveler, Grotle, Grovyle, Gurdurr, Haunter, Herdier, Ivysaur, Jigglypuff, Kadabra, Kakuna, Kirlia, Klang, Krokorok, Lairon, " +
-        "Lampent, Lombre, Loudred, Luxio, Machoke, Magmar, Magneton, Marill, Marshtomp, Metang, Metapod, Monferno, Nidorina, Nidorino, Nuzleaf, Palpitoad, Pidgeotto, Pignite, " +
-        "Pikachu, Piloswine, Poliwhirl, Porygon2, Prinplup, Pupitar, Quilava, Rhydon, Roselia, Seadra, Sealeo, Servine, Shelgon, Silcoon, Skiploom, Staravia, Swadloon, Togetic, " +
-        "Tranquill, Vanillish, Vibrava, Vigoroth, Wartortle, Weepinbell, Whirlipede, Zweilous";
-        MIDDLE_CUP_POKEMON = MIDDLE_CUP_POKEMON.split(", ");
-        for (var index in MIDDLE_CUP_POKEMON) {
-            if (MIDDLE_CUP_POKEMON[index] == poke) {
-                return true;
-            }
-        }
-        return false;
-    },
-
-    getmoves: function (id, num, moves, form, derp) {
-        if (form > 0) {
-            id = derp;
-        }
-        var moveindex = moves.indexOf(id + ":" + form);
-        moveindex = eval(moveindex) + 3 * 1 + num * 1;
-        moves = moves.substr(moveindex);
-        var movesarraya = moves.split('\n');
-        movesarraya[0] = movesarraya[0].split(" ");
-        for (var i in movesarraya[0]) {
-            movesarraya[0][i] = sys.move(movesarraya[0][i]);
-        }
-        return movesarraya[0].join(", ");
-    },
-
-    getmovesarraya: function (id, num, moves, form, derp) {
-        if (form > 0) {
-            id = derp;
-        }
-        var moveindex = moves.indexOf(id + ":" + form);
-        moveindex = eval(moveindex) + 3 * 1 + num * 1;
-        moves = moves.substr(moveindex);
-        var movesarraya = moves.split('\n');
-        movesarraya[0] = movesarraya[0].split(" ");
-        for (var i in movesarraya[0]) {
-            movesarraya[0][i] = sys.move(movesarraya[0][i]);
-        }
-        return movesarraya[0];
-    },
-
     htmlLinks:  function (text, type) {
         var exp = /([a-zA-Z]+:\/\/|www\.)[^\s]+/ig;
         var found = text.match(exp);
@@ -1406,7 +817,7 @@ module.exports = {
                     var name = link.match(regex)[link.match(regex).length - 1];
                     var resp;
                     try {
-                        resp = JSON.parse(sys.synchronousWebCall(helpers.youtubeDataUrl(name)));
+                        resp = JSON.parse(sys.synchronousWebCall(this.youtubeDataUrl(name)));
                         link = '<a href="' + this.escapehtml(link) + '">' + resp.items[0].snippet.title + '</a>';
                     } catch (e) {
                         sys.sendAll(e, 0);
@@ -1420,27 +831,6 @@ module.exports = {
             }
         }
         return type ? resp : link;
-    },
-
-    idsort: function (array) {
-        // array consists of multiple numbers. Using array.sort() would put 1000 in front of 995, for example
-        // this sorting function puts 1000 after 995
-        var x, y, z, sorted = [], maxlength = 1;
-        array = array.sort();
-        for (x in array) {
-            array[x] = JSON.stringify(array[x]);
-            if (array[x].length > maxlength) {
-                maxlength = array[x].length;
-            }
-        }
-        for (y = 1; y <= maxlength; y++) {
-            for (z in array) {
-                if (array[z].length == y) {
-                    sorted.push(array[z]);
-                }
-            }
-        }
-        return sorted;
     },
 
     authSort: function () {
@@ -1460,15 +850,6 @@ module.exports = {
             highestAuth--;
         }
         return authArray;
-    },
-
-    cauthSort: function (channel) {
-        var lower = sys.channel(channel).toLowerCase();
-        return regchannels[lower].owners.sort().concat(regchannels[lower].admins.sort()).concat(regchannels[lower].mods.sort());
-    },
-
-    userg: function (string) {
-        return (layout == "old" ? "\u2022 " : "") + "<b><font color='#808080'>" + this.escapehtml(string) + "</font></b>";
     },
 
     userl: function (string) {
@@ -1523,74 +904,6 @@ module.exports = {
         return array.join("");
     },
 
-    duoColor: function (text, colorX, colorY) {
-        var array = [], toggle = false, i;
-        for (i = 0; i < text.length; i++) {
-            array.push("<font color='" + (toggle ? colorY : colorX) + "';>" + text.charAt(i) + "</font>");
-            toggle = !toggle;
-        }
-        return array.join("");
-    },
-
-    desu: function (text) {
-        var firstColor = ["#008000", "#FF0000"][sys.rand(0, 2)];
-        return this.duoColor(text, firstColor, (firstColor == "#008000" ? "#FF0000" : "#008000"));
-    },
-
-    leet: function (text) {
-        var charset = ['o', 'l', 'z', 'e', 'a', 's', '6', 't', 'b', 'g'], i;
-        for (i = 0; i < charset.length; i++) {
-            text = text.replace(new RegExp(charset[i], "gi"), i);
-        }
-        return text.toLowerCase();
-    },
-
-    morse: function (text) {
-        var charset = "abcdefghijklmnopqrstuvwxyz0123456789 ", morse = [".-", "-...", "-.-.", "-..", ".", "..-.", "--.", "....",
-        "..", ".---", "-.-", ".-..", "--", "-.", "---", ".--.", "--.-", ".-.", "...", "-", "..-", "...-", ".--", "-..-", "-.--",
-        "--..", ".----", "..---", "...--", "....-", ".....", "-....", "--...", "---..", "----.", "-----", ""], newText = [], i;
-        text = text.toLowerCase();
-        for (i = 0; i < text.length; i++) {
-            if (charset.contains(text[i])) {
-                newText.push(morse[charset.indexOf(text[i])]);
-            }
-        }
-        return newText.join(" ");
-    },
-
-    reverse: function (text) {
-        return text.split("").reverse().join("");
-    },
-
-    statName: function (stat) {
-        return([
-            "HP",
-            "Attack",
-            "Defense",
-            "Sp. Atk.",
-            "Sp. Def.",
-            "Speed"
-        ][stat]);
-    },
-
-    colorStat: function (stat) {
-        if (stat <= 30) {
-            return "<b><font color='#8B0000'>" + stat + "</font></b>";
-        } else if (stat < 60) {
-            return "<b><font color='#FF0000'>" + stat + "</font></b>";
-        } else if (stat < 90) {
-            return "<b><font color='#FF4500'>" + stat + "</font></b>";
-        } else if (stat < 120) {
-            return "<b><font color='#00FF00'>" + stat + "</font></b>";
-        } else if (stat < 150) {
-            return "<b><font color='#008000'>" + stat + "</font></b>";
-        } else if (stat < 180) {
-            return "<b><font color='#0000FF'>" + stat + "</font></b>";
-        } else {
-            return "<b><font color='#00008B'>" + stat + "</font></b>";
-        }
-    },
-
     cap: function (string) {
         return string.charAt(0).toUpperCase() + string.slice(1);
     },
@@ -1600,26 +913,6 @@ module.exports = {
             return '-';
         }
         return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-    },
-
-    correctDateNotation: function (date) {
-        var tmp, time, year, month, day;
-        tmp = date.split('T')[0].split('-');
-        time = date.split('T')[1].replace(".000Z", "");
-        year = tmp[0];
-        month = tmp[1];
-        day = tmp[2];
-        if (day.charAt(0) == '0') {
-            day = day.slice(1);
-        }
-        if (month.charAt(0) == '0') {
-            month = month.slice(1);
-        }
-        return day + '-' + month + '-' + year + ", " + time.replace('Z', "");
-    },
-
-    noflash: function (name) {
-        return name[0] + "\u200b" + name.substr(1);
     },
 
     removespaces: function (string) {
@@ -1642,62 +935,8 @@ module.exports = {
         return str.replace(/<\/?[^>]*>/g, "");
     },
 
-    breakinghtml: function (string) {
-        if (string.split("<").length > string.split(">").length) {
-            return true;
-        } else if (this.removespaces(string) == "><") {
-            return true;
-        } else if (this.removespaces(string).indexOf("<center>") >= 0) {
-            return true;
-        } else if (this.removespaces(string).replace(/'|"/g, "").indexOf("dir=rtl") >= 0) {
-            return true;
-        }
-        return false;
-    },
-
     escapehtml: function (string) {
         return string.toString().replace(/&/g, "&amp;").replace(/>/g, "&gt;").replace(/</g, "&lt;");
-    },
-
-    escapehtmluser: function (string) {
-        return "<font color='" + cmdcolors[0] + "'>" + string.replace(/&/g, "&amp;").replace(/>/g, "&gt;").replace(/</g, "&lt;") + "</font>";
-    },
-
-    escapehtmlarg: function (string) {
-        return "<font color='" + cmdcolors[1] + "'>" + string.replace(/&/g, "&amp;").replace(/>/g, "&gt;").replace(/</g, "&lt;") + "</font>";
-    },
-
-    toseconds: function (time, unit) {
-        return({"minutes": time*60, "minute": time*60, "hours": time*3600, "hour": time*3600, "days": time*86400, "day": time*86400, "weeks": time*604800, "week": time*604800, "months": time*2592000, "month": time*2592000, "year": time*31536000, "years": time*31536000}[unit] || time);
-    },
-
-    timeplurality: function (time, unit) {
-        if (unit == "s") {
-            unit = "seconds";
-        } else if (unit == "m") {
-            unit = "minutes";
-        } else if (unit == "h") {
-            unit = "hours";
-        } else if (unit == "d") {
-            unit = "days";
-        }
-        if (time == 1 && unit[unit.length-1] == "s") {
-            unit = unit.replace(/s$/, "");
-        } else if (time != 1 && unit[unit.length-1] != "s" && unit != "feet" && unit != "km") {
-            unit = unit + "s";
-        } else if (unit == "feet") {
-            unit = "foot";
-        } else if (unit == "foot") {
-            unit = "feet";
-        }
-        return unit;
-    },
-
-    unitplural: function (unit) {
-        if (unit[unit.length-1] != "s") {
-            unit = unit + "s";
-        }
-        return unit;
     },
 
     typecolor: function (pokeNum) {
@@ -1739,67 +978,12 @@ module.exports = {
         return "<img src='item:" + itemNum + "'>";
     },
 
-    typeImage: function (src, type) {
-        if (this.isAndroidOrWeb(src)) {
-            return sys.type(type);
-        }
-        return "<img src='Themes/Classic/types/type" + type + ".png'>";
-    },
-
-    genderImage: function (src, gender) {
-        if (this.isAndroidOrWeb(src)) {
-            return this.cap(sys.gender(gender));
-        }
-        return "<img src='Themes/Classic/genders/gender" + gender + ".png'>";
-    },
-
-    pokeBallImage: function (src, ball) {
-        var mapping;
-        if (this.isAndroidOrWeb(src)) {
-            mapping = {"poke": "USER", "great": "MOD", "ultra": "ADMIN", "master": "OWNER"};
-            return AUTHIMAGE[mapping[ball]];
-        }
-        mapping = {"poke": "u", "great": "m", "ultra": "a", "master": "o"};
-        return "<img src='Themes/Classic/client/" + mapping[ball] + "Available.png'>";
-    },
-
-    statusImage: function (src, status) {
-        if (this.isAndroidOrWeb(src)) {
-            return STATUS[status.toUpperCase()];
-        }
-        return "<img src='Themes/Classic/status/battle_status" + this.toStatusNumber(status) + ".png'>";
-    },
-
-    toStatusNumber: function (status) {
-        return ({
-            "paralyze": 1,
-            "sleep": 2,
-            "freeze": 3,
-            "burn": 4,
-            "poison": 5
-        }[status]);
-    },
-
     color: function (src) {
         if (sys.getColor(src) == "#000000") {
             var colorlist = ["#5811B1", "#399BCD", "#0474BB", "#F8760D", "#A00C9E", "#0D762B", "#5F4C00", "#9A4F6D", "#D0990F", "#1B1390", "#028678", "#0324B1"];
             return colorlist[src % colorlist.length];
         }
         return sys.getColor(src);
-    },
-
-    isTooGreen: function (color) {
-        var hex = color.substr(3, 2).toUpperCase(), first = hex.charAt(0), second = hex.charAt(1);
-        if (second == 'D' || second == 'E' || second == 'F') {
-            return true;
-        }
-        if (!isNaN(first) && typeof(parseInt(first)) == "number" || first == 'A' || first == 'B') {
-            return false;
-        }
-        if (!isNaN(second) && typeof(parseInt(second)) == "number" && parseInt(second) <= 7) {
-            return false;
-        }
-        return true;
     },
 
     authName: function (auth, displayuser, hideinvis) {
@@ -1895,6 +1079,7 @@ module.exports = {
         return list;
     },
 
+    // dex.js?
     calcStat: function (stat, base, IV, EV, nature) {
         if (stat == '0') {
             return this.calcHP(base, IV, EV);
@@ -1909,14 +1094,14 @@ module.exports = {
         return Math.floor((IV + (2 * base) + Math.floor(EV / 4) + 100) + 10);
     },
 
-    getDbIndex: function (pokeId) {
-        var id = pokeId % 65536, forme = (pokeId - id) / 65536;
-        return id + ':' + forme;
-    },
-
     displayNum: function (pokeId) {
         var id = pokeId % 65536, forme = (pokeId - id) / 65536;
         return forme === 0 ? id : id + '-' + forme;
+    },
+
+    getDbIndex: function (pokeId) {
+        var id = pokeId % 65536, forme = (pokeId - id) / 65536;
+        return id + ':' + forme;
     },
 
     height: function (pokeId) {
@@ -2012,41 +1197,6 @@ module.exports = {
             power = 120;
         }
         return power;
-    },
-
-    teamOrdinal: function (team) {
-        return ({ 0:"first", 1:"second", 2:"third", 3:"fourth", 4:"fifth", 5:"sixth" }[team]);
-    },
-
-    ordinal: function (num) {
-        var str = String(num), lastDigit = str.charAt(str.length - 1);
-        if (Number(lastDigit) >= 3) {
-            lastDigit = "3";
-        }
-        return num + ({ "1":"st", "2":"nd", "3":"th" }[lastDigit]);
-    },
-
-    // Chuck Norris tier is at index 23
-    tierOf: function (pokeId) {
-        var name = sys.pokemon(pokeId), tiers = sys.read("tiers.xml").split('\n'), start = 23, pokemon,
-            tierId = { // + 1 compared to index
-                25: "Chuck Norris",
-                26: "*** WINNER ***",
-                27: "Uber",
-                28: "OU",
-                29: "UU",
-                30: "RU"
-            };
-
-        for (i = start; i < start + 8; i++) {
-            pokemon = tiers[i].substring(tiers[i].indexOf("pokemons") + 9, tiers[i].indexOf("abilities")).trim();
-            pokemon = pokemon.replace(/"/g, "").split(", ");
-            if (pokemon.indexOf(name) > -1) {
-                return tierId[i];
-            }
-        }
-
-        return "NU";
     },
 
     movePower: function (moveId, gen) {
@@ -2339,6 +1489,7 @@ module.exports = {
         Tour Helpers
         ------------
     **/
+    // tour.js?
     fisheryates: function (myarraya) {
         var i = myarraya.length;
         if (i === 0) {

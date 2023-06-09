@@ -1,7 +1,7 @@
 /*
     ----------------------------------------------
     FUN COMMUNITY MAIN SCRIPT main.js
-     - by Maribel Hearn, 2012-2021
+     - by Maribel Hearn, 2012-2023
 
     The main script file. Defines global
     constants, variables, functions and
@@ -15,6 +15,72 @@
     - full auth name customisation
     - silent muting commands and functionality
 */
+function initServerGlobals() {
+    open = helpers.readData("open");
+    latestShaHash = helpers.readData("latestshahash");
+    updateFrequency = helpers.readData("updatefrequency");
+    allowance = helpers.readData("allowance");
+    floodtime = helpers.readData("floodtime");
+    floodlevel = helpers.readData("floodlevel");
+    maxplayers = helpers.readData("maxplayers");
+    allowed = helpers.readData("allowed");
+    exceptions = helpers.readData("exceptions");
+    permchannels = helpers.readData("permchannels");
+    allowedrange = helpers.readData("allowedrange");
+    namestounban = helpers.readData("namestounban");
+    nameblocklist = helpers.readData("nameblocklist");
+    silentcommands = helpers.readData("silentcommands");
+    rules = helpers.readData("rules");
+    banlist = helpers.readData("banlist");
+    mutelist = helpers.readData("mutelist");
+    timezone = helpers.readData("timezone");
+    cityname = helpers.readData("cityname");
+    versions = helpers.readData("versions");
+    members = helpers.readData("members");
+    operatingsystem = helpers.readData("operatingsystem");
+    regchannels = helpers.readData("regchannels");
+    megabanlist = helpers.readData("megabanlist");
+    gigabanlist = helpers.readData("gigabanlist");
+    countryname = helpers.readData("countryname");
+    rangebanlist = helpers.readData("rangebanlist");
+}
+
+function initVars() {
+    stopbattles = false;
+    megabancheck = false;
+    gigabancheck = false;
+    serverStarting = false;
+    timer = 0;
+    currentSpoiler = 0;
+    layout = "new";
+    hostIp = "";
+    hostCountry = "";
+    hostCity = "";
+    hostTimeZone = "";
+    players = [];
+    floodplayers = [];
+    spoilers = [];
+    tour = {};
+    battles = {};
+    heightList = {};
+    weightList = {};
+    movepoolList = {};
+    powerList = {};
+    categoryList = {};
+    accList = {};
+    ppList = {};
+    moveEffList = {};
+    moveFlagList = {};
+    movePriorityList = {};
+    moveRangeList = {};
+    abilityList = {};
+    pokemonWithAbilityList = {};
+    itemList = {};
+    berryList = {};
+    flingPowerList = {};
+    berryPowerList = {};
+    berryTypeList = {};
+}
 
 (load = function () {
     /**
@@ -283,8 +349,8 @@
         ----------------
     **/
     helpers.initCustomGlobals();
-    helpers.initServerGlobals();
-    helpers.initTempVars();
+    initServerGlobals();
+    initVars();
     bansites = sys.read("bansites.txt").replace(/\r/g, "").split('\n');
     bansites.splice(bansites.indexOf(""), 1);
     bansites.splice(bansites.lastIndexOf(""), 1);
@@ -296,35 +362,25 @@
 ({
 
     loadScript: function () {
-    }
-
-    ,
+    },
 
     unloadScript: function () {
-    }
-
-    ,
+    },
 
     switchError: function (script) {
         print("An error occurred while reloading the scripts; the old script was kept.");
         sys.sendHtmlOwner("An error occurred while reloading the scripts; the old script was kept.");
-    }
-
-    ,
+    },
 
     warning: function (warning) {
         if (!serverStarting) {
             sys.printStackTrace(warning);
         }
-    }
-
-    ,
+    },
 
     battleConnectionLost: function () {
         sys.sendHtmlWatch(helpers.bot(bots.spy) + "[Server] Connection to the battle server was lost.");
-    }
-
-    ,
+    },
 
     serverStartUp: function () {
         var time = 100, pluginEvent, i;
@@ -429,9 +485,7 @@
                 }
             }
         }, time, 0);
-    }
-
-    ,
+    },
 
     serverShutDown: function () {
         /**
@@ -445,9 +499,7 @@
         } else if (sys.fexists("RelayStation") && sys.os() != "windows") {
             sys.system("kill $(pidof RelayStation)");
         }
-    }
-
-    ,
+    },
 
     step: function () {
         var pluginEvent, name, number, number2, index;
@@ -559,9 +611,7 @@
                 global[pluginEvent]();
             }
         }
-    }
-
-    ,
+    },
 
     beforeIPConnected: function (ip) {
         var range = ip.split('.')[0] + '.' + ip.split('.')[1];
@@ -584,9 +634,7 @@
         } else {
             sys.sendHtmlWatch(helpers.bot(bots.spy) + "[Server] IP " + ip + " is connecting to the server.");
         }
-    }
-
-    ,
+    },
 
     beforeLogIn: function (src) {
         var name = sys.name(src), lower = name.toLowerCase(), ip = sys.ip(src), range = sys.range(src), color = helpers.color(src), auth = sys.auth(src), i;
@@ -659,9 +707,66 @@
                 return;
             }
         }
-    }
+    },
 
-    ,
+    // returns formatted string of PO version
+    formatVersion: function (version) {
+        switch (version) {
+            case 2630:
+                return "2.6.3";
+            case 2621:
+                return "2.6.2.1";
+            case 2620:
+                return "2.6.2";
+            case 2601:
+                return "2.6.1";
+            case 2600:
+                return "2.6.0";
+            case 2520:
+                return "2.5.2";
+            case 2510:
+                return "2.5.1";
+            case 2500:
+                return "2.5.0";
+            case 2402:
+                return "2.4.2";
+            case 2302:
+                return "2.3.2 / 2.4.0 / 2.4.1";
+            case 2209:
+                return "2.2.9";
+            case 2205:
+                return "2.2.5";
+            case 2203:
+                return "2.2.3 / 2.2.4";
+            case 2202:
+                return "2.2.2";
+            case 2201:
+                return "2.2.1";
+            case 2200:
+                return "2.2.0";
+            case 2100:
+                return "2.1.0 / 2.1.1 / 2.1.2";
+            case 2020:
+                return "2.0.20 / 2.0.21 / 2.0.22";
+            case 2010:
+                return "2.0.1";
+            case 2007:
+                return "2.0.07";
+            case 2006:
+                return "2.0.06";
+            case 2005:
+                return "2.0.05";
+            case 2002:
+                return "2.0.02";
+            default:
+                return "";
+        }
+    },
+
+    // returns whether given username is a guest name
+    isGuest: function (name) {
+        return (/\bguest[0-9]/i).test(name);
+    },
 
     afterLogIn: function (src) {
         var name = sys.name(src),
@@ -788,7 +893,7 @@
         operatingsystem[lower] = os;
         helpers.saveData("operatingsystem", operatingsystem);
         os = helpers.os(operatingsystem[lower]);
-        versions[lower] = helpers.version(version);
+        versions[lower] = this.formatVersion(version);
         helpers.saveData("versions", versions);
         version = versions[lower];
         sys.sendHtmlWatch(helpers.bot(bots.spy) + "[Server] <b><font color='" + color + "'>" + name + "</font></b> is using " + os + (version === "" ? "" : ", " + version) + ".");
@@ -797,7 +902,7 @@
             Fake Guest Warning
             ------------------
         **/
-        if (helpers.isGuest(name) && sys.os(src) != "android" && sys.os(src) != "webclient") {
+        if (this.isGuest(name) && sys.os(src) != "android" && sys.os(src) != "webclient") {
             sys.sendHtmlAuths(helpers.bot(bots.welcome) + "This person is using a guest name, but isn't actually on " + helpers.os("android") + " or " + helpers.os("webclient") + ". Keep an eye on them!");
         }
         /**
@@ -823,9 +928,7 @@
                 });
             }
         }
-    }
-
-    ,
+    },
 
     beforeChannelJoin: function (src, channel) {
         var lower = sys.channel(channel).toLowerCase();
@@ -853,9 +956,7 @@
                 }
             }
         }
-    }
-
-    ,
+    },
 
     afterChannelJoin: function (src, channel) {
         var name = sys.name(src), channelname = sys.channel(channel), lower = sys.channel(channel).toLowerCase(),
@@ -924,14 +1025,10 @@
             }
         }
         sys.sendHtmlWatch(helpers.bot(bots.spy) + "[Server] <b><font color='" + helpers.color(src) + "'>" + sys.name(src) + "</font></b> has joined the channel " + helpers.channelLink(channelname) + ".");
-    }
-
-    ,
+    },
 
     beforeChannelLeave: function (src, channel) {
-    }
-
-    ,
+    },
 
     afterChannelLeave: function (src, channel) {
         /**
@@ -977,9 +1074,7 @@
                 global[pluginEvent](src, channel);
             }
         }
-    }
-
-    ,
+    },
 
     beforeLogOut: function (src) {
         /**
@@ -988,9 +1083,7 @@
             ----------
         **/
         sys.changeName(src, players[src].name);
-    }
-
-    ,
+    },
 
     afterLogOut: function (src) {
         var name = sys.name(src), lower = players[src].name.toLowerCase(), range = sys.range(src), ip = sys.ip(src), auth = sys.auth(src), authtitle = "", cookie = sys.cookie(src) ? sys.cookie(src) : "none";
@@ -1041,9 +1134,7 @@
             helpers.saveData("versions", versions);
         }
         delete players[src];
-    }
-
-    ,
+    },
 
     beforeChangeTeam: function (src, team) {
         /**
@@ -1059,9 +1150,7 @@
                 break;
             }
         }
-    }
-
-    ,
+    },
 
     afterChangeTeam: function (src, team) {
         var name = sys.name(src), ip = sys.ip(src), color = helpers.color(src), lower = sys.name(src).toLowerCase(), oldName = players[src].name.toLowerCase();
@@ -1082,7 +1171,7 @@
             -----------------------------------
         **/
         operatingsystem[lower] = sys.os(src);
-        versions[lower] = helpers.version(sys.version(src));
+        versions[lower] = this.formatVersion(sys.version(src));
         helpers.saveData("operatingsystem", operatingsystem);
         helpers.saveData("versions", versions);
         /**
@@ -1098,14 +1187,10 @@
             helpers.saveData("countryname", countryname);
             helpers.saveData("cityname", cityname);
         }
-    }
-
-    ,
+    },
 
     beforeChangeTier: function (src, team, oldtier, newtier) {
-    }
-
-    ,
+    },
 
     afterChangeTier: function (src, team, oldtier, newtier) {
         /**
@@ -1137,9 +1222,7 @@
         monolettercheck(src, team);
         sys.sendHtmlWatch(helpers.bot(bots.spy) + "[Player] <b><font color='" + helpers.color(src) + "'>" + sys.name(src) + "</font></b> has changed team " + team + " from the " + oldtier +
         " tier to the " + newtier + " tier.");
-    }
-
-    ,
+    },
 
     beforeNewPM: function (src) {
         /**
@@ -1155,14 +1238,10 @@
                 return;
             }
         }
-    }
-
-    ,
+    },
 
     afterNewPM: function (src) {
-    }
-
-    ,
+    },
 
     beforeChannelCreated: function (channel, channelname, creator) {
         if (sys.name(creator)) {
@@ -1176,9 +1255,7 @@
                 return;
             }
         }
-    }
-
-    ,
+    },
 
     afterChannelCreated: function (channel, channelname, creator) {
         var lower = sys.channel(channel).toLowerCase();
@@ -1188,9 +1265,7 @@
             "'>" + (creator ? sys.name(creator) : "~~Server~~") + "</font></b> " +
             "has created the channel " + helpers.channelLink(sys.channel(channel)) + ".");
         }
-    }
-
-    ,
+    },
 
     beforeChannelDestroyed: function (channel) {
         var lower = sys.channel(channel).toLowerCase();
@@ -1210,14 +1285,66 @@
             }
         }
         sys.sendHtmlWatch(helpers.bot(bots.spy) + "[Server] The channel #" + sys.channel(channel) + " has been destroyed.");
-    }
-
-    ,
+    },
 
     afterChannelDestroyed: function (channel) {
-    }
+    },
 
-    ,
+    // checks if the given user has exceeded the flood allowance
+    floodCheck: function (src, channelname) {
+        var auth = (sys.auth(src) == 10 ? 3 : sys.auth(src));
+        if (regchannels[channelname]) {
+            if (regchannels[channelname].flood) {
+                return false;
+            }
+            if (players[src].floodcount > allowance) {
+                floodplayers.splice(floodplayers.indexOf(src), 1);
+                if (players[src].floodcount != Infinity && auth < floodlevel) {
+                    return true;
+                }
+                players[src].floodcount = Infinity;
+            }
+            return false;
+        }
+        if (players[src].floodcount > allowance) {
+            floodplayers.splice(floodplayers.indexOf(src), 1);
+            if (players[src].floodcount != Infinity && auth < floodlevel) {
+                return true;
+            }
+            players[src].floodcount = Infinity;
+        }
+        return false;
+    },
+
+    // returns whether given string contains banned characters
+    bannedCharacters: function (message, lower) {
+        for (var i in bansites) {
+            if (message.indexOf(bansites[i]) != -1) {
+                return true;
+            }
+        }
+        if (regchannels[lower]) {
+            if (ZALGO.test(message) && !regchannels[lower].zalgo) {
+                return true;
+            }
+            if (/[\u202E\u202D]/.test(message) && !regchannels[lower].reverse) {
+                return true;
+            }
+            if (THAI.test(message) && !regchannels[lower].extending) {
+                return true;
+            }
+            if (SPECIAL.test(message) && !regchannels[lower].backward) {
+                return true;
+            }
+            if (ARABIC.test(message) || HEBREW.test(message)) {
+                return true;
+            }
+        } else {
+            if (ZALGO.test(message) || /[\u202E\u202D]/.test(message) || THAI.test(message) || SPECIAL.test(message) || ARABIC.test(message) || HEBREW.test(message)) {
+                return true;
+            }
+        }
+    },
 
     beforeChatMessage: function (src, message, channel) {
         var name = sys.name(src), auth = sys.auth(src), color = helpers.color(src), lower = message.toLowerCase(),
@@ -1233,7 +1360,7 @@
                 floodplayers.push(src);
             }
             players[src].floodcount++;
-            if (helpers.floodCheck(src, channelname2)) {
+            if (this.floodCheck(src, channelname2)) {
                 sys.stopEvent();
                 if (layout == "new") {
                     sys.sendHtmlAll(helpers.bot(bots.flood) + name + " has been kicked from the server for flooding!", channel);
@@ -1249,7 +1376,7 @@
             Banned Link / Characters Check
             ------------------------------
         **/
-        if (helpers.bannedcharacters(message, channelname2) && auth < 3) {
+        if (this.bannedCharacters(message, channelname2) && auth < 3) {
             sys.stopEvent();
             helpers.starfox(src, channel, message, bots.command, "Error 403, you are not allowed to post banned links or characters.", channel);
             return;
@@ -1399,9 +1526,24 @@
             sys.sendHtmlWatch(helpers.bot(bots.spy) + "[" + helpers.channelLink(channelname) +
             "] <b><font color='" + color + "'>" + helpers.escapehtml(name) + "</font></b>: " + helpers.escapehtml(message));
         }
-    }
+    },
 
-    ,
+    // returns preferred date notation for given date
+    correctDateNotation: function (date) {
+        var tmp, time, year, month, day;
+        tmp = date.split('T')[0].split('-');
+        time = date.split('T')[1].replace(".000Z", "");
+        year = tmp[0];
+        month = tmp[1];
+        day = tmp[2];
+        if (day.charAt(0) == '0') {
+            day = day.slice(1);
+        }
+        if (month.charAt(0) == '0') {
+            month = month.slice(1);
+        }
+        return day + '-' + month + '-' + year + ", " + time.replace('Z', "");
+    },
 
     afterChatMessage: function (src, message, channel) {
         var name = sys.name(src), lower = sys.channel(channel).toLowerCase();
@@ -1463,7 +1605,7 @@
                 var views = helpers.sep(data.items[0].statistics.viewCount);
                 var likes = helpers.sep(data.items[0].statistics.likeCount);
                 var dislikes = helpers.sep(data.items[0].statistics.dislikeCount);
-                var publishedDate = helpers.correctDateNotation(data.items[0].snippet.publishedAt);
+                var publishedDate = this.correctDateNotation(data.items[0].snippet.publishedAt);
 
                 sys.sendHtmlAll(helpers.bot(bots.main) + title + ", Uploader: " + username + ", Views: <b>" + views + "</b>, Likes: <b><font color='green'>" + likes + "</font></b>, " +
                 "Dislikes: <b><font color='red'>" + dislikes + "</font></b>, Published: " + publishedDate + " UTC.", channel);
@@ -1510,9 +1652,7 @@
                 global[pluginEvent](src, message, channel);
             }
         }
-    }
-
-    ,
+    },
 
     beforeNewMessage: function (message) {
         /**
@@ -1586,14 +1726,10 @@
                 global[pluginEvent](message);
             }
         }
-    }
-
-    ,
+    },
 
     afterNewMessage: function (message) {
-    }
-
-    ,
+    },
 
     beforeServerMessage: function (message) {
         sys.stopEvent();
@@ -1684,14 +1820,10 @@
             }
         }
         sys.sendHtmlMain("<font color='#FFA500'><timestamp/><b>~~Server~~:</b></font> " + message);
-    }
-
-    ,
+    },
 
     afterServerMessage: function (message) {
-    }
-
-    ,
+    },
 
     beforePlayerKick: function (src, trgt) {
         sys.stopEvent();
@@ -1701,14 +1833,10 @@
             return;
         }
         script.beforeChatMessage(src, "/kick " + players[trgt].name, 0);
-    }
-
-    ,
+    },
 
     afterPlayerKick: function (src, trgt) {
-    }
-
-    ,
+    },
 
     beforePlayerBan: function (src, trgt) {
         sys.stopEvent();
@@ -1722,38 +1850,28 @@
             return;
         }
         script.beforeChatMessage(src, "/ban " + players[trgt].name, 0);
-    }
-
-    ,
+    },
 
     afterPlayerBan: function (src, trgt) {
-    }
-
-    ,
+    },
 
     beforePlayerAway: function (src, away) {
-    }
-
-    ,
+    },
 
     afterPlayerAway: function (src, away) {
         sys.sendHtmlWatch(helpers.bot(bots.spy) + "[Player] <b><font color='" + helpers.color(src) + "'>" + sys.name(src) + "</font></b> is " + (away ? "idling" : "back") + ".");
-    }
-
-    ,
+    },
 
     beforePlayerRegister: function (src) {
         var name = sys.name(src), color = helpers.color(src);
-        if (helpers.isGuest(name)) {
+        if (this.isGuest(name)) {
             sys.stopEvent();
             sys.sendMessage(src, helpers.bot(bots.pass) + "You may not register guest names!");
             sys.sendHtmlWatch(helpers.bot(bots.spy) + "[Player] <b><font color='" + color + "'>" + name + "</font></b> tried to register a guest name.");
             return;
         }
         sys.sendHtmlWatch(helpers.bot(bots.spy) + "[Player] <b><font color='" + color + "'>" + name + "</font></b> registered.");
-    }
-
-    ,
+    },
 
     beforeChallengeIssued: function (src, trgt, clauses, rated, mode, team, team2) {
         /**
@@ -1782,9 +1900,7 @@
                 }
             }
         }
-    }
-
-    ,
+    },
 
     afterChallengeIssued: function (src, trgt, clauses, rated, mode) {
         if (clauses === 0) {
@@ -1795,9 +1911,7 @@
             sys.sendHtmlWatch(helpers.bot(bots.spy) + "[Battle] <b><font color='" + helpers.color(src) + "'>" + sys.name(src) + "</font></b> has challenged <b><font color='" + helpers.color(trgt) +
             "'>" + sys.name(trgt) + "</font></b> with the clauses " + (typeof(list) == "string" ? list : list.join(", ")) + ".");
         }
-    }
-
-    ,
+    },
 
     beforeFindBattle: function (src, team) {
         /**
@@ -1810,46 +1924,90 @@
             sys.stopEvent();
             return;
         }
-    }
-
-    ,
+    },
 
     afterFindBattle: function (src, team) {
         sys.sendHtmlWatch(helpers.bot(bots.spy) + "[Battle] <b><font color='" + helpers.color(src) + "'>" + sys.name(src) + "</font></b> has used the Find Battle button.");
-    }
-
-    ,
+    },
 
     beforeBattleMatchup: function (src, trgt, clauses, rated, mode, team, team2) {
-    }
-
-    ,
+    },
 
     afterBattleMatchup: function (src, trgt, clauses, rated, mode) {
-    }
-
-    ,
+    },
 
     battleSetup: function (src, trgt, battle) {
-    }
+    },
 
-    ,
+    // randomises the specified Pokemon in a player's team for Fundex Random
+    funrand: function (src, team, slot) {
+        var poke = sys.rand(1000, 1146), ability = sys.rand(0, 167), nature = sys.rand(0, 15), item = sys.rand(0, 330);
+
+        if (ability > 164) { // Web Browser and Snow Slide
+            ability += 68;
+        }
+
+        sys.changePokeNum(src, team, slot, poke);
+        sys.changePokeName(src, team, slot, sys.pokemon(poke));
+        sys.changePokeAbility(src, team, slot, ability);
+        sys.changePokeNature(src, team, slot, nature);
+        sys.changePokeItem(src, team, slot, item);
+
+        for (var moveSlot = 0; moveSlot < 4; moveSlot++) {
+            move = sys.rand(1, 682);
+
+            if (move > 559) { // Fundex moves
+                move += 440;
+            }
+
+            sys.changePokeMove(src, team, slot, moveSlot, move);
+
+            if (move == 216) {
+                sys.changePokeHappiness(src, team, slot, 255);
+            } else if (move == 218) {
+                sys.changePokeHappiness(src, team, slot, 0);
+            }
+        }
+
+        for (var stat = 0; stat < 6; stat++) {
+            sys.changeTeamPokeDV(src, team, slot, stat, 31);
+            sys.changeTeamPokeEV(src, team, slot, stat, 84);
+        }
+    },
 
     beforeBattleStarted: function (src, trgt, clauses, rated, mode, battle, team, team2) {
         if (sys.tier(src, team) == "Fundex Random" && sys.tier(trgt, team2) == "Fundex Random") {
             for (var slot = 0; slot < 6; slot++) {
-                helpers.funrand(src, team, slot);
-                helpers.funrand(trgt, team2, slot);
+                this.funrand(src, team, slot);
+                this.funrand(trgt, team2, slot);
             }
         }
 
         if (sys.tier(src, team) == "1v1 Fundex Random" && sys.tier(trgt, team2) == "1v1 Fundex Random") {
-            helpers.funrand(src, team, 0);
-            helpers.funrand(trgt, team2, 0);
+            this.funrand(src, team, 0);
+            this.funrand(trgt, team2, 0);
         }
-    }
+    },
 
-    ,
+    // returns short version of given date
+    shortdate: function (d) {
+        var f = "yyyy-MM-ddThh:mm:ss", y = d.getFullYear(), m = d.getMonth() + 1, hours = d.getHours(), minutes = d.getMinutes(), seconds = d.getSeconds();
+        d = d.getDate();
+        function z(s) {
+            s = '' + s;
+            return s.length > 1 ? s : '0' + s;
+        }
+        f = f.replace(/yyyy/, y);
+        f = f.replace(/yy/, String(y).substr(2));
+        f = f.replace(/MM/, z(m));
+        f = f.replace(/M/, m);
+        f = f.replace(/dd/, z(d));
+        f = f.replace(/d/, d);
+        f = f.replace(/hh/, z(hours));
+        f = f.replace(/mm/, z(minutes));
+        f = f.replace(/ss/, z(seconds));
+        return f;
+    },
 
     afterBattleStarted: function (src, trgt, clauses, rated, mode, battle, team, team2) {
         /**
@@ -1886,31 +2044,21 @@
             sys.sendHtmlWatch(helpers.bot(bots.spy) + "[Battle] A battle has started between <b><font color='" + helpers.color(src) + "'>" + sys.name(src) +
             "</font></b> and <b><font color='" + helpers.color(trgt) + "'>" + sys.name(trgt) + "</font></b>.");
         }
-    }
-
-    ,
+    },
 
     attemptToSpectateBattle: function (src, battler1, battler2) {
-    }
-
-    ,
+    },
 
     beforeSpectateBattle: function (src, battler1, battler2) {
-    }
-
-    ,
+    },
 
     afterSpectateBattle: function (src, battler1, battler2) {
         sys.sendHtmlWatch(helpers.bot(bots.spy) + "[Battle] <b><font color='" + helpers.color(src) + "'>" + sys.name(src) + "</font></b> is spectating the battle between " +
         "<b><font color='" + helpers.color(battler1) + "'>" + sys.name(battler1) + "</font></b> and <b><font color='" + helpers.color(battler2) + "'>" + sys.name(battler2) + "</font></b>.");
-    }
-
-    ,
+    },
 
     beforeBattleEnded: function (winner, loser, result, battle) {
-    }
-
-    ,
+    },
 
     afterBattleEnded: function (winner, loser, result, battle) {
         var winnername, losername;

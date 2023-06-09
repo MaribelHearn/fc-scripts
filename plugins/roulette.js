@@ -20,6 +20,11 @@ var rouletteEvent = "";
 var rouletteStep = 0;
 var roulette = sys.fexists(DATA_FOLDER + "roulette.txt") ? helpers.readData("roulette") : {};
 
+function formatEvent(event) {
+    var eventFormats = {"frenzy": "<b>Shiny Frenzy</b>", "fest": "<b>Chainfest</b>", "legendary": "<b>Legendary Swarm</b>"};
+    return (eventFormats[event] ? eventFormats[event] : "<b>Typeframe</b>");
+}
+
 module.exports = {
     commands: {
         roulettecommands: function (src, channel, command) {
@@ -113,7 +118,7 @@ module.exports = {
                     roulette[lower].chainLength = 1;
                     roulette[lower].isChaining = false;
                 } else {
-                    roulette[lower].shinies[pokemon].push(helpers.strip(helpers.formatEvent(rouletteEvent)).toLowerCase());
+                    roulette[lower].shinies[pokemon].push(helpers.strip(formatEvent(rouletteEvent)).toLowerCase());
                 }
                 roulette[lower].shinies[pokemon].push("1 / " + roulette[lower].shinyChance);
                 roulette[lower].shinyChance = 4096;
@@ -202,7 +207,7 @@ module.exports = {
 rouletteEventMessage = function (event, ended) {
     var eventMessage;
     if (ended) {
-        eventMessage = "The " + helpers.formatEvent(event) + " has ended!";
+        eventMessage = "The " + formatEvent(event) + " has ended!";
     } else {
         if (event == "frenzy") {
             eventMessage = "A <b>Shiny Frenzy</b> has begun! Shiny odds will be greatly increased for a limited amount of time!";

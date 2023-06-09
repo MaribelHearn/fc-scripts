@@ -1,12 +1,43 @@
 /*
     ----------------------------------------------
     FUN COMMUNITY OWNER COMMANDS ownercmds.js
-     - by Maribel Hearn, 2012-2021
+     - by Maribel Hearn, 2012-2023
 
     This file contains commands that can be
     run by owners.
     ----------------------------------------------
 */
+function secondsToWording(seconds) {
+    var result = [], days = 0, hours = 0, minutes = 0;
+
+    while (seconds >= 86400) {
+        days += 1;
+        seconds -= 86400;
+    }
+    while (seconds >= 3600) {
+        hours += 1;
+        seconds -= 3600;
+    }
+    while (seconds >= 60) {
+        minutes += 1;
+        seconds -= 60;
+    }
+
+    if (days >= 1) {
+        result.push(days + " day" + (days != 1 ? "s" : ""));
+    }
+    if (hours >= 1) {
+        result.push(hours + " hour" + (hours != 1 ? "s" : ""));
+    }
+    if (minutes >= 1) {
+        result.push(minutes + " minute" + (minutes != 1 ? "s" : ""));
+    }
+    if (seconds >= 1) {
+        result.push(seconds + " second" + (seconds != 1 ? "s" : ""));
+    }
+
+    return result.join(", ");
+}
 
 module.exports = {
     ownercommands: function (src, channel, command) {
@@ -25,9 +56,7 @@ module.exports = {
         + "<br><timestamp/><br>"
         + border2;
         sys.sendHtmlMessage(src, commandsmessage, channel);
-    }
-
-    ,
+    },
 
     /**
         -------------
@@ -79,9 +108,7 @@ module.exports = {
         + "<br><timestamp/><br>"
         + border2;
         sys.sendHtmlMessage(src, commandsmessage, channel);
-    }
-
-    ,
+    },
 
     user: function (src, channel, command) {
         var name = sys.name(src), trgtauth;
@@ -102,9 +129,7 @@ module.exports = {
         }
         trgt ? sys.changeAuth(trgt, 0) : sys.changeDbAuth(trgtname, 0);
         sys.sendHtmlAll(helpers.bot(bots.auth) + "<b>" + helpers.arg(trgtname) + " has been made " + helpers.arg2(AUTH_NAMES[0]) + " by " + helpers.user(name) + "!</font></b>");
-    }
-
-    ,
+    },
 
     moderator: function (src, channel, command) {
         var name = sys.name(src), ttrgtauth, newauth = 1;
@@ -132,15 +157,11 @@ module.exports = {
         }
         sys.changeDbAuth(trgtname, 1);
         sys.sendHtmlAll(helpers.bot(bots.auth) + "<b>" + helpers.arg(trgtname) + " has been made " + helpers.arg2(AUTH_NAMES[1]) + " by " + helpers.user(name) + "!</font></b>");
-    }
-
-    ,
+    },
 
     mod: function (src, channel, command) {
         this.moderator(src, channel, command);
-    }
-
-    ,
+    },
 
     administrator: function (src, channel, command) {
         var name = sys.name(src), trgtauth;
@@ -168,15 +189,11 @@ module.exports = {
         }
         sys.changeDbAuth(trgtname, 2);
         sys.sendHtmlAll(helpers.bot(bots.auth) + "<b>" + helpers.arg(trgtname) + " has been made " + helpers.arg2(AUTH_NAMES[2]) + " by " + helpers.user(name) + "!</font></b>");
-    }
-
-    ,
+    },
 
     admin: function (src, channel, command) {
         this.administrator(src, channel, command);
-    }
-
-    ,
+    },
 
     owner: function (src, channel, command) {
         var name = sys.name(src), trgtauth;
@@ -204,9 +221,7 @@ module.exports = {
         }
         sys.changeDbAuth(trgtname, 3);
         sys.sendHtmlAll(helpers.bot(bots.auth) + "<b>" + helpers.arg(trgtname) + " has been made " + helpers.arg2(AUTH_NAMES[3]) + " by " + helpers.user(name) + "!</font></b>");
-    }
-
-    ,
+    },
 
     invisibleowner: function (src, channel, command) {
         var name = sys.name(src), trgt, trgtname, trgtauth, placement;
@@ -240,21 +255,15 @@ module.exports = {
         }
         sys.changeDbAuth(trgtname, auth);
         sys.sendHtmlMessage(src, helpers.bot(bots.auth) + "You made " + trgtname + " " + AUTH_NAMES[4] + " (placement " + placement + ").", channel);
-    }
-
-    ,
+    },
 
     invisible: function (src, channel, command) {
         this.invisibleowner(src, channel, command);
-    }
-
-    ,
+    },
 
     invis: function (src, channel, command) {
         this.invisibleowner(src, channel, command);
-    }
-
-    ,
+    },
 
     /**
         ---------------
@@ -280,9 +289,7 @@ module.exports = {
         + "<br><timestamp/><br>"
         + border2;
         sys.sendHtmlMessage(src, commandsmessage, channel);
-    }
-
-    ,
+    },
 
     ls: function (src, channel, command) {
         var dir = command[1], index = 0, message, dirs, files;
@@ -313,15 +320,11 @@ module.exports = {
         }
         message += "</table><br><br><timestamp/><br>" + border2;
         sys.sendHtmlMessage(src, message, channel);
-    }
-
-    ,
+    },
 
     dir: function (src, channel, command) {
         this.ls(src, channel, command);
-    }
-
-    ,
+    },
 
     cat: function (src, channel, command) {
         var file = command[1], message;
@@ -340,15 +343,11 @@ module.exports = {
         "</h2><br>" + helpers.escapehtml(sys.read(file)).replace(/\n/g, "<br>") + "<br>" +
         "<br><timestamp/><br>" + border2;
         sys.sendHtmlMessage(src, message, channel);
-    }
-
-    ,
+    },
 
     type: function (src, channel, command) {
         this.cat(src, channel, command);
-    }
-
-    ,
+    },
 
     mv: function (src, channel, command) {
         var file = command[1];
@@ -372,9 +371,7 @@ module.exports = {
         var content = sys.read(file);
         sys.write(path, content);
         sys.sendHtmlMessage(src, helpers.bot(bots.script) + "File '" + file + "' has been moved to '" + path + "'!", channel);
-    }
-
-    ,
+    },
 
     rm: function (src, channel, command) {
         var file = command[1];
@@ -390,9 +387,7 @@ module.exports = {
         }
         sys.rm(file);
         sys.sendHtmlMessage(src, helpers.bot(bots.script) + "File '" + file + "' has been deleted!", channel);
-    }
-
-    ,
+    },
 
     mkdir: function (src, channel, command) {
         var dir = command[1];
@@ -408,15 +403,11 @@ module.exports = {
         }
         sys.mkdir(dir);
         sys.sendHtmlMessage(src, helpers.bot(bots.script) + "Directory '" + dir + "' has been created!", channel);
-    }
-
-    ,
+    },
 
     md: function (src, channel, command) {
         this.mkdir(src, channel, command);
-    }
-
-    ,
+    },
 
     rmdir: function (src, channel, command) {
         var dir = command[1];
@@ -440,15 +431,11 @@ module.exports = {
         }
         sys.rmdir(dir);
         sys.sendHtmlMessage(src, helpers.bot(bots.script) + "Directory '" + dir + "' has been deleted!", channel);
-    }
-
-    ,
+    },
 
     rd: function (src, channel, command) {
         this.rmdir(src, channel, command);
-    }
-
-    ,
+    },
 
     zip: function (src, channel, command) {
         var fileName = command[1];
@@ -479,9 +466,7 @@ module.exports = {
         }
         sys.zip(fileName, dir);
         sys.sendHtmlMessage(src, helpers.bot(bots.script) + "Compressed directory '" + dir + "' into archive '" + fileName + ".zip'.", channel);
-    }
-
-    ,
+    },
 
     unzip: function (src, channel, command) {
         var fileName = command[1];
@@ -509,9 +494,7 @@ module.exports = {
         }
         sys.extractZip(fileName, dir);
         sys.sendHtmlMessage(src, helpers.bot(bots.script) + "Extracted archive '" + fileName + ".zip' into directory '" + dir + "'.", channel);
-    }
-
-    ,
+    },
 
     exec: function (src, channel, command) {
         var cmd = command[1];
@@ -522,9 +505,7 @@ module.exports = {
         sys.sendHtmlMessage(src, border + "<br><timestamp/> <b>You executed the following command:</b><br><span style='font-family: dejavu sans mono;'>"
         + helpers.escapehtml(cmd) + "</span><br>" + border2, channel);
         sys.system(cmd);
-    }
-
-    ,
+    },
 
     /**
         ---------------
@@ -537,7 +518,7 @@ module.exports = {
         + "<br>"
         + "Automatic updates are currently turned <b>" + (UPDATE_KEY !== "" && updateFrequency > 0 ? "on" : "off") + "</b>.<br>";
         if (UPDATE_KEY !== "" && updateFrequency > 0) {
-            commandsmessage += "Update frequency: " + helpers.secondsToWording(updateFrequency) + ".<br>";
+            commandsmessage += "Update frequency: " + secondsToWording(updateFrequency) + ".<br>";
         }
         commandsmessage += "<br>"
         + "<b>" + helpers.user("/reload ") + helpers.arg("script") + "</b>: reloads script file <b>script</b> from the local files, which can be a module or a plugin. If <b>script</b> is not specified, reloads all scripts.<br>";
@@ -558,9 +539,7 @@ module.exports = {
         + "<br><timestamp/><br>"
         + border2;
         sys.sendHtmlMessage(src, commandsmessage, channel);
-    }
-
-    ,
+    },
 
     reload: function (src, channel, command) {
         var script = command[1], folder, type;
@@ -587,9 +566,7 @@ module.exports = {
         }
         sys.changeScript(sys.read("scripts.js"));
         sys.sendHtmlOwner(helpers.bot(bots.script) + "The server scripts have been reloaded.");
-    }
-
-    ,
+    },
 
     setgithubkey: function (src, channel, command) {
         if (UPDATE_KEY !== "") {
@@ -608,9 +585,7 @@ module.exports = {
         UPDATE_KEY = key;
         helpers.saveData("UPDATE_KEY", key);
         sys.sendHtmlMessage(src, helpers.bot(bots.script) + "Your GitHub API key has been set.", channel);
-    }
-
-    ,
+    },
 
     removegithubkey: function (src, channel, command) {
         if (UPDATE_KEY === "") {
@@ -620,9 +595,7 @@ module.exports = {
         UPDATE_KEY = "";
         helpers.saveData("UPDATE_KEY", "");
         sys.sendHtmlMessage(src, helpers.bot(bots.script) + "Your GitHub API key has been removed.", channel);
-    }
-
-    ,
+    },
 
     update: function (src, channel, command) {
         if (UPDATE_KEY === "") {
@@ -661,23 +634,17 @@ module.exports = {
         } catch (err) {
             // do nothing
         }
-    }
-
-    ,
+    },
 
     silentupdate: function (src, channel, command) {
         command[0] = "silentupdate";
         this.update(src, channel, command);
-    }
-
-    ,
+    },
 
     supdate: function (src, channel, command) {
         command[0] = "silentupdate";
         this.update(src, channel, command);
-    }
-
-    ,
+    },
 
     updatefrequency: function (src, channel, command) {
         var freq = command[1];
@@ -699,11 +666,9 @@ module.exports = {
         if (freq === 0) {
             sys.sendHtmlMessage(src, helpers.bot(bots.script) + "Automatic updates have been turned off.", channel);
         } else {
-            sys.sendHtmlMessage(src, helpers.bot(bots.script) + "The automatic update frequency has been set to " + helpers.secondsToWording(freq) + ".", channel);
+            sys.sendHtmlMessage(src, helpers.bot(bots.script) + "The automatic update frequency has been set to " + secondsToWording(freq) + ".", channel);
         }
-    }
-
-    ,
+    },
 
     "var": function (src, channel, command) {
         var allow = true, result, html;
@@ -727,9 +692,7 @@ module.exports = {
 
         }
         sys.sendHtmlMessage(src, helpers.bot(bots.script) + "The evaluated content of '" + helpers.escapehtml(command[1]) + "' is " + (html ? result : helpers.escapehtml(result)) + ".", channel);
-    }
-
-    ,
+    },
 
     time: function (src, channel, command) {
         var name = sys.name(src), auth = sys.auth(src), starttime, runtime;
@@ -748,9 +711,7 @@ module.exports = {
         }
         runtime = new Date() - starttime;
         sys.sendHtmlMessage(src, helpers.bot(bots.script) + "The runtime of '" + command + "' was " + runtime + " milliseconds.", channel);
-    }
-
-    ,
+    },
 
     eval: function (src, channel, command) {
         var name = sys.name(src), silent = command[0].slice(0, -4), starttime, runtime;
@@ -784,22 +745,16 @@ module.exports = {
         } else {
             sys.sendHtmlAll(helpers.bot(bots.script) + "The eval runtime was " + runtime + " milliseconds.", channel);
         }
-    }
-
-    ,
+    },
 
     silenteval: function (src, channel, command) {
         this.eval(src, channel, command);
-    }
-
-    ,
+    },
 
     seval: function (src, channel, command) {
         command[0] = "silenteval";
         this.eval(src, channel, command);
-    }
-
-    ,
+    },
 
     secretsilenteval: function (src, channel, command) {
         var name = sys.name(src);
@@ -813,15 +768,11 @@ module.exports = {
         } catch (error) {
             sys.sendHtmlMessage(src, helpers.bot(bots.script) + "An error occurred: " + error, channel);
         }
-    }
-
-    ,
+    },
 
     sseval: function (src, channel, command) {
         this.secretsilenteval(src, channel, command);
-    }
-
-    ,
+    },
 
     /**
         ------------------
@@ -844,9 +795,7 @@ module.exports = {
         + "<br><timestamp/><br>"
         + border2;
         sys.sendHtmlMessage(src, commandsmessage, channel);
-    }
-
-    ,
+    },
 
     open: function (src, channel, command) {
         var name = sys.name(src);
@@ -857,9 +806,7 @@ module.exports = {
         open = true;
         helpers.saveData("open", true);
         sys.sendHtmlAuths(helpers.bot(bots.priv) + "The server has been opened by " + name + ".");
-    }
-
-    ,
+    },
 
     close: function (src, channel, command) {
         var name = sys.name(src);
@@ -870,9 +817,7 @@ module.exports = {
         open = false;
         helpers.saveData("open", false);
         sys.sendHtmlAuths(helpers.bot(bots.priv) + "The server has been closed by " + name + ".");
-    }
-
-    ,
+    },
 
     allow: function (src, channel, command) {
         var name = sys.name(src), ip;
@@ -892,9 +837,7 @@ module.exports = {
         allowed.push(ip);
         helpers.saveData("allowed", allowed);
         sys.sendHtmlOwner(helpers.bot(bots.priv) + "The IP " + ip + " has been allowed through server closure and bans by " + name + ".", channel);
-    }
-
-    ,
+    },
 
     disallow: function (src, channel, command) {
         var name = sys.name(src), ip;
@@ -914,9 +857,7 @@ module.exports = {
         allowed.splice(allowed.indexOf(ip), 1);
         helpers.saveData("allowed", allowed);
         sys.sendHtmlOwner(helpers.bot(bots.priv) + "The IP " + ip + " has been disallowed through server closure and bans by " + name + ".");
-    }
-
-    ,
+    },
 
     allowrange: function (src, channel, command) {
         var name = sys.name(src), range;
@@ -936,9 +877,7 @@ module.exports = {
         allowedrange.push(range);
         helpers.saveData("allowedrange", allowedrange);
         sys.sendHtmlOwner(helpers.bot(bots.priv) + "The range " + range + " has been allowed through server closure and bans by " + name + ".");
-    }
-
-    ,
+    },
 
     disallowrange: function (src, channel, command) {
         var name = sys.name(src), range;
@@ -958,9 +897,7 @@ module.exports = {
         allowedrange.splice(allowedrange.indexOf(range), 1);
         helpers.saveData("allowedrange", allowedrange);
         sys.sendHtmlOwner(helpers.bot(bots.priv) + "The range " + range + " has been disallowed through server closure and bans by " + name + ".");
-    }
-
-    ,
+    },
 
     /**
         ----------------
@@ -982,9 +919,7 @@ module.exports = {
         + "<br><timestamp/><br>"
         + border2;
         sys.sendHtmlMessage(src, commandsmessage, channel);
-    }
-
-    ,
+    },
 
     trust: function (src, channel, command) {
         var name = sys.name(src), trustedIps = sys.trustedIps(), ip;
@@ -1003,9 +938,7 @@ module.exports = {
         }
         sys.addTrustedIp(ip);
         sys.sendHtmlOwner(helpers.bot(bots.priv) + "The IP " + ip + " has been added to the list of trusted IPs by " + name + ".");
-    }
-
-    ,
+    },
 
     distrust: function (src, channel, command) {
         var name = sys.name(src), trustedIps = sys.trustedIps(), ip;
@@ -1024,9 +957,7 @@ module.exports = {
         }
         sys.removeTrustedIp(ip);
         sys.sendHtmlOwner(helpers.bot(bots.priv) + "The IP " + ip + " has been removed from the list of trusted IPs by " + name + ".");
-    }
-
-    ,
+    },
 
     doschannel: function (src, channel, command) {
         var name = sys.name(src), dosChannel = command[1];
@@ -1040,9 +971,7 @@ module.exports = {
         }
         sys.changeDosChannel(dosChannel);
         sys.sendHtmlOwner(helpers.bot(bots.priv) + " The anti DoS message channel has been made #" + dosChannel + " by " + name + ".");
-    }
-
-    ,
+    },
 
     /**
         ---------------
@@ -1092,23 +1021,17 @@ module.exports = {
         + "<br><timestamp/><br>"
         + border2;
         sys.sendHtmlMessage(src, commandsmessage, channel);
-    }
-
-    ,
+    },
 
     "private": function (src, channel, command) {
         sys.makeServerPublic(false);
         sys.sendHtmlAll(helpers.bot(bots.priv) + "<b>" + helpers.user(sys.name(src)) + " made the server " + helpers.arg("private") + "!</b>");
-    }
-
-    ,
+    },
 
     "public": function (src, channel, command) {
         sys.makeServerPublic(true);
         sys.sendHtmlAll(helpers.bot(bots.priv) + "<b>" + helpers.user(sys.name(src)) + " made the server " + helpers.arg("public") + "!</b>");
-    }
-
-    ,
+    },
 
     shutdown: function (src, channel, command) {
         var name = sys.name(src);
@@ -1116,9 +1039,7 @@ module.exports = {
             sys.shutDown();
         }, 200, 0);
         sys.sendHtmlAll(helpers.bot(bots.priv) + "<b>" + helpers.user(name) + " has shut down the server!</b>");
-    }
-
-    ,
+    },
 
     restart: function (src, channel, command) {
         var name = sys.name(src), os = sys.os();
@@ -1138,9 +1059,7 @@ module.exports = {
             }, 200, 0);
         }
         sys.sendHtmlAll(helpers.bot(bots.priv) + "<b>" + helpers.user(name) + " has restarted the server!</b>");
-    }
-
-    ,
+    },
 
     softreset: function (src, channel, command) {
         var confirmation = command[1], message;
@@ -1153,9 +1072,7 @@ module.exports = {
         helpers.initCustoms();
         helpers.initCustomGlobals();
         sys.sendHtmlMessage(src, helpers.bot(bots.main) + "Your data has been soft reset successfully.", channel);
-    }
-
-    ,
+    },
 
     hardreset: function (src, channel, command) {
         var confirmation = command[1], dataFiles = sys.filesForDirectory(DATA_FOLDER), message, i;
@@ -1171,9 +1088,7 @@ module.exports = {
         sys.rmdir("data");
         sys.sendHtmlMessage(src, helpers.bot(bots.main) + "Your data has been hard reset successfully. The server will now shut down.", channel);
         this.shutdown(src, channel, command);
-    }
-
-    ,
+    },
 
     /**
         ---------------
@@ -1194,9 +1109,7 @@ module.exports = {
         + "<br><timestamp/><br>"
         + border2;
         sys.sendHtmlMessage(src, commandsmessage, channel);
-    }
-
-    ,
+    },
 
     addsilentcommand: function (src, channel, command) {
         var sc = command[1];
@@ -1207,15 +1120,11 @@ module.exports = {
         silentcommands.push(sc);
         helpers.saveData("silentcommands", silentcommands);
         sys.sendHtmlMessage(src, helpers.bot(bots.command) + "The command '/" + sc + "' is now a silent command.", channel);
-    }
-
-    ,
+    },
 
     addsc: function (src, channel, command) {
         this.addsilentcommand(src, channel, command);
-    }
-
-    ,
+    },
 
     removesilentcommand: function (src, channel, command) {
         var sc = command[1];
@@ -1230,15 +1139,11 @@ module.exports = {
         silentcommands.remove(sc);
         helpers.saveData("silentcommands", silentcommands);
         sys.sendHtmlMessage(src, helpers.bot(bots.command) + "The command '/" + sc + "' is no longer a silent command.", channel);
-    }
-
-    ,
+    },
 
     removesc: function (src, channel, command) {
         this.removesilentcommand(src, channel, command);
-    }
-
-    ,
+    },
 
     resetsilentcommands: function (src, channel, command) {
         sys.write(DATA_FOLDER + "silentcommands.txt", '["future","spoiler","seval","sseval","skick",' +
@@ -1246,21 +1151,15 @@ module.exports = {
         '"supdate","silentupdateplugin", "supdateplugin"]');
         silentcommands = helpers.readData("silentcommands");
         sys.sendHtmlMessage(src, helpers.bot(bots.command) + "The silent commands have been reset to their defaults.", channel);
-    }
-
-    ,
+    },
 
     resetscs: function (src, channel, command) {
         this.resetsilentcommands(src, channel, command);
-    }
-
-    ,
+    },
 
     resetsc: function (src, channel, command) {
         this.resetsilentcommands(src, channel, command);
-    }
-
-    ,
+    },
 
     /**
         ----------------
@@ -1285,9 +1184,7 @@ module.exports = {
         + "<br><timestamp/><br>"
         + border2;
         sys.sendHtmlMessage(src, commandsmessage, channel);
-    }
-
-    ,
+    },
 
     registerall: function (src, channel, command) {
         cusercommands.registerthis(src, 0, ["registerthis"]);
@@ -1315,9 +1212,7 @@ module.exports = {
         }
         helpers.saveData("regchannels", regchannels);
         sys.sendHtmlMessage(src, helpers.bot(bots.main) + "All permanent channels have been registered successfully and have been given their default settings.", channel);
-    }
-
-    ,
+    },
 
     unregisterall: function (src, channel, command) {
         var confirmation = command[1], message;
@@ -1345,9 +1240,7 @@ module.exports = {
         }
         helpers.saveData("regchannels", regchannels);
         sys.sendHtmlMessage(src, helpers.bot(bots.main) + "All permanent channels have been unregistered successfully.", channel);
-    }
-
-    ,
+    },
 
     renamechannel: function (src, channel, command) {
         var oldName = command[1], newName, lower;
@@ -1379,9 +1272,7 @@ module.exports = {
             }
         }
         helpers.starfox(src, channel, command, bots.command, "Error 403, invalid name.");
-    }
-
-    ,
+    },
 
     /**
         -------------
@@ -1411,9 +1302,7 @@ module.exports = {
         + "<br><timestamp/><br>"
         + border2;
         sys.sendHtmlMessage(src, commandsmessage, channel);
-    }
-
-    ,
+    },
 
     silentkick: function (src, channel, command) {
         if (!command[1]) {
@@ -1434,21 +1323,15 @@ module.exports = {
             trgtname = members[lower];
         }
         sys.sendHtmlMessage(src, helpers.bot(bots.kick) + "You silently kicked " + trgtname + ".", channel);
-    }
-
-    ,
+    },
 
     skick: function (src, channel, command) {
         this.silentkick(src, channel, command);
-    }
-
-    ,
+    },
 
     sk: function (src, channel, command) {
         this.silentkick(src, channel, command);
-    }
-
-    ,
+    },
 
     setipkey: function (src, channel, command) {
         if (API_KEY !== "") {
@@ -1477,9 +1360,7 @@ module.exports = {
             });
         });
         sys.sendHtmlMessage(src, helpers.bot(bots.main) + "Your IPinfoDB API key has been set.", channel);
-    }
-
-    ,
+    },
 
     removeipkey: function (src, channel, command) {
         if (API_KEY === "") {
@@ -1495,9 +1376,7 @@ module.exports = {
         helpers.saveData("cityname", {});
         helpers.saveData("timezone", {});
         sys.sendHtmlMessage(src, helpers.bot(bots.main) + "Your IPinfoDB API key has been removed.", channel);
-    }
-
-    ,
+    },
 
     setgooglekey: function (src, channel, command) {
         if (GOOGLE_KEY !== "") {
@@ -1512,9 +1391,7 @@ module.exports = {
         GOOGLE_KEY = key;
         helpers.saveData("GOOGLE_KEY", key);
         sys.sendHtmlMessage(src, helpers.bot(bots.main) + "Your Google API key has been set.", channel);
-    }
-
-    ,
+    },
 
     removegooglekey: function (src, channel, command) {
         if (GOOGLE_KEY === "") {
@@ -1524,9 +1401,7 @@ module.exports = {
         GOOGLE_KEY = "";
         helpers.saveData("GOOGLE_KEY", "");
         sys.sendHtmlMessage(src, helpers.bot(bots.main) + "Your Google API key has been removed.", channel);
-    }
-
-    ,
+    },
 
     clearpass: function (src, channel, command) {
         var name = sys.name(src), player, trgt;
@@ -1550,15 +1425,11 @@ module.exports = {
             sys.sendNetworkCommand(trgt, REACTIVATE_REGISTER_BUTTON);
         }
         sys.sendHtmlMessage(src, helpers.bot(bots.pass) + "The password of " + player + " has been cleared.", channel);
-    }
-
-    ,
+    },
 
     reloadtiers: function (src, channel, command) {
         sys.reloadTiers();
-    }
-
-    ,
+    },
 
     exportmembers: function (src, channel, command) {
         sys.exportMemberDatabase();

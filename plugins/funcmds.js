@@ -9,6 +9,47 @@
 */
 var bigtexts = sys.fexists(DATA_FOLDER + "bigtexts.txt") ? helpers.readData("bigtexts") : {};
 
+function duoColor(text, colorX, colorY) {
+    var array = [], toggle = false, i;
+    for (i = 0; i < text.length; i++) {
+        array.push("<font color='" + (toggle ? colorY : colorX) + "';>" + text.charAt(i) + "</font>");
+        toggle = !toggle;
+    }
+    return array.join("");
+}
+
+function desu(text) {
+    var firstColor = ["#008000", "#FF0000"][sys.rand(0, 2)];
+    return duoColor(text, firstColor, (firstColor == "#008000" ? "#FF0000" : "#008000"));
+}
+
+function pokeBallImage(src, ball) {
+    var mapping;
+    if (helpers.isAndroidOrWeb(src)) {
+        mapping = {"poke": "USER", "great": "MOD", "ultra": "ADMIN", "master": "OWNER"};
+        return AUTHIMAGE[mapping[ball]];
+    }
+    mapping = {"poke": "u", "great": "m", "ultra": "a", "master": "o"};
+    return "<img src='Themes/Classic/client/" + mapping[ball] + "Available.png'>";
+}
+
+function toStatusNumber(status) {
+    return ({
+        "paralyze": 1,
+        "sleep": 2,
+        "freeze": 3,
+        "burn": 4,
+        "poison": 5
+    }[status]);
+}
+
+function statusImage(src, status) {
+    if (helpers.isAndroidOrWeb(src)) {
+        return STATUS[status.toUpperCase()];
+    }
+    return "<img src='Themes/Classic/status/battle_status" + toStatusNumber(status) + ".png'>";
+}
+
 module.exports = {
     getBigtexts: function () {
         return bigtexts;
@@ -141,7 +182,7 @@ module.exports = {
         bulbaderp: function (src, channel, command) {
             var name = sys.name(src);
             sys.sendHtmlAll(helpers.bot(bots.fun) + "<b>" + helpers.user(name) +
-            " has used the " + helpers.arg("Bulbaderp") + " command.</b><br><img src='pokemon:1&gen=5'><b>" + helpers.desu("Bulbaderp!") + "</b>", channel);
+            " has used the " + helpers.arg("Bulbaderp") + " command.</b><br><img src='pokemon:1&gen=5'><b>" + desu("Bulbaderp!") + "</b>", channel);
         },
 
         burn: function (src, channel, command) {
@@ -149,8 +190,8 @@ module.exports = {
             !command[1] ? player = sys.name(sys.playerIds()[random]) : player = command[1];
             for (var i in channelPlayers) {
                 sys.sendHtmlMessage(channelPlayers[i], "<font color='#FF0000'><timestamp/>" +
-                "<b>" + helpers.statusImage(channelPlayers[i], command[0]) + helpers.escapehtml(player) + " has been burned by " + name +
-                "!" + helpers.statusImage(channelPlayers[i], command[0]) + "</b></font>", channel);
+                "<b>" + statusImage(channelPlayers[i], command[0]) + helpers.escapehtml(player) + " has been burned by " + name +
+                "!" + statusImage(channelPlayers[i], command[0]) + "</b></font>", channel);
             }
         },
 
@@ -171,15 +212,15 @@ module.exports = {
             if (rng > pokeballs[ball].rate) {
                 for (i in channelPlayers) {
                     sys.sendHtmlMessage(channelPlayers[i], "<font color='" + pokeballs[ball].color + "'><timestamp/>" +
-                    "<b>" + helpers.pokeBallImage(channelPlayers[i], ball) + player + " has been caught in a " + pokeballs[ball].name +
-                    " by " + name + "!" + helpers.pokeBallImage(channelPlayers[i], ball) + "</b></font>", channel);
+                    "<b>" + pokeBallImage(channelPlayers[i], ball) + player + " has been caught in a " + pokeballs[ball].name +
+                    " by " + name + "!" + pokeBallImage(channelPlayers[i], ball) + "</b></font>", channel);
                 }
             } else {
                 for (i in channelPlayers) {
                     sys.sendHtmlMessage(channelPlayers[i], "<font color='" + pokeballs[ball].color + "'><timestamp/>" +
-                    "<b>" + helpers.pokeBallImage(channelPlayers[i], ball) + name + " tried to capture " + player +
+                    "<b>" + pokeBallImage(channelPlayers[i], ball) + name + " tried to capture " + player +
                     " in a " + pokeballs[ball].name + ", but " + player +
-                    " escaped!" + helpers.pokeBallImage(channelPlayers[i], ball) + "</b></font>", channel);
+                    " escaped!" + pokeBallImage(channelPlayers[i], ball) + "</b></font>", channel);
                 }
             }
         },
@@ -208,7 +249,7 @@ module.exports = {
         darp: function (src, channel, command) {
             var name = sys.name(src);
             sys.sendHtmlAll(helpers.bot(bots.fun) + "<b>" + helpers.user(name) +
-            " has used the " + helpers.arg("Darp") + " command.</b><br><img src='pokemon:129&gen=5'><b>" + helpers.desu("Harpadarp!") + "</b>", channel);
+            " has used the " + helpers.arg("Darp") + " command.</b><br><img src='pokemon:129&gen=5'><b>" + desu("Harpadarp!") + "</b>", channel);
         },
 
         dennis: function (src, channel, command) {
@@ -220,13 +261,13 @@ module.exports = {
         derp: function (src, channel, command) {
             var name = sys.name(src);
             sys.sendHtmlAll(helpers.bot(bots.fun) + "<b>" + helpers.user(name) +
-            " has used the " + helpers.arg("Derp") + " command.</b><br><img src='pokemon:618&gen=5'><b>" + helpers.desu("Herpaderp!") + "</b>", channel);
+            " has used the " + helpers.arg("Derp") + " command.</b><br><img src='pokemon:618&gen=5'><b>" + desu("Herpaderp!") + "</b>", channel);
         },
 
         durp: function (src, channel, command) {
             var name = sys.name(src);
             sys.sendHtmlAll(helpers.bot(bots.fun) + "<b>" + helpers.user(name) +
-            " has used the " + helpers.arg("Durp") + " command.</b><br><img src='pokemon:349&gen=5'><b>" + helpers.desu("Hurpadurp!") + "</b>", channel);
+            " has used the " + helpers.arg("Durp") + " command.</b><br><img src='pokemon:349&gen=5'><b>" + desu("Hurpadurp!") + "</b>", channel);
         },
 
         epicfail: function (src, channel, command) {
@@ -258,7 +299,7 @@ module.exports = {
             pokenum == 1 ? pokenum = 399 : pokenum = 400;
             sys.sendHtmlAll(helpers.bot(bots.fun) + "<b>" + helpers.user(name) +
             " has used the " + helpers.arg("Ferp") + " command.</b><br><img src='pokemon:" + pokenum + "&gen=5" +
-            "'><b>" + helpers.desu("Ferpaderp!") + "</b>", channel);
+            "'><b>" + desu("Ferpaderp!") + "</b>", channel);
         },
 
         freeze: function (src, channel, command) {
@@ -266,15 +307,15 @@ module.exports = {
             !command[1] ? player = sys.name(sys.playerIds()[random]) : player = command[1];
             for (var i in channelPlayers) {
                 sys.sendHtmlMessage(channelPlayers[i], "<font color='#87CEEB'><timestamp/>" +
-                "<b>" + helpers.statusImage(channelPlayers[i], command[0]) + helpers.escapehtml(player) + " has been frozen by " + name +
-                "!" + helpers.statusImage(channelPlayers[i], command[0]) + "</b></font>", channel);
+                "<b>" + statusImage(channelPlayers[i], command[0]) + helpers.escapehtml(player) + " has been frozen by " + name +
+                "!" + statusImage(channelPlayers[i], command[0]) + "</b></font>", channel);
             }
         },
 
         herp: function (src, channel, command) {
             var name = sys.name(src);
             sys.sendHtmlAll(helpers.bot(bots.fun) + "<b>" + helpers.user(name) +
-            " has used the " + helpers.arg("Herp") + " command.</b><br><img src='pokemon:507&gen=5'><b>" + helpers.desu("Derpaherp!") + "</b>", channel);
+            " has used the " + helpers.arg("Herp") + " command.</b><br><img src='pokemon:507&gen=5'><b>" + desu("Derpaherp!") + "</b>", channel);
         },
 
         hug: function (src, channel, command) {
@@ -306,14 +347,14 @@ module.exports = {
         merp: function (src, channel, command) {
             var name = sys.name(src);
             sys.sendHtmlAll(helpers.bot(bots.fun) + "<b>" + helpers.user(name) +
-            " has used the " + helpers.arg("Merp") + " command.</b><br><img src='pokemon:206&gen=5'><b>" + helpers.desu("Merpaderp!") + "</b>", channel);
+            " has used the " + helpers.arg("Merp") + " command.</b><br><img src='pokemon:206&gen=5'><b>" + desu("Merpaderp!") + "</b>", channel);
         },
 
         nuke: function (src, channel, command) {
             var name = helpers.escapehtml(sys.name(src)), random = sys.rand(0, sys.numPlayers()), text, nukemessage;
             !command[1] ? player = sys.name(sys.playerIds()[random]) : player = command[1];
             text = helpers.escapehtml(player) + " has been nuked by " + name + "!";
-            nukemessage = "<font color='#800080'><timestamp/></font><b><font size='6' color='#FF0000'>☢</font>" + helpers.duoColor(text, "#800080", "#FF0000");
+            nukemessage = "<font color='#800080'><timestamp/></font><b><font size='6' color='#FF0000'>☢</font>" + duoColor(text, "#800080", "#FF0000");
             if (text.length % 2 === 0) {
                 sys.sendHtmlAll(nukemessage + "<font size='6' color='#800080'>☢</font></b>", channel);
             } else {
@@ -326,8 +367,8 @@ module.exports = {
             !command[1] ? player = sys.name(sys.playerIds()[random]) : player = command[1];
             for (var i in channelPlayers) {
                 sys.sendHtmlMessage(channelPlayers[i], "<font color='#FFA500'><timestamp/>" +
-                "<b>" + helpers.statusImage(channelPlayers[i], "paralyze") + helpers.escapehtml(player) + " has been " + command[0] + "d by " + name +
-                "!" + helpers.statusImage(channelPlayers[i], "paralyze") + "</b></font>", channel);
+                "<b>" + statusImage(channelPlayers[i], "paralyze") + helpers.escapehtml(player) + " has been " + command[0] + "d by " + name +
+                "!" + statusImage(channelPlayers[i], "paralyze") + "</b></font>", channel);
             }
         },
 
@@ -340,8 +381,8 @@ module.exports = {
             !command[1] ? player = sys.name(sys.playerIds()[random]) : player = command[1];
             for (var i in channelPlayers) {
                 sys.sendHtmlMessage(channelPlayers[i], "<font color='#800080'><timestamp/>" +
-                "<b>" + helpers.statusImage(channelPlayers[i], command[0]) + helpers.escapehtml(player) + " has been poisoned by " + name +
-                "!" + helpers.statusImage(channelPlayers[i], command[0]) + "</b></font>", channel);
+                "<b>" + statusImage(channelPlayers[i], command[0]) + helpers.escapehtml(player) + " has been poisoned by " + name +
+                "!" + statusImage(channelPlayers[i], command[0]) + "</b></font>", channel);
             }
         },
 
@@ -394,8 +435,8 @@ module.exports = {
             !command[1] ? player = sys.name(sys.playerIds()[random]) : player = command[1];
             for (var i in channelPlayers) {
                 sys.sendHtmlMessage(channelPlayers[i], "<timestamp/>" +
-                "<b>" + helpers.statusImage(channelPlayers[i], command[0]) + helpers.escapehtml(player) + " has been put to sleep by " + name +
-                "!" + helpers.statusImage(channelPlayers[i], command[0]) + "</b>", channel);
+                "<b>" + statusImage(channelPlayers[i], command[0]) + helpers.escapehtml(player) + " has been put to sleep by " + name +
+                "!" + statusImage(channelPlayers[i], command[0]) + "</b>", channel);
             }
         },
 

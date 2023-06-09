@@ -1,12 +1,95 @@
 /*
     ----------------------------------------------
     FUN COMMUNITY MOD COMMANDS modcmds.js
-     - by Maribel Hearn, 2012-2021
+     - by Maribel Hearn, 2012-2023
 
     This file contains commands that can be
     run by moderators.
     ----------------------------------------------
 */
+function timestampify(time) { // time must be a date object
+    var hours = JSON.stringify(time.getHours());
+    if (hours.length == 1) {
+        hours = "0" + hours;
+    }
+    var minutes = JSON.stringify(time.getMinutes());
+    if (minutes.length == 1) {
+        minutes = "0" + minutes;
+    }
+    var seconds = JSON.stringify(time.getSeconds());
+    if (seconds.length == 1) {
+        seconds = "0" + seconds;
+    }
+    return "(" + hours + ":" + minutes + ":" + seconds + ")";
+}
+
+function mapsUrl(city, country) {
+    return "https://www.google.com/maps?q=" + city + ", " + country;
+}
+
+function formatJusticeTime(justiceTime) { // justiceTime is in seconds
+    var str = "", days = 0, hours = 0, minutes = 0, seconds = 0;
+    if (justiceTime == '-') {
+        return "indefinite";
+    }
+    if (isNaN(justiceTime)) {
+        return justiceTime;
+    }
+    if (justiceTime === null) {
+        return "indefinite";
+    }
+    while (justiceTime >= 86400) {
+        days += 1;
+        justiceTime -= 86400;
+    }
+    if (days >= 1) {
+        str += days + " days, ";
+    }
+    while (justiceTime >= 3600) {
+        hours += 1;
+        justiceTime -= 3600;
+    }
+    if (hours >= 1) {
+        str += hours + " hours, ";
+    }
+    while (justiceTime >= 60) {
+        minutes += 1;
+        justiceTime -= 60;
+    }
+    if (minutes >= 1) {
+        str += minutes + " minutes and ";
+    }
+    while (justiceTime >= 1) {
+        seconds += 1;
+        justiceTime -= 1;
+    }
+    if (seconds >= 1) {
+        str += seconds + " seconds";
+    }
+    return str;
+}
+
+function sameIp(ip1, ip2) {
+    if (ip1 == "127.0.0.1" && helpers.ipRange(ip2) == "192.168") {
+        return true;
+    } else if (ip2 == "127.0.0.1" && helpers.ipRange(ip1) == "192.168") {
+        return true;
+    }
+    return ip1 == ip2;
+}
+
+function breakinghtml(string) {
+    if (string.split("<").length > string.split(">").length) {
+        return true;
+    } else if (helpers.removespaces(string) == "><") {
+        return true;
+    } else if (helpers.removespaces(string).indexOf("<center>") >= 0) {
+        return true;
+    } else if (helpers.removespaces(string).replace(/'|"/g, "").indexOf("dir=rtl") >= 0) {
+        return true;
+    }
+    return false;
+}
 
 module.exports = {
     modcommands: function (src, channel, command) {
@@ -26,10 +109,7 @@ module.exports = {
         + "<br><timestamp/><br>"
         + border2;
         sys.sendHtmlMessage(src, commandsmessage, channel);
-    }
-
-    ,
-
+    },
     /**
         ---------------
         Justice Options
@@ -55,9 +135,7 @@ module.exports = {
         + "<br><timestamp/><br>"
         + border2;
         sys.sendHtmlMessage(src, commandsmessage, channel);
-    }
-
-    ,
+    },
 
     forcerules: function (src, channel, command) {
         var name = sys.name(src), auth = sys.auth(src);
@@ -85,15 +163,11 @@ module.exports = {
         sys.sendHtmlMessage(trgt, rulesmessage, channel);
         sys.sendHtmlMessage(trgt, helpers.bot(bots.command) + "The server rules were forced on you by " + name + "!", channel);
         sys.sendHtmlMessage(src, helpers.bot(bots.command) + "You forced the Server Rules on " + command[1] + "!", channel);
-    }
-
-    ,
+    },
 
     frules: function (src, channel, command) {
         this.forcerules(src, channel, command);
-    }
-
-    ,
+    },
 
     forcerule: function (src, channel, command) {
         var name = sys.name(src), auth = sys.auth(src), number;
@@ -121,23 +195,17 @@ module.exports = {
         "<br>" + rules.explanations[number - 1] + "<br><br><timestamp/><br>" + border2, channel);
         sys.sendHtmlMessage(trgt, helpers.bot(bots.command) + "Rule " + number + " was forced on you by " + name + "!", channel);
         sys.sendHtmlMessage(src, helpers.bot(bots.command) + "You forced Rule " + number + " on " + command[1] + "!", channel);
-    }
-
-    ,
+    },
 
     frule: function (src, channel, command) {
         this.forcerule(src, channel, command);
-    }
-
-    ,
+    },
 
     warn: function (src, channel, command) {
         var name = sys.name(src), trgtname = command[1], reason = command[2];
         !reason ? reason = "Unknown" : reason = helpers.escapehtml(reason);
         sys.sendHtmlAll(helpers.bot(bots.warn) + "CAUTION! " + name + " warned " + trgtname + "! [Reason: " + reason + "]", channel);
-    }
-
-    ,
+    },
 
     kick: function (src, channel, command) {
         var reason = command[2], name = sys.name(src), lower = name.toLowerCase(), trgtname = command[1], trgt = sys.id(trgtname), auth = sys.auth(src), msg;
@@ -164,15 +232,11 @@ module.exports = {
             sys.sendHtmlAll(helpers.bot(bots.kick) + sys.name(trgt) + " has been kicked from the server by " + name + "! [Reason: " + reason + "]");
         }
         sys.kick(trgt);
-    }
-
-    ,
+    },
 
     k: function (src, channel, command) {
         this.kick(src, channel, command);
-    }
-
-    ,
+    },
 
     mute: function (src, channel, command, time, unit) {
         var name = helpers.escapehtml(sys.name(src)), original = players[src].name, trgtname = command[1], trgt = sys.id(trgtname), reason = command[2], auth = sys.auth(src),
@@ -266,15 +330,11 @@ module.exports = {
         } else {
             sys.sendHtmlAll(helpers.bot(bots.mute) + name + " has muted " + trgtname + (time == "forever" ? "" : " for " + time + " ") + unit + "! [Reason: " + reason + "]");
         }
-    }
-
-    ,
+    },
 
     m: function (src, channel, command) {
         this.mute(src, channel, command);
-    }
-
-    ,
+    },
 
     unmute: function (src, channel, command) {
         var name = helpers.escapehtml(sys.name(src)), srcip = sys.ip(src), trgtname = helpers.escapehtml(command[1]), lower, trgt, trgtip;
@@ -304,9 +364,7 @@ module.exports = {
             }
         }
         helpers.starfox(src, channel, command, bots.mute, "Error 400, you can't unmute " + trgtname + " because they aren't muted!");
-    }
-
-    ,
+    },
 
     mutereason: function (src, channel, command) {
         var reason = command[2];
@@ -324,9 +382,7 @@ module.exports = {
             lower = members[lower];
         }
         sys.sendHtmlAll(helpers.bot(bots.mute) + name + " has changed the mute reason of " + lower + " to '" + helpers.escapehtml(reason) + "'!", channel);
-    }
-
-    ,
+    },
 
     mutelist: function (src, channel, command) {
         var names = [], ips = [], muters = [], reasons = [], times = [], timesLeft = [], dates = [], silences = [], mutelistmessage, i;
@@ -339,8 +395,8 @@ module.exports = {
             ips.push(mutelist[i].ip);
             muters.push(mutelist[i].mutedby);
             reasons.push(mutelist[i].reason);
-            times.push(helpers.formatJusticeTime(mutelist[i].starttime));
-            timesLeft.push(helpers.formatJusticeTime(mutelist[i].time));
+            times.push(formatJusticeTime(mutelist[i].starttime));
+            timesLeft.push(formatJusticeTime(mutelist[i].time));
             dates.push(mutelist[i].date);
             silences.push(mutelist[i].silent);
         }
@@ -371,17 +427,13 @@ module.exports = {
         }
         mutelistmessage += "<br><br><b>Total Muted Players:</b> " + Object.keys(mutelist).length + "<br><br><timestamp/><br>" + border2;
         sys.sendHtmlMessage(src, mutelistmessage, channel);
-    }
-
-    ,
+    },
 
     clearmutelist: function (src, channel, command) {
         mutelist = {};
         helpers.saveData("mutelist", mutelist);
         sys.sendHtmlAll(helpers.bot(bots.mute) + "The mute list has been cleared by " + sys.name(src) + "!", channel);
-    }
-
-    ,
+    },
 
     banlist: function (src, channel, command) {
         var names = [], ips = [], banners = [], reasons = [], times = [], timesLeft = [], dates = [], banlistmessage, i;
@@ -394,8 +446,8 @@ module.exports = {
             ips.push(banlist[i].ip);
             banners.push(banlist[i].bannedby);
             reasons.push(banlist[i].reason);
-            times.push(helpers.formatJusticeTime(banlist[i].starttime));
-            timesLeft.push(helpers.formatJusticeTime(banlist[i].time));
+            times.push(formatJusticeTime(banlist[i].starttime));
+            timesLeft.push(formatJusticeTime(banlist[i].time));
             dates.push(banlist[i].date);
         }
         banlistmessage = border + "<h2>Ban List</h2><br>";
@@ -424,9 +476,7 @@ module.exports = {
         }
         banlistmessage += "<br><br><b>Total Banned Players:</b> " + Object.keys(banlist).length + "<br><br><timestamp/><br>" + border2;
         sys.sendHtmlMessage(src, banlistmessage, channel);
-    }
-
-    ,
+    },
 
     rangebanlist: function (src, channel, command) {
         var names = [], ranges = [], banners = [], reasons = [], dates = [], rangebanlistmessage, i;
@@ -465,9 +515,7 @@ module.exports = {
         }
         rangebanlistmessage += "<br><br><b>Total Range Banned Players:</b> " + Object.keys(rangebanlist).length + "<br><br><timestamp/><br>" + border2;
         sys.sendHtmlMessage(src, rangebanlistmessage, channel);
-    }
-
-    ,
+    },
 
     megabanlist: function (src, channel, command) {
         var names = [], banners = [], reasons = [], dates = [], megabanlistmessage, i;
@@ -504,9 +552,7 @@ module.exports = {
         }
         megabanlistmessage += "<br><br><b>Total Mega Banned Players:</b> " + Object.keys(megabanlist).length + "<br><br><timestamp/><br>" + border2;
         sys.sendHtmlMessage(src, megabanlistmessage, channel);
-    }
-
-    ,
+    },
 
     gigabanlist: function (src, channel, command) {
         var names = [], banners = [], reasons = [], pseudos = [], dates = [], gigabanlistmessage, i;
@@ -545,9 +591,7 @@ module.exports = {
         }
         gigabanlistmessage += "<br><br><b>Total Giga Banned Players:</b> " + Object.keys(gigabanlist).length + "<br><br><timestamp/><br>" + border2;
         sys.sendHtmlMessage(src, gigabanlistmessage, channel);
-    }
-
-    ,
+    },
 
     /**
         ----------------
@@ -566,9 +610,7 @@ module.exports = {
         + "<br><timestamp/><br>"
         + border2;
         sys.sendHtmlMessage(src, commandsmessage, channel);
-    }
-
-    ,
+    },
 
     cp: function (src, channel, command) {
         var DISPLAY_USER = true, cpmessage = border + "<h2>Control Panel</h2><br>", trgtname = command[1],
@@ -676,7 +718,7 @@ module.exports = {
         if (city == "[no data]") {
             cpmessage += "<br><b>IP:</b> " + ip;
         } else {
-            cpmessage += "<br><b>IP:</b> <a href='" + helpers.mapsUrl(city, country) + "'>" + ip + "</a>";
+            cpmessage += "<br><b>IP:</b> <a href='" + mapsUrl(city, country) + "'>" + ip + "</a>";
             location = (!helpers.isAndroid(src) ? flag + " " : "") + city + ", " + country;
         }
         cpmessage += "<br><b>Client:</b> " + os + version;
@@ -690,15 +732,11 @@ module.exports = {
         "<br><b>Channels:</b> " + playerChannels +
         "<br><br><timestamp/><br>" + border2;
         sys.sendHtmlMessage(src, cpmessage, channel);
-    }
-
-    ,
+    },
 
     whois: function (src, channel, command) {
         this.cp(src, channel, command);
-    }
-
-    ,
+    },
 
     rangealts: function (src, channel, command) {
         var altsmessage = border + "<h2>Alts for range " + command[1] + "</h2><br>", range = command[1], alts = [], db;
@@ -722,9 +760,7 @@ module.exports = {
         }
         altsmessage += alts.join(", ") + "<br><br><b>Total Alts:</b> " + alts.length + "<br><br><timestamp/><br>" + border2;
         sys.sendHtmlMessage(src, altsmessage, channel);
-    }
-
-    ,
+    },
 
     lastmessages: function (src, channel, command) {
         var message = border + "<h2>Last Messages</h2><br>";
@@ -735,7 +771,7 @@ module.exports = {
                 }
                 message += "<b><font color='" + players[i].color + "'>" + players[i].name + ":</font></b><br>";
                 for (var j in players[i].lastmessages) {
-                    message += helpers.timestampify(players[i].lastmessagetimes[j]) + " " + players[i].lastmessages[j] + "<br>";
+                    message += timestampify(players[i].lastmessagetimes[j]) + " " + players[i].lastmessages[j] + "<br>";
                 }
                 message += "<br>";
             }
@@ -748,7 +784,7 @@ module.exports = {
                 }
                 message += "<tr><td><b><font color='" + players[k].color + "'>" + players[k].name + "</font></b></td><td>";
                 for (var l in players[k].lastmessages) {
-                    message += helpers.timestampify(players[k].lastmessagetimes[l]) + " " + players[k].lastmessages[l] + "<br>";
+                    message += timestampify(players[k].lastmessagetimes[l]) + " " + players[k].lastmessages[l] + "<br>";
                 }
                 message += "</td></tr>";
             }
@@ -756,21 +792,15 @@ module.exports = {
         }
         message += "<br><br><timestamp/><br>" + border2;
         sys.sendHtmlMessage(src, message, channel);
-    }
-
-    ,
+    },
 
     lastmsgs: function (src, channel, command) {
         this.lastmessages(src, channel, command);
-    }
-
-    ,
+    },
 
     lastposts: function (src, channel, command) {
         this.lastmessages(src, channel, command);
-    }
-
-    ,
+    },
 
     regchannels: function (src, channel, command) {
         var message = border + "<h2>Registered Channels</h2><br>";
@@ -796,15 +826,11 @@ module.exports = {
         }
         message += "<br><br><b>Total Registered Channels:</b> " + Object.keys(regchannels).length + "<br><br><timestamp/><br>" + border2;
         sys.sendHtmlMessage(src, message, channel);
-    }
-
-    ,
+    },
 
     regchannelinfo: function (src, channel, command) {
         this.regchannels(src, channel, command);
-    }
-
-    ,
+    },
 
     commandlist: function (src, channel, command) {
         var scriptmessage = border + "<h2>List of Commands</h2><br>", length, totallength;
@@ -843,16 +869,11 @@ module.exports = {
         scriptmessage += "<br><b>Total Helpers:</b> " + Object.keys(helpers).length + "<br>" +
         "<b><u>Total Commands:</u></b> " + allcommands.length + "<br><br><timestamp/><br>" + border2;
         sys.sendHtmlMessage(src, scriptmessage, channel);
-    }
-
-    ,
+    },
 
     allcommands: function (src, channel, command) {
         this.commandlist(src, channel, command);
-    }
-
-    ,
-
+    },
     /**
         ------------
         Name Options
@@ -869,9 +890,7 @@ module.exports = {
         + "<br><timestamp/><br>"
         + border2;
         sys.sendHtmlMessage(src, commandsmessage, channel);
-    }
-
-    ,
+    },
 
     changename: function (src, channel, command) {
         var name = sys.name(src), auth = sys.auth(src);
@@ -895,9 +914,7 @@ module.exports = {
         sys.changeName(trgt, command[2]);
         sys.sendHtmlAll(helpers.bot(bots.name) + "<b>" + helpers.user(name) +
         " changed " + helpers.arg(command[1]) + "'s name to " + helpers.arg2(command[2]) + "!</b>", channel);
-    }
-
-    ,
+    },
 
     ify: function (src, channel, command) {
         var name = sys.name(src), auth = sys.auth(src), playerids = sys.playerIds(), n = 0, option = command[1], text, self;
@@ -931,9 +948,7 @@ module.exports = {
             }
         }
         sys.sendHtmlAll(helpers.bot(bots.name) + "<b>" + helpers.user(name) + " has " + helpers.arg2(text) + "-ified the server!</b>", channel);
-    }
-
-    ,
+    },
 
     resetall: function (src, channel, command) {
         var name = sys.name(src), auth = sys.auth(src);
@@ -942,9 +957,7 @@ module.exports = {
             sys.changeColor(src, players[src].color);
         }
         sys.sendHtmlAll(helpers.bot(bots.name) + "<b>" + helpers.user(name) + " has set everyone's name back to its original state.</b>", channel);
-    }
-
-    ,
+    },
 
     /**
         -------------
@@ -962,9 +975,7 @@ module.exports = {
         + "<br><timestamp/><br>"
         + border2;
         sys.sendHtmlMessage(src, commandsmessage, channel);
-    }
-
-    ,
+    },
 
     servertopic: function (src, channel, command) {
         var name = sys.name(src);
@@ -975,9 +986,7 @@ module.exports = {
         servertopic = command[1];
         helpers.saveData("servertopic", servertopic);
         sys.sendHtmlAll(helpers.bot(bots.topic) + "<b>" + helpers.user(name) + " changed the server topic to " + helpers.arg(command[1]) + ".</b>");
-    }
-
-    ,
+    },
 
     clear: function (src, channel, command) {
         var name = sys.name(src);
@@ -988,21 +997,15 @@ module.exports = {
         clearmessage += "<font color='white'>:</font><div>";
         clearmessage += helpers.bot(bots.clear) + "Kyuu~ chat explod.";
         sys.sendHtmlAll(clearmessage, channel);
-    }
-
-    ,
+    },
 
     clearchat: function (src, channel, command) {
         this.clear(src, channel, command);
-    }
-
-    ,
+    },
 
     chatclear: function (src, channel, command) {
         this.clear(src, channel, command);
-    }
-
-    ,
+    },
 
     fullclear: function (src, channel, command) {
         var name = sys.name(src);
@@ -1022,9 +1025,7 @@ module.exports = {
         sys.sendHtmlAll(helpers.bot(bots.clear) + "Kyuu~ chat explod.", channel);
         sys.sendHtmlAll(helpers.bot(bots.clear) + "The full clear runtime was " + runtime + ".", channel);
         sys.clearChat();
-    }
-
-    ,
+    },
 
     html: function (src, channel, command) {
         var name = sys.name(src), auth = sys.auth(src), color = helpers.color(src);
@@ -1043,9 +1044,7 @@ module.exports = {
         } else {
             sys.sendHtmlAll("<font color='" + color + "'><timestamp/>+<b><i>" + helpers.escapehtml(sys.name(src)) + ":</i></b></font> " + command, channel);
         }
-    }
-
-    ,
+    },
     /**
         ------------
         Alt Settings
@@ -1099,9 +1098,7 @@ module.exports = {
         + "If <b>alt</b> is not specified, changes your current alt's title. <b>alt</b> must have the same IP.<br>"
         + "<br><timestamp/><br>" + border2;
         sys.sendHtmlMessage(src, commandsmessage, channel);
-    }
-
-    ,
+    },
 
     alts: function (src, channel, command) {
         var isIp = false, player, ip, alts, altsmessage;
@@ -1127,9 +1124,7 @@ module.exports = {
         altsmessage = border + "<h2>" + (isIp ? "Alts for IP " + ip : player + "'s alts") + "</h2><br>" + alts.join(", ")
         + "<br><br><b>Total Alts:</b> " + alts.length + "<br><br><timestamp/><br>" + border2;
         sys.sendHtmlMessage(src, altsmessage, channel);
-    }
-
-    ,
+    },
 
     passauth: function (src, channel, command) {
         var name = helpers.escapehtml(sys.name(src)), lower = sys.name(src).toLowerCase(), auth = sys.auth(src), ip = sys.ip(src), player, id;
@@ -1168,9 +1163,7 @@ module.exports = {
             player = members[player];
         }
         sys.sendHtmlAll(helpers.bot(bots.auth) + "<b>" + helpers.user(name) + " passed their auth to " + helpers.arg(helpers.escapehtml(player)) + "!</b>", channel);
-    }
-
-    ,
+    },
 
     "delete": function (src, channel, command) {
         var name = helpers.escapehtml(sys.name(src)), auth = sys.auth(src), ip = sys.ip(src), player, id;
@@ -1189,9 +1182,7 @@ module.exports = {
         }
         sys.dbDelete(player);
         sys.sendHtmlMessage(src, helpers.bot(bots.command) + "Your alt " + player + " has been deleted from the database.", channel);
-    }
-
-    ,
+    },
 
     title: function (src, channel, command) {
         var name = sys.name(src), auth = sys.auth(src), ip = sys.ip(src), player;
@@ -1210,7 +1201,7 @@ module.exports = {
             sys.sendHtmlAll(helpers.bot(bots.command) + "<b>" + helpers.user(sys.name(src)) + " changed their auth title to " + helpers.arg(command[1]) + ".</b>", channel);
         } else {
             player = command[1].toLowerCase();
-            if (!helpers.sameIp(ip, sys.dbIp(player))) {
+            if (!sameIp(ip, sys.dbIp(player))) {
                 helpers.starfox(src, channel, command, bots.command, "Error 403, you may not change " + player + "'s title because they must have the same IP.");
                 return;
             }
@@ -1225,9 +1216,7 @@ module.exports = {
             }
             sys.sendHtmlAll(helpers.bot(bots.command) + "<b>" + helpers.user(sys.name(src)) + " changed " + helpers.arg(player) + "'s auth title to " + helpers.arg2(command[2]) + ".</b>", channel);
         }
-    }
-
-    ,
+    },
 
     /**
         ----------------
@@ -1260,9 +1249,7 @@ module.exports = {
         + "Use <b>" + helpers.user("/removecommand ") + helpers.arg("name") + "</b>: to remove a custom bigtext.<br>"
         + "<br><timestamp/><br>" + border2;
         sys.sendHtmlMessage(src, commandsmessage, channel);
-    }
-
-    ,
+    },
 
     addcommand: function (src, channel, command) {
         var name = sys.name(src), title, text, bot, color, size, lower;
@@ -1294,9 +1281,7 @@ module.exports = {
         }
         sys.sendHtmlAll(helpers.bot(bots.command) + name + " has added a custom bigtext command called '" + title + "'!", channel);
         funcommands.addBigtext(helpers.removespaces(lower), text, title, bot, color, size);
-    }
-
-    ,
+    },
 
     removecommand: function (src, channel, command) {
         var name = sys.name(src), lower;
@@ -1312,9 +1297,7 @@ module.exports = {
         }
         sys.sendHtmlAll(helpers.bot(bots.command) + name + " has removed the custom bigtext command '" + bigtexts[lower][2] + "'!", channel);
         funcommands.removeBigtext(lower);
-    }
-
-    ,
+    },
 
     /**
         ----------------
@@ -1357,9 +1340,7 @@ module.exports = {
         commandsmessage += "Use <b>" + helpers.user("/resetmsgs") + "</b> to reset your messages to their defaults.<br>"
         + "<br><timestamp/><br>" + border2;
         sys.sendHtmlMessage(src, commandsmessage, channel);
-    }
-
-    ,
+    },
 
     selfkickmsg: function (src, channel, command) {
         var message = command[1], lower = sys.name(src).toLowerCase(), msg;
@@ -1371,9 +1352,7 @@ module.exports = {
         selfkickmessages[lower] = message;
         helpers.saveData("selfkickmessages", selfkickmessages);
         sys.sendHtmlMessage(src, helpers.bot(bots.kick) + "Your self kick message has been changed successfully.", channel);
-    }
-
-    ,
+    },
 
     kickmsg: function (src, channel, command) {
         var message = command[1], lower = sys.name(src).toLowerCase(), msg;
@@ -1385,9 +1364,7 @@ module.exports = {
         kickmessages[lower] = message;
         helpers.saveData("kickmessages", kickmessages);
         sys.sendHtmlMessage(src, helpers.bot(bots.kick) + "Your kick message has been changed successfully.", channel);
-    }
-
-    ,
+    },
 
     mutemsg: function (src, channel, command) {
         var message = command[1], lower = sys.name(src).toLowerCase(), msg;
@@ -1399,9 +1376,7 @@ module.exports = {
         mutemessages[lower] = message;
         helpers.saveData("mutemessages", mutemessages);
         sys.sendHtmlMessage(src, helpers.bot(bots.mute) + "Your mute message has been changed successfully.", channel);
-    }
-
-    ,
+    },
 
     resetmsg: function (src, channel, command) {
         var message = command[1], lower = sys.name(src).toLowerCase();
@@ -1429,9 +1404,7 @@ module.exports = {
             return;
         }
         sys.sendHtmlMessage(src, helpers.bot(bots.main) + "Your " + message + " message has been reset.", channel);
-    }
-
-    ,
+    },
 
     resetmsgs: function (src, channel, command) {
         var lower = sys.name(src).toLowerCase();
@@ -1446,9 +1419,7 @@ module.exports = {
         helpers.saveData("banmessages", banmessages);
         helpers.saveData("rangebanmessages", rangebanmessages);
         sys.sendHtmlMessage(src, helpers.bot(bots.main) + "Your messages have been reset.", channel);
-    }
-
-    ,
+    },
 
     /**
         ---------------
@@ -1474,9 +1445,7 @@ module.exports = {
         + "<br><timestamp/><br>"
         + border2;
         sys.sendHtmlMessage(src, commandsmessage, channel);
-    }
-
-    ,
+    },
 
     filter: function (src, channel, command) {
         var word;
@@ -1488,15 +1457,11 @@ module.exports = {
         nameblocklist.push(word);
         helpers.saveData("nameblocklist", nameblocklist);
         sys.sendHtmlAuths(helpers.bot(bots.command) + "The word '" + word + "' has been added to the filter list.");
-    }
-
-    ,
+    },
 
     block: function (src, channel, command) {
         this.filter(src, channel, command);
-    }
-
-    ,
+    },
 
     unfilter: function (src, channel, command) {
         var word;
@@ -1512,15 +1477,11 @@ module.exports = {
         nameblocklist.splice(nameblocklist.indexOf(word), 1);
         helpers.saveData("nameblocklist", nameblocklist);
         sys.sendHtmlAuths(helpers.bot(bots.command) + "The word '" + word + "' has been removed from the filter list.");
-    }
-
-    ,
+    },
 
     unblock: function (src, channel, command) {
         this.unfilter(src, channel, command);
-    }
-
-    ,
+    },
 
     addexception: function (src, channel, command) {
         var name;
@@ -1532,9 +1493,7 @@ module.exports = {
         exceptions.push(name);
         helpers.saveData("exceptions", exceptions);
         sys.sendHtmlAuths(helpers.bot(bots.command) + "The name '" + name + "' will now bypass filtering.");
-    }
-
-    ,
+    },
 
     removeexception: function (src, channel, command) {
         var name;
@@ -1546,9 +1505,7 @@ module.exports = {
         exceptions.splice(exceptions.indexOf(name), 1);
         helpers.saveData("exceptions", exceptions);
         sys.sendHtmlAuths(helpers.bot(bots.command) + "The name '" + name + "' will no longer bypass filtering.");
-    }
-
-    ,
+    },
 
     exception: function (src, channel, command) {
         this.addexception(src, channel, command);

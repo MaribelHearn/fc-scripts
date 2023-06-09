@@ -1,12 +1,16 @@
 /*
     ----------------------------------------------
     FUN COMMUNITY CUSER COMMANDS cusercmds.js
-     - by Maribel Hearn, 2012-2021
+     - by Maribel Hearn, 2012-2023
 
     This file contains commands that can be
     run by channel users.
     ----------------------------------------------
 */
+function cauthSort(channel) {
+    var lower = sys.channel(channel).toLowerCase();
+    return regchannels[lower].owners.sort().concat(regchannels[lower].admins.sort()).concat(regchannels[lower].mods.sort());
+}
 
 module.exports = {
     cusercommands: function (src, channel, command) {
@@ -25,9 +29,7 @@ module.exports = {
         + "<br><timestamp/><br>"
         + border2;
         sys.sendHtmlMessage(src, commandsmessage, channel);
-    }
-
-    ,
+    },
 
     registerthis: function (src, channel, command) {
         var name = sys.name(src), lower = sys.channel(channel).toLowerCase();
@@ -58,15 +60,11 @@ module.exports = {
         helpers.saveData("regchannels", regchannels);
         sys.sendHtmlAll(helpers.bot(bots.channel) + "The channel has been registered by " + name + "!", channel);
         sys.sendHtmlAll(helpers.bot(bots.channel) + "<b>" + helpers.arg(name) + " has been made Channel Owner by " + helpers.user("~~Server~~") + "!</b>", channel);
-    }
-
-    ,
+    },
 
     register: function (src, channel, command) {
         this.registerthis(src, channel, command);
-    }
-
-    ,
+    },
 
     channelinfo: function (src, channel, command) {
         var lower = sys.channel(channel).toLowerCase(), reg = false, stay = false, priv = false, close = 0, silence = 0, caps = false, flood = false;
@@ -128,15 +126,11 @@ module.exports = {
         "<br><b>Topic:</b> " + topic.join(TOPIC_DELIMITER) +
         "<br><br><timestamp/><br>" + border2;
         sys.sendHtmlMessage(src, channelmessage, channel);
-    }
-
-    ,
+    },
 
     cinfo: function (src, channel, command) {
         this.channelinfo(src, channel, command);
-    }
-
-    ,
+    },
 
     channelonline: function (src, channel, command) {
         var DISPLAY_USER = true, HIDE_INVIS = true, onlinemessage = border + "<h2>Players Online on " + sys.channel(channel) + "</h2><br>", srcauth = sys.auth(src), lower, i;
@@ -195,15 +189,11 @@ module.exports = {
         }
         onlinemessage += "<br><br><timestamp/><br>" + border2;
         sys.sendHtmlMessage(src, onlinemessage, channel);
-    }
-
-    ,
+    },
 
     conline: function (src, channel, command) {
         this.channelonline(src, channel, command);
-    }
-
-    ,
+    },
 
     channelauth: function (src, channel, command) {
         var authmessage = border + "<h2>Channel Authority of " + sys.channel(channel) + "</h2><br>", srcauth = sys.auth(src), index = 0, authList, i;
@@ -247,27 +237,19 @@ module.exports = {
         }
         authmessage += "<br><br><timestamp/><br>" + border2;
         sys.sendHtmlMessage(src, authmessage, channel);
-    }
-
-    ,
+    },
 
     channelauths: function (src, channel, command) {
         this.channelauth(src, channel, command);
-    }
-
-    ,
+    },
 
     cauth: function (src, channel, command) {
         this.channelauth(src, channel, command);
-    }
-
-    ,
+    },
 
     cauths: function (src, channel, command) {
         this.channelauth(src, channel, command);
-    }
-
-    ,
+    },
 
     channelrules: function (src, channel, command) {
         var rulesmessage = border + "<h2>" + sys.channel(channel) + "'s Rules</h2><br>", lower = sys.channel(channel).toLowerCase();
@@ -291,15 +273,11 @@ module.exports = {
             helpers.starfox(src, channel, command, bots.channel, "Error 400, this channel isn't registered!");
             return;
         }
-    }
-
-    ,
+    },
 
     crules: function (src, channel, command) {
         this.channelrules(src, channel, command);
-    }
-
-    ,
+    },
 
     channeljoin: function (src, channel, command) {
         if (!command[1]) {
@@ -317,15 +295,11 @@ module.exports = {
         } else {
             sys.putInChannel(src, newchannel);
         }
-    }
-
-    ,
+    },
 
     cjoin: function (src, channel, command) {
         this.channeljoin(src, channel, command);
-    }
-
-    ,
+    },
 
     channelleave: function (src, channel, command) {
         var oldchannel = channel, id;
@@ -347,15 +321,11 @@ module.exports = {
         } else {
             sys.kick(src, oldchannel);
         }
-    }
-
-    ,
+    },
 
     cleave: function (src, channel, command) {
         this.channelleave(src, channel, command);
-    }
-
-    ,
+    },
 
     leaveall: function (src, channel, command) {
         var channels = sys.channelsOfPlayer(src);

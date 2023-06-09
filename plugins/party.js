@@ -14,6 +14,25 @@ var PARTY_MODES = ["joke", "nightclub", "desu", "rainbow", "nyan", "dennis", "ci
 var partyMode = sys.fexists(DATA_FOLDER + "partymode.txt") ? helpers.readData("partyMode") : "none";
 var partyNyan = 0;
 
+function nyanColor(number) {
+    switch (number) {
+        case 1:
+            return "#FF4500";
+        case 2:
+            return "#FFD700";
+        case 3:
+            return "#008000";
+        case 4:
+            return "#0000FF";
+        case 5:
+            return "#00008B";
+        case 6:
+            return "#800080";
+        default:
+            return "#FF0000";
+    }
+}
+
 module.exports = {
     getPartyMode: function () {
         return partyMode;
@@ -62,7 +81,7 @@ module.exports = {
             for (i = 1; i < length; i++) {
                 message += " Nyan";
             }
-            sys.sendHtmlAll("<font color='#FFFFFF'>:</font><div style='background:" + helpers.nyancolor(partyNyan) + "'><center><span style='font-size: 16px;'>" + message + "</span></center>", channel);
+            sys.sendHtmlAll("<font color='#FFFFFF'>:</font><div style='background:" + nyanColor(partyNyan) + "'><center><span style='font-size: 16px;'>" + message + "</span></center>", channel);
             partyNyan = (partyNyan + 1) % 7;
             return;
         } else if (mode == "dennis") {
@@ -126,7 +145,7 @@ module.exports = {
                 message += (sys.rand(0, 2) === 0 ? "BAKA" : " &#x2788;");
             }
         } else if (mode == "reverse") {
-            message = helpers.reverse(helpers.escapehtml(message));
+            message = helpers.escapehtml(message).split("").reverse().join("");
         }
         if (auth > 0 && auth < 4) {
             message = "<font color='" + color + "'><timestamp/> +<b><i>" + name + ":</i></b></font> " + message;
