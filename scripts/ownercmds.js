@@ -1055,7 +1055,7 @@ module.exports = {
                 sys.system("kill $(pidof RelayStation)");
             }
             sys.setTimer(function () {
-                sys.system("./restart.sh");
+                sys.system("bash restart.sh");
             }, 200, 0);
         }
         sys.sendHtmlAll(helpers.bot(bots.priv) + "<b>" + helpers.user(name) + " has restarted the server!</b>");
