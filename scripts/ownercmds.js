@@ -705,7 +705,7 @@ module.exports = {
         command = COMMAND_SYMBOL + command;
         starttime = new Date();
         try {
-            parseCommand(src, command, channel, name, auth, true);
+            handler.parseCommand(src, command, channel, name, auth, true);
         } catch (e) {
             sys.sendHtmlOwner(helpers.bot(bots.command) + "An error occurred while executing /time " + command + ": " + e);
         }

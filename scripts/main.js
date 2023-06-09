@@ -1477,7 +1477,7 @@ function initVars() {
         **/
         if (message.charAt(0) == COMMAND_SYMBOL && message.charAt(1) != COMMAND_SYMBOL && message.length > 1) {
             sys.stopEvent();
-            parseCommand(src, message, channel, name, auth, false);
+            handler.parseCommand(src, message, channel, name, auth, false);
             return;
         }
         /**

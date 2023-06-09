@@ -1528,7 +1528,7 @@ module.exports = {
             if (command[1][0] == COMMAND_SYMBOL && command[1].length > 1) {
                 message = "<timestamp/><b><small> -" + name + ", sent " + time + " " + unit + " ago</small></b>";
                 try {
-                    parseCommand(src, command[1], channel, name, auth, false);
+                    handler.parseCommand(src, command[1], channel, name, auth, false);
                 } catch (e) {
                     sys.sendHtmlOwner(helpers.bot(bots.command) + "An error occurred while executing /future " + command[1] + ": " + e);
                 }
