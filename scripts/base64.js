@@ -838,7 +838,7 @@ STATUS = {
     "wX1bU24bCbpYrr+mPh0WKp/XkqXXy9syU2MtBNfNBFvfSVaPWqZtln4hm+1MPHlHcU5fJnYXkc8Ivntelhs5BJ7vFjbI/XmoZ3ENweJ548Sv" +
     "32XHI9v2+fh31VcayFe6yXe9hH3nfjX+pjyP2dZeHH2ewBeb5gH3tteOgAAAABJRU5ErkJggg=='>"
 };
-if (helpers.isInArray("data", sys.dirsForDirectory(sys.cwd())) && sys.fexists(DATA_FOLDER + "API_KEY.txt") && sys.read(DATA_FOLDER + "API_KEY.txt") !== "") {
+if (sys.dirsForDirectory(sys.cwd()).indexOf("data") != -1 && sys.fexists(DATA_FOLDER + "API_KEY.txt") && sys.read(DATA_FOLDER + "API_KEY.txt") !== "") {
     FLAGS = {
         NETHERLANDS: "<img src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAABh0lEQVR42q1TO0sD" +
         "QRCeubvkimACPnOJIFmi+DrjA62sbewEf4Q/wU5LK8HK2sZH0hj1tLAQQRQfTQhIIhtElEQbKws9d9e9JErIyxgc2GVg5/v2+3ZmESoDoX6Ii" +

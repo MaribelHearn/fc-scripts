@@ -9,7 +9,6 @@
     ----------------------------------------------
     - auto-remove expired channel auth
     - add server silence?
-    - allcommands alts?
     - allow (un)blocking cyrillic, arabic etc.
     if I want to bother:
     - full auth name customisation
@@ -33,23 +32,24 @@ function initServerGlobals() {
     rules = helpers.readData("rules");
     banlist = helpers.readData("banlist");
     mutelist = helpers.readData("mutelist");
-    timezone = helpers.readData("timezone");
-    cityname = helpers.readData("cityname");
     versions = helpers.readData("versions");
     members = helpers.readData("members");
     operatingsystem = helpers.readData("operatingsystem");
     regchannels = helpers.readData("regchannels");
     megabanlist = helpers.readData("megabanlist");
     gigabanlist = helpers.readData("gigabanlist");
-    countryname = helpers.readData("countryname");
     rangebanlist = helpers.readData("rangebanlist");
+    if (API_KEY !== "") {
+        countryname = helpers.readData("countryname");
+        cityname = helpers.readData("cityname");
+        timezone = helpers.readData("timezone");
+    }
 }
 
 function initVars() {
     stopbattles = false;
     megabancheck = false;
     gigabancheck = false;
-    serverStarting = false;
     timer = 0;
     currentSpoiler = 0;
     layout = "new";
@@ -62,24 +62,6 @@ function initVars() {
     spoilers = [];
     tour = {};
     battles = {};
-    heightList = {};
-    weightList = {};
-    movepoolList = {};
-    powerList = {};
-    categoryList = {};
-    accList = {};
-    ppList = {};
-    moveEffList = {};
-    moveFlagList = {};
-    movePriorityList = {};
-    moveRangeList = {};
-    abilityList = {};
-    pokemonWithAbilityList = {};
-    itemList = {};
-    berryList = {};
-    flingPowerList = {};
-    berryPowerList = {};
-    berryTypeList = {};
 }
 
 (load = function () {
@@ -93,7 +75,6 @@ function initVars() {
     COMMAND_SYMBOL = '/';
     TOPIC_DELIMITER = " || ";
     IP_RETRIEVAL_URL = "http://whatismyip.akamai.com";
-    AUTO_UPDATE_URL = "https://api.github.com/repos/MaribelHearn/fc-scripts/commits";
     DAYS = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
     MONTHS = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
     REACTIVATE_REGISTER_BUTTON = 14;
@@ -103,20 +84,6 @@ function initVars() {
     ARABIC = /[\u0600-\u06FF]/;
     SPECIAL = /[\ufff0-\uffff]/;
     AUTH_NAMES = ["User", "Moderator", "Administrator", "Owner", "Invisible Owner"];
-    SCRIPT_MODULES = {
-        usercommands: "usercmds.js",
-        modcommands: "modcmds.js",
-        admincommands: "admincmds.js",
-        ownercommands: "ownercmds.js",
-        cusercommands: "cusercmds.js",
-        cmodcommands: "cmodcmds.js",
-        cadmincommands: "cadmincmds.js",
-        cownercommands: "cownercmds.js",
-        helpers: "helpers.js",
-        handler: "handler.js",
-        tierchecks: "tierchecks.js",
-        base64: "base64.js"
-    };
     OFFICIAL_PLUGINS = {
         funcommands: {
             name: "Fun Commands",
@@ -151,8 +118,6 @@ function initVars() {
             path: "mafiachecker.js"
         }
     };
-    SCRIPTS_FOLDER = "scripts/";
-    PLUGINS_FOLDER = "plugins/";
     DATA_FOLDER = "data/";
     /**
         ----------------
@@ -160,17 +125,17 @@ function initVars() {
         ----------------
     **/
     var require_cache = typeof require != "undefined" ? require.cache : {};
-    require = function require(moduleName, retry, plugin) {
-        var directory = plugin ? "plugins/" : "scripts/";
-        if (require.cache[moduleName]) {
-            return require.cache[moduleName];
+    require = function require(path, retry) {
+        if (require.cache[path]) {
+            return require.cache[path];
         }
+
         var module = {};
         module.module = module;
         module.exports = {};
-        module.source = moduleName;
+        module.source = path;
+
         with (module) {
-            var path = directory + moduleName;
             var backup = path + ".bak";
             var content = sys.read(path);
             if (content) {
@@ -178,10 +143,10 @@ function initVars() {
                     eval(sys.read(path));
                     sys.writeToFile(backup, sys.read(path));
                 } catch (e) {
-                    print("An error occurred in module " + moduleName + ": " + e);
+                    print("An error occurred in module " + path + ": " + e);
                     sys.writeToFile(path, sys.read(backup));
                     if (!retry) {
-                        require(moduleName, true); // prevent loops
+                        require(path, true); // prevent loops
                     }
                 } finally {
                     if (sys.fexists(backup)) {
@@ -190,7 +155,8 @@ function initVars() {
                 }
             }
         }
-        require.cache[moduleName] = module.exports;
+
+        require.cache[path] = module.exports;
         return module.exports;
     };
     require.cache = require_cache;
@@ -229,50 +195,6 @@ function initVars() {
         }
     });
     /**
-        ------------------------
-        Load Modules and Plugins
-        ------------------------
-    **/
-    for (var module in SCRIPT_MODULES) {
-        global[module] = require(SCRIPT_MODULES[module]);
-    }
-    plugins = sys.filesForDirectory(PLUGINS_FOLDER);
-    channelPlugins = [];
-    unofficialPlugins = false;
-    for (var plugin in OFFICIAL_PLUGINS) {
-        var path = OFFICIAL_PLUGINS[plugin].path;
-        if (sys.fexists("plugins/" + path)) {
-            global[plugin] = require(path, false, true); // retry = false, plugin = true
-            if (!["funcmds.js", "mafiastats.js", "mafiachecker.js"].contains(path)) {
-                channelPlugins.push(path.replace(".js", ""));
-            }
-        }
-    }
-    // unofficial plugins
-    if (sys.dirsForDirectory(sys.cwd()).contains("plugins")) {
-        var numberOfPlugins = plugins.length;
-        for (var i = 0; i < numberOfPlugins; i++) {
-            if (!require.cache.hasOwnProperty(plugins[i]) && plugins[i].split('.')[1] == "js") {
-                require(plugins[i], false, true);
-                unofficialPlugins = true;
-            }
-        }
-    }
-    /**
-        ------------------------------------------------
-        Initialize data for first time use, set API keys
-        ------------------------------------------------
-    **/
-    if (!sys.fexists("data/")) {
-        if (sys.fexists("data")) {
-            sys.rm("data");
-        }
-        helpers.initData();
-    }
-    API_KEY = JSON.parse(sys.read(DATA_FOLDER + "API_KEY.txt"));
-    GOOGLE_KEY = JSON.parse(sys.read(DATA_FOLDER + "GOOGLE_KEY.txt"));
-    UPDATE_KEY = JSON.parse(sys.read(DATA_FOLDER + "UPDATE_KEY.txt"));
-    /**
         ----------------------
         Additional Sys Methods
         ----------------------
@@ -303,6 +225,9 @@ function initVars() {
         }
     };
     sys.sendHtmlWatch = function (message) {
+        if (message.contains("<img src='data:image/png;base64,")) {
+            message = message.replace(/<img src='data:image\/png;base64,(.*?)>/g, "");
+        }
         sys.sendHtmlAll(message, watch);
     };
     sys.sendHtmlOwner = function (message) {
@@ -310,26 +235,6 @@ function initVars() {
             if (sys.auth(index) >= 3) {
                 sys.sendHtmlMessage(index, message);
             }
-        }
-    };
-    sys.printStackTrace = function (message) {
-        try {
-            var table = "<style>table {border-width: 1px; border-style: solid; border-color: #000000;}</style>" +
-            "<table cellpadding='2' cellspacing='0'><tr style='background-color: #B0B0B0;'><th>File</th><th>At line</th><th>Variables</th></tr>";
-            var stackTrace = message.split("<global>")[0].replace(/at scripts/g, "<br>at scripts").split("<br>");
-            var errorMessage = stackTrace[0], tmp, file, line, vars;
-            stackTrace.splice(0, 1);
-            for (var i in stackTrace) {
-                tmp = stackTrace[i].replace("at ", "").split(':');
-                file = tmp[0].replace("scripts/", "");
-                tmp = tmp[1].split("<anonymous>");
-                line = tmp[0].replace('\n', "");
-                tmp[1] === undefined ? vars = "" : vars = tmp[1].replace('(', "").replace(')', "");
-                table += "<tr><td>" + file + "</td><td>" + line + "</td><td>" + vars + "</td></tr>";
-            }
-            sys.sendHtmlOwner(helpers.bot(bots.script) + helpers.escapehtml(errorMessage) + "<br>" + table + "</table>");
-        } catch (e) {
-            sys.sendHtmlOwner(helpers.bot(bots.script) + "An error occurred while trying to print the stack trace for another error (lol): " + e);
         }
     };
     sys.isMegaBanned = function (cookie) {
@@ -343,25 +248,47 @@ function initVars() {
         }
         return false;
     };
-    /**
-        ----------------
-        Global Variables
-        ----------------
-    **/
-    helpers.initCustomGlobals();
-    initServerGlobals();
-    initVars();
-    bansites = sys.read("bansites.txt").replace(/\r/g, "").split('\n');
-    bansites.splice(bansites.indexOf(""), 1);
-    bansites.splice(bansites.lastIndexOf(""), 1);
-    tour[0] = {};
-    tour[0].tourmode = 0;
-    allcommands = helpers.allCommands();
 }).call(null);
 
 ({
-
     loadScript: function () {
+        /**
+            ------------------------
+            Load Modules and Plugins
+            ------------------------
+        **/
+        require.cache = {};
+        var modules = sys.filesForDirectory("scripts");
+        var numberOfModules = modules.length;
+        for (var i = 0; i < numberOfModules; i++) {
+            if (modules[i] == "helpers.js") {
+                helpers = require("scripts/" + modules[i]);
+            } else {
+                require("scripts/" + modules[i]);
+            }
+        }
+        plugins = sys.filesForDirectory("plugins");
+        channelPlugins = [];
+        unofficialPlugins = false;
+        for (var plugin in OFFICIAL_PLUGINS) {
+            var path = OFFICIAL_PLUGINS[plugin].path;
+            if (sys.fexists("plugins/" + path)) {
+                require("plugins/" + path); // retry = false, plugin = true
+                if (!["funcmds.js", "mafiastats.js", "mafiachecker.js"].contains(path)) {
+                    channelPlugins.push(path.replace(".js", ""));
+                }
+            }
+        }
+        // unofficial plugins
+        if (sys.dirsForDirectory(sys.cwd()).contains("plugins")) {
+            var numberOfPlugins = plugins.length;
+            for (var j = 0; j < numberOfPlugins; j++) {
+                if (!require.cache.hasOwnProperty("plugins/" + plugins[j]) && plugins[j].split('.')[1] == "js") {
+                    require("plugins/" + plugins[j]);
+                    unofficialPlugins = true;
+                }
+            }
+        }
     },
 
     unloadScript: function () {
@@ -373,9 +300,6 @@ function initVars() {
     },
 
     warning: function (warning) {
-        if (!serverStarting) {
-            sys.printStackTrace(warning);
-        }
     },
 
     battleConnectionLost: function () {
@@ -390,6 +314,33 @@ function initVars() {
         } else if (sys.fexists("RelayStation") && sys.os() != "windows") {
             sys.system("(./RelayStation &)");
         }
+        /**
+            ------------------------------------------------
+            Initialize data for first time use, set API keys
+            ------------------------------------------------
+        **/
+        if (!sys.fexists("data/")) {
+            if (sys.fexists("data")) {
+                sys.rm("data");
+            }
+            helpers.initData();
+        }
+        API_KEY = JSON.parse(sys.read(DATA_FOLDER + "API_KEY.txt"));
+        GOOGLE_KEY = JSON.parse(sys.read(DATA_FOLDER + "GOOGLE_KEY.txt"));
+        UPDATE_KEY = JSON.parse(sys.read(DATA_FOLDER + "UPDATE_KEY.txt"));
+        /**
+            ----------------
+            Global Variables
+            ----------------
+        **/
+        helpers.initCustomGlobals();
+        initServerGlobals();
+        initVars();
+        bansites = sys.read("bansites.txt").replace(/\r/g, "").split('\n');
+        bansites.splice(bansites.indexOf(""), 1);
+        bansites.splice(bansites.lastIndexOf(""), 1);
+        tour[0] = {};
+        tour[0].tourmode = 0;
         /**
             ----------------
             Channel Creation
@@ -501,6 +452,37 @@ function initVars() {
         }
     },
 
+    // updates the scripts from the github repo
+    updateScript: function (auto, silent) {
+        if (!sys.fexists(".git")) {
+            sys.sendHtmlOwner(helpers.bot(bots.script) + "The git clone seems to have been deleted; the scripts will not be automatically updated.");
+            return;
+        }
+        var resp = sys.synchronousWebCall("https://api.github.com/repos/MaribelHearn/fc-scripts/commits" + UPDATE_KEY);
+        var json = JSON.parse(resp);
+        var i = 0;
+        var commitmessage = json[i].commit.message;
+        var author = json[i].committer.login;
+        var sha = json[i].sha;
+        if (commitmessage == "Merge branch 'master' of https://github.com:MaribelHearn/fc-scripts into master" || commitmessage == "Merge git://github.com/MaribelHearn/fc-scripts") {
+            i = i + 1;
+            commitmessage = json[i].commit.message;
+            author = json[i].committer.login;
+            sha = json[i].sha;
+        }
+        if (sha == latestShaHash) {
+            sys.sendHtmlOwner(helpers.bot(bots.script) + "An" + (auto ? " automatic " : " ") + "update was attempted, but the scripts were already up-to-date.");
+            return;
+        }
+        latestShaHash = sha;
+        helpers.saveData("latestShaHash", sha);
+        sys.system("git pull");
+        sys.changeScript(sys.read("scripts.js"));
+        if (!silent) {
+            sys.sendHtmlOwner(helpers.bot(bots.script) + "The server scripts have been" + (auto ? " automatically " : " ") + "updated! [Commit Message: " + commitmessage + "]");
+        }
+    },
+
     step: function () {
         var pluginEvent, name, number, number2, index;
         /**
@@ -559,42 +541,16 @@ function initVars() {
             ------------
         **/
         if (UPDATE_KEY !== "" && updateFrequency > 0 && sys.time() % updateFrequency === 0) {
-            if (!sys.fexists(".git")) {
-                sys.sendHtmlOwner(helpers.bot(bots.script) + "The git repository seems to have been deleted; the scripts will not be automatically updated.");
-                return;
-            }
-            var resp = sys.synchronousWebCall(AUTO_UPDATE_URL + UPDATE_KEY);
-            var json = JSON.parse(resp);
-            var i = 0;
-            var commitmessage = json[i].commit.message;
-            var author = json[i].committer.login;
-            var sha = json[i].sha;
-            if (commitmessage == "Merge branch 'master' of https://github.com:MaribelHearn/fc-scripts into master" || commitmessage == "Merge git://github.com/MaribelHearn/fc-scripts") {
-                i = i + 1;
-                commitmessage = json[i].commit.message;
-                author = json[i].committer.login;
-                sha = json[i].sha;
-            }
-            if (sha == latestShaHash) {
-                sys.sendHtmlOwner(helpers.bot(bots.script) + "An automatic update was attempted, but the scripts were already up-to-date.");
-                return;
-            }
-            latestShaHash = sha;
-            helpers.saveData("latestShaHash", sha);
-            sys.system("git pull");
-            try {
-                sys.changeScript(sys.read("scripts.js"));
-                sys.sendHtmlOwner(helpers.bot(bots.script) + "The server scripts have been automatically updated! [Commit Message: " + commitmessage + "]");
-            } catch (err) {
-                return;
-            }
+            var auto = true;
+            var silent = false;
+            this.updateScript(auto, silent);
         }
         /**
             ---------------
             Roulette Events
             ---------------
         **/
-        if (require.cache.hasOwnProperty("roulette.js")) {
+        if (require.cache.hasOwnProperty("plugins/roulette.js")) {
             rouletteEvents();
         }
         /**
@@ -614,7 +570,6 @@ function initVars() {
     },
 
     beforeIPConnected: function (ip) {
-        var range = ip.split('.')[0] + '.' + ip.split('.')[1];
         /**
             ---------------------
             Server Starting Check
@@ -637,7 +592,7 @@ function initVars() {
     },
 
     beforeLogIn: function (src) {
-        var name = sys.name(src), lower = name.toLowerCase(), ip = sys.ip(src), range = sys.range(src), color = helpers.color(src), auth = sys.auth(src), i;
+        var name = sys.name(src), ip = sys.ip(src), range = sys.range(src), color = helpers.color(src), auth = sys.auth(src), i;
         /**
             ----------------------------------------
             Allowed IPs and ranges bypass all checks
@@ -773,14 +728,11 @@ function initVars() {
         lower = sys.name(src).toLowerCase(),
         auth = sys.auth(src),
         ip = sys.ip(src),
-        range = sys.range(src),
         cookie = sys.cookie(src) ? sys.cookie(src) : "none",
         id = sys.uniqueId(src) ? sys.uniqueId(src).id : "none",
         color = helpers.color(src),
         os = sys.os(src),
         version = sys.version(src),
-        ipexists = 0,
-        derp,
         country,
         servername = sys.getServerName(),
         uptime = sys.profileDump().split('\n')[0].split(',')[0].split(':')[1].slice(1, -2),
@@ -932,7 +884,7 @@ function initVars() {
 
     beforeChannelJoin: function (src, channel) {
         var lower = sys.channel(channel).toLowerCase();
-        var name, auth = sys.auth(src), ip = sys.ip(src), range = sys.range(src);
+        var name, auth = sys.auth(src), ip = sys.ip(src);
         if (regchannels[lower]) {
             var cbanlist = regchannels[lower].banlist;
         }
@@ -980,20 +932,22 @@ function initVars() {
             "'>Channel " + (layout == "new" ? "Topic" : "Description") +
             ":</font></b> " + regchannels[lower].topic.join(TOPIC_DELIMITER), channel);
         } else {
-            var partyMode = partycommands.getPartyMode();
-            if (require.cache.hasOwnProperty("party.js") && channel == partychannel && partyMode != "none") {
-                sys.sendHtmlMessage(src, "<b><font color='" + (layout == "new" ? channelTopicColor : "indigo") +
-                "'>Channel " + (layout == "new" ? "Topic" : "Description") +
-                ":</font></b> This channel is currently in " + helpers.cap(partyMode) + " Mode" +
-                "." + (partyMode == "nightclub" ? "<font color='#FFFFFF'>:</font>" +
-                "<div style='background: #000000;'>" : ""), channel);
+            if (require.cache.hasOwnProperty("plugins/party.js") && channel == partychannel) {
+                var partycommands = require("plugins/party.js");
+                if (partycommands.getPartyMode() != "none") {
+                    sys.sendHtmlMessage(src, "<b><font color='" + (layout == "new" ? channelTopicColor : "indigo") +
+                    "'>Channel " + (layout == "new" ? "Topic" : "Description") +
+                    ":</font></b> This channel is currently in " + helpers.cap(partyMode) + " Mode" +
+                    "." + (partyMode == "nightclub" ? "<font color='#FFFFFF'>:</font>" +
+                    "<div style='background: #000000;'>" : ""), channel);
+                }
             } else {
                 sys.sendHtmlMessage(src, "<b><font color='" + (layout == "new" ? channelTopicColor : "indigo") +
                 "'>Channel " + (layout == "new" ? "Topic" : "Description") +
                 ":</font></b> Welcome to " + channelname + "!", channel);
             }
         }
-        if (require.cache.hasOwnProperty("party.js") && channel == partychannel && partyMode == "nightclub") {
+        if (require.cache.hasOwnProperty("plugins/party.js") && channel == partychannel && require("plugins/party.js").getPartyMode() == "nightclub") {
             sys.sendHtmlWatch(helpers.bot(bots.spy) + "[Server] <b><font color='" + helpers.color(src) + "'>" + sys.name(src) + "</b> has joined the channel " + helpers.channelLink(channelname) + ".");
             return;
         }
@@ -1039,9 +993,8 @@ function initVars() {
         var name = sys.name(src), lower = players[src].name.toLowerCase(), cookie = sys.cookie(src) ? sys.cookie(src) : "none",
             cauth = (helpers.cauth(lower, channel) >= 1 && sys.dbAuth(lower) < 4 ? helpers.cauthname(lower, channel) + " " : ""),
             channelname = sys.channel(channel), id = sys.uniqueId(src) ? sys.uniqueId(src).id : "none";
-        if (require.cache.hasOwnProperty("party.js")) {
-            var partyMode = partycommands.getPartyMode();
-            if (channel == partychannel && partyMode == "nightclub") {
+        if (require.cache.hasOwnProperty("plugins/party.js")) {
+            if (channel == partychannel && require("plugins/party.js").getPartyMode() == "nightclub") {
                 sys.sendHtmlWatch(helpers.bot(bots.spy) + "[Server] <b><font color='" + helpers.color(src) + "'>" + name + "</font></b> has left the channel " + helpers.channelLink(channelname) + ".");
                 return;
             }
@@ -1077,16 +1030,11 @@ function initVars() {
     },
 
     beforeLogOut: function (src) {
-        /**
-            ----------
-            Reset Name
-            ----------
-        **/
         sys.changeName(src, players[src].name);
     },
 
     afterLogOut: function (src) {
-        var name = sys.name(src), lower = players[src].name.toLowerCase(), range = sys.range(src), ip = sys.ip(src), auth = sys.auth(src), authtitle = "", cookie = sys.cookie(src) ? sys.cookie(src) : "none";
+        var name = sys.name(src), lower = players[src].name.toLowerCase(), auth = sys.auth(src), authtitle = "", cookie = sys.cookie(src) ? sys.cookie(src) : "none";
         var id = sys.uniqueId(src) ? sys.uniqueId(src).id : "none", servername = sys.getServerName();
         /**
             ----------------
@@ -1122,16 +1070,18 @@ function initVars() {
             floodplayers.splice(floodplayers.indexOf(src), 1);
         }
         if (sys.auth(src) <= 0) {
-            delete countryname[lower];
-            delete cityname[lower];
-            delete timezone[lower];
             delete operatingsystem[lower];
             delete versions[lower];
-            helpers.saveData("countryname", countryname);
-            helpers.saveData("cityname", cityname);
-            helpers.saveData("timezone", timezone);
             helpers.saveData("operatingsystem", operatingsystem);
             helpers.saveData("versions", versions);
+            if (API_KEY !== "") {
+                delete countryname[lower];
+                delete cityname[lower];
+                delete timezone[lower];
+                helpers.saveData("countryname", countryname);
+                helpers.saveData("cityname", cityname);
+                helpers.saveData("timezone", timezone);
+            }
         }
         delete players[src];
     },
@@ -1347,9 +1297,7 @@ function initVars() {
     },
 
     beforeChatMessage: function (src, message, channel) {
-        var name = sys.name(src), auth = sys.auth(src), color = helpers.color(src), lower = message.toLowerCase(),
-            channelname = sys.channel(channel), ip = sys.ip(src), grammar = "s",
-            channelname2 = sys.channel(channel).toLowerCase(), random, command;
+        var name = sys.name(src), auth = sys.auth(src), color = helpers.color(src), channelname = sys.channel(channel), channelname2 = sys.channel(channel).toLowerCase(), command;
         /**
             ----------
             Flood Kick
@@ -1434,11 +1382,11 @@ function initVars() {
             Party
             -----
         **/
-        if (require.cache.hasOwnProperty("party.js")) {
-            var partyMode = partycommands.getPartyMode();
-            if (channel == partychannel && partyMode != "none") {
-                sys.stopEvent();
+        if (require.cache.hasOwnProperty("plugins/party.js")) {
+            var partycommands = require("plugins/party.js");
+            if (channel == partychannel && partycommands.getPartyMode() != "none") {
                 partycommands.beforeChatMessage(src, message, channel);
+                sys.stopEvent();
                 return;
             }
         }
@@ -1447,13 +1395,13 @@ function initVars() {
             Mafia
             -----
         **/
-        /*if (require.cache.hasOwnProperty("mafia.js")) {
+        if (require.cache.hasOwnProperty("plugins/mafia.js")) {
             if (channel == mafiachannel) {
-                sys.stopEvent();
                 mafiaBeforeChat(src, message, channel);
+                sys.stopEvent();
                 return;
             }
-        }*/
+        }
         /**
             --------------
             Custom Plugins
@@ -1463,10 +1411,10 @@ function initVars() {
             pluginEvent = plugins[i].replace(".js", "") + "Commands";
             command = message.replace(COMMAND_SYMBOL, "").replace(' ', DELIMITER).split(' ')[0];
             if (message.charAt(0) == COMMAND_SYMBOL && message.charAt(1) != COMMAND_SYMBOL && global[pluginEvent] && global[pluginEvent].hasOwnProperty(command)) {
-                sys.stopEvent();
                 global[pluginEvent][command](src, channel, message.split(DELIMITER));
                 sys.sendHtmlWatch(helpers.bot(bots.spy) + "[" + helpers.channelLink(channelname) +
                 "] <b><font color='" + color + "'>" + helpers.escapehtml(name) + "</font></b> ran " + message + ".");
+                sys.stopEvent();
                 return;
             }
         }
@@ -1476,8 +1424,9 @@ function initVars() {
             --------
         **/
         if (message.charAt(0) == COMMAND_SYMBOL && message.charAt(1) != COMMAND_SYMBOL && message.length > 1) {
-            sys.stopEvent();
+            var handler = require("scripts/handler.js");
             handler.parseCommand(src, message, channel, name, auth, false);
+            sys.stopEvent();
             return;
         }
         /**
@@ -1486,8 +1435,8 @@ function initVars() {
             ----------
         **/
         if (helpers.muteCheck(players[src].name) && auth < 3) {
-            sys.stopEvent();
             helpers.muteMessage(src, channel, message);
+            sys.stopEvent();
             return;
         }
         /**
@@ -1496,8 +1445,8 @@ function initVars() {
             ------------------
         **/
         if (helpers.cmuteCheck(players[src].name, channelname2) && auth < 3) {
-            sys.stopEvent();
             helpers.channelMuteMessage(src, channel);
+            sys.stopEvent();
             return;
         }
         /**
@@ -1507,8 +1456,8 @@ function initVars() {
         **/
         if (regchannels[channelname2]) {
             if (regchannels[channelname2].silence > auth) {
-                sys.stopEvent();
                 helpers.silenceMessage(src, channel);
+                sys.stopEvent();
                 return;
             }
         }
@@ -1665,65 +1614,14 @@ function initVars() {
             lower = lower.split(']');
             lower = lower[0];
             lower = lower.slice(2);
-            if (regchannels[lower]) {
-                if (regchannels[lower].priv) {
-                    sys.stopEvent();
-                    return;
-                }
+            if (regchannels[lower] && regchannels[lower].priv) {
+                sys.stopEvent();
+                return;
             }
         } else {
-            /**
-                ------------------------
-                Prevent Certain Messages
-                ------------------------
-            **/
-            if (message == "Announcement changed.") {
-                sys.stopEvent();
-            }
-            if (message == "The description of the server changed.") {
-                sys.stopEvent();
-            }
-            /**
-                --------------------------
-                Script Errors and Warnings
-                --------------------------
-            **/
-            if (/Script Check: Fatal script error on line \d+:/.test(message)) {
-                sys.stopEvent();
-                var errorMessage = message.split("changeScript");
-                print(errorMessage[0]);
-                if (!serverStarting) {
-                    sys.sendHtmlOwner(helpers.bot(bots.script) + errorMessage[0]);
-                }
-            }
-            if (/Script Error line \d+:/.test(message) || /Script Warning:/.test(message) || /Script Warning in/.test(message)) {
-                if (!serverStarting) {
-                    sys.stopEvent();
-                    sys.printStackTrace(message);
-                }
-            }
-            /**
-                ---------------------
-                Overactivity Messages
-                ---------------------
-            **/
-            if (message.substr(0, 3) == "IP ") {
+            if (message.substring(0, 3) == "IP ") {
                 sys.stopEvent();
                 sys.sendHtmlAll(helpers.bot(bots.spy) + "[Server] " + message, sys.channelId(sys.dosChannel()));
-            }
-        }
-        /**
-            --------------
-            Custom Plugins
-            --------------
-        **/
-        for (var i in plugins) {
-            if (Object.keys(OFFICIAL_PLUGINS).contains(plugins[i])) {
-                continue;
-            }
-            pluginEvent = plugins[i].replace(".js", "") + "NewMessage";
-            if (global[pluginEvent]) {
-                global[pluginEvent](message);
             }
         }
     },
@@ -1748,7 +1646,7 @@ function initVars() {
             }
             command = command.replace(' ', DELIMITER).split(DELIMITER);
             if (lower == "reload") {
-                ownercommands.reload(0, 0, command);
+                require.cache["ownercmds.js"].reload(0, 0, command);
             } else if (lower == "eval") {
                 var starttime = new Date();
                 command = command.splice(0, 1);

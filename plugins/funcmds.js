@@ -65,6 +65,14 @@ module.exports = {
         helpers.saveData("bigtexts", bigtexts);
     },
 
+    hasBigtext: function (name) {
+        return bigtexts.hasOwnProperty(name);
+    },
+
+    runBigtext: function (src, channel, command) {
+        this.commands.bigtext(src, channel, bigtexts[command[0]]);
+    },
+
     commands: {
         funcommands: function (src, channel, command) {
             var commandsmessage = border
@@ -170,10 +178,10 @@ module.exports = {
                 helpers.starfox(src, channel, command, bots.command, "Error 403, the size may not be larger than 32 px.");
                 return;
             }
-            if (allcommands.contains(title.toLowerCase())) {
+            /*if (.contains(title.toLowerCase())) {
                 helpers.starfox(src, channel, command, bots.command, "Error 403, the title may not be the same as one of an existing command.");
                 return;
-            }
+            }*/
             sys.sendHtmlAll(helpers.bot(bot) + "<b>" + helpers.user(name) +
             " has used the " + helpers.arg(title) + " command.</b><br><span style='font-size:" + size +
             "px'><font color='" + color + "'>" + text + "</font></span>", channel);

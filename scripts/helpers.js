@@ -107,12 +107,12 @@ module.exports = {
         }, dataFile, defaultVal;
         for (dataFile in dataFiles) {
             defaultVal = this.defaultValue(dataFile, dataFiles[dataFile]);
-            sys.write(DATA_FOLDER + dataFile + ".txt", (typeof(defaultVal) == "object" ? JSON.stringify(defaultVal) : defaultVal));
+            sys.write("data/" + dataFile + ".txt", JSON.stringify(defaultVal));
         }
-        if (require.cache.hasOwnProperty("funcmds.js")) {
-            sys.write(DATA_FOLDER + "bigtexts.txt", "{}");
-        } else if (sys.fexists(DATA_FOLDER + "bigtexts.txt")) {
-            sys.rm(DATA_FOLDER + "bigtexts.txt");
+        if (require.cache.hasOwnProperty("plugins/funcmds.js")) {
+            sys.write("data/bigtexts.txt", "{}");
+        } else if (sys.fexists("data/bigtexts.txt")) {
+            sys.rm("data/bigtexts.txt");
         }
         print("Customisation settings created");
     },
@@ -144,39 +144,42 @@ module.exports = {
             "operatingsystem": "object",
             "megabanlist": "object",
             "gigabanlist": "object",
+            "rangebanlist": "object",
             "countryname": "object",
-            "rangebanlist": "object"
+            "cityname": "object",
+            "versions": "object",
+            "members": "object"
         }, dataFile, defaultVal;
         sys.mkdir("data");
         for (dataFile in dataFiles) {
             defaultVal = this.defaultValue(dataFile, dataFiles[dataFile]);
-            sys.write(DATA_FOLDER + dataFile + ".txt", (typeof(defaultVal) == "object" ? JSON.stringify(defaultVal) : defaultVal));
+            sys.write("data/" + dataFile + ".txt", JSON.stringify(defaultVal));
         }
         permchannels = this.defaultValue("permchannels");
-        if (require.cache.hasOwnProperty("party.js")) {
+        if (require.cache.hasOwnProperty("plugins/party.js")) {
             permchannels.push("Party");
         }
-        if (require.cache.hasOwnProperty("roulette.js")) {
+        if (require.cache.hasOwnProperty("plugins/roulette.js")) {
             permchannels.push("Roulette");
         }
-        if (require.cache.hasOwnProperty("rr.js")) {
+        if (require.cache.hasOwnProperty("plugins/rr.js")) {
             permchannels.push("Russian Roulette");
         }
-        if (require.cache.hasOwnProperty("safari.js")) {
+        if (require.cache.hasOwnProperty("plugins/safari.js")) {
             permchannels.push("Safari");
         }
-        sys.write(DATA_FOLDER + "permchannels.txt", JSON.stringify(permchannels));
+        sys.write("data/permchannels.txt", JSON.stringify(permchannels));
         print("Data folder created");
         this.initCustoms();
     },
 
     readData: function (dataFile) {
-        if (!sys.fexists(DATA_FOLDER + dataFile + ".txt")) {
-            sys.write(DATA_FOLDER + dataFile + ".txt", this.defaultValue(dataFile));
+        if (!sys.fexists("data/" + dataFile + ".txt")) {
+            sys.write("data/" + dataFile + ".txt", this.defaultValue(dataFile));
             print("Missing data file " + dataFile + ".txt created");
         }
         try {
-            return JSON.parse(sys.read(DATA_FOLDER + dataFile + ".txt"));
+            return JSON.parse(sys.read("data/" + dataFile + ".txt"));
         } catch (err) {
             print("JSON data file " + dataFile + ".txt failed to parse: " + err);
             return null;
@@ -184,7 +187,7 @@ module.exports = {
     },
 
     saveData: function (dataFile, data) {
-        sys.write(DATA_FOLDER + (dataFile.match("KEY") ? dataFile : dataFile.toLowerCase()) + ".txt", JSON.stringify(data));
+        sys.write("data/" + (dataFile.match("KEY") ? dataFile : dataFile.toLowerCase()) + ".txt", JSON.stringify(data));
     },
 
     initCustomGlobals: function () {
@@ -220,10 +223,6 @@ module.exports = {
         Checking Helpers
         ----------------
     **/
-    isMutable: function (command) {
-        return /sendAll|sendHtmlAll|sendHtmlMain|sendHtmlAuths|sendHtmlAuth|sendHtmlOwner/.test(command.toString());
-    },
-
     isAndroid: function (src) {
         return sys.os(src) == "android";
     },
@@ -625,7 +624,7 @@ module.exports = {
     },
 
     formatLastOn: function (src, lastlogin) {
-        return (timezone[players[src].name.toLowerCase()] ? this.toTimeZone(lastlogin, timezone[players[src].name.toLowerCase()].split(':')[0]) : lastlogin).split('.')[0].replace('T', ", ");
+        return (API_KEY !== "" && timezone[players[src].name.toLowerCase()] ? this.toTimeZone(lastlogin, timezone[players[src].name.toLowerCase()].split(':')[0]) : lastlogin).split('.')[0].replace('T', ", ");
     },
 
     os: function (srcos) {
@@ -715,65 +714,6 @@ module.exports = {
             }
         }
         return false;
-    },
-
-    allCommands: function () {
-        var array = [], i;
-        for (i in usercommands) {
-            array.push(i);
-        }
-        for (i in modcommands) {
-            array.push(i);
-        }
-        for (i in admincommands) {
-            array.push(i);
-        }
-        for (i in ownercommands) {
-            array.push(i);
-        }
-        for (i in cusercommands) {
-            array.push(i);
-        }
-        for (i in cmodcommands) {
-            array.push(i);
-        }
-        for (i in cadmincommands) {
-            array.push(i);
-        }
-        for (i in cownercommands) {
-            array.push(i);
-        }
-        if (require.cache.hasOwnProperty("safari.js")) {
-            for (i in safaricommands) {
-                array.push(i);
-            }
-        }
-        if (require.cache.hasOwnProperty("roulette.js")) {
-            for (i in roulettecommands) {
-                array.push(i);
-            }
-        }
-        if (require.cache.hasOwnProperty("rr.js")) {
-            for (i in rrcommands) {
-                array.push(i);
-            }
-        }
-        if (require.cache.hasOwnProperty("party.js")) {
-            for (i in partycommands) {
-                array.push(i);
-            }
-        }
-        if (require.cache.hasOwnProperty("funcmds.js")) {
-            for (i in funcommands) {
-                array.push(i);
-            }
-        }
-        for (i in array) {
-            if (array[i].substr(0, 4) == "this") {
-                array.splice(i, 1);
-            }
-        }
-        return array;
     },
 
     bot: function (string) {
@@ -1078,412 +1018,6 @@ module.exports = {
         }
         return list;
     },
-
-    // dex.js?
-    calcStat: function (stat, base, IV, EV, nature) {
-        if (stat == '0') {
-            return this.calcHP(base, IV, EV);
-        }
-        return Math.floor(Math.floor((IV + (2 * base) + Math.floor(EV / 4)) * 100 / 100 + 5) * nature);
-    },
-
-    calcHP: function (base, IV, EV) {
-        if (base == 1) {
-            return 1;
-        }
-        return Math.floor((IV + (2 * base) + Math.floor(EV / 4) + 100) + 10);
-    },
-
-    displayNum: function (pokeId) {
-        var id = pokeId % 65536, forme = (pokeId - id) / 65536;
-        return forme === 0 ? id : id + '-' + forme;
-    },
-
-    getDbIndex: function (pokeId) {
-        var id = pokeId % 65536, forme = (pokeId - id) / 65536;
-        return id + ':' + forme;
-    },
-
-    height: function (pokeId) {
-        if (Object.keys(heightList).length === 0) {
-            var data = sys.read("db/pokes/height.txt").split('\n');
-            for (var i = 0; i < data.length; i++) {
-                var index = data[i].indexOf(' ');
-                var id = data[i].substr(0, index);
-                var height = data[i].substr(index + 1);
-                heightList[id] = height;
-            }
-        }
-        var key = this.getDbIndex(pokeId);
-        if (heightList[key] !== undefined) {
-            return heightList[key].trim();
-        }
-        index = key.indexOf(':') + 1;
-        var base = key.substr(0, index);
-        return heightList[base + '0'].trim();
-    },
-
-    weight: function (pokeId) {
-        if (Object.keys(weightList).length === 0) {
-            var data = sys.read("db/pokes/weight.txt").split('\n');
-            for (var i = 0; i < data.length; i++) {
-                var index = data[i].indexOf(' ');
-                var id = data[i].substr(0, index);
-                var weight = data[i].substr(index + 1);
-                weightList[id] = weight;
-            }
-        }
-        var key = this.getDbIndex(pokeId);
-        if (weightList[key] !== undefined) {
-            return weightList[key];
-        }
-        index = key.indexOf(':') + 1;
-        var base = key.substr(0, index);
-        return weightList[base + '0'];
-    },
-
-    movepool: function (pokeId) {
-        var index, id, movepool;
-        if (Object.keys(movepoolList).length === 0) {
-            var data = sys.read("db/pokes/6G/all_moves.txt").split('\n');
-            for (var i = 0; i < data.length; i++) {
-                index = data[i].indexOf(' ');
-                id = data[i].substr(0, index);
-                movepool = data[i].substr(index + 1).trim().split(' ');
-                for (var j in movepool) {
-                    movepool[j] = sys.move(movepool[j]);
-                }
-                movepoolList[id] = movepool;
-            }
-        }
-        var isFundex = (pokeId > 999 && pokeId < 1200 || pokeId > 66536);
-        if (isFundex && Object.keys(movepoolList).length <= 744) {
-            var fundexData = sys.read("db/pokes/5G/all_moves.txt").split('\n');
-            for (var k = 0; k < fundexData.length; k++) {
-                index = fundexData[k].indexOf(' ');
-                id = fundexData[k].substr(0, index);
-                if (parseInt(id.split(':')[0]) < 1000) {
-                    continue;
-                }
-                movepool = fundexData[k].substr(index + 1).trim().split(' ');
-                for (var l in movepool) {
-                    movepool[l] = sys.move(movepool[l]);
-                }
-                movepoolList[id] = movepool;
-            }
-        }
-        var key = this.getDbIndex(pokeId);
-        if (movepoolList[key] !== undefined) {
-            return movepoolList[key];
-        }
-        index = key.indexOf(':') + 1;
-        var base = key.substr(0, index);
-        return movepoolList[base];
-    },
-
-    weightPower: function (weight) {
-        var power;
-        if (weight < 10) {
-            power = 20;
-        } else if (weight >= 10 && weight < 25) {
-            power = 40;
-        } else if (weight >= 25 && weight < 50) {
-            power = 60;
-        } else if (weight >= 50 && weight < 100) {
-            power = 80;
-        } else if (weight >= 100 && weight < 200) {
-            power = 100;
-        } else { // weight >= 200
-            power = 120;
-        }
-        return power;
-    },
-
-    movePower: function (moveId, gen) {
-        if (!gen) {
-            gen = 7;
-        }
-        if (Object.keys(powerList).length === 0) {
-            var data = sys.read("db/moves/" + gen + "G/power.txt").split('\n');
-            for (var i = 0; i < data.length; i++) {
-                var index = data[i].indexOf(' ');
-                var key = data[i].substr(0, index);
-                var power = data[i].substr(index + 1);
-                powerList[key] = power;
-            }
-        }
-        if (powerList[moveId] === undefined || powerList[moveId] == '1') {
-            return '-';
-        }
-        return powerList[moveId];
-    },
-
-    moveCategory: function (moveId, gen) {
-        if (!gen) {
-            gen = 7;
-        }
-        if (Object.keys(categoryList).length === 0) {
-            var data = sys.read("db/moves/" + gen + "G/damage_class.txt").split('\n');
-            for (var i = 0; i < data.length; i++) {
-                var index = data[i].indexOf(' ');
-                var key = data[i].substr(0, index);
-                var category = data[i].substr(index + 1);
-                categoryList[key] = category;
-            }
-        }
-        if (categoryList[moveId] == 1) {
-            return "<font color='#800000'>Physical</font>";
-        }
-        if (categoryList[moveId] == 2) {
-            return "<font color='#FF69B4'>Special</font>";
-        }
-        return "<font color='#2E8B57'>Other</font>";
-    },
-
-    moveAccuracy: function (moveId, gen) {
-        if (!gen) {
-            gen = 7;
-        }
-        if (Object.keys(accList).length === 0) {
-            var data = sys.read("db/moves/" + gen + "G/accuracy.txt").split('\n');
-            for (var i = 0; i < data.length; i++) {
-                var index = data[i].indexOf(' ');
-                var key = data[i].substr(0, index);
-                var accuracy = data[i].substr(index + 1);
-                accList[key] = accuracy;
-            }
-        }
-        if (accList[moveId] == 101) {
-            return '-';
-        }
-        return accList[moveId];
-    },
-
-    movePP: function (moveId, gen) {
-        if (!gen) {
-            gen = 7;
-        }
-        if (Object.keys(ppList).length === 0) {
-            var data = sys.read("db/moves/" + gen + "G/pp.txt").split('\n');
-            for (var i = 0; i < data.length; i++) {
-                var index = data[i].indexOf(' ');
-                var key = data[i].substr(0, index);
-                var pp = data[i].substr(index + 1);
-                ppList[key] = pp;
-            }
-        }
-        return [ppList[moveId], ppList[moveId] * 8 / 5];
-    },
-
-    moveEffect: function (moveId, gen) {
-        if (!gen) {
-            gen = 7;
-        }
-        if (Object.keys(moveEffList).length === 0) {
-            var data = sys.read("db/moves/" + gen + "G/effect.txt").split('\n');
-            for (var i = 0; i < data.length; i++) {
-                var index = data[i].indexOf(" ");
-                var key = data[i].substr(0, index);
-                var effect = data[i].substr(index + 1);
-                moveEffList[key] = effect;
-            }
-        }
-        if (moveEffList[moveId] === undefined) {
-            return "Deals normal damage.";
-        }
-        return moveEffList[moveId].replace(/[[\]{}]/g, "");
-    },
-
-    moveContact: function (moveId, gen) {
-        if (!gen) {
-            gen = 7;
-        }
-        if (Object.keys(moveFlagList).length === 0) {
-            var data = sys.read("db/moves/" + gen + "G/flags.txt").split('\n');
-            for (var i = 0; i < data.length; i++) {
-                var index = data[i].indexOf(' ');
-                var key = data[i].substr(0, index);
-                var flags = data[i].substr(index + 1);
-                moveFlagList[key] = flags;
-            }
-        }
-        return (moveFlagList[moveId] % 2 === 1) ? "<font color='#008000'>Yes</font>" : "<font color='#FF0000'>No</font>";
-    },
-
-    movePriority: function (moveId, gen) {
-        if (!gen) {
-            gen = 7;
-        }
-        if (Object.keys(movePriorityList).length === 0) {
-            var data = sys.read("db/moves/" + gen + "G/priority.txt").split('\n');
-            for (var i = 0; i < data.length; i++) {
-                var index = data[i].indexOf(' ');
-                var key = data[i].substr(0, index);
-                var priority = data[i].substr(index + 1);
-                movePriorityList[key] = priority;
-            }
-        }
-        if (movePriorityList[moveId] === undefined) {
-            return 0;
-        }
-        return movePriorityList[moveId];
-    },
-
-    moveRange: function (moveId, gen) {
-        if (!gen) {
-            gen = 7;
-        }
-        if (Object.keys(moveRangeList).length === 0) {
-            var data = sys.read("db/moves/" + gen + "G/range.txt").split('\n');
-            for (var i = 0; i < data.length; i++) {
-                var index = data[i].indexOf(' ');
-                var key = data[i].substr(0, index);
-                var range = data[i].substr(index + 1);
-                moveRangeList[key] = range.replace(/\r/g, "");
-            }
-        }
-        if (moveRangeList[moveId] === undefined) {
-            return "Single Target";
-        }
-        return this.moveRangeToText(parseInt(moveRangeList[moveId]));
-    },
-
-    moveRangeToText: function (moveRange) {
-        switch (moveRange) {
-            case 2:
-                return "Ally";
-            case 4:
-                return "All But Self";
-            case 5:
-                return "Adjacent Foes";
-            case 6:
-                return "User's Team";
-            case 7:
-                return "Self";
-            case 8:
-                return "All";
-            case 9:
-                return "Random";
-            case 10:
-                return "Field";
-            case 11:
-                return "All Foes";
-            case 12:
-                return "All Allies";
-            case 13:
-                return "Special";
-            default:
-                return "Single Target";
-        }
-    },
-
-    ability: function (abilityId) {
-        if (Object.keys(abilityList).length === 0) {
-            var data = sys.read("db/abilities/ability_battledesc.txt").split('\n');
-            for (var i = 0; i < data.length; i++) {
-                var index = data[i].indexOf(' ');
-                var key = data[i].substr(0, index);
-                var ability = data[i].substr(index + 1);
-                abilityList[key] = ability.replace(/\r/g, "");
-            }
-        }
-        return abilityList[abilityId];
-    },
-
-    pokemonWithAbility: function (abilityId) {
-        if (!pokemonWithAbilityList[abilityId]) {
-            var data1, data2, data3, index;
-            data1 = sys.read("db/pokes/6G/ability1.txt").split('\n');
-            data2 = sys.read("db/pokes/6G/ability2.txt").split('\n');
-            data3 = sys.read("db/pokes/6G/ability3.txt").split('\n');
-            pokemonWithAbilityList[abilityId] = [];
-            for (var index1 in data1) {
-                index = data1[index1].split(' ');
-                if (index[1] == abilityId) {
-                    pokemonWithAbilityList[abilityId].push(sys.pokemon(index[0].split(':')[0]));
-                }
-            }
-            for (var index2 in data2) {
-                index = data2[index2].split(' ');
-                if (index[1] == abilityId) {
-                    pokemonWithAbilityList[abilityId].push(sys.pokemon(index[0].split(':')[0]));
-                }
-            }
-            for (var index3 in data3) {
-                index = data3[index3].split(' ');
-                if (index[1] == abilityId) {
-                    pokemonWithAbilityList[abilityId].push(sys.pokemon(index[0].split(':')[0]));
-                }
-            }
-        }
-        return pokemonWithAbilityList[abilityId];
-    },
-
-    getItem: function (itemId) {
-        if (Object.keys(itemList).length === 0) {
-            var data = sys.read("db/items/items_description.txt").split('\n');
-            for (var i = 0; i < data.length; i++) {
-                var index = data[i].indexOf(' ');
-                var key = data[i].substr(0, index);
-                var item = data[i].substr(index + 1);
-                itemList[key] = item;
-            }
-        }
-        return itemList[itemId];
-    },
-
-    getBerry: function (berryId) {
-        if (Object.keys(berryList).length === 0) {
-            var data = sys.read("db/items/berries_description.txt").split('\n');
-            for (var i = 0; i < data.length; i++) {
-                var index = data[i].indexOf(' ');
-                var key = data[i].substr(0, index);
-                var berry = data[i].substr(index + 1);
-                berryList[key] = berry;
-            }
-        }
-        return berryList[berryId];
-    },
-
-    getFlingPower: function (itemId) {
-        if (Object.keys(flingPowerList).length === 0) {
-            var data = sys.read("db/items/items_pow.txt").split('\n');
-            for (var i = 0; i < data.length; i++) {
-                var index = data[i].indexOf(' ');
-                var key = data[i].substr(0, index);
-                var power = data[i].substr(index + 1);
-                flingPowerList[key] = power;
-            }
-        }
-        return flingPowerList[itemId];
-    },
-
-    getBerryPower: function (berryId) {
-        if (Object.keys(berryPowerList).length === 0) {
-            var data = sys.read("db/items/berry_pow.txt").split('\n');
-            for (var i = 0; i < data.length; i++) {
-                var index = data[i].indexOf(' ');
-                var key = data[i].substr(0, index);
-                var power = data[i].substr(index + 1);
-                berryPowerList[key] = power;
-            }
-        }
-        return +berryPowerList[berryId] + 20;
-    },
-
-    getBerryType: function (berryId) {
-        if (Object.keys(berryTypeList).length === 0) {
-            var data = sys.read("db/items/berry_type.txt").split('\n');
-            for (var i = 0; i < data.length; i++) {
-                var index = data[i].indexOf(' ');
-                var key = data[i].substr(0, index);
-                var type = data[i].substr(index + 1);
-                berryTypeList[key] = type;
-            }
-        }
-        return berryTypeList[berryId].trim();
-    },
-
     /**
         ------------
         Tour Helpers
