@@ -733,16 +733,6 @@ module.exports = {
         return date.join(' ');
     },
 
-    gen: function (pokenum) {
-        var NUMBER_OF_GENS = 6, NUMBER_OF_POKEMON_GEN = [151, 251, 386, 493, 649, 718];
-        for (var i = 0; i < NUMBER_OF_GENS; i++) {
-            if (pokenum < NUMBER_OF_POKEMON_GEN[i]) {
-                return i + 1;
-            }
-        }
-        return 0;
-    },
-
     htmlLinks:  function (text, type) {
         var exp = /([a-zA-Z]+:\/\/|www\.)[^\s]+/ig;
         var found = text.match(exp);

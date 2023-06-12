@@ -1134,36 +1134,33 @@ function initVars() {
     },
 
     beforeChangeTier: function (src, team, oldtier, newtier) {
+        if (["Clear Skies", "Rain Dance", "Sunny Day", "Hail", "Sandstorm"].indexOf(newtier) != -1) {
+            tierchecks.weatherless(src, team, newtier);
+        }
+        if (newtier == "Metronome") {
+            tierchecks.metronome(src, team);
+        }
+        if (newtier == "Middle Cup") {
+            tierchecks.middleCup(src, team);
+        }
+        if (newtier == "Monocolour") {
+            tierchecks.monoColor(src, team);
+        }
+        if (newtier == "Monotype") {
+            tierchecks.monoType(src, team);
+        }
+        if (newtier == "Monospecies") {
+            tierchecks.monoSpecies(src, team);
+        }
+        if (newtier == "Monogen") {
+            tierchecks.monoGen(src, team);
+        }
+        if (newtier == "Monoletter") {
+            tierchecks.monoLetter(src, team);
+        }
     },
 
     afterChangeTier: function (src, team, oldtier, newtier) {
-        /**
-            -----------
-            Moody Check
-            -----------
-        **/
-        var moody = 141;
-        for (var i = 0; i < 6; i++) {
-            if (sys.teamPokeAbility(src, team, i) == moody) {
-                helpers.starfox(src, 0, undefined, bots.tour, "Error 403, you may not use the Moody ability!", team);
-                sys.changeTier(src, team, "Challenge Cup");
-                sys.stopEvent();
-                break;
-            }
-        }
-        /**
-            -----------------
-            Other Tier Checks
-            -----------------
-        **/
-        weatherlesscheck(src, team);
-        metronomecheck(src, team);
-        middlecupcheck(src, team);
-        monocolorcheck(src, team);
-        monotypecheck(src, team);
-        monospeciescheck(src, team);
-        monogencheck(src, team);
-        monolettercheck(src, team);
         sys.sendHtmlWatch(helpers.bot(bots.spy) + "[Player] <b><font color='" + helpers.color(src) + "'>" + sys.name(src) + "</font></b> has changed team " + team + " from the " + oldtier +
         " tier to the " + newtier + " tier.");
     },

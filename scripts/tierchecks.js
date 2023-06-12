@@ -7,104 +7,26 @@
     tiers.
     ----------------------------------------------
 */
-
-weatherlesscheck = function (src, team) {
-    var tier = sys.tier(src, team),  hasweather = false, drizzle = sys.abilityNum("Drizzle"), drought = sys.abilityNum("Drought"), sandstorm = sys.abilityNum("Sand Stream"), hail = sys.abilityNum("Snow Warning");
-    if (["Clear Skies", "Rain Dance", "Sunny Day", "Hail", "Sandstorm"].indexOf(tier) == -1) {
-        return;
-    }
-    for (var s = 0; s < 6; s++) {
-        if (sys.teamPokeAbility(src, team, s) == drizzle && tier != "Rain Dance") {
-            sys.sendHtmlMessage(src, helpers.bot(bots.tour) + "Your team is invalid for " + tier + " as it contains Drizzle.");
-            hasweather = true;
-            break;
-        } else if (sys.teamPokeAbility(src, team, s) == drought && tier != "Sunny Day") {
-            sys.sendHtmlMessage(src, helpers.bot(bots.tour) + "Your team is invalid for " + tier + " as it contains Drought.");
-            hasweather = true;
-            break;
-        } else if (sys.teamPokeAbility(src, team, s) == sandstorm && tier != "Sandstorm") {
-            sys.sendHtmlMessage(src, helpers.bot(bots.tour) + "Your team is invalid for " + tier + " as it contains Sand Stream.");
-            hasweather = true;
-            break;
-        } else if (sys.teamPokeAbility(src, team, s) == hail && tier != "Hail") {
-            sys.sendHtmlMessage(src, helpers.bot(bots.tour) + "Your team is invalid for " + tier + " as it contains Snow Warning.");
-            hasweather = true;
-            break;
-        }
-    }
-    if (hasweather) {
-        sys.changeTier(src, team, "Challenge Cup");
-    }
-};
-metronomecheck = function (src, team) {
-    var tier = sys.tier(src, team), metronome = sys.moveNum("Metronome"), leppa = sys.itemNum("Leppa Berry"), move, move2, move3, move4, item, hp, atk, def, satk, sdef, spd, index = 0;
-    if (tier != "Metronome") {
-        return;
-    }
-    for (var s = 0; s < 6; s++) {
-        move = sys.teamPokeMove(src, team, s, 0); move2 = sys.teamPokeMove(src, team, s, 1); move3 = sys.teamPokeMove(src, team, s, 2);
-        move4 = sys.teamPokeMove(src, team, s, 3); item = sys.teamPokeItem(src, team, s);
-        hp = sys.teamPokeEV(src, team, s, 0); atk = sys.teamPokeEV(src, team, s, 1); def = sys.teamPokeEV(src, team, s, 2);
-        satk = sys.teamPokeEV(src, team, s, 3); sdef = sys.teamPokeEV(src, team, s, 4); spd = sys.teamPokeEV(src, team, s, 5);
-        if (move != metronome) {
-            sys.changePokeMove(src, team, s, 0, metronome);
-        }
-        if (move2 > 0) {
-            sys.changePokeMove(src, team, s, 1, 0);
-        }
-        if (move3 > 0) {
-            sys.changePokeMove(src, team, s, 2, 0);
-        }
-        if (move4 > 0) {
-            sys.changePokeMove(src, team, s, 3, 0);
-        }
-        if (item != leppa) {
-            sys.changePokeItem(src, team, s, leppa);
-        }
-        if (hp != 85 || atk != 85 || def != 85 || satk != 85 || sdef != 85 || spd != 85) {
-            while (index < 6) {
-                sys.changeTeamPokeEV(src, team, s, index, 85);
-                index++;
-            }
-        }
-    }
-};
-
-function middlecup(poke) {
+function isMiddle(poke) {
     var MIDDLE_CUP_POKEMON = "Bayleef, Boldore, Cascoon, Chansey, Charmeleon, Clefairy, Combusken, Croconaw, Dewott, Dragonair, Duosion, Dusclops, Eelektrik, Electabuzz, Flaaffy, " +
     "Fraxure, Gabite, Gloom, Golbat, Gothorita, Graveler, Grotle, Grovyle, Gurdurr, Haunter, Herdier, Ivysaur, Jigglypuff, Kadabra, Kakuna, Kirlia, Klang, Krokorok, Lairon, " +
     "Lampent, Lombre, Loudred, Luxio, Machoke, Magmar, Magneton, Marill, Marshtomp, Metang, Metapod, Monferno, Nidorina, Nidorino, Nuzleaf, Palpitoad, Pidgeotto, Pignite, " +
     "Pikachu, Piloswine, Poliwhirl, Porygon2, Prinplup, Pupitar, Quilava, Rhydon, Roselia, Seadra, Sealeo, Servine, Shelgon, Silcoon, Skiploom, Staravia, Swadloon, Togetic, " +
     "Tranquill, Vanillish, Vibrava, Vigoroth, Wartortle, Weepinbell, Whirlipede, Zweilous";
+
     MIDDLE_CUP_POKEMON = MIDDLE_CUP_POKEMON.split(", ");
+
     for (var index in MIDDLE_CUP_POKEMON) {
         if (MIDDLE_CUP_POKEMON[index] == poke) {
             return true;
         }
     }
+
     return false;
 }
 
-middlecupcheck = function (src, team) {
-    var tier = sys.tier(src, team), middlefail = false, poke;
-    if (tier != "Middle Cup") {
-        return;
-    }
-    for (var s = 0; s < 6; s++) {
-        poke = sys.pokemon(sys.teamPoke(src, team, s));
-        if (!helpers.middlecup(poke)) {
-            sys.sendHtmlMessage(src, helpers.bot(bots.tour) + "Your team is invalid for " + tier + " as not every Pokemon is in the middle of an evolution family.");
-            middlefail = true;
-            break;
-        }
-    }
-    if (middlefail) {
-        sys.changeTier(src, team, "Challenge Cup");
-    }
-};
-
-function colorcheck(poke) {
-    POKEMON_COLORS = {
+function colorCheck(poke) {
+    var POKEMON_COLORS = {
         RED: ['Charmander', 'Charmeleon', 'Charizard', 'Vileplume', 'Paras', 'Parasect', 'Krabby', 'Kingler', 'Voltorb', 'Electrode', 'Goldeen', 'Seaking', 'Jynx', 'Magikarp',
         'Magmar', 'Flareon', 'Ledyba', 'Ledian', 'Ariados', 'Yanma', 'Scizor', 'Slugma', 'Magcargo', 'Octillery', 'Delibird', 'Porygon2', 'Magby', 'Ho-Oh', 'Torchic', 'Combusken',
         'Blaziken', 'Wurmple', 'Medicham', 'Carvanha', 'Camerupt', 'Solrock', 'Corphish', 'Crawdaunt', 'Latias', 'Groudon', 'Deoxys', 'Deoxys-A', 'Deoxys-D', 'Deoxys-S',
@@ -157,51 +79,61 @@ function colorcheck(poke) {
         'Vanillish', 'Vanilluxe', 'Emolga', 'Foongus', 'Amoonguss', 'Frillish', 'Jellicent', 'Tynamo', 'Litwick', 'Lampent', 'Cubchoo', 'Beartic', 'Rufflet', 'Larvesta',
         'Volcarona', 'Reshiram', 'Meloetta', 'Meloetta-S']
     };
+
     for (var index in POKEMON_COLORS.RED) {
         if (POKEMON_COLORS.RED[index] == poke) {
             return "red";
         }
     }
+
     for (var index2 in POKEMON_COLORS.BLUE) {
         if (POKEMON_COLORS.BLUE[index2] == poke) {
             return "blue";
         }
     }
+
     for (var index3 in POKEMON_COLORS.GREEBN) {
         if (POKEMON_COLORS.GREEN[index3] == poke) {
             return "green";
         }
     }
+
     for (var index4 in POKEMON_COLORS.YELLOW) {
         if (POKEMON_COLORS.YELLOW[index4] == poke) {
             return "yellow";
         }
     }
+
     for (var index5 in POKEMON_COLORS.WHITE) {
         if (POKEMON_COLORS.WHITE[index5] == poke) {
             return "white";
         }
     }
+
     for (var index6 in POKEMON_COLORS.GRAY) {
         if (POKEMON_COLORS.GRAY[index6] == poke) {
             return "gray";
         }
     }
+
     for (var index7 in POKEMON_COLORS.BLACK) {
         if (POKEMON_COLORS.BLACK[index7] == poke) {
             return "black";
         }
     }
+
     for (var index8 in POKEMON_COLORS.PINK) {
         if (POKEMON_COLORS.PINK[index8] == poke) {
             return "pink";
         }
     }
+
     for (var index9 in POKEMON_COLORS.PURPLE) {
         if (POKEMON_COLORS.PURPLE[index9] == poke) {
             return "purple";
         }
     }
+
     for (var index10 in POKEMON_COLORS.BROWN) {
         if (POKEMON_COLORS.BROWN[index10] == poke) {
             return "brown";
@@ -209,108 +141,154 @@ function colorcheck(poke) {
     }
 }
 
-monocolorcheck = function (src, team) {
-    var tier = sys.tier(src, team), colourfail = false, poke, color;
-    if (tier != "Monocolour") {
-        return;
+function gen(pokeNum) {
+    var NUMBER_OF_GENS = 6;
+    var NUMBER_OF_POKEMON_GEN = [151, 251, 386, 493, 649, 718];
+
+    for (var i = 0; i < NUMBER_OF_GENS; i++) {
+        if (pokeNum < NUMBER_OF_POKEMON_GEN[i]) {
+            return i + 1;
+        }
     }
-    for (var s = 0; s < 6; s++) {
-        poke = sys.pokemon(sys.teamPoke(src, team, s));
-        if (s === 0) {
-            color = helpers.colorcheck(poke);
-        } else {
-            if (helpers.colorcheck(poke) != color) {
-                sys.sendHtmlMessage(src, helpers.bot(bots.tour) + "Your team is invalid for " + tier + " as not every Pokemon is of the same colour.");
-                colourfail = true;
+
+    return 0;
+}
+
+module.exports = {
+    // TODO ban use of weather setting moves
+    weatherless: function (src, team, tier) {
+        var hasIllegalWeather = false;
+        var drizzle = sys.abilityNum("Drizzle");
+        var drought = sys.abilityNum("Drought");
+        var sandstorm = sys.abilityNum("Sand Stream");
+        var hail = sys.abilityNum("Snow Warning");
+
+        for (var slot = 0; slot < 6; slot++) {
+            if (sys.teamPokeAbility(src, team, slot) == drizzle && tier != "Rain Dance") {
+                sys.sendHtmlMessage(src, helpers.bot(bots.tour) + "Your team is invalid for " + tier + " as it contains Drizzle.");
+                hasIllegalWeather = true;
+                break;
+            } else if (sys.teamPokeAbility(src, team, slot) == drought && tier != "Sunny Day") {
+                sys.sendHtmlMessage(src, helpers.bot(bots.tour) + "Your team is invalid for " + tier + " as it contains Drought.");
+                hasIllegalWeather = true;
+                break;
+            } else if (sys.teamPokeAbility(src, team, slot) == sandstorm && tier != "Sandstorm") {
+                sys.sendHtmlMessage(src, helpers.bot(bots.tour) + "Your team is invalid for " + tier + " as it contains Sand Stream.");
+                hasIllegalWeather = true;
+                break;
+            } else if (sys.teamPokeAbility(src, team, slot) == hail && tier != "Hail") {
+                sys.sendHtmlMessage(src, helpers.bot(bots.tour) + "Your team is invalid for " + tier + " as it contains Snow Warning.");
+                hasIllegalWeather = true;
                 break;
             }
         }
-    }
-    if (colourfail) {
-        sys.changeTier(src, team, "Challenge Cup");
-    }
-};
-monotypecheck = function (src, team) {
-    var tier = sys.tier(src, team), typefail = false, pokenum, typecount = [], type1, type2, index = 0;
-    if (tier != "Monotype") {
-        return;
-    }
-    while (index < 19) {
-        typecount[index] = 0;
-        index++;
-    }
-    for (var s = 0; s < 6; s++) {
-        pokenum = sys.teamPoke(src, team, s);
-        type1 = sys.pokeType1(pokenum);
-        type2 = sys.pokeType2(pokenum);
-        typecount[type1]++;
-        typecount[type2]++;
-    }
-    if (JSON.stringify(typecount).indexOf(6) == -1) {
-        sys.sendHtmlMessage(src, helpers.bot(bots.tour) + "Your team is invalid for " + tier + " as not every Pokemon is of the same type.");
-        typefail = true;
-    }
-    if (typefail) {
-        sys.changeTier(src, team, "Challenge Cup");
-    }
-};
-monospeciescheck = function (src, team) {
-    var tier = sys.tier(src, team), speciesfail = false, pokenum;
-    if (tier != "Monospecies") {
-        return;
-    }
-    for (var s = 0; s < 6; s++) {
-        if (s === 0) {
-            pokenum = sys.teamPoke(src, team, s);
-        } else {
-            if (pokenum != sys.teamPoke(src, team, s)) {
-                sys.sendHtmlMessage(src, helpers.bot(bots.tour) + "Your team is invalid for " + tier + " as not every Pokemon is of the same species.");
-                speciesfail = true;
-                break;
+
+        if (hasIllegalWeather) {
+            sys.changeTier(src, team, "Challenge Cup");
+        }
+    },
+
+    metronome: function (src, team) {
+        var metronome = sys.moveNum("Metronome");
+        var leppa = sys.itemNum("Leppa Berry");
+
+        for (var slot = 0; slot < 6; slot++) {
+            sys.changePokeMove(src, team, slot, 0, metronome);
+            sys.changePokeMove(src, team, slot, 1, 0);
+            sys.changePokeMove(src, team, slot, 2, 0);
+            sys.changePokeMove(src, team, slot, 3, 0);
+            sys.changePokeItem(src, team, slot, leppa);
+
+            for (var stat = 0; stat < 6; stat++) {
+                sys.changeTeamPokeEV(src, team, slot, stat, 85);
             }
         }
-    }
-    if (speciesfail) {
-        sys.changeTier(src, team, "Challenge Cup");
-    }
-};
-monogencheck = function (src, team) {
-    var tier = sys.tier(src, team), genfail = false, gen;
-    if (tier != "Monogen") {
-        return;
-    }
-    for (var s = 0; s < 6; s++) {
-        if (s === 0) {
-            gen = helpers.gen(sys.teamPoke(src, team, s));
-        } else {
-            if (gen != helpers.gen(sys.teamPoke(src, team, s))) {
-                sys.sendHtmlMessage(src, helpers.bot(bots.tour) + "Your team is invalid for " + tier + " as not every Pokemon is of the same gen.");
-                genfail = true;
-                break;
+    },
+
+    middleCup: function (src, team) {
+        var poke;
+
+        for (var slot = 0; slot < 6; slot++) {
+            poke = sys.pokemon(sys.teamPoke(src, team, slot));
+
+            if (!isMiddle(poke)) {
+                sys.sendHtmlMessage(src, helpers.bot(bots.tour) + "Your team is invalid for Middle Cup as not every Pokemon is in the middle of an evolution family.");
+                sys.changeTier(src, team, "Challenge Cup");
+                return;
             }
         }
-    }
-    if (genfail) {
-        sys.changeTier(src, team, "Challenge Cup");
-    }
-};
-monolettercheck = function (src, team) {
-    var tier = sys.tier(src, team), letterfail = false, letter;
-    if (tier != "Monoletter") {
-        return;
-    }
-    for (var s = 0; s < 6; s++) {
-        if (s === 0) {
-            letter = sys.pokemon(sys.teamPoke(src, team, s)).charAt(0);
-        } else {
-            if (letter != sys.pokemon(sys.teamPoke(src, team, s)).charAt(0)) {
-                sys.sendHtmlMessage(src, helpers.bot(bots.tour) + "Your team is invalid for " + tier + " as not every Pokemon name starts with the same letter.");
-                letterfail = true;
-                break;
+    },
+
+    monoColor: function (src, team) {
+        var poke, color;
+
+        for (var slot = 0; slot < 6; slot++) {
+            poke = sys.pokemon(sys.teamPoke(src, team, slot));
+
+            if (slot === 0) {
+                color = colorCheck(poke);
+            } else if (colorCheck(poke) != color) {
+                sys.sendHtmlMessage(src, helpers.bot(bots.tour) + "Your team is invalid for Monocolor as not every Pokemon is of the same colour.");
+                sys.changeTier(src, team, "Challenge Cup");
+                return;
             }
         }
-    }
-    if (letterfail) {
-        sys.changeTier(src, team, "Challenge Cup");
+    },
+
+    monoType: function (src, team) {
+        var pokeNum, types;
+
+        for (var slot = 0; slot < 6; slot++) {
+            pokeNum = sys.teamPoke(src, team, slot);
+
+            if (slot > 0 && types.indexOf(sys.pokeType1(pokeNum)) == -1) {
+                sys.sendHtmlMessage(src, helpers.bot(bots.tour) + "Your team is invalid for Monotype as not every Pokemon is of the same type.");
+                sys.changeTier(src, team, "Challenge Cup");
+                return;
+            }
+            types = [sys.pokeType1(pokeNum), sys.pokeType2(pokeNum)];
+        }
+    },
+
+    monoSpecies: function (src, team) {
+        var pokeNum;
+
+        for (var slot = 0; slot < 6; slot++) {
+            if (slot === 0) {
+                pokeNum = sys.teamPoke(src, team, slot);
+            } else if (pokeNum != sys.teamPoke(src, team, slot)) {
+                sys.sendHtmlMessage(src, helpers.bot(bots.tour) + "Your team is invalid for Monospecies as not every Pokemon is of the same species.");
+                sys.changeTier(src, team, "Challenge Cup");
+                return;
+            }
+        }
+    },
+
+    monoGen: function (src, team) {
+        var gen;
+
+        for (var slot = 0; slot < 6; slot++) {
+            if (slot === 0) {
+                gen = gen(sys.teamPoke(src, team, slot));
+            } else if (gen != gen(sys.teamPoke(src, team, slot))) {
+                sys.sendHtmlMessage(src, helpers.bot(bots.tour) + "Your team is invalid for Monogen as not every Pokemon is of the same gen.");
+                sys.changeTier(src, team, "Challenge Cup");
+                return;
+            }
+        }
+    },
+
+    monoLetter: function (src, team) {
+        var letter;
+
+        for (var slot = 0; slot < 6; slot++) {
+            if (slot === 0) {
+                letter = sys.pokemon(sys.teamPoke(src, team, slot)).charAt(0);
+            } else if (letter != sys.pokemon(sys.teamPoke(src, team, slot)).charAt(0)) {
+                sys.sendHtmlMessage(src, helpers.bot(bots.tour) + "Your team is invalid for Monoletter as not every Pokemon name starts with the same letter.");
+                sys.changeTier(src, team, "Challenge Cup");
+                return;
+            }
+        }
     }
 };
