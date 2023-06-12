@@ -14,14 +14,14 @@
     - full auth name customisation
     - silent muting commands and functionality
 */
+var floodplayers = [];
+
 function initServerGlobals() {
     open = helpers.readData("open");
-    latestShaHash = helpers.readData("latestshahash");
     updateFrequency = helpers.readData("updatefrequency");
     allowance = helpers.readData("allowance");
     floodtime = helpers.readData("floodtime");
     floodlevel = helpers.readData("floodlevel");
-    maxplayers = helpers.readData("maxplayers");
     allowed = helpers.readData("allowed");
     exceptions = helpers.readData("exceptions");
     permchannels = helpers.readData("permchannels");
@@ -48,9 +48,6 @@ function initServerGlobals() {
 
 function initVars() {
     stopbattles = false;
-    megabancheck = false;
-    gigabancheck = false;
-    timer = 0;
     currentSpoiler = 0;
     layout = "new";
     hostIp = "";
@@ -58,7 +55,6 @@ function initVars() {
     hostCity = "";
     hostTimeZone = "";
     players = [];
-    floodplayers = [];
     spoilers = [];
     tour = {};
     battles = {};
@@ -470,6 +466,7 @@ function initVars() {
             author = json[i].committer.login;
             sha = json[i].sha;
         }
+        var latestShaHash = helpers.readData("latestshahash");
         if (sha == latestShaHash) {
             sys.sendHtmlOwner(helpers.bot(bots.script) + "An" + (auto ? " automatic " : " ") + "update was attempted, but the scripts were already up-to-date.");
             return;
@@ -760,7 +757,6 @@ function initVars() {
         if (sys.isGigaBanned(id)) {
             sys.sendMessage(src, "You are banned!");
             sys.sendHtmlWatch(helpers.bot(bots.spy) + "[Server] Giga banned user <b><font color='" + color + "'>" + name + "</font></b> tried to enter the server.");
-            gigabancheck = true;
             sys.kick(src);
             return;
         }
@@ -777,7 +773,6 @@ function initVars() {
             if (sys.isMegaBanned(cookie)) {
                 sys.sendMessage(src, "You are banned!");
                 sys.sendHtmlWatch(helpers.bot(bots.spy) + "[Server] Mega banned user <b><font color='" + color + "'>" + name + "</font></b> tried to enter the server.");
-                megabancheck = true;
                 sys.kick(src);
                 return;
             }
@@ -797,6 +792,7 @@ function initVars() {
             Max Players
             -----------
         **/
+        var maxplayers = helpers.readData("maxplayers");
         if (sys.numPlayers() > maxplayers) {
             maxplayers++;
             helpers.saveData("maxplayers", maxplayers);
@@ -913,7 +909,7 @@ function initVars() {
     afterChannelJoin: function (src, channel) {
         var name = sys.name(src), channelname = sys.channel(channel), lower = sys.channel(channel).toLowerCase(),
             cookie = sys.cookie(src) ? sys.cookie(src) : "none", id = sys.uniqueId(src) ? sys.uniqueId(src).id : "none";
-        if (cookie == "banned" || cookie.substr(0, 6) === "banned") {
+        if (sys.isMegaBanned(cookie)) {
             return;
         }
         if (sys.isGigaBanned(id)) {
@@ -986,34 +982,6 @@ function initVars() {
 
     afterChannelLeave: function (src, channel) {
         /**
-            -------------
-            Leave Message
-            -------------
-        **/
-        var name = sys.name(src), lower = players[src].name.toLowerCase(), cookie = sys.cookie(src) ? sys.cookie(src) : "none",
-            cauth = (helpers.cauth(lower, channel) >= 1 && sys.dbAuth(lower) < 4 ? helpers.cauthname(lower, channel) + " " : ""),
-            channelname = sys.channel(channel), id = sys.uniqueId(src) ? sys.uniqueId(src).id : "none";
-        if (require.cache.hasOwnProperty("plugins/party.js")) {
-            if (channel == partychannel && require("plugins/party.js").getPartyMode() == "nightclub") {
-                sys.sendHtmlWatch(helpers.bot(bots.spy) + "[Server] <b><font color='" + helpers.color(src) + "'>" + name + "</font></b> has left the channel " + helpers.channelLink(channelname) + ".");
-                return;
-            }
-        }
-        if (cookie == "banned" || cookie.substr(0, 6) === "banned") {
-            megabancheck = false;
-        } else if (sys.isGigaBanned(id)) {
-            gigabancheck = false;
-        } else {
-            if (channel > 0) {
-                if (layout == "new") {
-                    sys.sendHtmlAll(helpers.bot(bots.channel) + channelLeaveMessage.replace(/~Player~/, cauth + name).replace(/~Channel~/, channelname), channel);
-                } else {
-                    sys.sendHtmlAll("<timestamp/><b>~" + helpers.rainbow(name) + " has left " + channelname + "~</b>", channel);
-                }
-            }
-            sys.sendHtmlWatch(helpers.bot(bots.spy) + "[Server] <b><font color='" + helpers.color(src) + "'>" + name + "</font></b> has left the channel " + helpers.channelLink(channelname) + ".");
-        }
-        /**
             --------------
             Custom Plugins
             --------------
@@ -1027,6 +995,34 @@ function initVars() {
                 global[pluginEvent](src, channel);
             }
         }
+        /**
+            -------------
+            Leave Message
+            -------------
+        **/
+        var name = sys.name(src), lower = players[src].name.toLowerCase(),
+            cauth = (helpers.cauth(lower, channel) >= 1 && sys.dbAuth(lower) < 4 ? helpers.cauthname(lower, channel) + " " : ""),
+            channelname = sys.channel(channel);
+        if (require.cache.hasOwnProperty("plugins/party.js")) {
+            if (channel == partychannel && require("plugins/party.js").getPartyMode() == "nightclub") {
+                sys.sendHtmlWatch(helpers.bot(bots.spy) + "[Server] <b><font color='" + helpers.color(src) + "'>" + name + "</font></b> has left the channel " + helpers.channelLink(channelname) + ".");
+                return;
+            }
+        }
+        var cookie = sys.cookie(src) ? sys.cookie(src) : "none";
+        var id = sys.uniqueId(src) ? sys.uniqueId(src).id : "none";
+        if (sys.isMegaBanned(cookie) || sys.isGigaBanned(id)) {
+            return;
+        }
+        sys.sendHtmlWatch(helpers.bot(bots.spy) + "[Server] <b><font color='" + helpers.color(src) + "'>" + name + "</font></b> has left the channel " + helpers.channelLink(channelname) + ".");
+        if (channel === 0) {
+            return;
+        }
+        if (layout == "new") {
+            sys.sendHtmlAll(helpers.bot(bots.channel) + channelLeaveMessage.replace(/~Player~/, cauth + name).replace(/~Channel~/, channelname), channel);
+        } else {
+            sys.sendHtmlAll("<timestamp/><b>~" + helpers.rainbow(name) + " has left " + channelname + "~</b>", channel);
+        }
     },
 
     beforeLogOut: function (src) {
@@ -1034,8 +1030,7 @@ function initVars() {
     },
 
     afterLogOut: function (src) {
-        var name = sys.name(src), lower = players[src].name.toLowerCase(), auth = sys.auth(src), authtitle = "", cookie = sys.cookie(src) ? sys.cookie(src) : "none";
-        var id = sys.uniqueId(src) ? sys.uniqueId(src).id : "none", servername = sys.getServerName();
+        var name = sys.name(src), lower = players[src].name.toLowerCase(), auth = sys.auth(src), authtitle = "";
         /**
             ----------------
             Auth Title Check
@@ -1050,11 +1045,10 @@ function initVars() {
             Leave Message
             -------------
         **/
-        if (cookie == "banned" || cookie.substr(0, 6) === "banned") {
-            megabancheck = false;
-        } else if (sys.isGigaBanned(id)) {
-            gigabancheck = false;
-        } else {
+        var cookie = sys.cookie(src) ? sys.cookie(src) : "none";
+        var id = sys.uniqueId(src) ? sys.uniqueId(src).id : "none";
+        var servername = sys.getServerName();
+        if (!sys.isMegaBanned(cookie) && !sys.isGigaBanned(id)) {
             if (layout == "new") {
                 sys.sendHtmlMain(helpers.bot(bots.welcome) + leaveMessage.replace(/~Player~/, authtitle + name).replace(/~Server~/, servername));
             } else {
