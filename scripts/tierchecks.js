@@ -141,7 +141,7 @@ function colorCheck(poke) {
     }
 }
 
-function gen(pokeNum) {
+function pokeGen(pokeNum) {
     var NUMBER_OF_GENS = 6;
     var NUMBER_OF_POKEMON_GEN = [151, 251, 386, 493, 649, 718];
 
@@ -185,6 +185,7 @@ module.exports = {
 
         if (hasIllegalWeather) {
             sys.changeTier(src, team, "Challenge Cup");
+            sys.stopEvent();
         }
     },
 
@@ -214,6 +215,7 @@ module.exports = {
             if (!isMiddle(poke)) {
                 sys.sendHtmlMessage(src, helpers.bot(bots.tour) + "Your team is invalid for Middle Cup as not every Pokemon is in the middle of an evolution family.");
                 sys.changeTier(src, team, "Challenge Cup");
+                sys.stopEvent();
                 return;
             }
         }
@@ -228,8 +230,9 @@ module.exports = {
             if (slot === 0) {
                 color = colorCheck(poke);
             } else if (colorCheck(poke) != color) {
-                sys.sendHtmlMessage(src, helpers.bot(bots.tour) + "Your team is invalid for Monocolor as not every Pokemon is of the same colour.");
+                sys.sendHtmlMessage(src, helpers.bot(bots.tour) + "Your team is invalid for Monocolour as not every Pokemon is of the same colour.");
                 sys.changeTier(src, team, "Challenge Cup");
+                sys.stopEvent();
                 return;
             }
         }
@@ -244,6 +247,7 @@ module.exports = {
             if (slot > 0 && types.indexOf(sys.pokeType1(pokeNum)) == -1) {
                 sys.sendHtmlMessage(src, helpers.bot(bots.tour) + "Your team is invalid for Monotype as not every Pokemon is of the same type.");
                 sys.changeTier(src, team, "Challenge Cup");
+                sys.stopEvent();
                 return;
             }
             types = [sys.pokeType1(pokeNum), sys.pokeType2(pokeNum)];
@@ -259,6 +263,7 @@ module.exports = {
             } else if (pokeNum != sys.teamPoke(src, team, slot)) {
                 sys.sendHtmlMessage(src, helpers.bot(bots.tour) + "Your team is invalid for Monospecies as not every Pokemon is of the same species.");
                 sys.changeTier(src, team, "Challenge Cup");
+                sys.stopEvent();
                 return;
             }
         }
@@ -269,10 +274,11 @@ module.exports = {
 
         for (var slot = 0; slot < 6; slot++) {
             if (slot === 0) {
-                gen = gen(sys.teamPoke(src, team, slot));
-            } else if (gen != gen(sys.teamPoke(src, team, slot))) {
+                gen = pokeGen(sys.teamPoke(src, team, slot));
+            } else if (gen != pokeGen(sys.teamPoke(src, team, slot))) {
                 sys.sendHtmlMessage(src, helpers.bot(bots.tour) + "Your team is invalid for Monogen as not every Pokemon is of the same gen.");
                 sys.changeTier(src, team, "Challenge Cup");
+                sys.stopEvent();
                 return;
             }
         }
@@ -287,6 +293,7 @@ module.exports = {
             } else if (letter != sys.pokemon(sys.teamPoke(src, team, slot)).charAt(0)) {
                 sys.sendHtmlMessage(src, helpers.bot(bots.tour) + "Your team is invalid for Monoletter as not every Pokemon name starts with the same letter.");
                 sys.changeTier(src, team, "Challenge Cup");
+                sys.stopEvent();
                 return;
             }
         }

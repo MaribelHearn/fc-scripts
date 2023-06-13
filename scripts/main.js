@@ -1134,6 +1134,7 @@ function initVars() {
     },
 
     beforeChangeTier: function (src, team, oldtier, newtier) {
+        var tierchecks = require("scripts/tierchecks.js");
         if (["Clear Skies", "Rain Dance", "Sunny Day", "Hail", "Sandstorm"].indexOf(newtier) != -1) {
             tierchecks.weatherless(src, team, newtier);
         }
