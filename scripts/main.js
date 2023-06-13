@@ -1081,19 +1081,6 @@ function initVars() {
     },
 
     beforeChangeTeam: function (src, team) {
-        /**
-            -----------
-            Moody Check
-            -----------
-        **/
-        var moody = 141;
-        for (var i = 0; i < 6; i++) {
-            if (sys.teamPokeAbility(src, team, i) == moody) {
-                helpers.starfox(src, 0, undefined, bots.tour, "Error 403, you may not use the Moody ability!", team);
-                sys.changeTier(src, team, "Challenge Cup");
-                break;
-            }
-        }
     },
 
     afterChangeTeam: function (src, team) {
