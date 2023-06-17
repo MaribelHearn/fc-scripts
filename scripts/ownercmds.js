@@ -1329,20 +1329,7 @@ module.exports = {
             }
             API_KEY = key;
             helpers.saveData("API_KEY", key);
-            sys.webCall(IP_RETRIEVAL_URL, function (resp) {
-                if (resp === "") {
-                    print("An error occurred while loading the host IP address.");
-                    return;
-                }
-                hostIp = resp;
-                sys.webCall(helpers.countryRetrievalUrl(hostIp), function (resp) {
-                    resp = JSON.parse(resp);
-                    hostTimeZone = helpers.timezonedata(resp.countryName, resp.timeZone);
-                    hostCountry = helpers.countrydata(resp.countryName);
-                    hostCity = helpers.citydata(resp.cityName);
-                    print("Host location data has been loaded.");
-                });
-            });
+            script.setHostLocation(true);
             sys.sendHtmlMessage(src, helpers.bot(bots.main) + "Your IPinfoDB API key has been set.", channel);
         },
     
@@ -1406,7 +1393,7 @@ module.exports = {
             trgt = sys.id(player);
             if (trgt) {
                 sys.sendHtmlMessage(trgt, helpers.bot(bots.pass) + "Your password was cleared by " + name + "! The Register button will be reactivated.");
-                sys.sendNetworkCommand(trgt, REACTIVATE_REGISTER_BUTTON);
+                sys.sendNetworkCommand(trgt, 14); // reactivate register button
             }
             sys.sendHtmlMessage(src, helpers.bot(bots.pass) + "The password of " + player + " has been cleared.", channel);
         },

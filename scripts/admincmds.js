@@ -1071,7 +1071,7 @@ module.exports = {
             var commandsmessage = border
             + "<h2>Administrator Commands ~ Battle Settings</h2>"
             + "<br>"
-            + "Battling is currently <b>" + (stopbattles ? "off" : "on") + "</b>.<br>"
+            + "Battling is currently <b>" + (script.stopBattles ? "off" : "on") + "</b>.<br>"
             + "<br>"
             + "<b>" + helpers.user("/stopbattles") + "</b>: disallows battles to be started.<br>"
             + "<b>" + helpers.user("/resumebattles") + "</b>: allows battles to be started again.<br>"
@@ -1084,14 +1084,14 @@ module.exports = {
         ,
     
         stopbattles: function (src, channel, command) {
-            stopbattles = true;
+            script.stopBattles = true;
             sys.sendHtmlAll(helpers.bot(bots.battle) + "<b>" + helpers.user(sys.name(src)) + " has stopped battles! No battles can be started anymore!</b>");
         }
     
         ,
     
         resumebattles: function (src, channel, command) {
-            stopbattles = false;
+            script.stopBattles = false;
             sys.sendHtmlAll(helpers.bot(bots.battle) + "<b>" + helpers.user(sys.name(src)) + " has resumed battles! Everyone can battle again!</b>");
         }
     

@@ -7,6 +7,9 @@
     run by any user.
     ----------------------------------------------
 */
+var spoilers = [];
+var currentSpoiler = 0;
+
 function battleLink(battle) {
     return "<a href='po:watch/" + battle + "'>Watch</a>";
 }
@@ -1211,7 +1214,7 @@ module.exports = {
                 return;
             }
             sys.clearPass(players[src].name);
-            sys.sendNetworkCommand(src, REACTIVATE_REGISTER_BUTTON);
+            sys.sendNetworkCommand(src, 14); // reactivate register button
             sys.sendHtmlMessage(src, helpers.bot(bots.pass) + "Your password has been successfully cleared.", channel);
         },
     
@@ -1315,8 +1318,9 @@ module.exports = {
                     return;
                 }
             }
-            if (helpers.bannedchars(newname)[0]) {
-                helpers.starfox(src, channel, command, bots.name, "Error 403, your name contains " + helpers.bannedchars(newname)[1] + ". Please try another name.");
+            var bannedName = script.bannedUsernameCheck(newname);
+            if (bannedName[0]) {
+                helpers.starfox(src, channel, command, bots.name, "Error 403, your name contains " + bannedName[1] + ". Please try another name.");
                 return;
             }
             sys.changeName(src, newname);

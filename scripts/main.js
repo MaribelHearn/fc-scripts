@@ -14,7 +14,11 @@
     - full auth name customisation
     - silent muting commands and functionality
 */
+var hostLocation;
 var floodplayers = [];
+var bansites = sys.read("bansites.txt").replace(/\r/g, "").split('\n');
+bansites.splice(bansites.indexOf(""), 1);
+bansites.splice(bansites.lastIndexOf(""), 1);
 
 function initServerGlobals() {
     open = helpers.readData("open");
@@ -44,20 +48,6 @@ function initServerGlobals() {
     }
 }
 
-function initVars() {
-    stopbattles = false;
-    currentSpoiler = 0;
-    layout = "new";
-    hostIp = "";
-    hostCountry = "";
-    hostCity = "";
-    hostTimeZone = "";
-    players = [];
-    spoilers = [];
-    tour = {};
-    battles = {};
-}
-
 (load = function () {
     /**
         ----------------
@@ -68,15 +58,8 @@ function initVars() {
     DELIMITER = '*';
     COMMAND_SYMBOL = '/';
     TOPIC_DELIMITER = " || ";
-    IP_RETRIEVAL_URL = "http://whatismyip.akamai.com";
     DAYS = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
     MONTHS = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-    REACTIVATE_REGISTER_BUTTON = 14;
-    THAI = /[\u0E00-\u0E7F]/;
-    ZALGO = /[\u0300-\u036F]/;
-    HEBREW = /[\u0591-\u05F4]/;
-    ARABIC = /[\u0600-\u06FF]/;
-    SPECIAL = /[\ufff0-\uffff]/;
     AUTH_NAMES = ["User", "Moderator", "Administrator", "Owner", "Invisible Owner"];
     OFFICIAL_PLUGINS = {
         funcommands: {
@@ -300,6 +283,37 @@ function initVars() {
         sys.sendHtmlWatch(helpers.bot(bots.spy) + "[Server] Connection to the battle server was lost.");
     },
 
+    // returns URL to retrieve country data
+    countryRetrievalUrl: function (ip) {
+        return "http://api.ipinfodb.com/v3/ip-city/?key=" + API_KEY + "&ip=" + ip + "&format=json";
+    },
+
+    // sets host IP and optionally country data
+    setHostLocation: function (reload) {
+        if (hostLocation && !reload) {
+            return;
+        }
+        sys.webCall("http://whatismyip.akamai.com", function (resp) {
+            if (resp === "") {
+                print("An error occurred while loading the host IP address.");
+                return;
+            }
+            var result = {"ip": resp};
+            if (API_KEY !== "") {
+                sys.webCall(this.countryRetrievalUrl(hostIp), function (resp) {
+                    resp = JSON.parse(resp);
+                    result.timeZone = helpers.timezonedata(resp.countryName, resp.timeZone);
+                    result.country = helpers.countrydata(resp.countryName);
+                    result.city = helpers.citydata(resp.cityName);
+                    print("Host location data has been loaded.");
+                    hostLocation = result;
+                });
+            } else {
+                hostLocation = result;
+            }
+        });
+    },
+
     serverStartUp: function () {
         var time = 100, pluginEvent, i;
         serverStarting = true;
@@ -329,10 +343,10 @@ function initVars() {
         **/
         helpers.initCustomGlobals();
         initServerGlobals();
-        initVars();
-        bansites = sys.read("bansites.txt").replace(/\r/g, "").split('\n');
-        bansites.splice(bansites.indexOf(""), 1);
-        bansites.splice(bansites.lastIndexOf(""), 1);
+        layout = "new";
+        players = [];
+        battles = {};
+        tour = {};
         tour[0] = {};
         tour[0].tourmode = 0;
         /**
@@ -398,22 +412,7 @@ function initVars() {
             Set Host IP, Country and Time Zone
             ----------------------------------
         **/
-        sys.webCall(IP_RETRIEVAL_URL, function (resp) {
-            if (resp === "") {
-                print("An error occurred while loading the host IP address.");
-                return;
-            }
-            hostIp = resp;
-            if (API_KEY !== "") {
-                sys.webCall(helpers.countryRetrievalUrl(hostIp), function (resp) {
-                    resp = JSON.parse(resp);
-                    hostTimeZone = helpers.timezonedata(resp.countryName, resp.timeZone);
-                    hostCountry = helpers.countrydata(resp.countryName);
-                    hostCity = helpers.citydata(resp.cityName);
-                    print("Host location data has been loaded.");
-                });
-            }
-        });
+        this.setHostLocation();
         /**
             --------------
             Custom Plugins
@@ -479,7 +478,7 @@ function initVars() {
     },
 
     step: function () {
-        var pluginEvent, name, number, number2, index;
+        var pluginEvent, name, index;
         /**
             --------
             Flooding
@@ -650,9 +649,10 @@ function initVars() {
                 Banned Characters Check
                 -----------------------
             **/
-            if (helpers.bannedchars(name)[0] && auth < 3) {
-                sys.sendMessage(src, "Your name contains " + helpers.bannedchars(name)[1] + ". Please change your name and try entering again.");
-                sys.sendHtmlWatch(helpers.bot(bots.spy) + "[Server] <b><font color='" + color + "'>" + name + "</font></b> tried to enter the server with " + helpers.bannedchars(name)[1] + " in their username.");
+            var bannedName = this.bannedUsernameCheck(name);
+            if (bannedName[0] && auth < 3) {
+                sys.sendMessage(src, "Your name contains " + bannedName[1] + ". Please change your name and try entering again.");
+                sys.sendHtmlWatch(helpers.bot(bots.spy) + "[Server] <b><font color='" + color + "'>" + name + "</font></b> tried to enter the server with " + bannedName[1] + " in their username.");
                 sys.stopEvent();
                 return;
             }
@@ -875,7 +875,7 @@ function initVars() {
                 country = helpers.toFlagKey(helpers.removespaces(countryname[lower].toUpperCase()));
                 sys.sendHtmlWatch(helpers.bot(bots.spy) + "[Server] <b><font color='" + color + "'>" + name + "</font></b> is from " + flags[country] + " " + countryname[lower] + ".");
             } else {
-                sys.webCall(helpers.countryRetrievalUrl(ip), function (resp) {
+                sys.webCall(this.countryRetrievalUrl(ip), function (resp) {
                     resp = JSON.parse(resp);
                     timezone[lower] = helpers.timezonedata(resp.countryName, resp.timeZone);
                     countryname[lower] = helpers.countrydata(resp.countryName);
@@ -1243,32 +1243,63 @@ function initVars() {
     },
 
     // returns whether given string contains banned characters
-    bannedCharacters: function (message, lower) {
+    bannedCharacters: function (message, channelLower) {
         for (var i in bansites) {
             if (message.indexOf(bansites[i]) != -1) {
-                return true;
+                return [true, ""];
             }
         }
-        if (regchannels[lower]) {
-            if (ZALGO.test(message) && !regchannels[lower].zalgo) {
-                return true;
-            }
-            if (/[\u202E\u202D]/.test(message) && !regchannels[lower].reverse) {
-                return true;
-            }
-            if (THAI.test(message) && !regchannels[lower].extending) {
-                return true;
-            }
-            if (SPECIAL.test(message) && !regchannels[lower].backward) {
-                return true;
-            }
-            if (ARABIC.test(message) || HEBREW.test(message)) {
-                return true;
-            }
+        var THAI = /[\u0E00-\u0E7F]/;
+        var ZALGO = /[\u0300-\u036F]/;
+        var ARABIC = /[\u0600-\u06FF]/;
+        var HEBREW = /[\u0591-\u05F4]/;
+        var REVERSE = /[\u202E\u202D]/;
+        var SPECIAL = /[\ufff0-\uffff]/;
+        if (ZALGO.test(message) && (!regchannels[channelLower] || !regchannels[channelLower].zalgo)) {
+            return [true, "zalgo"];
+        }
+        if (REVERSE.test(message) && (!regchannels[channelLower] || !regchannels[channelLower].reverse)) {
+            return [true, "reverse characters"];
+        }
+        if (THAI.test(message) && (!regchannels[channelLower] || !regchannels[channelLower].extending)) {
+            return [true, "extending characters"];
+        }
+        if (SPECIAL.test(message) && (!regchannels[channelLower] || !regchannels[channelLower].backward)) {
+            return [true, "special characters"];
+        }
+        if (ARABIC.test(message)) {
+            return [true, "Arabic"];
+        }
+        if (HEBREW.test(message)) {
+            return [true, "Hebrew"];
+        }
+    },
+
+    // returns whether given name contains banned characters for a username
+    bannedUsernameCheck: function (name) {
+        var FAKEI = /\u00A1/;
+        var GREEK = /[\u0370-\u03FF]/;
+        var OTHER = /\u3061|\u65532/;
+        var SPACE = /\u0009-\u000D|\u0085|\u00A0|\u1680|\u180E|\u2000-\u200A|\u2028|\u2029|\u2029|\u202F|\u205F|\u3000/;
+        var DASH = /\u058A|\u05BE|\u1400|\u1806|\u2010-\u2015|\u2053|\u207B|\u208B|\u2212|\u2E17|\u2E1A|\u301C|\u3030|\u30A0|[\uFE31-\uFE32]|\uFE58|\uFE63|\uFF0D/;
+        var CYRILLIC = /\u0455|\u04ae|\u04c0|\u04cf|\u050c|\u051a|\u051b|\u051c|\u051d|\u0405|\u0408|\u0430|\u0410|\u0412|\u0435|\u0415|\u041c|\u041d|\u043e|\u041e|\u0440|\u0420|\u0441|\u0421|\u0422|\u0443|\u0445|\u0425|\u0456|\u0406/;
+        var bannedCharacters = this.bannedCharacters(name);
+        if (bannedCharacters[0]) {
+            return bannedCharacters;
+        } else if (CYRILLIC.test(string)) {
+            return [true, "Cyrillic that is similar to letters"];
+        } else if (GREEK.test(string)) {
+            return [true, "Greek that is similar to letters"];
+        } else if (FAKEI.test(string)) {
+            return [true, "a fake I"];
+        } else if (SPACE.test(string)) {
+            return [true, "space characters"];
+        } else if (DASH.test(string)) {
+            return [true, "dash characters"];
+        } else if (OTHER.test(string)) {
+            return [true, "special characters"];
         } else {
-            if (ZALGO.test(message) || /[\u202E\u202D]/.test(message) || THAI.test(message) || SPECIAL.test(message) || ARABIC.test(message) || HEBREW.test(message)) {
-                return true;
-            }
+            return [false, ""];
         }
     },
 
@@ -1300,7 +1331,8 @@ function initVars() {
             Banned Link / Characters Check
             ------------------------------
         **/
-        if (this.bannedCharacters(message, channelname2) && auth < 3) {
+        var bannedCharacters = this.bannedCharacters(message, channelname2);
+        if (bannedCharacters[0] && auth < 3) {
             sys.stopEvent();
             helpers.starfox(src, channel, message, bots.command, "Error 403, you are not allowed to post banned links or characters.", channel);
             return;
@@ -1719,13 +1751,15 @@ function initVars() {
         sys.sendHtmlWatch(helpers.bot(bots.spy) + "[Player] <b><font color='" + color + "'>" + name + "</font></b> registered.");
     },
 
+    stopBattles: false,
+
     beforeChallengeIssued: function (src, trgt, clauses, rated, mode, team, team2) {
         /**
             ------------
             Stop Battles
             ------------
         **/
-        if (stopbattles) {
+        if (stopBattles) {
             sys.sendMessage(src, helpers.bot(bots.main) + "The server is going to restart soon! You can't battle now!");
             sys.sendMessage(trgt, helpers.bot(bots.main) + sys.name(src) + " tried to challenge you while battles weren't allowed.");
             sys.stopEvent();
@@ -1765,7 +1799,7 @@ function initVars() {
             Stop Battles
             ------------
         **/
-        if (stopbattles) {
+        if (stopBattles) {
             sys.sendMessage(src, helpers.bot(bots.main) + "The server is going to restart soon! You can't battle now!");
             sys.stopEvent();
             return;
