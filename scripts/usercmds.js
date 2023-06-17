@@ -330,8 +330,14 @@ module.exports = {
                 colors.push(helpers.color(i));
                 names.push(players[i].name + (sys.name(i) != players[i].name ? " (" + helpers.escapehtml(sys.name(i)) + ")" : ""));
                 lower = names[index].toLowerCase();
-                countries.push(API_KEY !== "" && countryname[lower] ? FLAGS[helpers.toFlagKey(countryname[lower])] : "[no data]");
-                timeZones.push(API_KEY !== "" && timezone[lower] ? timezone[lower] : "[no data]");
+                if (API_KEY !== "") {
+                    var flags = require("scripts/base64.js").flags;
+                    countries.push(countryname[lower] ? flags[helpers.toFlagKey(countryname[lower])] : "[no data]");
+                    timeZones.push(timezone[lower] ? timezone[lower] : "[no data]");
+                } else {
+                    countries.push("[no data]");
+                    timeZones.push("[no data]");
+                }
                 lastMessages.push(helpers.escapehtml(players[i].lastmessage));
                 times.push(helpers.timePassed(colors[i], players[i].lastmessagetime));
                 index++;
@@ -341,7 +347,7 @@ module.exports = {
                 for (i in ids) {
                     onlinemessage += helpers.authName(auths[i], DISPLAY_USER, HIDE_INVIS) + " | " + "<b><font color='" + colors[i] + "'>" + names[i] + "</font></b> | " + ids[i];
                     if (srcauth >= 1) {
-                        onlinemessage += " | " + ips[i] + " | " + helpers.osName(clients[i]);
+                        onlinemessage += " | " + ips[i] + " | " + script.osName(clients[i]);
                     }
                     onlinemessage += "<br>";
                 }
@@ -365,7 +371,7 @@ module.exports = {
                     + "<td><b><font color='" + colors[i] + "'>" + names[i] + "</font></b></td>"
                     + "<td>" + ids[i] + "</td>";
                     if (srcauth >= 1) {
-                        onlinemessage += "<td>" + ips[i] + "</td><td>" + helpers.osImage(clients[i]) + "</td>";
+                        onlinemessage += "<td>" + ips[i] + "</td><td>" + script.osImage(clients[i]) + "</td>";
                         if (API_KEY !== "") {
                             onlinemessage += "<td>" + countries[i] + "</td><td>" + timeZones[i] + "</td>";
                         }
@@ -603,7 +609,7 @@ module.exports = {
             serverprivate === true ? serverprivate = "<font color='red'>No</font>" : serverprivate = "<b><font color='green'>Yes</font></b>";
             open ? serveropen = "<b><font color='green'>Yes</font></b>" : serveropen = "<font color='red'>No</font>";
             servermessage += "<br><b>Name:</b> " + sys.getServerName() +
-            "<br><b>Host OS:</b> " + helpers.os(sys.os()) +
+            "<br><b>Host OS:</b> " + script.os(sys.os()) +
             "<br><b>Version:</b> " + sys.serverVersion() +
             "<br><b>IP:</b> " + hostIp +
             "<br><b>" + (ports == 1 ? "Port" : "Ports") + ":</b> " + sys.serverPorts().join(", ") +
@@ -754,7 +760,7 @@ module.exports = {
         },
     
         mp: function (src, channel, command) {
-            require("scripts/modcmds.js").cp(src, channel, ["cp", sys.name(src)]);
+            require("scripts/modcmds.js").commands.cp(src, channel, ["cp", sys.name(src)]);
         },
     
         myalts: function (src, channel, command) {

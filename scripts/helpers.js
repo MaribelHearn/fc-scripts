@@ -1,7 +1,7 @@
 /*
     ----------------------------------------------
     FUN COMMUNITY HELPER METHODS helpers.js
-     - by Maribel Hearn, 2012-2021,
+     - by Maribel Hearn, 2012-2023,
        with tournament methods by Lutra and
        pokemon db methods from main server
        scripts
@@ -141,13 +141,11 @@ module.exports = {
             "banlist": "object",
             "mutelist": "object",
             "timezone": "object",
-            "operatingsystem": "object",
             "megabanlist": "object",
             "gigabanlist": "object",
             "rangebanlist": "object",
             "countryname": "object",
             "cityname": "object",
-            "versions": "object",
             "members": "object"
         }, dataFile, defaultVal;
         sys.mkdir("data");
@@ -627,38 +625,6 @@ module.exports = {
         return (API_KEY !== "" && timezone[players[src].name.toLowerCase()] ? this.toTimeZone(lastlogin, timezone[players[src].name.toLowerCase()].split(':')[0]) : lastlogin).split('.')[0].replace('T', ", ");
     },
 
-    os: function (srcos) {
-        if (srcos == "windows") {
-            return WINDOWS_BASE64 + " Windows";
-        } else if (srcos == "mac") {
-            return APPLE_BASE64 + " Mac";
-        } else if (srcos == "linux") {
-            return LINUX_BASE64 + " Linux";
-        } else if (srcos == "android") {
-            return ANDROID_BASE64 + " Android";
-        } else if (srcos == "webclient") {
-            return IE_BASE64 + " Web Client";
-        }
-    },
-
-    osImage: function (srcos) {
-        if (srcos == "windows") {
-            return WINDOWS_BASE64;
-        } else if (srcos == "mac") {
-            return APPLE_BASE64;
-        } else if (srcos == "linux") {
-            return LINUX_BASE64;
-        } else if (srcos == "android") {
-            return ANDROID_BASE64;
-        } else if (srcos == "webclient") {
-            return IE_BASE64;
-        }
-    },
-
-    osName: function (srcos) {
-        return (srcos == "webclient" ? "Web Client" : this.cap(srcos));
-    },
-
     isRange: function (range) {
         var ipdigits = range.split(".").join(""), iparray;
         if (isNaN(parseInt(ipdigits))) {
@@ -834,10 +800,6 @@ module.exports = {
         return array.join("");
     },
 
-    cap: function (string) {
-        return string.charAt(0).toUpperCase() + string.slice(1);
-    },
-
     sep: function (num) {
         if (isNaN(num)) {
             return '-';
@@ -958,21 +920,22 @@ module.exports = {
     },
 
     authimage: function (src, authlevel) {
+        var authImage = require("scripts/base64.js").auth;
         if (this.isAndroidOrWeb(src)) {
             return ({
-                11: AUTHIMAGE.BATTLING_OWNER,
-                10: AUTHIMAGE.BATTLING_ADMIN,
-                9: AUTHIMAGE.BATTLING_MOD,
-                8: AUTHIMAGE.BATTLING_USER,
-                7: AUTHIMAGE.IDLE_OWNER,
-                6: AUTHIMAGE.IDLE_ADMIN,
-                5: AUTHIMAGE.IDLE_MOD,
-                4: AUTHIMAGE.IDLE_USER,
-                3: AUTHIMAGE.OWNER,
-                2: AUTHIMAGE.ADMIN,
-                1: AUTHIMAGE.MOD,
-                0: AUTHIMAGE.USER
-            }[authlevel] || AUTHIMAGE.IDLE_USER);
+                11: authImage.BATTLING_OWNER,
+                10: authImage.BATTLING_ADMIN,
+                9: authImage.BATTLING_MOD,
+                8: authImage.BATTLING_USER,
+                7: authImage.IDLE_OWNER,
+                6: authImage.IDLE_ADMIN,
+                5: authImage.IDLE_MOD,
+                4: authImage.IDLE_USER,
+                3: authImage.OWNER,
+                2: authImage.ADMIN,
+                1: authImage.MOD,
+                0: authImage.USER
+            }[authlevel] || authImage.IDLE_USER);
         }
         return ({
         11: "<img src='Themes/Classic/client/oBattle.png'>",

@@ -32,9 +32,7 @@ function initServerGlobals() {
     rules = helpers.readData("rules");
     banlist = helpers.readData("banlist");
     mutelist = helpers.readData("mutelist");
-    versions = helpers.readData("versions");
     members = helpers.readData("members");
-    operatingsystem = helpers.readData("operatingsystem");
     regchannels = helpers.readData("regchannels");
     megabanlist = helpers.readData("megabanlist");
     gigabanlist = helpers.readData("gigabanlist");
@@ -661,9 +659,33 @@ function initVars() {
         }
     },
 
+    // return string with first letter capitalised
+    cap: function (string) {
+        return string.charAt(0).toUpperCase() + string.slice(1);
+    },
+
+    // returns operating system image
+    osImage: function (srcos) {
+        return require("scripts/base64.js")[srcos];
+    },
+
+    // returns formatted operating system name
+    osName: function (srcos) {
+        return (srcos == "webclient" ? "Web Client" : this.cap(srcos));
+    },
+
+    // returns operating system image plus formatted name
+    os: function (srcos) {
+        return this.osImage(srcos) + " " + this.osName(srcos);
+    },
+
     // returns formatted string of PO version
     formatVersion: function (version) {
         switch (version) {
+            case 2721:
+                return "2.7.2.1";
+            case 2700:
+                return "2.7.1 / 2.7.2";
             case 2630:
                 return "2.6.3";
             case 2621:
@@ -833,25 +855,14 @@ function initVars() {
         } else {
             sys.sendHtmlMain("<timestamp/><b>~Please Welcome " + (auth >= 1 ? AUTH_NAMES[auth] + " " : "") + helpers.rainbow(name) + "~</b>");
         }
-        /**
-            -----------------------------------
-            Operating System and Client Version
-            -----------------------------------
-        **/
-        operatingsystem[lower] = os;
-        helpers.saveData("operatingsystem", operatingsystem);
-        os = helpers.os(operatingsystem[lower]);
-        versions[lower] = this.formatVersion(version);
-        helpers.saveData("versions", versions);
-        version = versions[lower];
-        sys.sendHtmlWatch(helpers.bot(bots.spy) + "[Server] <b><font color='" + color + "'>" + name + "</font></b> is using " + os + (version === "" ? "" : ", " + version) + ".");
+        sys.sendHtmlWatch(helpers.bot(bots.spy) + "[Server] <b><font color='" + color + "'>" + name + "</font></b> is using " + this.os(os) + " " + this.formatVersion(version) + ".");
         /**
             ------------------
             Fake Guest Warning
             ------------------
         **/
         if (this.isGuest(name) && sys.os(src) != "android" && sys.os(src) != "webclient") {
-            sys.sendHtmlAuths(helpers.bot(bots.welcome) + "This person is using a guest name, but isn't actually on " + helpers.os("android") + " or " + helpers.os("webclient") + ". Keep an eye on them!");
+            sys.sendHtmlAuths(helpers.bot(bots.welcome) + "This person is using a guest name, but isn't actually on " + this.osName("android") + " or " + this.osName("webclient") + ". Keep an eye on them!");
         }
         /**
             ---------------------
@@ -859,9 +870,10 @@ function initVars() {
             ---------------------
         **/
         if (API_KEY !== "") {
+            var flags = require("scripts/base64.js").flags;
             if (countryname[lower]) {
                 country = helpers.toFlagKey(helpers.removespaces(countryname[lower].toUpperCase()));
-                sys.sendHtmlWatch(helpers.bot(bots.spy) + "[Server] <b><font color='" + color + "'>" + name + "</font></b> is from " + FLAGS[country] + " " + countryname[lower] + ".");
+                sys.sendHtmlWatch(helpers.bot(bots.spy) + "[Server] <b><font color='" + color + "'>" + name + "</font></b> is from " + flags[country] + " " + countryname[lower] + ".");
             } else {
                 sys.webCall(helpers.countryRetrievalUrl(ip), function (resp) {
                     resp = JSON.parse(resp);
@@ -872,7 +884,7 @@ function initVars() {
                     helpers.saveData("countryname", countryname);
                     helpers.saveData("cityname", cityname);
                     country = helpers.toFlagKey(helpers.removespaces(countryname[lower].toUpperCase()));
-                    sys.sendHtmlWatch(helpers.bot(bots.spy) + "[Server] <b><font color='" + color + "'>" + name + "</font></b> is from " + FLAGS[country] + " " + countryname[lower] + ".");
+                    sys.sendHtmlWatch(helpers.bot(bots.spy) + "[Server] <b><font color='" + color + "'>" + name + "</font></b> is from " + flags[country] + " " + countryname[lower] + ".");
                 });
             }
         }
@@ -1063,19 +1075,13 @@ function initVars() {
         if (floodplayers.indexOf(src) != -1) {
             floodplayers.splice(floodplayers.indexOf(src), 1);
         }
-        if (sys.auth(src) <= 0) {
-            delete operatingsystem[lower];
-            delete versions[lower];
-            helpers.saveData("operatingsystem", operatingsystem);
-            helpers.saveData("versions", versions);
-            if (API_KEY !== "") {
-                delete countryname[lower];
-                delete cityname[lower];
-                delete timezone[lower];
-                helpers.saveData("countryname", countryname);
-                helpers.saveData("cityname", cityname);
-                helpers.saveData("timezone", timezone);
-            }
+        if (sys.auth(src) <= 0 && API_KEY !== "") {
+            delete countryname[lower];
+            delete cityname[lower];
+            delete timezone[lower];
+            helpers.saveData("countryname", countryname);
+            helpers.saveData("cityname", cityname);
+            helpers.saveData("timezone", timezone);
         }
         delete players[src];
     },
@@ -1096,15 +1102,6 @@ function initVars() {
         "'>" + name + "</font></b>.");
         players[src].name = name;
         players[src].color = color;
-        /**
-            -----------------------------------
-            Operating System and Client Version
-            -----------------------------------
-        **/
-        operatingsystem[lower] = sys.os(src);
-        versions[lower] = this.formatVersion(sys.version(src));
-        helpers.saveData("operatingsystem", operatingsystem);
-        helpers.saveData("versions", versions);
         /**
             ---------------------
             Time Zone and Country
@@ -1518,8 +1515,7 @@ function initVars() {
         **/
         if (GOOGLE_KEY !== "") {
             var link = helpers.strip(message).substring(helpers.strip(message).indexOf(": ") + 2, helpers.strip(message).length).trim(),
-                regex = /.*(?:youtu.be\/|youtube.*v=|youtube.*\/embed\/|youtube.*\/v\/|youtube.*videos\/)([^#&?]*).*/,
-                image, ext, base64, array, size, x, y;
+                regex = /.*(?:youtu.be\/|youtube.*v=|youtube.*\/embed\/|youtube.*\/v\/|youtube.*videos\/)([^#&?]*).*/;
             if (link.match(regex)) {
                 try {
                     var data = helpers.htmlLinks(link, "object");
@@ -1539,33 +1535,6 @@ function initVars() {
                 "Dislikes: <b><font color='red'>" + dislikes + "</font></b>, Published: " + publishedDate + " UTC.", channel);
             }
         }
-        /**
-            ---------
-            Image Bot
-            ---------
-        **/
-        /*regex = /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/;
-        array = message.split(' ');
-        if (sys.os() == "linux") {
-            for (i in array) {
-                link = helpers.strip(array[i]).substring(helpers.strip(array[i]).indexOf(": ") + 1, helpers.strip(array[i]).length).trim();
-                ext = link.substr(-4);
-                if (regex.test(link) && [".png", ".jpg", ".gif", ".ico"].contains(ext)) {
-                    sys.system("wget -O " + DATA_FOLDER + "temp_img" + ext + " " + link +
-                    " && identify " + DATA_FOLDER + "temp_img" + ext + " > " + DATA_FOLDER + "temp_id.txt");
-                    size = sys.read(DATA_FOLDER + "temp_id.txt").split(' ')[2];
-                    x = Number(size.split('x')[0]); y = Number(size.split('x')[1]);
-                    if (y > 350) {
-                        sys.system("convert -size " + size + " " + DATA_FOLDER + "temp_img" + ext +
-                        " -resize " + (x / 2) + "x" + (y / 2) + " " + DATA_FOLDER + "temp_img" + ext);
-                    }
-                    sys.system("base64 " + DATA_FOLDER + "temp_img" + ext + " > " + DATA_FOLDER + "temp_base64.txt");
-                    base64 = sys.read(DATA_FOLDER + "temp_base64.txt");
-                    sys.sendHtmlAll(helpers.bot(bots.main) + "<a href='" + link +
-                    "'><img src='data:image/png;base64," + base64 + "'></a>", channel);
-                }
-            }
-        }*/
         /**
             --------------
             Custom Plugins

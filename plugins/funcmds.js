@@ -25,9 +25,10 @@ function desu(text) {
 
 function pokeBallImage(src, ball) {
     var mapping;
+    var authImage = require("scripts/base64.js").auth;
     if (helpers.isAndroidOrWeb(src)) {
         mapping = {"poke": "USER", "great": "MOD", "ultra": "ADMIN", "master": "OWNER"};
-        return AUTHIMAGE[mapping[ball]];
+        return authImage[mapping[ball]];
     }
     mapping = {"poke": "u", "great": "m", "ultra": "a", "master": "o"};
     return "<img src='Themes/Classic/client/" + mapping[ball] + "Available.png'>";
@@ -155,11 +156,14 @@ module.exports = {
         },
 
         axolotl: function (src, channel, command) {
-            var name = helpers.escapehtml(sys.name(src)), auth = sys.auth(src), color = helpers.color(src);
+            var axolotl = require("scripts/base64.js").axolotl;
+            var name = helpers.escapehtml(sys.name(src));
+            var auth = sys.auth(src);
+            var color = helpers.color(src);
             if (auth >= 1 && auth <= 3) {
-                sys.sendHtmlAll("<font color='" + color + "'><timestamp/> +<b><i>" + name + ":</i></b></font> " + AXOLOTL_BASE64, channel);
+                sys.sendHtmlAll("<font color='" + color + "'><timestamp/> +<b><i>" + name + ":</i></b></font> " + axolotl, channel);
             } else {
-                sys.sendHtmlAll("<font color='" + color + "'><timestamp/> <b>" + name + ":</b></font> " + AXOLOTL_BASE64, channel);
+                sys.sendHtmlAll("<font color='" + color + "'><timestamp/> <b>" + name + ":</b></font> " + axolotl, channel);
             }
         },
 

@@ -144,8 +144,14 @@ module.exports = {
                 colors.push(helpers.color(ids[i]));
                 names.push(players[ids[i]].name + (sys.name(ids[i]) != players[ids[i]].name ? " (" + helpers.escapehtml(sys.name(ids[i])) + ")" : ""));
                 lower = names[i].toLowerCase();
-                countries.push(API_KEY !== "" && countryname[lower] ? FLAGS[helpers.toFlagKey(countries[i])] : "[no data]");
-                timeZones.push(API_KEY !== "" && timezone[lower] ? timezone[lower] : "[no data]");
+                if (API_KEY !== "") {
+                    var flags = require("scripts/base64.js").flags;
+                    countries.push(countryname[lower] ? flags[helpers.toFlagKey(countryname[lower])] : "[no data]");
+                    timeZones.push(timezone[lower] ? timezone[lower] : "[no data]");
+                } else {
+                    countries.push("[no data]");
+                    timeZones.push("[no data]");
+                }
                 lastMessages.push(helpers.escapehtml(players[ids[i]].lastmessage));
                 times.push(helpers.timePassed(colors[i], players[ids[i]].lastmessagetime));
             }
@@ -154,7 +160,7 @@ module.exports = {
                 for (i in ids) {
                     onlinemessage += helpers.authName(auths[i], true) + " | " + "<b><font color='" + colors[i] + "'>" + names[i] + "</font></b> | " + ids[i];
                     if (srcauth >= 1) {
-                        onlinemessage += " | " + ips[i] + " | " + helpers.osName(clients[i]);
+                        onlinemessage += " | " + ips[i] + " | " + script.osName(clients[i]);
                     }
                     onlinemessage += "<br>";
                 }
@@ -178,7 +184,7 @@ module.exports = {
                     + "<td><b><font color='" + colors[i] + "'>" + names[i] + "</font></b></td>"
                     + "<td>" + ids[i] + "</td>";
                     if (srcauth >= 1) {
-                        onlinemessage += "<td>" + ips[i] + "</td><td>" + helpers.osImage(clients[i]) + "</td>";
+                        onlinemessage += "<td>" + ips[i] + "</td><td>" + script.osImage(clients[i]) + "</td>";
                         if (API_KEY !== "") {
                             onlinemessage += "<td>" + countries[i] + "</td><td>" + timeZones[i] + "</td>";
                         }
@@ -197,7 +203,7 @@ module.exports = {
         },
     
         channelauth: function (src, channel, command) {
-            var authmessage = border + "<h2>Channel Authority of " + sys.channel(channel) + "</h2><br>", srcauth = sys.auth(src), index = 0, authList, i;
+            var authmessage = border + "<h2>Channel Authority of " + sys.channel(channel) + "</h2><br>", index = 0, authList, i;
             var lower = sys.channel(channel).toLowerCase(), auths = [], names = [], lastLogins = [], statuses = [];
             if (!regchannels[lower]) {
                 helpers.starfox(src, channel, command, bots.channel, "Error 400, this channel isn't registered!");

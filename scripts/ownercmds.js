@@ -974,11 +974,12 @@ module.exports = {
             commandsmessage += "<h2>Owner Commands ~ Server Settings</h2>"
             + "<br>"
             + "<b>Name:</b> " + sys.getServerName() + "<br>"
-            + "<b>Host OS:</b> " + helpers.os(sys.os()) + "<br>"
+            + "<b>Host OS:</b> " + script.os(sys.os()) + "<br>"
             + "<b>Version:</b> " + sys.serverVersion() + "<br>"
             + "<b>IP:</b> " + hostIp + "<br>";
             if (API_KEY !== "") {
-                commandsmessage += "<b>Hosted from:</b> " + (hostCountry ? FLAGS[helpers.toFlagKey(hostCountry)] +
+                var flags = require("scripts/base64.js").flags;
+                commandsmessage += "<b>Hosted from:</b> " + (hostCountry ? flags[helpers.toFlagKey(hostCountry)] +
                 " " + hostCountry : "[no data]") + "<br>";
             }
             commandsmessage += "<b>" + (ports == 1 ? "Port" : "Ports") + ":</b> " + sys.serverPorts().join(", ") + "<br>"

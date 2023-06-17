@@ -640,9 +640,11 @@ module.exports = {
             }
             player = name.toLowerCase();
             if (id) {
+                os = sys.os(id);
                 ip = sys.ip(id);
                 auth = sys.auth(id);
                 range = sys.range(id);
+                version = sys.version(id);
                 imageindex = (auth > 3 ? 0 : auth);
                 if (sys.battling(id)) {
                     imageindex += 8;
@@ -656,9 +658,11 @@ module.exports = {
                 }
                 playerChannels = playerChannels.join(", ");
             } else {
+                os = "[no data]";
                 ip = sys.dbIp(player);
                 auth = sys.dbAuth(player);
                 range = sys.dbRange(player);
+                version = "[no data]";
                 imageindex = (auth > 3 ? 0 : auth) + 4;
                 status = "<font color='red'>Offline</font>";
                 playerChannels = "None";
@@ -691,26 +695,25 @@ module.exports = {
             alts = sys.aliases(ip);
             totalAlts = alts.length;
             lastLogin = helpers.formatLastOn(src, sys.dbLastOn(sys.dbExists(player) ? player : name));
-            if (operatingsystem[player]) {
-                os = (helpers.isAndroid(src) ? helpers.osName(operatingsystem[player]) : helpers.os(operatingsystem[player]));
-            } else {
-                os = "[no data]";
+            if (os) {
+                os = (helpers.isAndroid(src) ? script.osName(os) : script.os(os));
             }
-            versions[player] ? version = ", ver. " + versions[player] : version = "";
             if (API_KEY !== "" && countryname[player]) {
                 country = countryname[player];
-                flag = FLAGS[helpers.toFlagKey(countryname[player])];
+                flag = require("scripts/base64.js").flags[helpers.toFlagKey(countryname[player])];
+                timezone[player] ? timezone2 = timezone[player] : timezone2 = "[no data]";
+                cityname[player.toLowerCase()] ? city = cityname[player.toLowerCase()] : city = "[no data]";
             } else {
                 country = "[no data]";
                 flag = "[no data]";
+                timezone2 = "[no data]";
+                city = "[no data]";
             }
-            timezone[player] ? timezone2 = timezone[player] : timezone2 = "[no data]";
             sys.dbRegistered(player) ? registered = "<b><font color='green'>Yes</font></b>" : registered = "<font color='red'>No</font>";
             alts = alts.join(", ");
             if (members[player]) {
                 player = members[player];
             }
-            !cityname[player.toLowerCase()] ? city = "[no data]" : city = cityname[player.toLowerCase()];
             cpmessage += (!helpers.isAndroid(src) ? helpers.authimage(src, imageindex) +
             " " : "") + player + " " + (id && players[id].name.toLowerCase() != lower ? " (" + lower + ")" : "") + " " + status +
             "<br><b>Auth:</b> " + helpers.authName(auth, DISPLAY_USER);
@@ -720,7 +723,7 @@ module.exports = {
                 cpmessage += "<br><b>IP:</b> <a href='" + mapsUrl(city, country) + "'>" + ip + "</a>";
                 location = (!helpers.isAndroid(src) ? flag + " " : "") + city + ", " + country;
             }
-            cpmessage += "<br><b>Client:</b> " + os + version;
+            cpmessage += "<br><b>Client:</b> " + os + " " + script.formatVersion(version);
             if (API_KEY !== "") {
                 cpmessage += "<br><b>Location:</b> " + location + "<br><b>Time Zone:</b> " + timezone2;
             }
