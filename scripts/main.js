@@ -301,7 +301,7 @@ function initServerGlobals() {
             }
             var result = {"ip": resp};
             if (API_KEY !== "") {
-                sys.webCall(this.countryRetrievalUrl(hostIp), function (resp) {
+                sys.webCall(this.countryRetrievalUrl(result.ip), function (resp) {
                     resp = JSON.parse(resp);
                     result.timeZone = helpers.timezonedata(resp.countryName, resp.timeZone);
                     result.country = helpers.countrydata(resp.countryName);
@@ -313,6 +313,11 @@ function initServerGlobals() {
                 hostLocation = result;
             }
         });
+    },
+
+    // returns host IP
+    getHostIP: function () {
+        return hostLocation.ip;
     },
 
     serverStartUp: function () {
