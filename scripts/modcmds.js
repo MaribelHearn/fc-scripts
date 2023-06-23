@@ -695,7 +695,7 @@ module.exports = {
             alts = sys.aliases(ip);
             totalAlts = alts.length;
             lastLogin = helpers.formatLastOn(src, sys.dbLastOn(sys.dbExists(player) ? player : name));
-            if (os) {
+            if (os != "[no data]") {
                 os = (helpers.isAndroid(src) ? script.osName(os) : script.os(os));
             }
             if (API_KEY !== "" && countryname[player]) {
