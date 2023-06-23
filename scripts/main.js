@@ -1289,17 +1289,17 @@ function initServerGlobals() {
         var bannedCharacters = this.bannedCharacters(name);
         if (bannedCharacters[0]) {
             return bannedCharacters;
-        } else if (CYRILLIC.test(string)) {
+        } else if (CYRILLIC.test(name)) {
             return [true, "Cyrillic that is similar to letters"];
-        } else if (GREEK.test(string)) {
+        } else if (GREEK.test(name)) {
             return [true, "Greek that is similar to letters"];
-        } else if (FAKEI.test(string)) {
+        } else if (FAKEI.test(name)) {
             return [true, "a fake I"];
-        } else if (SPACE.test(string)) {
+        } else if (SPACE.test(name)) {
             return [true, "space characters"];
-        } else if (DASH.test(string)) {
+        } else if (DASH.test(name)) {
             return [true, "dash characters"];
-        } else if (OTHER.test(string)) {
+        } else if (OTHER.test(name)) {
             return [true, "special characters"];
         } else {
             return [false, ""];
