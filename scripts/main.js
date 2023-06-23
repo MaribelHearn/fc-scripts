@@ -1273,6 +1273,7 @@ function initServerGlobals() {
         if (HEBREW.test(message)) {
             return [true, "Hebrew"];
         }
+        return [false, ""];
     },
 
     // returns whether given name contains banned characters for a username
@@ -1331,8 +1332,8 @@ function initServerGlobals() {
             Banned Link / Characters Check
             ------------------------------
         **/
-        var bannedCharacters = this.bannedCharacters(message, channelname2);
-        if (bannedCharacters[0] && auth < 3) {
+        var hasBannedCharacters = this.bannedCharacters(message, channelname2);
+        if (hasBannedCharacters[0] && auth < 3) {
             sys.stopEvent();
             helpers.starfox(src, channel, message, bots.command, "Error 403, you are not allowed to post banned links or characters.", channel);
             return;
@@ -1531,14 +1532,6 @@ function initServerGlobals() {
                     players[src].caps--;
                 }
             }
-        }
-        /**
-            -------------------
-            Zalgo or Thai Clear
-            -------------------
-        **/
-        if (ZALGO.test(message) || THAI.test(message)) {
-            sys.clearChat();
         }
         /**
             -----------
