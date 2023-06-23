@@ -572,25 +572,11 @@ function initServerGlobals() {
     },
 
     beforeIPConnected: function (ip) {
-        /**
-            ---------------------
-            Server Starting Check
-            ---------------------
-        **/
         if (serverStarting) {
             sys.stopEvent();
             return;
         }
-        /**
-            -------------
-            Relay Station
-            -------------
-        **/
-        if (ip == "::1%0") {
-            sys.sendHtmlWatch(helpers.bot(bots.spy) + "[Server] The web client is connecting to the server.");
-        } else {
-            sys.sendHtmlWatch(helpers.bot(bots.spy) + "[Server] IP " + ip + " is connecting to the server.");
-        }
+        sys.sendHtmlWatch(helpers.bot(bots.spy) + "[Server] IP " + ip + " is connecting to the server.");
     },
 
     beforeLogIn: function (src) {
