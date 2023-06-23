@@ -859,12 +859,12 @@ module.exports = {
         },
     
         disallowrange: function (src, channel, command) {
-            var name = sys.name(src), range;
+            var name = sys.name(src);
             if (!command[1]) {
                 helpers.starfox(src, channel, command, bots.priv, "Error 404, range not found.");
                 return;
             }
-            range = command[1];
+            var range = command[1];
             if (!helpers.isRange(range)) {
                 helpers.starfox(src, channel, command, bots.ban, "Error 400, invalid range.");
                 return;

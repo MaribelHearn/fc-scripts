@@ -615,8 +615,8 @@ module.exports = {
     
         cp: function (src, channel, command) {
             var DISPLAY_USER = true, cpmessage = border + "<h2>Control Panel</h2><br>", trgtname = command[1],
-            player, id, exists, name, auth, imageindex, status, registered, location, os, country, city,
-            lower, usedips, playerChannels, lastLogin, timezone2, flag, version, totalAlts, index;
+            player, id, ip, exists, name, auth, imageindex, status, registered, location, os, country, city,
+            lower, usedips, playerChannels, lastLogin, timezone2, flag, version, alts, totalAlts, index, range;
             if (!trgtname) {
                 helpers.starfox(src, channel, command, bots.command, "Error 404, player not found.", channel);
                 return;

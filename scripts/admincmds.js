@@ -637,7 +637,7 @@ module.exports = {
         ,
     
         rangeunban: function (src, channel, command) {
-            var name = sys.name(src), trgtname = command[1], lower;
+            var name = sys.name(src), trgtname = command[1], lower, range;
             if (!trgtname) {
                 helpers.starfox(src, channel, command, bots.gigaban, "Error 404, player not found.");
                 return;
