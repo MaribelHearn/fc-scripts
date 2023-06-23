@@ -1614,9 +1614,9 @@ function initServerGlobals() {
             ---------------
         **/
         if (message.charAt(0) == COMMAND_SYMBOL && message.length > 0) {
-            var command = message, lower = "", cmd;
+            var command = message, lower = "";
             command = command.replace(COMMAND_SYMBOL, "");
-            cmd = command;
+            var cmd = command;
             while (cmd !== "" && cmd.charAt(0) != ' ') {
                 lower += cmd.charAt(0);
                 cmd = cmd.slice(1);

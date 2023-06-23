@@ -281,7 +281,7 @@ module.exports = {
             }
         }
         if (command) {
-            cmd = (typeof(command) == "string" ? command : command.join(DELIMITER).replace(DELIMITER, ' '));
+            var cmd = (typeof(command) == "string" ? command : command.join(DELIMITER).replace(DELIMITER, ' '));
             if ((message.indexOf("Error 403, ") != -1 || bot == bots.starfox) && message != "Error 403, you are not allowed to post banned links or characters.") {
                 sys.sendHtmlWatch(this.bot(bots.spy ) + "[<a href=\"po:join/" + channelname + "\">#" + channelname +
                 "</a>] <b><font color='" + this.color(src) + "'>" + this.escapehtml(name) + "</font></b> got Star Fox'd because of trying to run /" + this.escapehtml(cmd) + " (Error 403 Forbidden).");

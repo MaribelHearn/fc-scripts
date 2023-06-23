@@ -186,6 +186,7 @@ function watchChannelLogging(message, channel, name, lower, color, channelName) 
     }
 
     var plugins = sys.filesForDirectory("plugins");
+    var pluginEvent;
     for (var i in plugins) {
         if (Object.keys(OFFICIAL_PLUGINS).contains(plugins[i])) {
             continue;
