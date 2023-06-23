@@ -1,1 +1,34 @@
+# script backups
 *.bak
+
+# script data
+data/
+
+# Pokemon Online server and client files
+*.dll
+*.exe
+accessible/
+battleserverplugins/
+bearer/
+clientplugins/
+db/
+iconengines/
+imageformats/
+Logs/
+mediaservice/
+Music/
+platforms/
+playlistformats/
+qml/
+Qt/
+serverplugins/
+sqldrivers/
+Themes/
+trans/
+usage_stats/
+config
+pokemon
+languages.txt
+stdout.txt
+unins000.dat
+version.ini
