@@ -239,6 +239,9 @@ function initServerGlobals() {
         var modules = sys.filesForDirectory("scripts");
         var numberOfModules = modules.length;
         for (var i = 0; i < numberOfModules; i++) {
+            if (modules[i] == "main.js") {
+                continue;
+            }
             if (modules[i] == "helpers.js") {
                 helpers = require("scripts/" + modules[i]);
             } else {
