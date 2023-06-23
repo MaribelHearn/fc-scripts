@@ -226,7 +226,7 @@ function initServerGlobals() {
         }
         return false;
     };
-}).call(null);
+})();
 
 ({
     loadScript: function () {
