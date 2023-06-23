@@ -626,6 +626,7 @@ module.exports = {
             var scriptmessage = border + "<h2>Script Info</h2><br>";
             var officialPlugins = [], customPlugins = [];
             if (sys.dirsForDirectory(sys.cwd()).contains("plugins")) {
+                var plugins = sys.filesForDirectory("plugins");
                 for (var j in plugins) {
                     if (JSON.stringify(OFFICIAL_PLUGINS).contains(plugins[j])) {
                         officialPlugins.push(plugins[j]);

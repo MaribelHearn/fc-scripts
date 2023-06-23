@@ -16,6 +16,7 @@
 */
 var hostLocation;
 var floodplayers = [];
+var channelPlugins = [];
 var bansites = sys.read("bansites.txt").replace(/\r/g, "").split('\n');
 bansites.splice(bansites.indexOf(""), 1);
 bansites.splice(bansites.lastIndexOf(""), 1);
@@ -244,9 +245,7 @@ function initServerGlobals() {
                 require("scripts/" + modules[i]);
             }
         }
-        plugins = sys.filesForDirectory("plugins");
-        channelPlugins = [];
-        unofficialPlugins = false;
+        var plugins = sys.filesForDirectory("plugins");
         for (var plugin in OFFICIAL_PLUGINS) {
             var path = OFFICIAL_PLUGINS[plugin].path;
             if (sys.fexists("plugins/" + path)) {
@@ -262,7 +261,6 @@ function initServerGlobals() {
             for (var j = 0; j < numberOfPlugins; j++) {
                 if (!require.cache.hasOwnProperty("plugins/" + plugins[j]) && plugins[j].split('.')[1] == "js") {
                     require("plugins/" + plugins[j]);
-                    unofficialPlugins = true;
                 }
             }
         }
@@ -419,6 +417,7 @@ function initServerGlobals() {
             --------------
         **/
         sys.setTimer(function () {
+            var plugins = sys.filesForDirectory("plugins");
             for (var i in plugins) {
                 if (Object.keys(OFFICIAL_PLUGINS).contains(plugins[i])) {
                     continue;
@@ -552,6 +551,7 @@ function initServerGlobals() {
             Custom Plugins
             --------------
         **/
+        var plugins = sys.filesForDirectory("plugins");
         for (i in plugins) {
             if (Object.keys(OFFICIAL_PLUGINS).contains(plugins[i])) {
                 continue;
@@ -964,6 +964,7 @@ function initServerGlobals() {
             Custom Plugins
             --------------
         **/
+        var plugins = sys.filesForDirectory("plugins");
         for (var i in plugins) {
             if (Object.keys(OFFICIAL_PLUGINS).contains(plugins[i])) {
                 continue;
@@ -998,6 +999,7 @@ function initServerGlobals() {
             Custom Plugins
             --------------
         **/
+        var plugins = sys.filesForDirectory("plugins");
         for (var i in plugins) {
             if (Object.keys(OFFICIAL_PLUGINS).contains(plugins[i])) {
                 continue;
@@ -1416,6 +1418,7 @@ function initServerGlobals() {
             Custom Plugins
             --------------
         **/
+        var plugins = sys.filesForDirectory("plugins");
         for (var i in plugins) {
             pluginEvent = plugins[i].replace(".js", "") + "Commands";
             command = message.replace(COMMAND_SYMBOL, "").replace(' ', DELIMITER).split(' ')[0];
@@ -1565,6 +1568,7 @@ function initServerGlobals() {
             Custom Plugins
             --------------
         **/
+        var plugins = sys.filesForDirectory("plugins");
         for (var i in plugins) {
             if (Object.keys(OFFICIAL_PLUGINS).contains(plugins[i])) {
                 continue;
@@ -1678,6 +1682,7 @@ function initServerGlobals() {
             Custom Plugins
             --------------
         **/
+        var plugins = sys.filesForDirectory("plugins");
         for (var i in plugins) {
             if (Object.keys(OFFICIAL_PLUGINS).contains(plugins[i])) {
                 continue;
