@@ -15,6 +15,7 @@ db/
 iconengines/
 imageformats/
 Logs/
+logs/
 mediaservice/
 Music/
 platforms/
