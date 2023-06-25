@@ -118,8 +118,8 @@ function initServerGlobals() {
             var content = sys.read(path);
             if (content) {
                 try {
-                    eval(sys.read(path));
                     sys.writeToFile(backup, sys.read(path));
+                    eval(sys.read(path));
                 } catch (e) {
                     print("An error occurred in module " + path + ": " + e);
                     sys.writeToFile(path, sys.read(backup));
