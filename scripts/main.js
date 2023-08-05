@@ -121,7 +121,7 @@ function initServerGlobals() {
                     sys.writeToFile(backup, sys.read(path));
                     eval(sys.read(path));
                 } catch (e) {
-                    print("An error occurred in module " + path + ": " + e);
+                    print("An error occurred in module " + path + ": " + e.backtrace);
                     sys.writeToFile(path, sys.read(backup));
                     if (!retry) {
                         require(path, true); // prevent loops
@@ -1751,7 +1751,7 @@ function initServerGlobals() {
             Stop Battles
             ------------
         **/
-        if (stopBattles) {
+        if (this.stopBattles) {
             sys.sendMessage(src, helpers.bot(bots.main) + "The server is going to restart soon! You can't battle now!");
             sys.sendMessage(trgt, helpers.bot(bots.main) + sys.name(src) + " tried to challenge you while battles weren't allowed.");
             sys.stopEvent();
@@ -1791,7 +1791,7 @@ function initServerGlobals() {
             Stop Battles
             ------------
         **/
-        if (stopBattles) {
+        if (this.stopBattles) {
             sys.sendMessage(src, helpers.bot(bots.main) + "The server is going to restart soon! You can't battle now!");
             sys.stopEvent();
             return;
@@ -1891,7 +1891,7 @@ function initServerGlobals() {
         battles[battle] = {};
         battles[battle].p1 = sys.name(src);
         battles[battle].p2 = sys.name(trgt);
-        battles[battle].start = helpers.shortdate(new Date());
+        battles[battle].start = this.shortdate(new Date());
         battles[battle].tier = sys.tier(src, team) == sys.tier(trgt, team2) ? sys.tier(src, team) : "Mixed";
         battles[battle].clauses = (typeof(list) == "string" ? list : list.join(", "));
         /**
