@@ -221,7 +221,7 @@ module.exports = {
     },
 
     height: function (pokeId) {
-        if (Object.keys(heightList).length === 0) {
+        if (Object.keys(heightData).length === 0) {
             readHeightData();
         }
         var key = this.getDbIndex(pokeId);
@@ -234,7 +234,7 @@ module.exports = {
     },
 
     weight: function (pokeId) {
-        if (Object.keys(weightList).length === 0) {
+        if (Object.keys(weightData).length === 0) {
             readWeightData();
         }
         var key = this.getDbIndex(pokeId);
@@ -248,20 +248,20 @@ module.exports = {
 
     movepool: function (pokeId) {
         var index, id, movepool;
-        if (Object.keys(movepoolList).length === 0) {
+        if (Object.keys(movepoolData).length === 0) {
             readMovepoolData();
         }
         var isFundex = (pokeId > 999 && pokeId < 1200 || pokeId > 66536);
-        if (isFundex && Object.keys(movepoolList).length <= 744) {
+        if (isFundex && Object.keys(movepoolData).length <= 744) {
             readFundexMovepools();
         }
         var key = this.getDbIndex(pokeId);
-        if (movepoolList[key] !== undefined) {
-            return movepoolList[key];
+        if (movepoolData[key] !== undefined) {
+            return movepoolData[key];
         }
         index = key.indexOf(':') + 1;
         var base = key.substring(0, index);
-        return movepoolList[base];
+        return movepoolData[base];
     },
 
     weightPower: function (weight) {
@@ -293,13 +293,13 @@ module.exports = {
     },
 
     moveCategory: function (moveId) {
-        if (Object.keys(categoryList).length === 0) {
+        if (Object.keys(moveData.category).length === 0) {
             readMoveData("damage_class");
         }
-        if (categoryList[moveId] == 1) {
+        if (moveData.category[moveId] == 1) {
             return "<font color='#800000'>Physical</font>";
         }
-        if (categoryList[moveId] == 2) {
+        if (moveData.category[moveId] == 2) {
             return "<font color='#FF69B4'>Special</font>";
         }
         return "<font color='#2E8B57'>Other</font>";
@@ -403,35 +403,35 @@ module.exports = {
     },
 
     getItem: function (itemId) {
-        if (Object.keys(itemList).length === 0) {
+        if (Object.keys(itemData.text).length === 0) {
             readItemTexts("items");
         }
         return itemData.text[itemId];
     },
 
     getBerry: function (berryId) {
-        if (Object.keys(berryList).length === 0) {
+        if (Object.keys(berryData.text).length === 0) {
             readItemTexts("berries");
         }
         return berryData.text[berryId];
     },
 
     getFlingPower: function (itemId) {
-        if (Object.keys(flingPowerList).length === 0) {
+        if (Object.keys(itemData.power).length === 0) {
             readItemPowers("items");
         }
         return itemData.power[itemId];
     },
 
     getBerryPower: function (berryId) {
-        if (Object.keys(berryPowerList).length === 0) {
+        if (Object.keys(berryData.power).length === 0) {
             readItemPowers("berry");
         }
         return berryData.power[berryId];
     },
 
     getBerryType: function (berryId) {
-        if (Object.keys(berryTypeList).length === 0) {
+        if (Object.keys(berryData.type).length === 0) {
             readBerryTypes();
         }
         return berryData.type[berryId].trim();
