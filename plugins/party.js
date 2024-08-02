@@ -22,7 +22,7 @@ function nyanColor(number) {
             return "#FFD700";
         case 3:
             return "#008000";
-        case 4:``
+        case 4:
             return "#0000FF";
         case 5:
             return "#00008B";

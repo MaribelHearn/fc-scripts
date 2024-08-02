@@ -790,6 +790,10 @@ module.exports = {
         return str.replace(/<\/?[^>]*>/g, "");
     },
 
+    cap: function (string) {
+        return string.charAt(0).toUpperCase() + string.slice(1).toLowerCase();
+    },
+
     escapehtml: function (string) {
         return string.toString().replace(/&/g, "&amp;").replace(/>/g, "&gt;").replace(/</g, "&lt;");
     },
