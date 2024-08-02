@@ -11,7 +11,7 @@
     ----------------------------------------------
 */
 var PARTY_MODES = ["joke", "nightclub", "desu", "rainbow", "nyan", "dennis", "cirno", "sparta", "luigi", "roflcopter", "derp", "asdf", "leet", "morse", "reverse"];
-var partyMode = sys.fexists(DATA_FOLDER + "partymode.txt") ? helpers.readData("partyMode") : "none";
+var partyMode = sys.fexists(DATA_FOLDER + "partyMode.txt") ? helpers.readData("partyMode") : "none";
 var partyNyan = 0;
 
 function nyanColor(number) {
@@ -22,7 +22,7 @@ function nyanColor(number) {
             return "#FFD700";
         case 3:
             return "#008000";
-        case 4:
+        case 4:``
             return "#0000FF";
         case 5:
             return "#00008B";
