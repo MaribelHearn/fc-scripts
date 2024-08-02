@@ -585,6 +585,10 @@ module.exports = {
     },
 
     formatLastOn: function (src, lastlogin) {
+        if (!lastlogin) {
+            return "Unknown";
+        }
+
         return (API_KEY !== "" && timezone[players[src].name.toLowerCase()] ? this.toTimeZone(lastlogin, timezone[players[src].name.toLowerCase()].split(':')[0]) : lastlogin).split('.')[0].replace('T', ", ");
     },
 
