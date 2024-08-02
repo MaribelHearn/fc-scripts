@@ -244,6 +244,8 @@ function initServerGlobals() {
             }
             if (modules[i] == "helpers.js") {
                 helpers = require("scripts/" + modules[i]);
+            } else if (modules[i] == "handler.js") {
+                handler = require("scripts/" + modules[i]);
             } else {
                 require("scripts/" + modules[i]);
             }

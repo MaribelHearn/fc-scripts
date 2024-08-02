@@ -49,7 +49,7 @@ module.exports = {
         var name = helpers.escapehtml(sys.name(src)), auth = sys.auth(src), color = helpers.color(src),
         length = message.length, mode = partyMode, playerIds, random, derps, i;
         if (message.split(' ')[0] == "/mode") {
-            handler.parseCommand(src, message, channel, name, auth, false);
+            handler.parseCommand(src, message, channel, name, auth);
             return;
         }
         if (mode == "joke") {
