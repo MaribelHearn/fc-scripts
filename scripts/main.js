@@ -884,6 +884,7 @@ function initServerGlobals() {
                 });
             }
         }
+        print("login|" + players[src].name + "|" + auth + "|" + color);
     },
 
     beforeChannelJoin: function (src, channel) {
@@ -1081,6 +1082,7 @@ function initServerGlobals() {
             helpers.saveData("cityname", cityname);
             helpers.saveData("timezone", timezone);
         }
+        print("logout|" + players[src].name);
         delete players[src];
     },
 
@@ -1918,6 +1920,7 @@ function initServerGlobals() {
             sys.sendHtmlWatch(helpers.bot(bots.spy) + "[Battle] A battle has started between <b><font color='" + helpers.color(src) + "'>" + sys.name(src) +
             "</font></b> and <b><font color='" + helpers.color(trgt) + "'>" + sys.name(trgt) + "</font></b>.");
         }
+        print("battle|" + players[src].name + "|" + players[trgt].name + "|" + battles[battle].tier);
     },
 
     attemptToSpectateBattle: function (src, battler1, battler2) {
