@@ -247,12 +247,12 @@ module.exports = {
     },
 
     movepool: function (pokeId) {
-        var index, id, movepool;
+        var index;
         if (Object.keys(movepoolData).length === 0) {
             readMovepoolData();
         }
         var isFundex = (pokeId > 999 && pokeId < 1200 || pokeId > 66536);
-        if (isFundex && Object.keys(movepoolData).length <= 744) {
+        if (isFundex && Object.keys(movepoolData).length <= 845) {
             readFundexMovepools();
         }
         var key = this.getDbIndex(pokeId);

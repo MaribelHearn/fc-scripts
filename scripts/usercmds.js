@@ -959,7 +959,7 @@ module.exports = {
                 move = sys.move(moveNum);
             }
             movepool = dex.movepool(pokeNum);
-            learnmessage = border + "<h2>#" + helpers.displayNum(pokeNum) + " " + pokemon + "</h2><br><b>Movepool:</b> " + movepool.join(", ")
+            learnmessage = border + "<h2>#" + dex.displayNum(pokeNum) + " " + pokemon + "</h2><br><b>Movepool:</b> " + movepool.join(", ")
             + "<br><br><b>Total Moves:</b> " + movepool.length + "<br><br><timestamp/><br>" + border2;
             if (move) {
                 sys.sendHtmlMessage(src, helpers.bot(bots.command) + pokemon + " can" + (!helpers.isInArray(move, movepool) ? "not" : "") + " learn " + move + ".", channel);
