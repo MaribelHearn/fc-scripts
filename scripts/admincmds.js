@@ -986,12 +986,14 @@ module.exports = {
             users = db.length;
             for (var i in db) {
                 ip = sys.dbIp(db[i]);
-                range = sys.dbRange(db[i]);
+                if (ip) {
+                    range = sys.dbRange(db[i]);
+                }
                 registeredUsers += (sys.dbRegistered(db[i]) ? 1 : 0);
                 if (!helpers.isInArray(ip, ipArray)) {
                     ipArray.push(ip);
                 }
-                if (!helpers.isInArray(range, rangeArray)) {
+                if (range && !helpers.isInArray(range, rangeArray)) {
                     rangeArray.push(range);
                 }
             }
