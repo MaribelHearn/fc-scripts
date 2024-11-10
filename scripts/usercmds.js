@@ -614,7 +614,7 @@ module.exports = {
             servermessage += "<br><b>Name:</b> " + sys.getServerName() +
             "<br><b>Host OS:</b> " + script.os(sys.os()) +
             "<br><b>Version:</b> " + sys.serverVersion() +
-            "<br><b>IP:</b> " + script.getHostIP() +
+            "<br><b>IP:</b> " + hostLocation.ip +
             "<br><b>" + (ports == 1 ? "Port" : "Ports") + ":</b> " + sys.serverPorts().join(", ") +
             "<br><b>Public:</b> " + serverprivate + "<br><b>Open:</b> " + serveropen + "<br><br>" + "<b>Local Date:</b> " + date +
             "<br><b>Local Time:</b> " + time + "<br><b>Server Uptime:</b> " + helpers.formatUptime(uptime) + "<br><br><timestamp/><br>" + border2;

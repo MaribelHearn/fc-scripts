@@ -317,11 +317,6 @@ function initServerGlobals() {
         });
     },
 
-    // returns host IP
-    getHostIP: function () {
-        return hostLocation.ip;
-    },
-
     serverStartUp: function () {
         var time = 100, pluginEvent, i;
         serverStarting = true;
