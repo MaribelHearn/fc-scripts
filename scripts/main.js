@@ -298,6 +298,7 @@ function initServerGlobals() {
         }
         sys.webCall("http://whatismyip.akamai.com", function (resp) {
             if (resp === "") {
+                hostLocation = {"ip": "Unknown"};
                 print("An error occurred while loading the host IP address.");
                 return;
             }
