@@ -12,8 +12,11 @@ plugins/*
 !plugins/rr.js
 !plugins/safari.js
 
-# Pokemon Online server and client files
+# Pokemon Online libraries
 *.dll
+*.so*
+
+# Pokemon Online server and client files
 *.exe
 accessible/
 battleserverplugins/
