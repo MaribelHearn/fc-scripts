@@ -142,7 +142,7 @@ function cmuteCheck(name, lower) {
 }
 
 function closeCheck(src, name, lower) {
-    return regchannels[lower].close > sys.auth(src) && regchannels[lower].close > helpers.cauth(name.toLowerCase(), sys.channelId(lower));
+    return regchannels[lower].close > sys.auth(src) && regchannels[lower].close > cauth(name.toLowerCase(), sys.channelId(lower));
 }
 
 /**
@@ -150,9 +150,9 @@ function closeCheck(src, name, lower) {
     Method Helpers
     --------------
 **/
-function starfox(src, channel, command, bot, message, team) {
+function starfox(src, channel, command, botName, message, team) {
     var name = sys.name(src), channelname = sys.channel(channel), index = 0, regular = 0;
-    sys.sendHtmlMessage(src, bot(bot) + message, channel);
+    sys.sendHtmlMessage(src, bot(botName) + message, channel);
     if (regchannels[channelname.toLowerCase()]) {
         if (regchannels[channelname.toLowerCase()].priv) {
             return;
@@ -160,7 +160,7 @@ function starfox(src, channel, command, bot, message, team) {
     }
     if (command) {
         var cmd = (typeof(command) == "string" ? command : command.join(DELIMITER).replace(DELIMITER, ' '));
-        if ((message.indexOf("Error 403, ") != -1 || bot == bots.starfox) && message != "Error 403, you are not allowed to post banned links or characters.") {
+        if ((message.indexOf("Error 403, ") != -1 || botName == bots.starfox) && message != "Error 403, you are not allowed to post banned links or characters.") {
             sys.sendHtmlWatch(bot(bots.spy ) + "[<a href=\"po:join/" + channelname + "\">#" + channelname +
             "</a>] <b><font color='" + color(src) + "'>" + escapehtml(name) + "</font></b> got Star Fox'd because of trying to run /" + escapehtml(cmd) + " (Error 403 Forbidden).");
         } else if (message.indexOf("Error 404, ") != -1) {
@@ -527,7 +527,7 @@ function bot(string) {
     return "<font color='" + botcolor + "'><timestamp/></font><font color='" + botsymbolcolor + "'><b>" + escapehtml(botsymbol) + "</b></font><font color='" + botcolor + "'><b>" + string + ": </b></font>";
 }
 
-function date(date) {
+function dateFunc(date) {
     date = date.toString().split(' ');
     date[5] = date[5].replace(/0/g, "");
     if (date[7]) {
@@ -1156,7 +1156,7 @@ module.exports = {
     },
 
     date: function (date) {
-        return date(date);
+        return dateFunc(date);
     },
 
     htmlLinks:  function (text, type) {
