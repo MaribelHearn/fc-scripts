@@ -1,7 +1,7 @@
 /*
     ----------------------------------------------
     FUN COMMUNITY OWNER COMMANDS ownercmds.js
-     - by Maribel Hearn, 2012-2023
+     - by Maribel Hearn, 2012-2025
 
     This file contains commands that can be
     run by owners.
@@ -1049,8 +1049,8 @@ module.exports = {
                 sys.sendHtmlMessage(src, message, channel);
                 return;
             }
-            helpers.initCustoms();
-            helpers.initCustomGlobals();
+            script.initCustoms();
+            script.initCustomGlobals();
             sys.sendHtmlMessage(src, helpers.bot(bots.main) + "Your data has been soft reset successfully.", channel);
         },
     

@@ -1,7 +1,7 @@
 /*
     ----------------------------------------------
     FUN COMMUNITY MAIN SCRIPT main.js
-     - by Maribel Hearn, 2012-2023
+     - by Maribel Hearn, 2012-2025
 
     The main script file. Defines global
     constants, variables, functions and
@@ -20,6 +20,128 @@ var channelPlugins = [];
 var bansites = sys.read("bansites.txt").replace(/\r/g, "").split('\n');
 bansites.splice(bansites.indexOf(""), 1);
 bansites.splice(bansites.lastIndexOf(""), 1);
+
+function initCustoms() {
+    var dataFiles = {
+        "botcolor": "string",
+        "botsymbol": "string",
+        "servertopic": "string",
+        "botsymbolcolor": "string",
+        "bordercolor": "string",
+        "servertopiccolor": "string",
+        "channeltopiccolor": "string",
+        "welcomemessage": "string",
+        "leavemessage": "string",
+        "channelwelcomemessage": "string",
+        "channelleavemessage": "string",
+        "silencemessage": "string",
+        "unsilencemessage": "string",
+        "nopermissionmessage": "string",
+        "border": "string",
+        "border2": "string",
+        "cmdcolors": "array",
+        "listcolors": "object",
+        "bots": "object",
+        "authtitles": "object",
+        "selfkickmessages": "object",
+        "kickmessages": "object",
+        "mutemessages": "object",
+        "banmessages": "object",
+        "rangebanmessages": "object"
+    }, dataFile, defaultVal;
+    for (dataFile in dataFiles) {
+        defaultVal = helpers.defaultValue(dataFile, dataFiles[dataFile]);
+        sys.write("data/" + dataFile + ".txt", JSON.stringify(defaultVal));
+    }
+    if (require.cache.hasOwnProperty("plugins/funcmds.js")) {
+        sys.write("data/bigtexts.txt", "{}");
+    } else if (sys.fexists("data/bigtexts.txt")) {
+        sys.rm("data/bigtexts.txt");
+    }
+    print("Customisation settings created");
+}
+
+function initData() {
+    var dataFiles = {
+        "open": "boolean",
+        "allowance": "number",
+        "floodtime": "number",
+        "floodlevel": "number",
+        "maxplayers": "number",
+        "updatefrequency": "number",
+        "API_KEY": "string",
+        "GOOGLE_KEY": "string",
+        "UPDATE_KEY": "string",
+        "latestshahash": "string",
+        "allowed": "array",
+        "exceptions": "array",
+        "permchannels": "array",
+        "allowedrange": "array",
+        "namestounban": "array",
+        "silentcommands": "array",
+        "nameblocklist": "array",
+        "rules": "object",
+        "regchannels": "object",
+        "banlist": "object",
+        "mutelist": "object",
+        "timezone": "object",
+        "megabanlist": "object",
+        "gigabanlist": "object",
+        "rangebanlist": "object",
+        "countryname": "object",
+        "cityname": "object",
+        "members": "object"
+    }, dataFile, defaultVal;
+    sys.mkdir("data");
+    for (dataFile in dataFiles) {
+        defaultVal = defaultValue(dataFile, dataFiles[dataFile]);
+        sys.write("data/" + dataFile + ".txt", JSON.stringify(defaultVal));
+    }
+    permchannels = defaultValue("permchannels");
+    if (require.cache.hasOwnProperty("plugins/party.js")) {
+        permchannels.push("Party");
+    }
+    if (require.cache.hasOwnProperty("plugins/roulette.js")) {
+        permchannels.push("Roulette");
+    }
+    if (require.cache.hasOwnProperty("plugins/rr.js")) {
+        permchannels.push("Russian Roulette");
+    }
+    if (require.cache.hasOwnProperty("plugins/safari.js")) {
+        permchannels.push("Safari");
+    }
+    sys.write("data/permchannels.txt", JSON.stringify(permchannels));
+    print("Data folder created");
+    initCustoms();
+}
+
+function initCustomGlobals() {
+    botcolor = helpers.readData("botcolor");
+    botsymbol = helpers.readData("botsymbol");
+    servertopic = helpers.readData("servertopic");
+    botsymbolcolor = helpers.readData("botsymbolcolor");
+    borderColor = helpers.readData("bordercolor");
+    serverTopicColor = helpers.readData("servertopiccolor");
+    channelTopicColor = helpers.readData("channeltopiccolor");
+    welcomeMessage = helpers.readData("welcomemessage");
+    leaveMessage = helpers.readData("leavemessage");
+    channelWelcomeMessage = helpers.readData("channelwelcomemessage");
+    channelLeaveMessage = helpers.readData("channelleavemessage");
+    noPermissionMessage = helpers.readData("nopermissionmessage");
+    silenceMessage = helpers.readData("silencemessage");
+    unsilenceMessage = helpers.readData("unsilencemessage");
+    cmdcolors = helpers.readData("cmdcolors");
+    listcolors = helpers.readData("listcolors");
+    bots = helpers.readData("bots");
+    authtitles = helpers.readData("authtitles");
+    selfkickmessages = helpers.readData("selfkickmessages");
+    kickmessages = helpers.readData("kickmessages");
+    mutemessages = helpers.readData("mutemessages");
+    banmessages = helpers.readData("banmessages");
+    rangebanmessages = helpers.readData("rangebanmessages");
+    border = helpers.readData("border");
+    border2 = helpers.readData("border2");
+}
 
 function initServerGlobals() {
     open = helpers.readData("open");
@@ -318,6 +440,14 @@ function initServerGlobals() {
         });
     },
 
+    initCustoms: function () {
+        initCustoms();
+    },
+
+    initCustomGlobals: function () {
+        initCustomGlobals();
+    },
+
     serverStartUp: function () {
         var time = 100, pluginEvent, i;
         serverStarting = true;
@@ -335,7 +465,7 @@ function initServerGlobals() {
             if (sys.fexists("data")) {
                 sys.rm("data");
             }
-            helpers.initData();
+            initData();
         }
         API_KEY = JSON.parse(sys.read(DATA_FOLDER + "API_KEY.txt"));
         GOOGLE_KEY = JSON.parse(sys.read(DATA_FOLDER + "GOOGLE_KEY.txt"));
@@ -345,7 +475,7 @@ function initServerGlobals() {
             Global Variables
             ----------------
         **/
-        helpers.initCustomGlobals();
+        initCustomGlobals();
         initServerGlobals();
         layout = "new";
         players = [];
