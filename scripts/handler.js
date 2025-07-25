@@ -1,7 +1,7 @@
 /*
     ----------------------------------------------
     FUN COMMUNITY COMMAND HANDLER handler.js
-     - by Maribel Hearn, 2015-2023
+     - by Maribel Hearn, 2015-2025
 
     This script file contains the command
     handler, which will parse a given command
@@ -98,8 +98,9 @@ function executeCommand(src, channel, command, script, commandName) {
         require(script).commands[commandName](src, channel, command);
         return 2; // success
     } catch (err) {
-        if (err.backtrace[2].contains("executeCommand") && require(script).commands[commandName].toString().split('{')[1].trim().substring(0, 5) != "this.") {
-            script = "scripts/helpers.js"; // TODO can also be dex.js
+        var functionName = err.backtracetext.split('(')[0];
+        if (functionIndex.hasOwnProperty(functionName)) {
+            script = functionIndex[functionName];
         }
         sys.sendHtmlOwner(helpers.bot(bots.script) + "Error in module " + script + " on line " + err.lineNumber + ": " + err);
         return 3; // error

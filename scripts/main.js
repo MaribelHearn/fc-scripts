@@ -17,6 +17,7 @@
 var hostLocation;
 var floodplayers = [];
 var channelPlugins = [];
+var functionIndex = {};
 var bansites = sys.read("bansites.txt").replace(/\r/g, "").split('\n');
 bansites.splice(bansites.indexOf(""), 1);
 bansites.splice(bansites.lastIndexOf(""), 1);
@@ -168,6 +169,26 @@ function initServerGlobals() {
         countryname = helpers.readData("countryname");
         cityname = helpers.readData("cityname");
         timezone = helpers.readData("timezone");
+    }
+}
+
+function initFunctionIndex() { // to know which function is in which module
+    var helpersModule = sys.read("scripts/helpers.js").split('\n');
+    var dexModule = sys.read("scripts/dex.js").split('\n');
+    var functionName;
+
+    for (var i = 0; i < helpersModule.length; i++) {
+        if (helpersModule[i].indexOf("function") === 0) {
+            functionName = helpersModule[i].split('(')[0].replace("function ", "");
+            functionIndex[functionName] = "scripts/helpers.js";
+        }
+    }
+
+    for (var j = 0; j < dexModule.length; j++) {
+        if (dexModule[j].indexOf("function") === 0) {
+            functionName = dexModule[j].split('(')[0].replace("function ", "");
+            functionIndex[functionName] = "scripts/dex.js";
+        }
     }
 }
 
@@ -477,6 +498,7 @@ function initServerGlobals() {
         **/
         initCustomGlobals();
         initServerGlobals();
+        initFunctionIndex();
         layout = "new";
         players = [];
         battles = {};
