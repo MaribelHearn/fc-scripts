@@ -150,7 +150,7 @@ function closeCheck(src, name, lower) {
     Method Helpers
     --------------
 **/
-function starfox() {
+function starfox(src, channel, command, bot, message, team) {
     var name = sys.name(src), channelname = sys.channel(channel), index = 0, regular = 0;
     sys.sendHtmlMessage(src, bot(bot) + message, channel);
     if (regchannels[channelname.toLowerCase()]) {
@@ -203,7 +203,7 @@ function muteMessage(src, channel, message) {
     if (mutelist[lower].silent) {
         var name = (members[lower] ? members[lower] : lower);
         if (message.charAt(0) == '/' && message.length > 1) {
-            helpers.starfox(src, channel, command, bots.starfox, noPermissionMessage.replace(/~Player~/, name));
+            starfox(src, channel, command, bots.starfox, noPermissionMessage.replace(/~Player~/, name));
             return;
         }
         sys.sendMessage(src, name + ": " + message, channel);
