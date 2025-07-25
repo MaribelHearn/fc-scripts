@@ -32,6 +32,7 @@ var berryData = {
     "type": {}
 };
 
+// Private functions
 function readHeightData() {
     var data = sys.read("db/pokes/height.txt").split('\n');
     var index, id, height;
@@ -166,274 +167,379 @@ function readBerryTypes() {
     }
 }
 
+// Public functions
+function calcHP(base, IV, EV) {
+    if (base == 1) {
+        return 1;
+    }
+    return Math.floor((IV + (2 * base) + Math.floor(EV / 4) + 100) + 10);
+}
+
+function calcStat(stat, base, IV, EV, nature) {
+    if (stat == '0') {
+        return calcHP(base, IV, EV);
+    }
+    return Math.floor(Math.floor((IV + (2 * base) + Math.floor(EV / 4)) * 100 / 100 + 5) * nature);
+}
+
+function statName(stat) {
+    return([
+        "HP",
+        "Attack",
+        "Defense",
+        "Sp. Atk.",
+        "Sp. Def.",
+        "Speed"
+    ][stat]);
+}
+
+function colorStat(stat) {
+    if (stat <= 30) {
+        return "<b><font color='#8B0000'>" + stat + "</font></b>";
+    } else if (stat < 60) {
+        return "<b><font color='#FF0000'>" + stat + "</font></b>";
+    } else if (stat < 90) {
+        return "<b><font color='#FF4500'>" + stat + "</font></b>";
+    } else if (stat < 120) {
+        return "<b><font color='#00FF00'>" + stat + "</font></b>";
+    } else if (stat < 150) {
+        return "<b><font color='#008000'>" + stat + "</font></b>";
+    } else if (stat < 180) {
+        return "<b><font color='#0000FF'>" + stat + "</font></b>";
+    } else {
+        return "<b><font color='#00008B'>" + stat + "</font></b>";
+    }
+}
+
+function displayNum(pokeId) {
+    var id = pokeId % 65536, forme = (pokeId - id) / 65536;
+    return forme === 0 ? id : id + '-' + forme;
+}
+
+function getDbIndex(pokeId) {
+    var id = pokeId % 65536, forme = (pokeId - id) / 65536;
+    return id + ':' + forme;
+}
+
+function height(pokeId) {
+    if (Object.keys(heightData).length === 0) {
+        readHeightData();
+    }
+    var key = getDbIndex(pokeId);
+    if (heightData[key]) {
+        return heightData[key].trim();
+    }
+    index = key.indexOf(':') + 1;
+    var base = key.substring(0, index);
+    return heightData[base + '0'].trim();
+}
+
+function weight(pokeId) {
+    if (Object.keys(weightData).length === 0) {
+        readWeightData();
+    }
+    var key = getDbIndex(pokeId);
+    if (weightData[key]) {
+        return weightData[key];
+    }
+    index = key.indexOf(':') + 1;
+    var base = key.substring(0, index);
+    return weightData[base + '0'];
+}
+
+function movepool(pokeId) {
+    var index;
+    if (Object.keys(movepoolData).length === 0) {
+        readMovepoolData();
+    }
+    var isFundex = (pokeId > 999 && pokeId < 1200 || pokeId > 66536);
+    if (isFundex && Object.keys(movepoolData).length <= 845) {
+        readFundexMovepools();
+    }
+    var key = getDbIndex(pokeId);
+    if (movepoolData[key] !== undefined) {
+        return movepoolData[key];
+    }
+    index = key.indexOf(':') + 1;
+    var base = key.substring(0, index);
+    return movepoolData[base];
+}
+
+function weightPower(weight) {
+    var power;
+    if (weight < 10) {
+        power = 20;
+    } else if (weight >= 10 && weight < 25) {
+        power = 40;
+    } else if (weight >= 25 && weight < 50) {
+        power = 60;
+    } else if (weight >= 50 && weight < 100) {
+        power = 80;
+    } else if (weight >= 100 && weight < 200) {
+        power = 100;
+    } else { // weight >= 200
+        power = 120;
+    }
+    return power;
+}
+
+function movePower(moveId) {
+    if (Object.keys(moveData.power).length === 0) {
+        readMoveData("power");
+    }
+    if (moveData.power[moveId] === undefined || moveData.power[moveId] == '1') {
+        return '-';
+    }
+    return moveData.power[moveId];
+}
+
+function moveCategory(moveId) {
+    if (Object.keys(moveData.category).length === 0) {
+        readMoveData("damage_class");
+    }
+    if (moveData.category[moveId] == 1) {
+        return "<font color='#800000'>Physical</font>";
+    }
+    if (moveData.category[moveId] == 2) {
+        return "<font color='#FF69B4'>Special</font>";
+    }
+    return "<font color='#2E8B57'>Other</font>";
+}
+
+function moveAccuracy(moveId) {
+    if (Object.keys(moveData.accuracy).length === 0) {
+        readMoveData("accuracy");
+    }
+    if (moveData.accuracy[moveId] == 101) {
+        return '-';
+    }
+    return moveData.accuracy[moveId];
+}
+
+function movePP(moveId) {
+    if (Object.keys(moveData.pp).length === 0) {
+        readMoveData("pp");
+    }
+    return [moveData.pp[moveId], moveData.pp[moveId] * 8 / 5];
+}
+
+function moveEffect(moveId) {
+    if (Object.keys(moveData.effect).length === 0) {
+        readMoveData("effect");
+    }
+    if (moveData.effect[moveId] === undefined) {
+        return "Deals normal damage.";
+    }
+    return moveData.effect[moveId].replace(/[[\]{}]/g, "");
+}
+
+function moveContact(moveId) {
+    if (Object.keys(moveData.flags).length === 0) {
+        readMoveData("flags");
+    }
+    return (moveData.flags[moveId] % 2 === 1) ? "<font color='#008000'>Yes</font>" : "<font color='#FF0000'>No</font>";
+}
+
+function movePriority(moveId) {
+    if (Object.keys(moveData.priority).length === 0) {
+        readMoveData("priority");
+    }
+    if (moveData.priority[moveId] === undefined) {
+        return 0;
+    }
+    return moveData.priority[moveId];
+}
+
+function moveRange(moveId) {
+    if (Object.keys(moveData.range).length === 0) {
+        readMoveData("range");
+    }
+    if (moveData.range[moveId] === undefined) {
+        return "Single Target";
+    }
+    return moveRangeToText(parseInt(moveData.range[moveId]));
+}
+
+function moveRangeToText(moveRange) {
+    switch (moveRange) {
+        case 2:
+            return "Ally";
+        case 4:
+            return "All But Self";
+        case 5:
+            return "Adjacent Foes";
+        case 6:
+            return "User's Team";
+        case 7:
+            return "Self";
+        case 8:
+            return "All";
+        case 9:
+            return "Random";
+        case 10:
+            return "Field";
+        case 11:
+            return "All Foes";
+        case 12:
+            return "All Allies";
+        case 13:
+            return "Special";
+        default:
+            return "Single Target";
+    }
+}
+
+function ability(abilityId) {
+    if (Object.keys(abilityData).length === 0) {
+        readAbilityData();
+    }
+    return abilityData[abilityId];
+}
+
+function pokemonWithAbility(abilityId) {
+    if (Object.keys(pokemonAbilityData).length === 0) {
+        readPokemonAbilityData();
+    }
+    return pokemonAbilityData[abilityId];
+}
+
+function getItem(itemId) {
+    if (Object.keys(itemData.text).length === 0) {
+        readItemTexts("items");
+    }
+    return itemData.text[itemId];
+}
+
+function getBerry(berryId) {
+    if (Object.keys(berryData.text).length === 0) {
+        readItemTexts("berries");
+    }
+    return berryData.text[berryId];
+}
+
+function getFlingPower(itemId) {
+    if (Object.keys(itemData.power).length === 0) {
+        readItemPowers("items");
+    }
+    return itemData.power[itemId];
+}
+
+function getBerryPower(berryId) {
+    if (Object.keys(berryData.power).length === 0) {
+        readItemPowers("berry");
+    }
+    return berryData.power[berryId];
+}
+
+function getBerryType(berryId) {
+    if (Object.keys(berryData.type).length === 0) {
+        readBerryTypes();
+    }
+    return berryData.type[berryId].trim();
+}
+
 module.exports = {
     calcHP: function (base, IV, EV) {
-        if (base == 1) {
-            return 1;
-        }
-        return Math.floor((IV + (2 * base) + Math.floor(EV / 4) + 100) + 10);
+        return calcHP(base, IV, EV);
     },
 
     calcStat: function (stat, base, IV, EV, nature) {
-        if (stat == '0') {
-            return this.calcHP(base, IV, EV);
-        }
-        return Math.floor(Math.floor((IV + (2 * base) + Math.floor(EV / 4)) * 100 / 100 + 5) * nature);
+        return calcStat(stat, base, IV, EV, nature);
     },
 
     statName: function (stat) {
-        return([
-            "HP",
-            "Attack",
-            "Defense",
-            "Sp. Atk.",
-            "Sp. Def.",
-            "Speed"
-        ][stat]);
+        return statName(stat);
     },
 
     colorStat: function (stat) {
-        if (stat <= 30) {
-            return "<b><font color='#8B0000'>" + stat + "</font></b>";
-        } else if (stat < 60) {
-            return "<b><font color='#FF0000'>" + stat + "</font></b>";
-        } else if (stat < 90) {
-            return "<b><font color='#FF4500'>" + stat + "</font></b>";
-        } else if (stat < 120) {
-            return "<b><font color='#00FF00'>" + stat + "</font></b>";
-        } else if (stat < 150) {
-            return "<b><font color='#008000'>" + stat + "</font></b>";
-        } else if (stat < 180) {
-            return "<b><font color='#0000FF'>" + stat + "</font></b>";
-        } else {
-            return "<b><font color='#00008B'>" + stat + "</font></b>";
-        }
+        return colorStat(stat);
     },
 
     displayNum: function (pokeId) {
-        var id = pokeId % 65536, forme = (pokeId - id) / 65536;
-        return forme === 0 ? id : id + '-' + forme;
+        return displayNum(pokeId);
     },
 
     getDbIndex: function (pokeId) {
-        var id = pokeId % 65536, forme = (pokeId - id) / 65536;
-        return id + ':' + forme;
+        return getDbIndex(pokeId);
     },
 
     height: function (pokeId) {
-        if (Object.keys(heightData).length === 0) {
-            readHeightData();
-        }
-        var key = this.getDbIndex(pokeId);
-        if (heightData[key]) {
-            return heightData[key].trim();
-        }
-        index = key.indexOf(':') + 1;
-        var base = key.substring(0, index);
-        return heightData[base + '0'].trim();
+        return height(pokeId);
     },
 
     weight: function (pokeId) {
-        if (Object.keys(weightData).length === 0) {
-            readWeightData();
-        }
-        var key = this.getDbIndex(pokeId);
-        if (weightData[key]) {
-            return weightData[key];
-        }
-        index = key.indexOf(':') + 1;
-        var base = key.substring(0, index);
-        return weightData[base + '0'];
+        return weight(pokeId);
     },
 
     movepool: function (pokeId) {
-        var index;
-        if (Object.keys(movepoolData).length === 0) {
-            readMovepoolData();
-        }
-        var isFundex = (pokeId > 999 && pokeId < 1200 || pokeId > 66536);
-        if (isFundex && Object.keys(movepoolData).length <= 845) {
-            readFundexMovepools();
-        }
-        var key = this.getDbIndex(pokeId);
-        if (movepoolData[key] !== undefined) {
-            return movepoolData[key];
-        }
-        index = key.indexOf(':') + 1;
-        var base = key.substring(0, index);
-        return movepoolData[base];
+        return movepool(pokeId);
     },
 
     weightPower: function (weight) {
-        var power;
-        if (weight < 10) {
-            power = 20;
-        } else if (weight >= 10 && weight < 25) {
-            power = 40;
-        } else if (weight >= 25 && weight < 50) {
-            power = 60;
-        } else if (weight >= 50 && weight < 100) {
-            power = 80;
-        } else if (weight >= 100 && weight < 200) {
-            power = 100;
-        } else { // weight >= 200
-            power = 120;
-        }
-        return power;
+        return weightPower(weight);
     },
 
     movePower: function (moveId) {
-        if (Object.keys(moveData.power).length === 0) {
-            readMoveData("power");
-        }
-        if (moveData.power[moveId] === undefined || moveData.power[moveId] == '1') {
-            return '-';
-        }
-        return moveData.power[moveId];
+        return movePower(moveId);
     },
 
     moveCategory: function (moveId) {
-        if (Object.keys(moveData.category).length === 0) {
-            readMoveData("damage_class");
-        }
-        if (moveData.category[moveId] == 1) {
-            return "<font color='#800000'>Physical</font>";
-        }
-        if (moveData.category[moveId] == 2) {
-            return "<font color='#FF69B4'>Special</font>";
-        }
-        return "<font color='#2E8B57'>Other</font>";
+        return moveCategory(moveId);
     },
 
     moveAccuracy: function (moveId) {
-        if (Object.keys(moveData.accuracy).length === 0) {
-            readMoveData("accuracy");
-        }
-        if (moveData.accuracy[moveId] == 101) {
-            return '-';
-        }
-        return moveData.accuracy[moveId];
+        return moveAccuracy(moveId);
     },
 
     movePP: function (moveId) {
-        if (Object.keys(moveData.pp).length === 0) {
-            readMoveData("pp");
-        }
-        return [moveData.pp[moveId], moveData.pp[moveId] * 8 / 5];
+        return movePP(moveId);
     },
 
     moveEffect: function (moveId) {
-        if (Object.keys(moveData.effect).length === 0) {
-            readMoveData("effect");
-        }
-        if (moveData.effect[moveId] === undefined) {
-            return "Deals normal damage.";
-        }
-        return moveData.effect[moveId].replace(/[[\]{}]/g, "");
+        return moveEffect(moveId);
     },
 
     moveContact: function (moveId) {
-        if (Object.keys(moveData.flags).length === 0) {
-            readMoveData("flags");
-        }
-        return (moveData.flags[moveId] % 2 === 1) ? "<font color='#008000'>Yes</font>" : "<font color='#FF0000'>No</font>";
+        return moveContact(moveId);
     },
 
     movePriority: function (moveId) {
-        if (Object.keys(moveData.priority).length === 0) {
-            readMoveData("priority");
-        }
-        if (moveData.priority[moveId] === undefined) {
-            return 0;
-        }
-        return moveData.priority[moveId];
+        return movePriority(moveId);
     },
 
     moveRange: function (moveId) {
-        if (Object.keys(moveData.range).length === 0) {
-            readMoveData("range");
-        }
-        if (moveData.range[moveId] === undefined) {
-            return "Single Target";
-        }
-        return this.moveRangeToText(parseInt(moveData.range[moveId]));
+        return moveRange(moveId);
     },
 
     moveRangeToText: function (moveRange) {
-        switch (moveRange) {
-            case 2:
-                return "Ally";
-            case 4:
-                return "All But Self";
-            case 5:
-                return "Adjacent Foes";
-            case 6:
-                return "User's Team";
-            case 7:
-                return "Self";
-            case 8:
-                return "All";
-            case 9:
-                return "Random";
-            case 10:
-                return "Field";
-            case 11:
-                return "All Foes";
-            case 12:
-                return "All Allies";
-            case 13:
-                return "Special";
-            default:
-                return "Single Target";
-        }
+        return moveRangeToText(moveRange);
     },
 
     ability: function (abilityId) {
-        if (Object.keys(abilityData).length === 0) {
-            readAbilityData();
-        }
-        return abilityData[abilityId];
+        return ability(abilityId);
     },
 
     pokemonWithAbility: function (abilityId) {
-        if (Object.keys(pokemonAbilityData).length === 0) {
-            readPokemonAbilityData();
-        }
-        return pokemonAbilityData[abilityId];
+        return pokemonWithAbility(abilityId);
     },
 
     getItem: function (itemId) {
-        if (Object.keys(itemData.text).length === 0) {
-            readItemTexts("items");
-        }
-        return itemData.text[itemId];
+        return getItem(itemId);
     },
 
     getBerry: function (berryId) {
-        if (Object.keys(berryData.text).length === 0) {
-            readItemTexts("berries");
-        }
-        return berryData.text[berryId];
+        return getBerry(berryId);
     },
 
     getFlingPower: function (itemId) {
-        if (Object.keys(itemData.power).length === 0) {
-            readItemPowers("items");
-        }
-        return itemData.power[itemId];
+        return getFlingPower(itemId);
     },
 
     getBerryPower: function (berryId) {
-        if (Object.keys(berryData.power).length === 0) {
-            readItemPowers("berry");
-        }
-        return berryData.power[berryId];
+        return getBerryPower(berryId);
     },
 
     getBerryType: function (berryId) {
-        if (Object.keys(berryData.type).length === 0) {
-            readBerryTypes();
-        }
-        return berryData.type[berryId].trim();
+        return getBerryType(berryId);
     }
 };
