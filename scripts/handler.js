@@ -8,6 +8,8 @@
     and execute it if possible.
     ----------------------------------------------
 */
+
+// Private functions
 function filterLastMessage(src, message, channel) {
     if (regchannels[sys.channel(channel).toLowerCase()]) {
         if (!regchannels[sys.channel(channel).toLowerCase()].priv && !helpers.isInString(message, silentcommands)) {
@@ -93,6 +95,23 @@ function clearanceChecks(src, channel, command, name, auth, cauth, message, scri
     return true;
 }
 
+function stackTraceTable(stackTrace, script) {
+    var stacktracemessage = "Stack trace:"
+    + "<style>table {border-width: 1px; border-style: solid; border-color: #000000;}</style>"
+    + "<table cellpadding='2' cellspacing='0'><thead><tr style='background-color: #B0B0B0;'>"
+    + "<th>Function</th><th>Arguments</th><th>Line</th></tr></thead><tbody>";
+    for (var i = 0; i < stackTrace.length - 1; i++) { // skip "global -1" line
+        line = stackTrace[i].split(/\(|\)/);
+        stacktracemessage += "<tr>";
+        stacktracemessage += "<td>" + line[0] + "</td>";
+        stacktracemessage += "<td>" + line[1] + "</td>";
+        stacktracemessage += "<td>" + (i === 0 ? script + ": " : "") + line[2].replace("at ", "") + "</td>";
+        stacktracemessage += "</tr>";
+    }
+    stacktracemessage += "</tbody></table>";
+    return stacktracemessage;
+}
+
 function executeCommand(src, channel, command, script, commandName) {
     try {
         require(script).commands[commandName](src, channel, command);
@@ -103,6 +122,7 @@ function executeCommand(src, channel, command, script, commandName) {
             script = functionIndex[functionName];
         }
         sys.sendHtmlOwner(helpers.bot(bots.script) + "Error in module " + script + " on line " + err.lineNumber + ": " + err);
+        sys.sendHtmlOwnerChannel(helpers.bot(bots.script) + stackTraceTable(err.backtrace, script));
         return 3; // error
     }
 }
@@ -201,34 +221,39 @@ function watchChannelLogging(message, channel, name, lower, color, channelName) 
     }
 }
 
+// Public functions
+function parseCommand(src, message, channel, name, auth) {
+    var cauth = helpers.cauth(players[src].name.toLowerCase(), channel);
+    var channelName = sys.channel(channel);
+    var color = helpers.color(src);
+    var lower = "";
+    filterLastMessage(src, message, channel);
+    var command = message.replace(COMMAND_SYMBOL, "");
+    var cmd = command;
+
+    while (cmd !== "" && cmd.charAt(0) != ' ') {
+        lower += cmd.charAt(0).toLowerCase();
+        cmd = cmd.slice(1);
+    }
+
+    command = command.replace(' ', DELIMITER).split(DELIMITER);
+    var starfox = findCommand(src, channel, command, name, lower, auth, cauth, message);
+
+    /*
+        * 0 = not found
+        * 1 = starfox/mute
+        * 2 = command successfully executed
+        * 3 = error
+        */
+    if (starfox === 0) {
+        helpers.starfox(src, channel, command, bots.command, "Error 404, command '" + helpers.escapehtml(lower) + "' not found.");
+    } else if (starfox == 2) {
+        watchChannelLogging(message, channel, name, lower, color, channelName);
+    }
+}
+
 module.exports = {
     parseCommand: function (src, message, channel, name, auth) {
-        var cauth = helpers.cauth(players[src].name.toLowerCase(), channel);
-        var channelName = sys.channel(channel);
-        var color = helpers.color(src);
-        var lower = "";
-        filterLastMessage(src, message, channel);
-        var command = message.replace(COMMAND_SYMBOL, "");
-        var cmd = command;
-
-        while (cmd !== "" && cmd.charAt(0) != ' ') {
-            lower += cmd.charAt(0).toLowerCase();
-            cmd = cmd.slice(1);
-        }
-
-        command = command.replace(' ', DELIMITER).split(DELIMITER);
-        var starfox = findCommand(src, channel, command, name, lower, auth, cauth, message);
-
-        /*
-         * 0 = not found
-         * 1 = starfox/mute
-         * 2 = command successfully executed
-         * 3 = error
-         */
-        if (starfox === 0) {
-            helpers.starfox(src, channel, command, bots.command, "Error 404, command '" + helpers.escapehtml(lower) + "' not found.");
-        } else if (starfox == 2) {
-            watchChannelLogging(message, channel, name, lower, color, channelName);
-        }
+        parseCommand(src, message, channel, name, auth);
     }
 };

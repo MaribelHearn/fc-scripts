@@ -351,6 +351,12 @@ function initFunctionIndex() { // to know which function is in which module
         }
         sys.sendHtmlAll(message, watch);
     };
+    sys.sendHtmlOwnerChannel = function (message) {
+        if (message.contains("<img src='data:image/png;base64,")) {
+            message = message.replace(/<img src='data:image\/png;base64,(.*?)>/g, "");
+        }
+        sys.sendHtmlAll(message, ownerchannel);
+    };
     sys.sendHtmlOwner = function (message) {
         for (var index in players) {
             if (sys.auth(index) >= 3) {
