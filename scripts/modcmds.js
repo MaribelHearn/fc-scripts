@@ -1028,7 +1028,7 @@ module.exports = {
             }
             command.splice(0, 1);
             command = command.join(DELIMITER);
-            if (helpers.breakinghtml(command)) {
+            if (breakinghtml(command)) {
                 helpers.starfox(src, channel, command, bots.command, "Error 403, you may not post chat breaking HTML.");
                 return;
             }
