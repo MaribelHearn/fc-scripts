@@ -1310,7 +1310,7 @@ function initFunctionIndex() { // to know which function is in which module
             Prevent Silent Muted People From PMing
             --------------------------------------
         **/
-        sys.sendHtmlOwner("<timestamp/> [Debug] PM is being sent by " + players[src].name + ".");
+        //sys.sendHtmlOwner("<timestamp/> [Debug] PM is being sent by " + players[src].name + ".");
         var lower = players[src].name.toLowerCase();
         if (helpers.muteCheck(players[src].name)) {
             if (mutelist[lower].silent) {
