@@ -1,7 +1,7 @@
 /*
     ----------------------------------------------
     FUN COMMUNITY USER COMMANDS usercmds.js
-     - by Maribel Hearn, 2012-2023
+     - by Maribel Hearn, 2012-2025
 
     This file contains commands that can be
     run by any user.
@@ -346,6 +346,7 @@ module.exports = {
                 index++;
             }
             if (helpers.isAndroidOrWeb(src)) {
+                onlinemessage = "<br>" + onlinemessage;
                 onlinemessage += "<tt>";
                 for (i in ids) {
                     onlinemessage += helpers.authName(auths[i], DISPLAY_USER, HIDE_INVIS) + " | " + "<b><font color='" + colors[i] + "'>" + names[i] + "</font></b> | " + ids[i];
@@ -425,6 +426,7 @@ module.exports = {
             }
             channelmessage = border + "<h2>Channels Online</h2><br>";
             if (helpers.isAndroidOrWeb(src)) {
+                channelmessage = "<br>" + channelmessage;
                 channelmessage += "<tt>";
                 for (i in names) {
                     channelmessage += ids[i] + " | " + names[i] + " | </tt>" + descriptions[i] + "<tt><br>";
@@ -454,6 +456,7 @@ module.exports = {
             }
             battlemessage = border + "<h2>Battles Online</h2><br>";
             if (helpers.isAndroidOrWeb(src)) {
+                battlemessage = "<br>" + battlemessage;
                 battlemessage += "<tt>";
                 for (i in ids) {
                     battlemessage += p1s[i] + " vs " + p2s[i] + " (" + tiers[i] + ") (<watch id='" + ids[i] + "'>Watch</watch>)<br>";
@@ -576,6 +579,7 @@ module.exports = {
                 }
                 registrymessage = border + "<h2>Pokémon Online Registry</h2><br>";
                 if (helpers.isAndroidOrWeb(src)) {
+                    registrymessage = "<br>" + registrymessage;
                     registrymessage += "<tt>";
                     for (var k in servers) {
                         registrymessage += (servers[k] == servername ? "<b>" + servers[k] + "</b>" : servers[k]) + " | " + playernums[k] + " | " + advConnects[k] + "<br>";
@@ -718,6 +722,7 @@ module.exports = {
                 index++;
             }
             if (helpers.isAndroidOrWeb(src)) {
+                authmessage = "<br>" + authmessage;
                 authmessage += "<tt>";
                 for (i in auths) {
                     authmessage += helpers.authName(auths[i]) + " | " + names[i] + " | " + statuses[i] + "<br>";
@@ -787,6 +792,7 @@ module.exports = {
                 index++;
             }
             if (helpers.isAndroidOrWeb(src)) {
+                altsmessage = "<br>" + altsmessage;
                 altsmessage += "<tt>";
                 for (i in auths) {
                     altsmessage += names[i] + " | " + registered[i] + "<br>";
@@ -865,6 +871,7 @@ module.exports = {
             + "<br><b>Weight:</b> " + weight + " kg / " + americanWeight + " lbs"
             + "<br><b>Power of Grass Knot / Low Kick:</b> " + weightPower;
             if (helpers.isAndroidOrWeb(src)) {
+                dexmessage = "<br>" + dexmessage;
                 dexmessage += "<tt>";
                 for (k in baseStats) {
                     stat = baseStats[k];

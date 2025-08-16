@@ -1,7 +1,7 @@
 /*
     ----------------------------------------------
     FUN COMMUNITY CMOD COMMANDS cmodcmds.js
-     - by Maribel Hearn, 2012-2021
+     - by Maribel Hearn, 2012-2025
 
     This file contains commands that can be
     run by channel moderators.
@@ -265,7 +265,8 @@ module.exports = {
                 dates.push(list[i].date);
             }
             mutelistmessage = border + "<h2>" + sys.channel(channel) + " Mute List</h2><br>";
-            if (helpers.isAndroid(src)) {
+            if (helpers.isAndroidOrWeb(src)) {
+                mutelistmessage = "<br>" + mutelistmessage;
                 mutelistmessage += "<tt>";
                 for (i in names) {
                     mutelistmessage += names[i] + " | " + ips[i] + " | </tt>" + dates[i] + "<tt><br>";
@@ -309,7 +310,8 @@ module.exports = {
                 dates.push(list[i].date);
             }
             banlistmessage = border + "<h2>" + sys.channel(channel) + " Ban List</h2><br>";
-            if (helpers.isAndroid(src)) {
+            if (helpers.isAndroidOrWeb(src)) {
+                banlistmessage = "<br>" + banlistmessage;
                 banlistmessage += "<tt>";
                 for (i in names) {
                     banlistmessage += names[i] + " | " + ips[i] + " | </tt>" + dates[i] + "<tt><br>";

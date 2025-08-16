@@ -1,7 +1,7 @@
 /*
     ----------------------------------------------
     FUN COMMUNITY MOD COMMANDS modcmds.js
-     - by Maribel Hearn, 2012-2023
+     - by Maribel Hearn, 2012-2025
 
     This file contains commands that can be
     run by moderators.
@@ -402,7 +402,8 @@ module.exports = {
                 silences.push(mutelist[i].silent);
             }
             mutelistmessage = border + "<h2>Mute List</h2><br>";
-            if (helpers.isAndroid(src)) {
+            if (helpers.isAndroidOrWeb(src)) {
+                mutelistmessage = "<br>" + mutelistmessage;
                 mutelistmessage += "<tt>";
                 for (i in names) {
                     mutelistmessage += names[i] + " | " + ips[i] + " | </tt>" + dates[i] + "<tt><br>";
@@ -452,7 +453,8 @@ module.exports = {
                 dates.push(banlist[i].date);
             }
             banlistmessage = border + "<h2>Ban List</h2><br>";
-            if (helpers.isAndroid(src)) {
+            if (helpers.isAndroidOrWeb(src)) {
+                banlistmessage = "<br>" + banlistmessage;
                 banlistmessage += "<tt>";
                 for (i in names) {
                     banlistmessage += names[i] + " | " + ips[i] + " | </tt>" + dates[i] + "<tt><br>";
@@ -493,7 +495,8 @@ module.exports = {
                 dates.push(rangebanlist[i].date);
             }
             rangebanlistmessage = border + "<h2>Range Ban List</h2><br>";
-            if (helpers.isAndroid(src)) {
+            if (helpers.isAndroidOrWeb(src)) {
+                rangebanlistmessage = "<br>" + rangebanlistmessage;
                 rangebanlistmessage += "<tt>";
                 for (i in names) {
                     rangebanlistmessage += names[i] + " | " + ranges[i] + " | </tt>" + dates[i] + "<tt><br>";
@@ -531,7 +534,8 @@ module.exports = {
                 dates.push(megabanlist[i].date);
             }
             megabanlistmessage = border + "<h2>Mega Ban List</h2><br>";
-            if (helpers.isAndroid(src)) {
+            if (helpers.isAndroidOrWeb(src)) {
+                megabanlistmessage = "<br>" + megabanlistmessage;
                 megabanlistmessage += "<tt>";
                 for (i in names) {
                     megabanlistmessage += names[i] + " | </tt>" + dates[i] + "<tt><br>";
@@ -569,7 +573,8 @@ module.exports = {
                 dates.push(gigabanlist[i].date);
             }
             gigabanlistmessage = border + "<h2>Giga Ban List</h2><br>";
-            if (helpers.isAndroid(src)) {
+            if (helpers.isAndroidOrWeb(src)) {
+                gigabanlistmessage = "<br>" + gigabanlistmessage;
                 gigabanlistmessage += "<tt>";
                 for (i in names) {
                     gigabanlistmessage += names[i] + " | </tt>" + dates[i] + "<tt><br>";
@@ -766,7 +771,8 @@ module.exports = {
     
         lastmessages: function (src, channel, command) {
             var message = border + "<h2>Last Messages</h2><br>";
-            if (helpers.isAndroid(src)) {
+            if (helpers.isAndroidOrWeb(src)) {
+                message = "<br>" + message;
                 for (var i in players) {
                     if (players[i].lastmessages.length === 0) {
                         continue;
@@ -806,7 +812,8 @@ module.exports = {
     
         regchannels: function (src, channel, command) {
             var message = border + "<h2>Registered Channels</h2><br>";
-            if (helpers.isAndroid(src)) {
+            if (helpers.isAndroidOrWeb(src)) {
+                message = "<br>" + message;
                 message += "<tt>";
                 for (var i in regchannels) {
                     message += "#" + (typeof(sys.channelId(i)) == "number" ? sys.channel(sys.channelId(i)) : i) + " | "
@@ -1062,7 +1069,8 @@ module.exports = {
                 }
                 index++;
             }
-            if (helpers.isAndroid(src)) {
+            if (helpers.isAndroidOrWeb(src)) {
+                commandsmessage = "<br>" + commandsmessage;
                 commandsmessage += "<tt>";
                 for (i in auths) {
                     commandsmessage += titles[i] + " | " + names[i] + " | " + registered[i] + "<br>";

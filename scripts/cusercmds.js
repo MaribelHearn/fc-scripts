@@ -1,7 +1,7 @@
 /*
     ----------------------------------------------
     FUN COMMUNITY CUSER COMMANDS cusercmds.js
-     - by Maribel Hearn, 2012-2023
+     - by Maribel Hearn, 2012-2025
 
     This file contains commands that can be
     run by channel users.
@@ -155,7 +155,8 @@ module.exports = {
                 lastMessages.push(helpers.escapehtml(players[ids[i]].lastmessage));
                 times.push(helpers.timePassed(colors[i], players[ids[i]].lastmessagetime));
             }
-            if (helpers.isAndroid(src)) {
+            if (helpers.isAndroidOrWeb(src)) {
+                onlinemessage = "<br>" + onlinemessage;
                 onlinemessage += "<tt>";
                 for (i in ids) {
                     onlinemessage += helpers.authName(auths[i], true) + " | " + "<b><font color='" + colors[i] + "'>" + names[i] + "</font></b> | " + ids[i];
@@ -221,7 +222,8 @@ module.exports = {
                 }
                 index++;
             }
-            if (helpers.isAndroid(src)) {
+            if (helpers.isAndroidOrWeb(src)) {
+                authmessage = "<br>" + authmessage;
                 authmessage += "<tt>";
                 for (i in auths) {
                     authmessage += auths[i] + " | " + names[i] + " | " + statuses[i] + "<br>";

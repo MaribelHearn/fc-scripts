@@ -78,7 +78,8 @@ module.exports = {
                 }
                 index++;
             }
-            if (helpers.isAndroid(src)) {
+            if (helpers.isAndroidOrWeb(src)) {
+                commandsmessage = "<br>" + commandsmessage;
                 commandsmessage += "<tt>";
                 for (i in auths) {
                     commandsmessage += names[i] + ": " + authLevels[i] + "<br>";
