@@ -977,7 +977,7 @@ module.exports = {
             + "<b>Name:</b> " + sys.getServerName() + "<br>"
             + "<b>Host OS:</b> " + script.os(sys.os()) + "<br>"
             + "<b>Version:</b> " + sys.serverVersion() + "<br>"
-            + "<b>IP:</b> " + hostLocation.ip + "<br>";
+            + "<b>IP:</b> " + script.hostLocation.ip + "<br>";
             if (API_KEY !== "") {
                 var flags = require("scripts/base64.js").flags;
                 commandsmessage += "<b>Hosted from:</b> " + (hostCountry ? flags[helpers.toFlagKey(hostCountry)] +

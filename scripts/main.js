@@ -439,14 +439,15 @@ function initFunctionIndex() { // to know which function is in which module
         return "http://api.ipinfodb.com/v3/ip-city/?key=" + API_KEY + "&ip=" + ip + "&format=json";
     },
 
+    hostLocation: {"ip": "Unknown"},
+
     // sets host IP and optionally country data
     setHostLocation: function (reload) {
-        if (hostLocation && !reload) {
+        if (this.hostLocation[ip] !== "Unknown" && !reload) {
             return;
         }
         sys.webCall("http://whatismyip.akamai.com", function (resp) {
             if (resp === "") {
-                hostLocation = {"ip": "Unknown"};
                 print("An error occurred while loading the host IP address.");
                 return;
             }
@@ -458,10 +459,10 @@ function initFunctionIndex() { // to know which function is in which module
                     result.country = helpers.countrydata(resp.countryName);
                     result.city = helpers.citydata(resp.cityName);
                     print("Host location data has been loaded.");
-                    hostLocation = result;
+                    this.hostLocation = result;
                 });
             } else {
-                hostLocation = result;
+                this.hostLocation = result;
             }
         });
     },
