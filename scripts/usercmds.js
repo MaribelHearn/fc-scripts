@@ -112,6 +112,15 @@ function tierOf(pokeId) {
     return "NU";
 }
 
+function numToGen(pokeId) {
+    if (pokeId >= 1000 && pokeId < 1200 || pokeId > 65536) {
+        return 5;
+    } else if (pokeId >= 2000 && pokeId < 2200) {
+        return 6;
+    }
+    return 7;
+}
+
 module.exports = {
     commands: {
 /**
@@ -832,7 +841,7 @@ module.exports = {
                 return;
             }
             pokeNum = (isNaN(pokemon) ? sys.pokeNum(pokemon) : pokemon);
-            gen = (pokeNum > 999 && pokeNum < 1200 || pokeNum > 66536 ? 5 : 7);
+            gen = numToGen(pokeNum);
             pokemon = sys.pokemon(pokeNum);
             type1 = sys.pokeType1(pokeNum, gen);
             type2 = sys.pokeType2(pokeNum, gen);
