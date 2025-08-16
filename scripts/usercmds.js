@@ -345,7 +345,7 @@ module.exports = {
                 times.push(helpers.timePassed(colors[i], players[i].lastmessagetime));
                 index++;
             }
-            if (helpers.isAndroid(src)) {
+            if (helpers.isAndroidOrWeb(src)) {
                 onlinemessage += "<tt>";
                 for (i in ids) {
                     onlinemessage += helpers.authName(auths[i], DISPLAY_USER, HIDE_INVIS) + " | " + "<b><font color='" + colors[i] + "'>" + names[i] + "</font></b> | " + ids[i];
@@ -424,7 +424,7 @@ module.exports = {
                 }
             }
             channelmessage = border + "<h2>Channels Online</h2><br>";
-            if (helpers.isAndroid(src)) {
+            if (helpers.isAndroidOrWeb(src)) {
                 channelmessage += "<tt>";
                 for (i in names) {
                     channelmessage += ids[i] + " | " + names[i] + " | </tt>" + descriptions[i] + "<tt><br>";
@@ -453,7 +453,7 @@ module.exports = {
                 startTimes.push(helpers.formatLastOn(src, battles[i].start));
             }
             battlemessage = border + "<h2>Battles Online</h2><br>";
-            if (helpers.isAndroid(src)) {
+            if (helpers.isAndroidOrWeb(src)) {
                 battlemessage += "<tt>";
                 for (i in ids) {
                     battlemessage += p1s[i] + " vs " + p2s[i] + " (" + tiers[i] + ") (<watch id='" + ids[i] + "'>Watch</watch>)<br>";
@@ -575,7 +575,7 @@ module.exports = {
                     }
                 }
                 registrymessage = border + "<h2>Pokémon Online Registry</h2><br>";
-                if (helpers.isAndroid(src)) {
+                if (helpers.isAndroidOrWeb(src)) {
                     registrymessage += "<tt>";
                     for (var k in servers) {
                         registrymessage += (servers[k] == servername ? "<b>" + servers[k] + "</b>" : servers[k]) + " | " + playernums[k] + " | " + advConnects[k] + "<br>";
@@ -717,7 +717,7 @@ module.exports = {
                 }
                 index++;
             }
-            if (helpers.isAndroid(src)) {
+            if (helpers.isAndroidOrWeb(src)) {
                 authmessage += "<tt>";
                 for (i in auths) {
                     authmessage += helpers.authName(auths[i]) + " | " + names[i] + " | " + statuses[i] + "<br>";
@@ -777,16 +777,16 @@ module.exports = {
                 titles.push(authtitles[lower] ? authtitles[lower] : '-');
                 lastLogins.push(helpers.formatLastOn(src, sys.dbLastOn(alts[i])));
                 if (sys.dbRegistered(alts[i])) {
-                    registered.push(helpers.isAndroid(src) ? "<b><font color='green'>Registered</font></b>" : "<b><font color='green'>Yes</font></b>");
+                    registered.push(helpers.isAndroidOrWeb(src) ? "<b><font color='green'>Registered</font></b>" : "<b><font color='green'>Yes</font></b>");
                 } else {
-                    registered.push(helpers.isAndroid(src) ? "<font color='red'>Unregistered</font>" : "<font color='red'>No</font>");
+                    registered.push(helpers.isAndroidOrWeb(src) ? "<font color='red'>Unregistered</font>" : "<font color='red'>No</font>");
                 }
                 if (members[lower]) {
                     names[index] = members[lower];
                 }
                 index++;
             }
-            if (helpers.isAndroid(src)) {
+            if (helpers.isAndroidOrWeb(src)) {
                 altsmessage += "<tt>";
                 for (i in auths) {
                     altsmessage += names[i] + " | " + registered[i] + "<br>";
@@ -864,7 +864,7 @@ module.exports = {
             + "<br><b>Height:</b> " + height + " m / " + americanHeight + " ft"
             + "<br><b>Weight:</b> " + weight + " kg / " + americanWeight + " lbs"
             + "<br><b>Power of Grass Knot / Low Kick:</b> " + weightPower;
-            if (helpers.isAndroid(src)) {
+            if (helpers.isAndroidOrWeb(src)) {
                 dexmessage += "<tt>";
                 for (k in baseStats) {
                     stat = baseStats[k];
