@@ -143,7 +143,7 @@ module.exports = {
             currentWild = pokeNum;
             baseCatchRate = CATCH_RATES[pokeNum];
             sys.sendHtmlAll(helpers.bot(bots.safari) + "A wild " + (shine ? "<b><font color='#FFA500'>Shiny</font></b> " : "") +
-            "<b><font color='" + helpers.typecolor(pokeNum) + "'>" + pokemon + "</font></b> appeared!<br>" + helpers.pokeImage(pokeNum, shine), safarichannel);
+            "<b><font color='" + helpers.typecolor(pokeNum) + "'>" + pokemon + "</font></b> appeared!<br>" + helpers.pokeImage(pokeNum, shine, 7), safarichannel);
         },
 
         wild: function (src, channel, command) {

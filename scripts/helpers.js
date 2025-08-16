@@ -695,11 +695,11 @@ function typecolor(pokeNum) {
     ][sys.pokeType1(pokeNum)]);
 }
 
-function pokeImage(pokeNum, shine, gen) {
-    if (gen) {
-        return (shine ? "<img src='pokemon:" + pokeNum + "&shiny=true&gen=" + gen + "'>" : "<img src='pokemon:" + pokeNum + "&gen=" + gen + "'>");
+function pokeImage(pokeNum, shine, gen, androidOrWeb) {
+    if (androidOrWeb && (pokeNum >= 1000 && pokeNum < 1200 || pokeNum > 65536)) {
+        return (shine ? "<img src='https://fc.maribelhearn.com/sprites/shiny/" + pokeNum + ".png'>" : "<img src='https://fc.maribelhearn.com/sprites/" + pokeNum + ".png'>");
     }
-    return (shine ? "<img src='pokemon:" + pokeNum + "&shiny=true'>" : "<img src='pokemon:" + pokeNum + "'>");
+    return (shine ? "<img src='pokemon:" + pokeNum + "&shiny=true&gen=" + gen + "'>" : "<img src='pokemon:" + pokeNum + "&gen=" + gen + "'>");
 }
 
 function pokeIcon(pokeNum) {
@@ -1227,8 +1227,8 @@ module.exports = {
         return typecolor(pokeNum);
     },
 
-    pokeImage: function (pokeNum, shine, gen) {
-        return pokeImage(pokeNum, shine, gen);
+    pokeImage: function (pokeNum, shine, gen, androidOrWeb) {
+        return pokeImage(pokeNum, shine, gen, androidOrWeb);
     },
 
     pokeIcon: function (pokeNum) {
