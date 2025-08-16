@@ -840,7 +840,7 @@ module.exports = {
                 helpers.starfox(src, channel, command, bots.command, "Error 403, invalid Pokémon.");
                 return;
             }
-            pokeNum = (isNaN(pokemon) ? sys.pokeNum(pokemon) : pokemon);
+            pokeNum = (isNaN(pokemon) || pokemon === "2012" ? sys.pokeNum(pokemon) : pokemon);
             gen = numToGen(pokeNum);
             pokemon = sys.pokemon(pokeNum);
             type1 = sys.pokeType1(pokeNum, gen);
