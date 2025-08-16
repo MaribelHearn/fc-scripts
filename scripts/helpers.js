@@ -701,6 +701,7 @@ function pokeImage(pokeNum, shine, gen, androidOrWeb) {
         pokeNum = dex.displayNum(pokeNum);
         return (shine ? "<img src='http://fc.maribelhearn.com/sprites/shiny/" + pokeNum + ".png'>" : "<img src='http://fc.maribelhearn.com/sprites/" + pokeNum + ".png'>");
     }
+    print(pokeNum);
     return (shine ? "<img src='pokemon:" + pokeNum + "&shiny=true&gen=" + gen + "'>" : "<img src='pokemon:" + pokeNum + "&gen=" + gen + "'>");
 }
 

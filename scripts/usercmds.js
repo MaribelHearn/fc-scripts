@@ -113,7 +113,7 @@ function tierOf(pokeId) {
 }
 
 function numToGen(pokeId) {
-    if (pokeId >= 1000 && pokeId < 1200 || pokeId > 65536) {
+    if (pokeId >= 1000 && pokeId < 1200 || pokeId > 66535) { // forme is 65536 + num
         return 5;
     } else if (pokeId >= 2000 && pokeId < 2200) {
         return 6;
