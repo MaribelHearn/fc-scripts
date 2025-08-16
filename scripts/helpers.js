@@ -697,6 +697,8 @@ function typecolor(pokeNum) {
 
 function pokeImage(pokeNum, shine, gen, androidOrWeb) {
     if (androidOrWeb && (pokeNum >= 1000 && pokeNum < 1200 || pokeNum > 65536)) {
+        var dex = require("scripts/dex.js");
+        pokeNum = dex.displayNum(pokeNum);
         return (shine ? "<img src='http://fc.maribelhearn.com/sprites/shiny/" + pokeNum + ".png'>" : "<img src='http://fc.maribelhearn.com/sprites/" + pokeNum + ".png'>");
     }
     return (shine ? "<img src='pokemon:" + pokeNum + "&shiny=true&gen=" + gen + "'>" : "<img src='pokemon:" + pokeNum + "&gen=" + gen + "'>");

@@ -865,7 +865,7 @@ module.exports = {
             baseStats = sys.pokeBaseStats(pokeNum, gen);
             bst = helpers.sum(baseStats);
             dexmessage = border + "<h2>#" + dex.displayNum(pokeNum) + " " + pokemon + "</h2>";
-            dexmessage += "<br>" + helpers.pokeImage(dex.displayNum(pokeNum), false, gen, helpers.isAndroidOrWeb(src));
+            dexmessage += "<br>" + helpers.pokeImage(pokeNum, false, gen, helpers.isAndroidOrWeb(src));
             dexmessage += "<br><b>Type:</b> " + types.join(/img/.test(types.toString()) ? "" : " / ");
             if (pokeNum > 999 && pokeNum < 1200 || pokeNum > 66536) {
                 dexmessage += "<br><b>Tier:</b> " + tierOf(pokeNum);
