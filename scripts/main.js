@@ -14,7 +14,6 @@
     - full auth name customisation
     - silent muting commands and functionality
 */
-var hostLocation;
 var floodplayers = [];
 var channelPlugins = [];
 var functionIndex = {};
