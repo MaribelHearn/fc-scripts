@@ -123,7 +123,7 @@ function numToGen(pokeId) {
 
 module.exports = {
     commands: {
-/**
+    /**
         -------------
         Command Lists
         -------------
