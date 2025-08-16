@@ -443,7 +443,7 @@ function initFunctionIndex() { // to know which function is in which module
 
     // sets host IP and optionally country data
     setHostLocation: function (reload) {
-        if (this.hostLocation[ip] !== "Unknown" && !reload) {
+        if (this.hostLocation.ip !== "Unknown" && !reload) {
             return;
         }
         sys.webCall("http://whatismyip.akamai.com", function (resp) {
