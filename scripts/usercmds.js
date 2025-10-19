@@ -1072,7 +1072,7 @@ module.exports = {
                     }
                     index++;
                 }
-                viewteammessage += "<img src='pokemon:" + iddisplay + "' /><img src='item:" + item + "' /><br>";
+                viewteammessage += "<img src='pokemon:" + iddisplay + "&gen=5' /><img src='item:" + item + "' /><br>";
                 if (gen > 2) {
                     var ability = sys.teamPokeAbility(src, team, slot), abilityname = sys.ability(ability);
                     viewteammessage += "Ability: " + abilityname + "<br>";
