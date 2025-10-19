@@ -1047,7 +1047,7 @@ module.exports = {
                 helpers.starfox(src, channel, command, bots.command, "Error 403, invalid team number.");
                 return;
             }
-            var slot, srcname = sys.name(src), gen = sys.gen(src, team), viewteammessage = border + "<h2>" + srcname + "'s " + sys.tier(src, team) + " Team</h2><br><table>", index = 1, iddisplay;
+            var slot, srcname = sys.name(src), gen = sys.gen(src, team), viewteammessage = border + "<h2>" + srcname + "'s " + sys.tier(src, team) + " Team</h2><br><table>", index = 1, iddisplay, isFundex;
             for (slot = 0; slot < 6; slot++) {
                 var id = sys.teamPoke(src, team, slot);
                 if (id === 0) {
@@ -1072,7 +1072,8 @@ module.exports = {
                     }
                     index++;
                 }
-                viewteammessage += "<img src='pokemon:" + iddisplay + "&gen=5' /><img src='item:" + item + "' /><br>";
+                isFundex = (pokeNum > 999 && pokeNum < 1200 || pokeNum > 66536 ? "&gen=5" : "");
+                viewteammessage += "<img src='pokemon:" + iddisplay + isFundex + "' /><img src='item:" + item + "' /><br>";
                 if (gen > 2) {
                     var ability = sys.teamPokeAbility(src, team, slot), abilityname = sys.ability(ability);
                     viewteammessage += "Ability: " + abilityname + "<br>";
