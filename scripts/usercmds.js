@@ -1072,7 +1072,7 @@ module.exports = {
                     }
                     index++;
                 }
-                isFundex = (pokeNum > 999 && pokeNum < 1200 || pokeNum > 66536 ? "&gen=5" : "");
+                isFundex = (id > 999 && id < 1200 || id > 66536 ? "&gen=5" : "");
                 viewteammessage += "<img src='pokemon:" + iddisplay + isFundex + "' /><img src='item:" + item + "' /><br>";
                 if (gen > 2) {
                     var ability = sys.teamPokeAbility(src, team, slot), abilityname = sys.ability(ability);
