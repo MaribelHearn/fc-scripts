@@ -91,7 +91,7 @@ function teamOrdinal(team) {
 
 // Chuck Norris tier is at index 23
 function tierOf(pokeId) {
-    var name = sys.pokemon(pokeId), tiers = sys.read("tiers.xml").split('\n'), start = 23, pokemon,
+    var name = sys.pokemon(pokeId), tiers = sys.read("tiers.xml").split('\n'), start = 25, pokemon,
         tierId = { // + 1 compared to index
             26: "Chuck Norris",
             27: "*** WINNER ***",
@@ -103,7 +103,7 @@ function tierOf(pokeId) {
             33: "PU"
         };
 
-    for (i = start; i < start + 8; i++) {
+    for (i = start; i < start + 10; i++) {
         pokemon = tiers[i].substring(tiers[i].indexOf("pokemons") + 9, tiers[i].indexOf("abilities")).trim();
         pokemon = pokemon.replace(/"/g, "").split(", ");
         if (pokemon.indexOf(name) > -1) {
