@@ -93,12 +93,14 @@ function teamOrdinal(team) {
 function tierOf(pokeId) {
     var name = sys.pokemon(pokeId), tiers = sys.read("tiers.xml").split('\n'), start = 23, pokemon,
         tierId = { // + 1 compared to index
-            25: "Chuck Norris",
-            26: "*** WINNER ***",
-            27: "Uber",
-            28: "OU",
-            29: "UU",
-            30: "RU"
+            26: "Chuck Norris",
+            27: "*** WINNER ***",
+            28: "Uber",
+            29: "OU",
+            30: "UU",
+            31: "RU",
+            32: "NU",
+            33: "PU"
         };
 
     for (i = start; i < start + 8; i++) {
@@ -109,7 +111,7 @@ function tierOf(pokeId) {
         }
     }
 
-    return "NU";
+    return "ZU";
 }
 
 function numToGen(pokeId) {
