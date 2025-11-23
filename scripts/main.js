@@ -1269,6 +1269,7 @@ function initFunctionIndex() { // to know which function is in which module
             helpers.saveData("countryname", countryname);
             helpers.saveData("cityname", cityname);
         }
+        this.beforeChangeTier(src, team, undefined, sys.tier(src, team));
     },
 
     beforeChangeTier: function (src, team, oldtier, newtier) {
