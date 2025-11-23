@@ -297,5 +297,21 @@ module.exports = {
                 return;
             }
         }
+    },
+
+    zuSpecies: function (src, team) {
+        var speciesList = [];
+        var species;
+
+        for (var slot = 0; slot < 6; slot++) {
+            species = sys.pokemon(sys.teamPoke(src, team, slot));
+            if (speciesList.contains(species)) {
+                sys.sendHtmlMessage(src, helpers.bot(bots.tour) + "Your team is invalid for Fundex ZU as it contains the same species twice.");
+                sys.changeTier(src, team, "Challenge Cup");
+                sys.stopEvent();
+                return;
+            }
+            speciesList.push(species);
+        }
     }
 };

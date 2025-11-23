@@ -1297,6 +1297,9 @@ function initFunctionIndex() { // to know which function is in which module
         if (newtier == "Monoletter") {
             tierchecks.monoLetter(src, team);
         }
+        if (newtier == "Fundex ZU") {
+            tierchecks.zuSpecies(src, team);
+        }
     },
 
     afterChangeTier: function (src, team, oldtier, newtier) {
