@@ -65,14 +65,14 @@ function toSeconds(time, unit) {
 
 function typeImage(src, type) {
     if (helpers.isAndroidOrWeb(src)) {
-        return sys.type(type);
+        return "<img src='http://fc.maribelhearn.com/sprites/type" + type + ".png'>";
     }
     return "<img src='Themes/Classic/types/type" + type + ".png'>";
 }
 
 function genderImage(src, gender) {
     if (helpers.isAndroidOrWeb(src)) {
-        return helpers.cap(sys.gender(gender));
+        return "<img src='http://fc.maribelhearn.com/sprites/gender" + gender + ".png'>";
     }
     return "<img src='Themes/Classic/genders/gender" + gender + ".png'>";
 }
